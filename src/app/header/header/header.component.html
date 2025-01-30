@@ -1,0 +1,38 @@
+<header class="border-b-2 border-neutral-200 dark:border-blue-900">
+  <div
+    class="flex justify-between items-center bg-white px-6 py-4 dark:bg-blue-950"
+  >
+    <button
+      class="text-blue-800 dark:text-blue-300 p-2 rounded-full flex items-center justify-center"
+      routerLink="/"
+    >
+      <mat-icon>group</mat-icon>
+      <span class="ml-2">Famappy</span>
+    </button>
+
+    <div class="flex items-center justify-between gap-6">
+      @if (!user()) {
+      <button
+        class="border border-blue-700 dark:border-blue-400 dark:text-blue-400 px-4 py-2 flex items-center justify-center"
+        (click)="login()"
+        routerLink="/login"
+      >
+        Log in
+      </button>
+      <button
+        class="bg-blue-700 text-white dark:bg-blue-400 dark:text-black px-4 py-2 flex items-center justify-center"
+        routerLink="/signup"
+      >
+        Sign up
+      </button>
+      } @else {<app-user-menu /> }
+
+      <button
+        class="bg-blue-400 dark:bg-blue-300 p-1 rounded-full flex items-center justify-center"
+        (click)="toggleTheme()"
+      >
+        <mat-icon>{{ isDarkMode ? "wb_sunny" : "bedtime" }}</mat-icon>
+      </button>
+    </div>
+  </div>
+</header>

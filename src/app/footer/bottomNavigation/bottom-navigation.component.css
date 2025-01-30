@@ -1,0 +1,13 @@
+.active-link {
+  background-color: coral;
+  color: #1512c4;
+  font-weight: bold;
+}
+
+.material-btn-custom {
+  color: #f7ec19;
+}
+
+.material-btn-custom.dark {
+  color: #f719d9;
+}

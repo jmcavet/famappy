@@ -5,32 +5,34 @@ import { provideRouter } from '@angular/router';
 import { routes } from './app.routes';
 
 import { providePrimeNG } from 'primeng/config';
-import Aura from '@primeng/themes/aura';
 
-import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
-import { getAuth, provideAuth } from '@angular/fire/auth';
-import { getFirestore, provideFirestore } from '@angular/fire/firestore';
-import { getStorage, provideStorage } from '@angular/fire/storage';
+// import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
+// import { getAuth, provideAuth } from '@angular/fire/auth';
+// import { getFirestore, provideFirestore } from '@angular/fire/firestore';
+// import { getStorage, provideStorage } from '@angular/fire/storage';
 import { MyPreset } from './mypreset';
+import { provideHttpClient } from '@angular/common/http';
+
+// const fbApp = () =>
+//   initializeApp({
+//     projectId: 'famappy-6181c',
+//     appId: '1:998789579438:web:77674387cf299adfdda33f',
+//     storageBucket: 'famappy-6181c.firebasestorage.app',
+//     apiKey: 'AIzaSyCFHTJvWi_BqBV3fwXB8lRrO8WbGoP0qxc',
+//     authDomain: 'famappy-6181c.firebaseapp.com',
+//     messagingSenderId: '998789579438',
+//     measurementId: 'G-N73T1JEWL7',
+//   });
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes),
-    provideFirebaseApp(() =>
-      initializeApp({
-        projectId: 'famappy-6181c',
-        appId: '1:998789579438:web:77674387cf299adfdda33f',
-        storageBucket: 'famappy-6181c.firebasestorage.app',
-        apiKey: 'AIzaSyCFHTJvWi_BqBV3fwXB8lRrO8WbGoP0qxc',
-        authDomain: 'famappy-6181c.firebaseapp.com',
-        messagingSenderId: '998789579438',
-        measurementId: 'G-N73T1JEWL7',
-      })
-    ),
-    provideAuth(() => getAuth()),
-    provideFirestore(() => getFirestore()),
-    provideStorage(() => getStorage()),
+    provideHttpClient(),
+    // provideFirebaseApp(fbApp),
+    // provideAuth(() => getAuth()),
+    // provideFirestore(() => getFirestore()),
+    // provideStorage(() => getStorage()),
     provideAnimationsAsync(),
     providePrimeNG({
       theme: {
@@ -43,5 +45,6 @@ export const appConfig: ApplicationConfig = {
       },
       ripple: true,
     }),
+    provideAnimationsAsync(),
   ],
 };

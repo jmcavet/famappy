@@ -1,0 +1,55 @@
+<div class="flex items-center justify-between text-green-800 mx-36">
+  <button
+    class="bg-blue-300 p-2 rounded-full flex items-center justify-center"
+    routerLink="/"
+    routerLinkActive="active-link"
+    [routerLinkActiveOptions]="{ exact: true }"
+  >
+    <mat-icon>home</mat-icon>
+  </button>
+
+  <button
+    class="bg-blue-300 p-2 rounded-full flex items-center justify-center"
+    routerLink="/"
+    routerLinkActive="active-link"
+    [routerLinkActiveOptions]="{ exact: true }"
+    [matMenuTriggerFor]="belowMenu"
+  >
+    <mat-icon>add</mat-icon>
+  </button>
+
+  <mat-menu #belowMenu="matMenu" yPosition="above">
+    <button mat-menu-item>Item 1</button>
+    <button mat-menu-item>Item 2</button>
+  </mat-menu>
+
+  <button
+    class="bg-blue-300 p-2 rounded-full flex items-center justify-center"
+    routerLink="/"
+    routerLinkActive="active-link"
+    [routerLinkActiveOptions]="{ exact: true }"
+    [matMenuTriggerFor]="beforeMenu"
+  >
+    <mat-icon>shopping_cart</mat-icon>
+  </button>
+  <mat-menu #beforeMenu="matMenu" xPosition="before">
+    <button mat-menu-item>Item 1</button>
+    <button mat-menu-item>Item 2</button>
+  </mat-menu>
+
+  <button
+    class="bg-blue-300 p-2 rounded-full flex items-center justify-center"
+    routerLink="/"
+    routerLinkActive="active-link"
+    [routerLinkActiveOptions]="{ exact: true }"
+    [matMenuTriggerFor]="afterMenu"
+  >
+    <mat-icon>school</mat-icon>
+  </button>
+  <mat-menu #afterMenu="matMenu" xPosition="after">
+    <div class="bg-red-200 dark:bg-red-800">
+      <button mat-menu-item class="material-btn-custom">Item 1</button>
+    </div>
+    <button mat-menu-item>Item 2</button>
+  </mat-menu>
+</div>
