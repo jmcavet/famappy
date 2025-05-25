@@ -1,0 +1,15 @@
+<div class="cards-container">
+  @for (recipe of recipes; track $index) {
+  <div
+    class="card"
+    [routerLink]="['/recipes', recipe.id]"
+    (click)="navigateToRecipe(recipe)"
+  >
+    <app-recipe-card [recipe]="recipe"></app-recipe-card>
+  </div>
+  }
+</div>
+
+<button routerLink="/new-recipe">
+  <i class="fa-solid fa-plus fa-xl"></i>
+</button>

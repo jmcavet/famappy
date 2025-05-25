@@ -1,0 +1,14 @@
+<button
+  [attr.type]="type"
+  [disabled]="disabled"
+  [ngClass]="getClasses()"
+  (click)="onClick()"
+>
+  <ng-container *ngIf="iconPos === 'left'">
+    <i *ngIf="icon" [ngClass]="getIconClasses()"></i>
+  </ng-container>
+  <ng-content></ng-content>
+  <ng-container *ngIf="iconPos === 'right'">
+    <i *ngIf="icon" [ngClass]="getIconClasses()"></i>
+  </ng-container>
+</button>

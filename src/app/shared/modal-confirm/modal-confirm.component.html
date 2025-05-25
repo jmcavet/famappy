@@ -1,0 +1,39 @@
+<div class="main-container">
+  <div
+    [ngClass]="isModalOpen ? 'block' : 'hidden'"
+    class="fixed inset-0 bg-gray-800 bg-opacity-75 flex justify-center items-center"
+    (click)="closeModalOnOutsideClick($event)"
+  >
+    <div class="modal-container">
+      <h2 class="header">{{ title }}</h2>
+
+      <div class="message-container">{{ message }}</div>
+
+      <app-button
+        icon="fa fa-xmark"
+        btnStyle="text-based"
+        iconPos="right"
+        size="large"
+        class="absolute top-2 right-2"
+        (clickEvent)="closeModal()"
+      ></app-button>
+
+      <div class="flex items-center justify-between">
+        <app-button
+          btnStyle="text-based"
+          color="danger"
+          size="large"
+          (clickEvent)="onCancel()"
+          >Cancel</app-button
+        >
+
+        <app-button
+          [color]="btnConfirmColor"
+          size="medium"
+          (clickEvent)="onConfirm()"
+          >{{ btnConfirmText }}</app-button
+        >
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,29 @@
+<ul>
+  @for (mealCategory of mealCategories; track $index) {
+  <li (click)="selectMealCategory(mealCategory.name)">
+    {{ mealCategory.name | capitalize }}
+    @if (mealCategoryPreviouslySelected === mealCategory.name) {
+    <i
+      class="fa-solid fa-check fa-xl text-primary-600 dark:text-primary-500"
+    ></i>
+    }
+  </li>
+  }
+</ul>
+
+<button
+  class="bg-secondary-600 rounded-full p-2 w-12 h-12 text-white fixed bottom-24 right-6 shadow-lg"
+  (click)="openModalInput()"
+>
+  <i class="fa-solid fa-plus fa-xl"></i>
+</button>
+
+<app-modal-input
+  title="Enter new meal category"
+  [inputValue]="mealCategoryName"
+  [existingItems]="mealCategories"
+  btnConfirmText="Apply"
+  btnConfirmColor="primary"
+  [isModalOpen]="showModalInput"
+  (confirmEventTest)="onConfirmModalAction($event)"
+/>

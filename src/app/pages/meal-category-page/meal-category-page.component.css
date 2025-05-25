@@ -1,0 +1,7 @@
+ul {
+  @apply flex flex-col items-start justify-start gap-4 bg-transparent dark:bg-transparent dark:text-white;
+}
+
+li {
+  @apply flex items-center justify-between rounded px-4 py-2 w-full border-b border-b-gray-300 dark:border-b-gray-700 hover:bg-primary-100 dark:hover:bg-primary-900 cursor-pointer;
+}

@@ -1,12 +1,13 @@
-import { Component, Inject, inject, OnInit, signal } from '@angular/core';
 import {
-  addDoc,
-  collection,
-  collectionData,
-  deleteDoc,
-  doc,
-  Firestore,
-} from '@angular/fire/firestore';
+  AfterViewInit,
+  Component,
+  Inject,
+  inject,
+  OnInit,
+  signal,
+  ViewChild,
+} from '@angular/core';
+
 import { RouterOutlet } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
@@ -18,6 +19,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { CommonModule } from '@angular/common';
 import { FooterComponent } from './footer/footer.component';
 import { BottomNavigationComponent } from './footer/bottomNavigation/bottom-navigation.component';
+import { ToastContainerComponent } from './shared/toast-container/toast-container.component';
+import { ToastService } from './services/toast.service';
 
 interface Item {
   id: string;
@@ -38,11 +41,17 @@ interface Item {
     MatButtonModule,
     BottomNavigationComponent,
     FooterComponent,
+    ToastContainerComponent,
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css',
 })
-export class AppComponent implements OnInit {
+export class AppComponent implements AfterViewInit {
+  @ViewChild(ToastContainerComponent)
+  toastContainer!: ToastContainerComponent;
+
+  constructor(private toastService: ToastService) {}
+
   message: string = '';
 
   visible: boolean = false;
@@ -51,29 +60,15 @@ export class AppComponent implements OnInit {
     this.visible = true;
   }
 
-  // firestore = inject(Firestore);
-  // itemCollection = collection(this.firestore, 'items');
-  // item$ = collectionData<any>(this.itemCollection, { idField: 'id' });
+  ngAfterViewInit(): void {
+    this.toastService.registerContainer(this.toastContainer.viewContainerRef);
+  }
 
   items?: Item[];
 
-  ngOnInit(): void {
-    // this.item$.subscribe((data) => {
-    //   this.items = data;
-    // });
-  }
-
   onSubmit() {
-    // addDoc(this.itemCollection, { text: this.message });
     this.message = '';
   }
-
-  // onDelete(docId: string): Promise<void> {
-  //   console.log('docId: ', docId);
-  //   const docRef = doc(this.firestore, 'items', docId);
-
-  //   return deleteDoc(docRef);
-  // }
 
   toggleDarkMode() {
     const element = document.querySelector('html');

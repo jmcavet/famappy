@@ -1,0 +1,33 @@
+.form-grid {
+  /* @apply grow grid grid-cols-[auto,1fr] gap-4; */
+  @apply flex flex-col justify-center gap-4;
+}
+
+label {
+  @apply text-gray-600 dark:text-gray-300;
+}
+
+input[type="text"],
+textarea {
+  @apply shadow appearance-none border rounded py-2 px-4 text-gray-700 dark:bg-gray-800 dark:text-white dark:border-gray-700 leading-tight focus:outline-none;
+}
+
+small {
+  color: red;
+}
+
+input.ng-invalid.ng-touched {
+  border: 1px solid red;
+}
+
+.btn-add {
+  @apply border border-primary-600 text-primary-600 dark:bg-primary-500 rounded w-10 h-10;
+}
+
+.tag-input {
+  @apply inline-block bg-green-100 p-2 mr-2 border border-gray-300 rounded cursor-pointer;
+}
+
+.tag-input[readonly] {
+  @apply bg-gray-200;
+}

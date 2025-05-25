@@ -1,0 +1,15 @@
+input[type="text"] {
+  @apply appearance-none border rounded py-3 px-2 text-gray-700 border-gray-300 dark:bg-gray-800 dark:text-white dark:border-gray-600 leading-tight focus:outline-none;
+}
+
+.btn-add {
+  @apply border border-primary-600 text-primary-600 dark:bg-primary-500 dark:text-white rounded w-12 h-12;
+}
+
+.btn-add.disabled {
+  @apply opacity-30;
+}
+
+small {
+  color: red;
+}

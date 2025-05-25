@@ -1,0 +1,278 @@
+<form class="form-grid" [formGroup]="form">
+  <div class="group">
+    <input
+      type="text"
+      id="title"
+      name=""
+      formControlName="title"
+      placeholder="Title"
+      autocomplete="off"
+      class="col-span-2"
+    />
+    @if (form.get('title')?.touched && form.get('title')?.invalid) {
+    <div class="validator">
+      @if (form.get('title')?.errors?.['required']) {
+      <small>Title is required.</small>
+      } @if (form.get('title')?.errors?.['minlength']) {
+      <small>Title must be at least 3 characters long.</small>
+      } @if (form.get('title')?.errors?.['maxlength']) {
+      <small>Title must be no greater than 36 characters long.</small>
+      }
+    </div>
+    }
+  </div>
+
+  <div class="group">
+    <div class="flex items-center justify-start gap-2">
+      <i class="fa-solid fa-clock"></i>
+      <label for="preparationTime" class="text-lg">Preparation Time</label>
+    </div>
+    <div class="input-wrapper">
+      <input
+        type="text"
+        id="preparationTime"
+        name="preparationTime"
+        formControlName="preparationTime"
+        class="w-full"
+        autocomplete="off"
+      />
+      <span class="unit">min</span>
+    </div>
+
+    @if (form.get('preparationTime')?.touched &&
+    form.get('preparationTime')?.invalid) {
+    <div class="validator">
+      @if (form.get('preparationTime')?.errors?.['required']) {
+      <small>Time in minute is required.</small>
+      } @if (form.get('preparationTime')?.errors?.['pattern']) {
+      <small>Input must be a positive number.</small>
+      }
+    </div>
+    }
+
+    <div class="flex items-center justify-start gap-2">
+      <i class="fa-solid fa-utensils"></i>
+      <label for="cookingTime" class="text-lg">Cooking Time</label>
+    </div>
+    <div class="input-wrapper">
+      <input
+        type="text"
+        id="cookingTime"
+        name="cookingTime"
+        formControlName="cookingTime"
+        class="w-full"
+        autocomplete="off"
+      />
+      <span class="unit">min</span>
+    </div>
+
+    @if (form.get('cookingTime')?.touched && form.get('cookingTime')?.invalid) {
+    <div class="validator">
+      @if (form.get('cookingTime')?.errors?.['required']) {
+      <small>Time in minute is required.</small>
+      } @if (form.get('cookingTime')?.errors?.['pattern']) {
+      <small>Input must be a positive number.</small>
+      }
+    </div>
+    }
+
+    <div class="flex items-center justify-start gap-2">
+      <i class="fa-solid fa-person"></i>
+      <label for="servings" class="text-lg">Servings</label>
+    </div>
+    <div
+      class="flex items-center justify-between bg-white border border:text-gray-300 dark:bg-gray-800 dark:text-white rounded-2xl dark:border-gray-700 px-2 py-2"
+    >
+      <i class="fa-solid fa-minus" (click)="decreaseServings()"></i>
+      <p>{{ messageServings() }}</p>
+      <button>
+        <i class="fa-solid fa-plus" (click)="increaseServings()"></i>
+      </button>
+    </div>
+  </div>
+
+  <div class="group">
+    <div class="flex items-center justify-start gap-2">
+      <i class="fa-solid fa-person-hiking"></i>
+      <span class="text-lg">Difficulty</span>
+    </div>
+    <div class="group-items">
+      @for (difficultyOption of difficultyOptions; track $index) {
+      <button
+        class="btn-tag"
+        [class.active]="state.difficulty === difficultyOption"
+        (click)="setDifficulty(difficultyOption)"
+      >
+        {{ difficultyOption | capitalize }}
+      </button>
+      }
+    </div>
+    <div class="flex items-center justify-start gap-2">
+      <i class="fa-solid fa-barcode"></i>
+      <span class="text-lg">Price</span>
+    </div>
+    <div class="group-items">
+      @for (priceOption of priceOptions; track $index) {
+      <button
+        class="btn-tag"
+        [class.active]="state.price === priceOption"
+        (click)="setPrice(priceOption)"
+      >
+        @if (priceOption === "low") {<i class="fa-solid fa-euro-sign"></i>}
+        @else if (priceOption === "normal") {
+        <i class="fa-solid fa-euro-sign"></i
+        ><i class="fa-solid fa-euro-sign"></i>
+        } @else {
+        <i class="fa-solid fa-euro-sign"></i
+        ><i class="fa-solid fa-euro-sign"></i>
+        <i class="fa-solid fa-euro-sign"></i>
+        }
+      </button>
+      }
+    </div>
+    <div class="flex items-center justify-start gap-2">
+      <i class="fa-solid fa-calendar-days"></i>
+      <span class="text-lg">Frequency</span>
+    </div>
+    <div class="group-items">
+      @for (frequencyOption of frequencyOptions; track $index) {
+      <button
+        class="btn-tag"
+        [class.active]="state.frequency === frequencyOption"
+        (click)="setFrequency(frequencyOption)"
+      >
+        {{ frequencyOption | capitalize }}
+      </button>
+      }
+    </div>
+  </div>
+
+  <div class="bg-white dark:bg-gray-800 px-2 py-4 rounded-lg">
+    <div class="flex items-center justify-start gap-2 mb-2">
+      <i class="fa-solid fa-snowflake"></i>
+      <span class="text-lg">Season</span>
+    </div>
+    <div class="flex items-center justify-between gap-2">
+      @for (seasonOption of seasonOptions; track $index) {
+      <button
+        class="btn-tag"
+        [class.active]="state.seasonsSelected.includes(seasonOption)"
+        (click)="setSeason(seasonOption)"
+      >
+        {{ seasonOption | capitalize }}
+      </button>
+      }
+    </div>
+  </div>
+
+  <div>
+    <div
+      class="flex items-center justify-between gap-4 bg-white dark:bg-gray-800 px-2 py-2 rounded-lg"
+      (click)="navigateToMealCategoryPage()"
+    >
+      <div class="flex items-center justify-start gap-2">
+        <i class="fa-solid fa-cake-candles"></i>
+        <span class="text-lg">Meal Category</span>
+      </div>
+      <button
+        type="button"
+        id="btn-meal-category"
+        class="btn-meal-category"
+        [class.none]="state.mealCategory === 'none'"
+      >
+        {{ state.mealCategory | capitalize }}
+      </button>
+    </div>
+
+    <div
+      class="flex items-center justify-between gap-4 bg-white dark:bg-gray-800 px-2 py-2 rounded-lg"
+      (click)="navigateToCuisinePage()"
+    >
+      <div class="flex items-center justify-start gap-2">
+        <i class="fa-solid fa-flag"></i>
+        <span class="text-lg">Cuisine</span>
+      </div>
+      <button
+        type="button"
+        id="btn-cuisine"
+        class="btn-cuisine"
+        [class.none]="state.cuisine === 'none'"
+      >
+        {{ state.cuisine | capitalize }}
+      </button>
+    </div>
+  </div>
+
+  <div class="bg-white dark:bg-gray-800 px-2 py-4 rounded">
+    <div class="flex items-center justify-between mb-4">
+      <div class="flex items-center justify-start gap-2">
+        <i class="fa-solid fa-tag"></i>
+        <label for="tags" class="text-lg">Recipe Categories</label>
+      </div>
+      <app-button
+        icon="fa fa-plus"
+        iconPos="left"
+        size="medium"
+        color="primary"
+        btnStyle="text-based"
+        (click)="openModalInput()"
+        >Add Category</app-button
+      >
+    </div>
+
+    <ul class="flex flex-wrap justify-start gap-2">
+      @for (recipeCategory of recipeCategories; track $index) {
+      <li
+        class="btn-tag"
+        [class.active]="selectedCategoryIds.has(recipeCategory.id)"
+        (click)="setRecipeCategory(recipeCategory)"
+      >
+        {{ recipeCategory.name }}
+      </li>
+      }
+    </ul>
+  </div>
+
+  <div class="group-source">
+    <div class="flex items-center justify-start gap-2">
+      <i class="fa-brands fa-sourcetree"></i>
+      <label for="source" class="text-lg">Source</label>
+    </div>
+    <div class="input-wrapper w-full">
+      <input
+        type="text"
+        id="source"
+        name="source"
+        formControlName="source"
+        class="w-full"
+        autocomplete="off"
+      />
+    </div>
+  </div>
+
+  <div class="mb-4">
+    <button
+      class="favorite"
+      [class.active]="state.favorite"
+      (click)="setFavorite()"
+    >
+      {{ state.favorite ? "Remove from favorites" : "Add to favorites"
+      }}<i
+        class="fa-heart ml-4"
+        [ngClass]="{
+          'fa-solid': state.favorite,
+          'fa-regular': !state.favorite
+        }"
+      ></i>
+    </button>
+  </div>
+</form>
+
+<app-modal-input
+  title="Enter recipe category"
+  [existingItems]="recipeCategories"
+  btnConfirmText="Apply"
+  btnConfirmColor="primary"
+  [isModalOpen]="showModalInput"
+  (confirmEventTest)="onConfirmModalAction($event)"
+/>

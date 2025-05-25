@@ -1,0 +1,7 @@
+.filter {
+  @apply border border-primary-600 text-primary-600 p-2 rounded;
+}
+
+.filter.active {
+  @apply border-none bg-primary-600 text-white dark:bg-primary-500;
+}

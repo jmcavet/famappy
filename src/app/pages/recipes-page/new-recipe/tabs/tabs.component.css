@@ -1,0 +1,23 @@
+.tabs-header {
+  @apply flex justify-between cursor-pointer mb-6 dark:text-gray-300;
+}
+
+.tab-title {
+  @apply px-5 py-2 mr-2 font-bold transition-colors duration-100 ease-in-out;
+}
+
+.tab-title:hover {
+  @apply bg-gray-200 dark:bg-gray-700;
+}
+
+.tab-title.active {
+  @apply text-primary-600 dark:text-primary-500 border-b-2 border-b-primary-600 dark:border-b-primary-500;
+}
+
+.tabs-content {
+  @apply p-2;
+}
+
+.tab-content {
+  @apply block;
+}

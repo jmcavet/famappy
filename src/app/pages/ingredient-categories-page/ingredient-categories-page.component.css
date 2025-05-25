@@ -1,0 +1,7 @@
+ul {
+  @apply mt-4 mx-4 py-2 rounded-2xl bg-white dark:bg-gray-800 dark:text-gray-50;
+}
+
+li {
+  @apply flex items-center justify-between px-2 mx-2 py-2 mb-2 hover:bg-primary-100 dark:hover:bg-primary-900;
+}

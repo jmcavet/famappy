@@ -1,0 +1,11 @@
+input[type="text"] {
+  @apply appearance-none py-2 text-gray-700 dark:bg-gray-800 dark:text-white focus:outline-none;
+}
+
+.ingredient-exists {
+  @apply mx-2 bg-red-200 text-red-600 dark:bg-red-900 dark:text-red-200 p-2 mt-2 rounded;
+}
+
+.message-no-type {
+  @apply mx-auto flex flex-col items-center justify-between gap-0 bg-yellow-100 dark:bg-yellow-900 border-2 border-yellow-400 dark:border-yellow-500 p-4 w-max rounded-2xl;
+}

@@ -1,14 +1,21 @@
-<header class="border-b-2 border-neutral-200 dark:border-blue-900">
-  <div
-    class="flex justify-between items-center bg-white px-6 py-4 dark:bg-blue-950"
-  >
-    <button
-      class="text-blue-800 dark:text-blue-300 p-2 rounded-full flex items-center justify-center"
-      routerLink="/"
-    >
-      <mat-icon>group</mat-icon>
-      <span class="ml-2">Famappy</span>
-    </button>
+<header>
+  <div class="flex justify-between items-center px-4 h-full">
+    <div class="flex items-center justify-between gap-4 dark:text-white">
+      @if (config.showHomeIcon) {
+      <button
+        class="rounded-full flex items-center justify-center"
+        routerLink="/"
+      >
+        <i class="fa fa-house fa-lg"></i>
+      </button>
+      } @if (config.showBackIcon) {
+      <button class="dark:text-white" (click)="goBack()">
+        <i class="fa-solid fa-arrow-left-long"></i>
+      </button>
+      }
+
+      <p class="text-xl dark:text-white">{{ config.title }}</p>
+    </div>
 
     <div class="flex items-center justify-between gap-6">
       @if (!user()) {
@@ -25,7 +32,8 @@
       >
         Sign up
       </button>
-      } @else {<app-user-menu /> }
+      }
+      <!-- } @else {<app-user-menu /> } -->
 
       <button
         class="bg-blue-400 dark:bg-blue-300 p-1 rounded-full flex items-center justify-center"
@@ -33,6 +41,34 @@
       >
         <mat-icon>{{ isDarkMode ? "wb_sunny" : "bedtime" }}</mat-icon>
       </button>
+
+      @if (config.showDropdown) {
+      <ng-container>
+        <div class="relative" #dropdownContainer>
+          <i
+            class="fa-solid fa-ellipsis-vertical fa-lg cursor-pointer dark:text-white z-20"
+            (click)="toggleDropdown($event)"
+          ></i>
+          @if (dropdownOpen) {
+          <ul
+            class="absolute right-0 mt-2 bg-white border border-gray-200 dark:text-white dark:bg-gray-800 dark:border-gray-600 shadow rounded p-2 space-y-1 z-20"
+          >
+            @for (option of config.dropdownOptions; track $index) {
+            <li
+              (click)="onSelectOption(option)"
+              class="flex items-center hover:bg-primary-100 dark:hover:bg-primary-900 px-1 py-2 rounded cursor-pointer w-full whitespace-nowrap"
+            >
+              <span class="mr-2 w-5 text-center"
+                ><i class="{{ option.icon }}"></i
+              ></span>
+              <span class="flex-1">{{ option.label }}</span>
+            </li>
+            }
+          </ul>
+          }
+        </div>
+      </ng-container>
+      }
     </div>
   </div>
 </header>

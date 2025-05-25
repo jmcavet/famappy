@@ -1,0 +1,4 @@
+footer {
+  /* @apply bg-green-200 border-t-2 border-neutral-200 dark:border-blue-900 fixed bottom-0 w-full h-10vh; */
+  @apply bg-white dark:bg-gray-800 px-6 py-4 fixed bottom-0 w-full h-8vh;
+}

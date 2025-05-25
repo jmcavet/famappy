@@ -1,6 +1,5 @@
 import { inject, Injectable, signal } from '@angular/core';
 
-import { from, Observable } from 'rxjs';
 import { FirebaseService } from './firebase.service';
 import {
   createUserWithEmailAndPassword,
@@ -10,7 +9,6 @@ import {
   User,
 } from 'firebase/auth';
 import { doc, getDoc } from 'firebase/firestore';
-import { updateProfile } from '@angular/fire/auth';
 
 @Injectable({
   providedIn: 'root',

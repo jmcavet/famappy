@@ -1,0 +1,42 @@
+<div class="card-container">
+  <div class="left-container"></div>
+  <div class="right-container">
+    <div class="title">{{ recipe?.title }}</div>
+
+    <!-- <i
+      class="fa-solid fa-heart text-primary-600 dark:text-primary-500 absolute top-2 right-2"
+    ></i> -->
+
+    <div class="summary">
+      <div class="border-r border-r-gray-300 dark:border-r-gray-600">
+        <i class="fa-solid fa-person mr-1"></i>
+        <span class="text-sm">{{ recipe?.servings }}</span>
+      </div>
+
+      <div class="border-r border-r-gray-300 dark:border-r-gray-600">
+        <i class="fa-solid fa-clock mr-1"></i>
+        <span class="text-sm">{{ totalTime | mintohour }}</span>
+      </div>
+
+      <div>
+        @if (recipe?.price === "low") {<i class="fa-solid fa-euro-sign"></i>}
+        @if (recipe?.price === "normal") {<i class="fa-solid fa-euro-sign"></i
+        ><i class="fa-solid fa-euro-sign"></i> } @if (recipe?.price === "high")
+        {<i class="fa-solid fa-euro-sign"></i
+        ><i class="fa-solid fa-euro-sign"></i
+        ><i class="fa-solid fa-euro-sign"></i>}
+      </div>
+    </div>
+
+    <div class="categories">
+      <div class="category">
+        <i class="fa-solid fa-cake-candles"></i>
+        <span>{{ recipe?.mealCategory }}</span>
+      </div>
+      <div class="category">
+        <i class="fa-solid fa-flag"></i>
+        <span>{{ recipe?.cuisine }}</span>
+      </div>
+    </div>
+  </div>
+</div>

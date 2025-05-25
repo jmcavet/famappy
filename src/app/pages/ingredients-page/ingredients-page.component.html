@@ -1,0 +1,52 @@
+<div class="container-grid">
+  <div class="relative w-full">
+    <input
+      #ingredientInput
+      type="text"
+      id="name"
+      name="name"
+      autocomplete="off"
+      placeholder="Search for an ingredient"
+      class="w-full mt-4 px-2 py-2 rounded border border-gray-300"
+      [(ngModel)]="inputText"
+      (ngModelChange)="onInputChange($event)"
+    />
+    <button
+      *ngIf="inputText"
+      type="button"
+      (click)="onResetInput()"
+      class="absolute right-5 bottom-5 flex items-center text-gray-400 hover:text-gray-600"
+    >
+      <i class="fa-solid fa-close fa-xl"></i>
+    </button>
+  </div>
+
+  <ul class="mt-6">
+    <li
+      *ngFor="let ingredient of ingredientsFiltered; let i = index"
+      (click)="selectIngredient(ingredient.name)"
+    >
+      <div class="dark:text-gray-50 flex items-center justify-start w-full">
+        <div
+          class="italic w-1/3 sm:w-1/4 lg:w-1/6 text-gray-400 dark:text-gray-500"
+        >
+          {{ ingredient.typeName }}
+        </div>
+        <div class="flex-grow">{{ ingredient.name }}</div>
+      </div>
+    </li>
+  </ul>
+
+  <button
+    class="bg-secondary-600 rounded-full p-2 w-12 h-12 text-white fixed bottom-24 right-6 shadow-lg"
+    routerLink="/manage-ingredients"
+  >
+    <i class="fa-solid fa-plus fa-xl"></i>
+  </button>
+
+  <div class="flex flex-col items-center">
+    @if (isLoading) {
+    <app-loading />
+    }
+  </div>
+</div>

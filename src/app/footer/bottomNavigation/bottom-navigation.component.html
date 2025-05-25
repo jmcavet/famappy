@@ -1,21 +1,21 @@
-<div class="flex items-center justify-between text-green-800 mx-36">
+<div class="flex items-center justify-between text-blue-800 dark:text-blue-300">
   <button
-    class="bg-blue-300 p-2 rounded-full flex items-center justify-center"
+    class="bg-blue-200 dark:bg-blue-800 p-2 rounded-full flex items-center justify-center"
     routerLink="/"
     routerLinkActive="active-link"
     [routerLinkActiveOptions]="{ exact: true }"
   >
-    <mat-icon>home</mat-icon>
+    <i class="fa fa-house"></i>
   </button>
 
   <button
-    class="bg-blue-300 p-2 rounded-full flex items-center justify-center"
+    class="bg-blue-200 dark:bg-blue-800 p-2 rounded-full flex items-center justify-center"
     routerLink="/"
     routerLinkActive="active-link"
     [routerLinkActiveOptions]="{ exact: true }"
     [matMenuTriggerFor]="belowMenu"
   >
-    <mat-icon>add</mat-icon>
+    <i class="fa fa-plus"></i>
   </button>
 
   <mat-menu #belowMenu="matMenu" yPosition="above">
@@ -24,13 +24,13 @@
   </mat-menu>
 
   <button
-    class="bg-blue-300 p-2 rounded-full flex items-center justify-center"
+    class="bg-blue-200 dark:bg-blue-800 p-2 rounded-full flex items-center justify-center"
     routerLink="/"
     routerLinkActive="active-link"
     [routerLinkActiveOptions]="{ exact: true }"
     [matMenuTriggerFor]="beforeMenu"
   >
-    <mat-icon>shopping_cart</mat-icon>
+    <i class="fa fa-cart-shopping"></i>
   </button>
   <mat-menu #beforeMenu="matMenu" xPosition="before">
     <button mat-menu-item>Item 1</button>
@@ -38,13 +38,13 @@
   </mat-menu>
 
   <button
-    class="bg-blue-300 p-2 rounded-full flex items-center justify-center"
+    class="bg-blue-200 dark:bg-blue-800 p-2 rounded-full flex items-center justify-center"
     routerLink="/"
     routerLinkActive="active-link"
     [routerLinkActiveOptions]="{ exact: true }"
     [matMenuTriggerFor]="afterMenu"
   >
-    <mat-icon>school</mat-icon>
+    <i class="fa fa-graduation-cap"></i>
   </button>
   <mat-menu #afterMenu="matMenu" xPosition="after">
     <div class="bg-red-200 dark:bg-red-800">

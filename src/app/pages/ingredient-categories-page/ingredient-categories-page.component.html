@@ -1,0 +1,14 @@
+<ul>
+  <li
+    class="cursor-pointer"
+    *ngFor="let ingredientCategory of ingredientCategories; let i = index"
+  >
+    <p>{{ ingredientCategory.name }}</p>
+  </li>
+</ul>
+
+<div class="flex flex-col items-center">
+  @if (isLoading) {
+  <app-loading />
+  }
+</div>

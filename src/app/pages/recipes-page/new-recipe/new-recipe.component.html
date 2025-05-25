@@ -1,0 +1,23 @@
+<div>
+  <div class="header">
+    <button
+      class="btn-save"
+      (click)="onAddRecipe()"
+      [disabled]="!formIsValid"
+      [ngClass]="{ 'opacity-30': !formIsValid }"
+    >
+      Save
+    </button>
+  </div>
+  <app-tabs>
+    <app-tab tabTitle="definition" [active]="true">
+      <app-tab-definition />
+    </app-tab>
+    <app-tab tabTitle="ingredients">
+      <app-tab-ingredients />
+    </app-tab>
+    <app-tab tabTitle="instructions">
+      <app-tab-instructions />
+    </app-tab>
+  </app-tabs>
+</div>

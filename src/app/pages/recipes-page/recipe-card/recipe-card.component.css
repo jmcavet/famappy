@@ -1,0 +1,27 @@
+.card-container {
+  @apply grid grid-cols-3 gap-2;
+}
+
+.left-container {
+  @apply col-span-1 bg-gray-200 dark:bg-gray-700;
+}
+
+.right-container {
+  @apply col-span-2 flex flex-col justify-between gap-2 p-2;
+}
+
+.title {
+  @apply text-xl text-start;
+}
+
+.summary {
+  @apply grid grid-cols-3 gap-2 text-gray-400 dark:text-gray-500;
+}
+
+.categories {
+  @apply grid grid-cols-2 gap-2 text-gray-400 dark:text-gray-500 mt-6 text-center;
+}
+
+.category {
+  @apply flex items-center justify-start gap-1 px-2 bg-transparent border border-gray-400 rounded-xl py-2 dark:text-gray-500 dark:border-gray-600;
+}

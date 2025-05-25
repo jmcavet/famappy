@@ -1,0 +1,54 @@
+<div class="main-container">
+  <div
+    [ngClass]="isModalOpen ? 'block' : 'hidden'"
+    class="fixed inset-0 bg-gray-800 bg-opacity-75 flex justify-center items-center"
+    (click)="closeModalOnOutsideClick($event)"
+  >
+    <div class="modal-container">
+      <h2 class="header">{{ title }}</h2>
+
+      <input
+        #autoFocusInput
+        type="text"
+        id="name"
+        name="name"
+        required
+        placeholder="Name"
+        autocomplete="off"
+        [(ngModel)]="inputValue"
+        (ngModelChange)="onInputChange($event)"
+        (keydown.enter)="onConfirm()"
+      />
+      @if (invalidMessage) {
+      <p class="invalid">{{ invalidMessage }}</p>
+      }
+
+      <app-button
+        icon="fa fa-xmark"
+        btnStyle="text-based"
+        iconPos="right"
+        size="large"
+        class="absolute top-2 right-2"
+        (clickEvent)="closeModal()"
+      ></app-button>
+
+      <div class="flex items-center justify-between mt-6">
+        <app-button
+          btnStyle="text-based"
+          color="primary"
+          size="large"
+          (clickEvent)="onCancel()"
+          >Cancel</app-button
+        >
+
+        <app-button
+          [color]="btnConfirmColor"
+          size="medium"
+          (clickEvent)="onConfirm()"
+          [disabled]="invalidMessage !== undefined"
+          >{{ btnConfirmText }}</app-button
+        >
+      </div>
+    </div>
+  </div>
+</div>
