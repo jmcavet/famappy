@@ -1,0 +1,69 @@
+<ul>
+  @for (ingredientCategory of dbIngredientCategories(); track $index) {
+  <li>
+    <div>{{ ingredientCategory.name }}</div>
+
+    <div class="btns-container">
+      <button
+        type="button"
+        (click)="openModalUpdateIngredientCategory(ingredientCategory)"
+      >
+        <i
+          class="fa-regular fa-pen-to-square text-primary-600 dark:text-primary-500 text-xl"
+        ></i>
+      </button>
+
+      <button
+        type="button"
+        (click)="onConfirmRemoveCategory(ingredientCategory.id)"
+      >
+        <i
+          class="fa-regular fa-trash-can text-danger-600 dark:text-danger-500 text-xl"
+        ></i>
+      </button>
+    </div>
+  </li>
+  }
+</ul>
+
+<button
+  class="bg-secondary-600 rounded-full p-2 w-12 h-12 text-white fixed bottom-24 right-6 shadow-lg"
+  (click)="openModalAddIngredientCategory()"
+>
+  <i class="fa-solid fa-plus fa-xl"></i>
+</button>
+
+<app-modal-input
+  title="Enter new ingredient category"
+  [inputValue]="ingredientCategoryName()"
+  [existingItems]="dbIngredientCategories()"
+  btnConfirmText="Apply"
+  btnConfirmColor="primary"
+  [isModalOpen]="showModalAddIngredientCategory()"
+  (confirmEventTest)="onConfirmModalAddIngredientCategory($event)"
+/>
+
+<app-modal-input
+  title="Update ingredient category"
+  [inputValue]="ingredientCategoryNameToUpdate()"
+  [existingItems]="dbIngredientCategories()"
+  btnConfirmText="Update"
+  btnConfirmColor="primary"
+  [isModalOpen]="showModalUpdateIngredientCategory()"
+  (confirmEventTest)="onConfirmModalUpdateIngredientCategory($event)"
+/>
+
+<app-modal-confirm
+  title="Delete confirmation"
+  [message]="deleteMessage()"
+  btnConfirmText="Delete"
+  btnConfirmColor="danger"
+  [isModalOpen]="showConfirmDeleteModal()"
+  (confirmEvent)="onConfirmModalAction($event)"
+/>
+
+<div class="flex flex-col items-center">
+  @if (canShowPage()) {
+  <app-loading />
+  }
+</div>

@@ -1,6 +1,6 @@
-import { inject, Injectable } from '@angular/core';
+import { inject, Injectable, signal } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
-import { BehaviorSubject, filter, map } from 'rxjs';
+import { filter, map } from 'rxjs';
 
 export type DropdownOption = {
   label: string;
@@ -14,6 +14,7 @@ export interface HeaderConfig {
   showBackIcon?: boolean;
   showDropdown?: boolean;
   dropdownOptions: DropdownOption[];
+  actions: any[];
 }
 
 @Injectable({
@@ -23,14 +24,14 @@ export class HeaderService {
   private router = inject(Router);
   private activatedRoute = inject(ActivatedRoute);
 
-  private headerConfigSubject = new BehaviorSubject<HeaderConfig>({
+  headerConfig = signal<HeaderConfig>({
     title: 'Default Title',
     showHomeIcon: true,
     showBackIcon: false,
     showDropdown: false,
     dropdownOptions: [],
+    actions: [],
   });
-  headerConfig$ = this.headerConfigSubject.asObservable();
 
   constructor() {
     this.router.events
@@ -48,15 +49,12 @@ export class HeaderService {
             showBackIcon: data['showBackIcon'] ?? false,
             showDropdown: data['showDropdown'] ?? false,
             dropdownOptions: data['dropdownOptions'] ?? [],
+            actions: data['actions'] ?? [],
           };
         })
       )
       .subscribe((config) => {
-        this.setHeaderConfig(config);
+        this.headerConfig.set(config);
       });
-  }
-
-  setHeaderConfig(config: HeaderConfig) {
-    this.headerConfigSubject.next(config);
   }
 }

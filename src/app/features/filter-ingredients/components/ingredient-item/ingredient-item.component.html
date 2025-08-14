@@ -1,0 +1,11 @@
+<button
+  (click)="selectItem()"
+  [ngClass]="['item-container', isSelected() ? 'selected' : '']"
+>
+  <div class="flex items-center justify-start gap-4">
+    <div class="text-gray-400 dark:text-gray-400 italic">
+      {{ ingredient().categoryName }}
+    </div>
+    <div>{{ ingredient().name }}</div>
+  </div>
+</button>

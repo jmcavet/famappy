@@ -1,0 +1,28 @@
+<div class="flex flex-wrap items-center justify-start gap-2 mt-6 mx-2">
+  @for (ingredientCategory of ingredientCategories(); track $index) {
+  <button
+    class="ingredient-type"
+    [class.active]="
+      ingredientCategorySelected()?.name === ingredientCategory.name
+    "
+    (click)="
+      selectIngredientType(
+        ingredientCategory,
+        ingredientCategorySelected()?.name === ingredientCategory.name
+      )
+    "
+  >
+    {{ ingredientCategory.name }}
+  </button>
+  }
+
+  <app-button
+    icon="fa-solid fa-pen"
+    iconPos="left"
+    size="medium"
+    color="secondary"
+    btnStyle="text-based"
+    routerLink="/manage-ingredient-categories"
+    >{{ linkText() }}</app-button
+  >
+</div>

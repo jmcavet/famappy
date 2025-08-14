@@ -1,0 +1,15 @@
+.title {
+  @apply dark:text-white text-3xl my-6 text-center;
+}
+
+.cards-container {
+  @apply grid grid-cols-2 gap-2 px-2 sm:grid-cols-3 sm:gap-4 sm:px-4 lg:grid-cols-4 lg:gap-8 lg:px-8;
+}
+
+.card {
+  @apply bg-white dark:bg-gray-800 dark:text-white p-2 rounded-lg shadow dark:shadow-gray-700 relative transform transition-all duration-300 hover:scale-[1.02] hover:shadow-md;
+}
+
+button {
+  @apply bg-secondary-600 rounded-full p-2 w-12 h-12 text-white fixed bottom-24 right-6 shadow-lg;
+}

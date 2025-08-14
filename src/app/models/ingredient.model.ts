@@ -1,6 +1,6 @@
 export interface IngredientWithoutId {
   name: string;
-  typeId: string;
+  categoryId: string;
 }
 
 // Used to add the document ID of the firestore object in order to eventually later on remove the Ingredient by id
@@ -13,16 +13,29 @@ export interface IngredientWithIdAndDate extends IngredientWithId {
 }
 
 export interface IngredientWithTypeName extends IngredientWithIdAndDate {
-  typeName: string | undefined;
+  categoryName: string | undefined;
 }
 
-export interface IsAcending {
-  date: boolean;
-  type: boolean;
-  name: boolean;
+export interface IngredientDocInBackend {
+  id: string;
+  name: string;
+  dateCreated: string;
+  categoryId: string;
 }
 
-export interface Ingredient {
+export interface IngredientCategoryDocInBackend {
+  id: string;
+  name: string;
+  dateCreated: string;
+}
+
+export type SortKey = 'name' | 'category' | 'dateCreated';
+
+export type IsAcending = Record<SortKey, boolean>;
+
+/** The ingredient object as one of the properties of the the recipe object */
+export interface RecipeIngredient {
+  id: string;
   name: string;
   measure: number;
   unit: string;

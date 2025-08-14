@@ -1,5 +1,4 @@
-import { RecipeCategoryWithIdAndDate } from './cuisine.model';
-import { Ingredient } from './ingredient.model';
+import { RecipeIngredient } from './ingredient.model';
 
 export type Difficulty = 'low' | 'normal' | 'high';
 export type Price = 'low' | 'normal' | 'high';
@@ -15,18 +14,34 @@ export interface RecipeState {
   price: Price;
   frequency: Frequency;
   seasonsSelected: Season[];
-  recipeCategoriesSelected: RecipeCategoryWithIdAndDate[];
-  mealCategory: string;
-  cuisine: string;
+  recipeCategoryIds: string[];
+  mealCategoryId: string;
+  cuisineId: string;
   source: string;
-  ingredients: Ingredient[];
+  comment: string;
+  ingredients: RecipeIngredient[];
   ingredient: string;
+  ingredientId: string;
   selectedTabTitle: string;
   instructions: string[];
-  favorite: boolean;
+  filter: {
+    mealCategories: string[];
+    cuisines: string[];
+    recipeCategories: string[];
+    ingredientCategories: string[];
+    ingredientIds: string[];
+    difficulties: string[];
+    prices: string[];
+    frequencies: string[];
+    seasons: string[];
+  };
+  nbFilters: number;
+  imageUrl: null | string;
+  thumbnailUrl: string;
 }
 
-// Used to add the document ID of the firestore object in order to eventually later on remove the Recipe by id
-export interface RecipeStateWithId extends RecipeState {
-  id: string;
-}
+export interface RecipeDocInBackend
+  extends Omit<
+    RecipeState,
+    'ingredient' | 'ingredientId' | 'selectedTabTitle' | 'filter' | 'nbFilters'
+  > {}

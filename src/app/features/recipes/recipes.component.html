@@ -1,0 +1,32 @@
+@if (canShowPage()) {
+<div class="flex flex-col items-center">
+  <app-loading />
+</div>
+} @else {
+<app-recipe-search
+  [(filter)]="filterText"
+  [recipesFilteredByTitle]="recipesFilteredByTitle()"
+  [recipesFiltered]="recipesFiltered()"
+  [dbMealCategories]="dbMealCategories()"
+  [dbCuisines]="dbCuisines()"
+  [dbRecipeCategories]="dbRecipeCategories()"
+  [dbIngredients]="dbIngredients()"
+  [dbIngredientCategories]="dbIngredientCategories()"
+/>
+
+<div class="cards-container">
+  @for (recipe of recipesFiltered(); track $index) {
+  <div
+    class="card"
+    [routerLink]="['/recipes', recipe.id]"
+    (click)="navigateToRecipe(recipe)"
+  >
+    <app-recipe-card [recipeState]="recipe"></app-recipe-card>
+  </div>
+  }
+</div>
+
+<button routerLink="/new-recipe">
+  <i class="fa-solid fa-plus fa-xl"></i>
+</button>
+}

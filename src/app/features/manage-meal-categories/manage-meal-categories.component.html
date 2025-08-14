@@ -1,0 +1,71 @@
+<div class="items-container">
+  <ul>
+    @for (mealCategory of dbMealCategories(); track $index) {
+    <li>
+      <span>{{ mealCategory.name | capitalize }}</span>
+      <div class="buttons-container">
+        <button type="button">
+          <button
+            type="button"
+            (click)="openModalUpdateMealCategory(mealCategory)"
+          >
+            <i
+              class="fa-regular fa-pen-to-square text-primary-600 dark:text-primary-500 text-xl"
+            ></i>
+          </button>
+        </button>
+        <button
+          type="button"
+          (click)="openModalDeleteMealCategory(mealCategory)"
+        >
+          <i
+            class="fa-regular fa-trash-can text-danger-600 dark:text-danger-500 text-xl"
+          ></i>
+        </button>
+      </div>
+    </li>
+    }
+  </ul>
+</div>
+
+<button
+  class="bg-secondary-600 rounded-full p-2 w-12 h-12 text-white fixed bottom-24 right-6 shadow-lg"
+  (click)="openModalAddMealCategory()"
+>
+  <i class="fa-solid fa-plus fa-xl"></i>
+</button>
+
+<app-modal-input
+  title="Enter new meal category"
+  [inputValue]="mealCategoryName()"
+  [existingItems]="dbMealCategories()"
+  btnConfirmText="Apply"
+  btnConfirmColor="primary"
+  [isModalOpen]="showModalAddMealCategory()"
+  (confirmEventTest)="onConfirmModalAddMealCategory($event)"
+/>
+
+<app-modal-input
+  title="Update Meal Category"
+  [inputValue]="mealCategoryNameToUpdate()"
+  [existingItems]="dbMealCategories()"
+  btnConfirmText="Update"
+  btnConfirmColor="primary"
+  [isModalOpen]="showModalUpdateMealCategory()"
+  (confirmEventTest)="onConfirmModalUpdateMealCategory($event)"
+/>
+
+<app-modal-confirm
+  title="Delete confirmation"
+  [message]="getDeleteMessage()"
+  btnConfirmText="Delete"
+  btnConfirmColor="danger"
+  [isModalOpen]="showModalDeleteMealCategory()"
+  (confirmEvent)="onConfirmModalDeleteMealCategory($event)"
+/>
+
+<div class="flex flex-col items-center">
+  @if (canShowPage()) {
+  <app-loading />
+  }
+</div>

@@ -1,0 +1,19 @@
+.input-wrapper {
+  @apply w-full relative;
+}
+
+input[type="text"] {
+  @apply w-full shadow appearance-none border rounded px-10 py-4 text-gray-700 dark:bg-gray-800 dark:text-white dark:border-gray-400 leading-tight focus:outline-none;
+}
+
+.btn-reset {
+  @apply absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600;
+}
+
+.icon-search {
+  @apply absolute left-2 top-1/2 -translate-y-1/2 text-gray-400;
+}
+
+.btn-apply-filter {
+  @apply w-full bg-primary-600 text-white dark:bg-primary-500 px-4 py-2 rounded;
+}

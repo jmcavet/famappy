@@ -1,0 +1,11 @@
+.main-container {
+  @apply fixed inset-0 flex justify-center items-center bg-gray-900 bg-opacity-90 z-10;
+}
+
+.message {
+  @apply text-white mb-4;
+}
+
+.progress {
+  @apply bg-blue-500 w-80 h-8 rounded-full transition-all duration-300;
+}

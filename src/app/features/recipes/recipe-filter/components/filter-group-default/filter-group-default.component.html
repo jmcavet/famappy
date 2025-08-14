@@ -1,0 +1,21 @@
+<div class="flex items-center justify-start gap-6 mb-2">
+  <div class="header">
+    <i class="{{ icon }}"></i>
+    <p>{{ sectionTitle }}</p>
+  </div>
+  <button class="select-all" (click)="selectDeselectAll()">
+    {{ labelToggleSelectAll() }}
+  </button>
+</div>
+
+<div class="flex flex-wrap items-center gap-2">
+  @for (tag of tags(); track $index) {
+  <button
+    class="btn-tag"
+    [class.active]="tag.selected === true"
+    (click)="toggleTag(tag.name)"
+  >
+    {{ tag.name }}
+  </button>
+  }
+</div>

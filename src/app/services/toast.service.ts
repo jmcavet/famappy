@@ -1,5 +1,5 @@
 import { ComponentRef, Injectable, ViewContainerRef } from '@angular/core';
-import { ToastComponent } from '../shared/toast/toast.component';
+import { ToastComponent } from '../shared/components/toast/toast.component';
 
 @Injectable({
   providedIn: 'root',

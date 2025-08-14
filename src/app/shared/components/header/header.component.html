@@ -1,0 +1,86 @@
+<header>
+  <div class="flex justify-between items-center px-4 h-full">
+    <div class="flex items-center justify-between gap-4 dark:text-white">
+      @if (headerConfig().showHomeIcon) {
+      <button
+        class="rounded-full flex items-center justify-center"
+        routerLink="/"
+      >
+        <i class="fa fa-house fa-lg"></i>
+      </button>
+      } @if (headerConfig().showBackIcon) {
+      <button class="dark:text-white" (click)="goBack()">
+        <i class="fa-solid fa-arrow-left-long"></i>
+      </button>
+      }
+
+      <p class="text-xl dark:text-white">{{ headerConfig().title }}</p>
+    </div>
+
+    <div class="flex items-center justify-between gap-6">
+      @if (!user()) {
+      <button
+        class="border border-blue-700 dark:border-blue-400 dark:text-blue-400 px-4 py-2 flex items-center justify-center"
+        (click)="login()"
+        routerLink="/login"
+      >
+        Log in
+      </button>
+      <button
+        class="bg-blue-700 text-white dark:bg-blue-400 dark:text-black px-4 py-2 flex items-center justify-center"
+        routerLink="/signup"
+      >
+        Sign up
+      </button>
+      } @else {
+      <button
+        class="border border-blue-700 dark:border-blue-400 dark:text-blue-400 px-4 py-2 flex items-center justify-center"
+        (click)="logout()"
+        routerLink="/logout"
+      >
+        Log out
+      </button>
+      }
+
+      <button
+        class="bg-blue-400 dark:bg-blue-300 p-1 rounded-full flex items-center justify-center"
+        (click)="toggleTheme()"
+      >
+        <mat-icon>{{ isDarkMode() ? "wb_sunny" : "bedtime" }}</mat-icon>
+      </button>
+
+      @if (headerConfig().showDropdown) {
+      <ng-container>
+        <div class="relative" #dropdownContainer>
+          <i
+            class="fa-solid fa-ellipsis-vertical fa-lg cursor-pointer dark:text-white z-20"
+            (click)="toggleDropdown($event)"
+          ></i>
+          @if (dropdownOpen()) {
+          <ul
+            class="absolute right-0 mt-2 bg-white border border-gray-200 dark:text-white dark:bg-gray-800 dark:border-gray-600 shadow rounded p-2 space-y-1 z-20"
+          >
+            @for (option of headerConfig().dropdownOptions; track $index) {
+            <li
+              (click)="onSelectOption(option)"
+              class="flex items-center hover:bg-primary-100 dark:hover:bg-primary-900 px-1 py-2 rounded cursor-pointer w-full whitespace-nowrap"
+            >
+              <span class="mr-2 w-5 text-center"
+                ><i class="{{ option.icon }}"></i
+              ></span>
+              <span class="flex-1">{{ option.label }}</span>
+            </li>
+            }
+          </ul>
+          }
+        </div>
+      </ng-container>
+      } @if (headerConfig().actions.length > 0) { @for(action of
+      headerConfig().actions; track $index) {
+      <button (click)="action.func()">
+        <i class="{{ action.icon }}"></i>
+      </button>
+      } }
+    </div>
+  </div>
+</header>

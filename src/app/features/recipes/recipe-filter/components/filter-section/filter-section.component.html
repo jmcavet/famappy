@@ -1,0 +1,23 @@
+<div>
+  <div class="flex items-center justify-start gap-6 mb-2">
+    <div class="header">
+      <i class="{{ icon }}"></i>
+      <p>{{ sectionTitle }}</p>
+    </div>
+    <button class="select-all" (click)="selectDeselectAll()">
+      {{ labelToggleSelectAll() }}
+    </button>
+  </div>
+
+  <div class="flex flex-wrap items-center justify-start gap-x-2 gap-y-4">
+    @for (tag of tags(); track tag.id) {
+    <button
+      class="btn-tag"
+      [class.active]="selectedIds().includes(tag.id)"
+      (click)="toggleTag(tag.id)"
+    >
+      {{ tag.name }}
+    </button>
+    }
+  </div>
+</div>

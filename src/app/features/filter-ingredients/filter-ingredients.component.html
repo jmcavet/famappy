@@ -1,0 +1,37 @@
+<div class="flex flex-col items-start justify-between gap-4 p-4">
+  <div class="input-wrapper">
+    <input
+      type="text"
+      id="search"
+      name="search"
+      placeholder="Search for an ingredient"
+      autocomplete="off"
+      [(ngModel)]="filter"
+    />
+
+    @if(filter()) {
+    <button type="button" (click)="onResetFilterText()" class="btn-reset">
+      <i class="fa-solid fa-close fa-lg"></i>
+    </button>
+    }
+    <i class="fa-solid fa-search fa-lg icon-search"></i>
+  </div>
+
+  <app-ingredient-categories-selection-page />
+
+  <div class="w-full">
+    @for(ingredient of ingredientsFiltered(); track $index) {
+    <app-ingredient-item
+      [ingredient]="ingredient"
+      [selectedIngredientIds]="selectedIngredientIds()"
+      (toggleItem)="toggleItem($event)"
+    />
+    }
+  </div>
+
+  @if(nbIngredientsFiltered()) {
+  <button (click)="applyFilter()" class="btn-apply-filter">
+    {{ btnText() }}
+  </button>
+  }
+</div>

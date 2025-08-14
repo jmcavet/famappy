@@ -1,0 +1,15 @@
+.filter-container {
+  @apply flex flex-col justify-between gap-8;
+}
+
+.clear {
+  @apply flex items-center justify-end gap-2 text-primary-600 border border-primary-600 rounded-md px-4 py-3 dark:text-white dark:border-white;
+}
+
+.btn-apply {
+  @apply w-full bg-primary-600 dark:bg-primary-500 text-white rounded-md px-4 py-3 shadow-md;
+}
+
+.btn-apply.disabled {
+  @apply bg-gray-300 dark:bg-gray-800 cursor-not-allowed;
+}

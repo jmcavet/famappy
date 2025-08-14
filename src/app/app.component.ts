@@ -13,14 +13,14 @@ import { FormsModule } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { DialogModule } from 'primeng/dialog';
-import { HeaderComponent } from './header/header/header.component';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatButtonModule } from '@angular/material/button';
 import { CommonModule } from '@angular/common';
-import { FooterComponent } from './footer/footer.component';
-import { BottomNavigationComponent } from './footer/bottomNavigation/bottom-navigation.component';
-import { ToastContainerComponent } from './shared/toast-container/toast-container.component';
+import { ToastContainerComponent } from './shared/components/toast-container/toast-container.component';
 import { ToastService } from './services/toast.service';
+import { HeaderComponent } from './shared/components/header/header.component';
+import { FooterComponent } from './shared/components/footer/footer.component';
+import { BottomNavigationComponent } from './shared/components/bottomNavigation/bottom-navigation.component';
 
 interface Item {
   id: string;

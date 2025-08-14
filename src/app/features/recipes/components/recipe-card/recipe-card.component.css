@@ -1,0 +1,31 @@
+.card-container {
+  @apply flex flex-col gap-2;
+}
+
+.left-container {
+  @apply col-span-1 bg-primary-100 dark:bg-primary-900;
+}
+
+.right-container {
+  @apply col-span-2 flex flex-col justify-between gap-2 p-2;
+}
+
+.header {
+  @apply flex items-center justify-between;
+}
+
+.title {
+  @apply text-lg font-medium;
+}
+
+.summary {
+  @apply flex justify-between text-gray-500 dark:text-gray-400;
+}
+
+.categories {
+  @apply flex justify-between text-gray-500 dark:text-gray-400 text-center text-xs;
+}
+
+.category {
+  @apply flex items-center justify-start gap-1 px-2 bg-transparent border border-gray-400 rounded-xl py-2 dark:text-gray-500 dark:border-gray-600;
+}
