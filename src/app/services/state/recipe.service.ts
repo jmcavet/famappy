@@ -1,7 +1,12 @@
 import { effect, Injectable, signal } from '@angular/core';
 
 import { RecipeCategoryDocInBackend } from '../../models/cuisine.model';
-import { RecipeState, Season } from '../../models/recipe.model';
+import {
+  Difficulty,
+  Frequency,
+  RecipeState,
+  Season,
+} from '../../models/recipe.model';
 import { RecipeIngredient } from '../../models/ingredient.model';
 
 @Injectable({
@@ -17,6 +22,9 @@ export class RecipeStateService {
     price: 'normal',
     frequency: 'monthly',
     seasonsSelected: [],
+    difficultiesSelected: [],
+    frequenciesSelected: [],
+    cuisinesSelected: [],
     recipeCategoryIds: [],
     mealCategoryId: 'none',
     cuisineId: 'none',
@@ -237,6 +245,60 @@ export class RecipeStateService {
       seasonsUpdated = [...this.recipeState().seasonsSelected, seasonSelected];
     }
     this.updateProperty('seasonsSelected', seasonsUpdated);
+  }
+
+  setDifficulty(difficultySelected: Difficulty) {
+    let difficultiesUpdated;
+
+    if (this.recipeState().difficultiesSelected.includes(difficultySelected)) {
+      const index =
+        this.recipeState().difficultiesSelected.indexOf(difficultySelected);
+      difficultiesUpdated = this.recipeState().difficultiesSelected.filter(
+        (_, i) => i !== index
+      );
+    } else {
+      difficultiesUpdated = [
+        ...this.recipeState().difficultiesSelected,
+        difficultySelected,
+      ];
+    }
+    this.updateProperty('difficultiesSelected', difficultiesUpdated);
+  }
+
+  setFrequency(frequencySelected: Frequency) {
+    let frequenciesUpdated;
+
+    if (this.recipeState().frequenciesSelected.includes(frequencySelected)) {
+      const index =
+        this.recipeState().frequenciesSelected.indexOf(frequencySelected);
+      frequenciesUpdated = this.recipeState().frequenciesSelected.filter(
+        (_, i) => i !== index
+      );
+    } else {
+      frequenciesUpdated = [
+        ...this.recipeState().frequenciesSelected,
+        frequencySelected,
+      ];
+    }
+    this.updateProperty('frequenciesSelected', frequenciesUpdated);
+  }
+
+  setCuisine(cuisineSelected: any) {
+    let cuisinesUpdated;
+
+    if (this.recipeState().cuisinesSelected.includes(cuisineSelected)) {
+      const index =
+        this.recipeState().cuisinesSelected.indexOf(cuisineSelected);
+      cuisinesUpdated = this.recipeState().cuisinesSelected.filter(
+        (_, i) => i !== index
+      );
+    } else {
+      cuisinesUpdated = [
+        ...this.recipeState().cuisinesSelected,
+        cuisineSelected,
+      ];
+    }
+    this.updateProperty('cuisinesSelected', cuisinesUpdated);
   }
 
   setRecipeCategory(recipeCategorySelected: RecipeCategoryDocInBackend) {

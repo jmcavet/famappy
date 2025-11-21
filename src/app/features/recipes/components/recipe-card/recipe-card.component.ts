@@ -1,6 +1,4 @@
-import { Component, computed, effect, inject, Input } from '@angular/core';
-import { Recipe } from './recipe.model';
-import { DatePipe, NgClass } from '@angular/common';
+import { Component, inject, Input } from '@angular/core';
 import { RecipeState } from '../../../../models/recipe.model';
 import { MinToHourPipe } from '../../../../shared/pipes/mintohour.pipe';
 import { CuisineBackendService } from '../../../../services/backend/cuisine.service';
@@ -8,7 +6,7 @@ import { MealCategoryBackendService } from '../../../../services/backend/meal-ca
 
 @Component({
   selector: 'app-recipe-card',
-  imports: [MinToHourPipe, NgClass],
+  imports: [MinToHourPipe],
   templateUrl: './recipe-card.component.html',
   styleUrl: './recipe-card.component.css',
 })

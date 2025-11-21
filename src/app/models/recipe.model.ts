@@ -1,4 +1,4 @@
-import { RecipeIngredient } from './ingredient.model';
+import { IngredientDocInBackend, RecipeIngredient } from './ingredient.model';
 
 export type Difficulty = 'low' | 'normal' | 'high';
 export type Price = 'low' | 'normal' | 'high';
@@ -14,6 +14,9 @@ export interface RecipeState {
   price: Price;
   frequency: Frequency;
   seasonsSelected: Season[];
+  difficultiesSelected: Difficulty[];
+  frequenciesSelected: Frequency[];
+  cuisinesSelected: any[];
   recipeCategoryIds: string[];
   mealCategoryId: string;
   cuisineId: string;

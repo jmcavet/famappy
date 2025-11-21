@@ -1,3 +1,4 @@
+import { RecipeIngredient } from '../../../../models/ingredient.model';
 import { RecipeState } from '../../../../models/recipe.model';
 
 // Represents an object of collection "recipes" in Firestore
@@ -12,7 +13,7 @@ export interface Recipe {
   price: string;
   sources: string[];
   frequency: string;
-  ingredients: string[];
+  ingredients: RecipeIngredient[];
   instructions: string[];
   tags: string[];
   imageFile: string;
