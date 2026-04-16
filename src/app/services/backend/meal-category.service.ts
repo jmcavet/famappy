@@ -5,7 +5,6 @@ import {
   signal,
   WritableSignal,
 } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
 import { FirebaseService } from './firebase.service';
 import { FirestoreService } from './generic.service';
 import { MealCategoryDocInBackend } from '../../models/cuisine.model';
@@ -53,7 +52,7 @@ export class MealCategoryBackendService {
       () => {
         // This callback runs once Firestore returns data (even empty)
         this._loading.set(false);
-      }
+      },
     );
   }
 
@@ -76,7 +75,7 @@ export class MealCategoryBackendService {
         () => {
           // This callback runs once Firestore returns data (even empty)
           this._saving.set(false);
-        }
+        },
       );
       console.log('New meal category document ID: ', docId);
     } catch (error) {
@@ -87,7 +86,6 @@ export class MealCategoryBackendService {
   async updateMealCategoryInStore(
     mealCategoryIdToUpdate: string,
     newMealCategoryName: string,
-    mustPreserveState: WritableSignal<boolean>
   ) {
     this._updating.set(true);
 
@@ -99,34 +97,26 @@ export class MealCategoryBackendService {
         () => {
           // This callback runs once Firestore returns
           this._updating.set(false);
-        }
+        },
       );
-
-      // If the user has selected a specific meal category (e.g. main course) in the /meal-category page, which corresponds to
-      // the original meal category name that has been updated, make sure to preserve the state
-      mustPreserveState.set(true);
     } catch (error) {
       console.error('Error updating meal category: ', error);
     }
   }
 
-  async deleteMealCategoryInStore(
-    mealCategoryIdToDelete: string,
-    mealCategoryId: string,
-    updateProperty: Function,
-    mustPreserveState: WritableSignal<boolean>
-  ) {
+  async deleteMealCategoryInStore(mealCategoryIdToDelete: string) {
     this._deleting.set(true);
 
     try {
-      // If the user has selected a specific meal category (e.g. main course) in the /meal-category page, which corresponds to
-      // the meal category that is about to be deleted, make sure to delete it and replace it by 'none'
-      const mealCategoryNameDeleted = this.mealCategories().find(
-        (mealCategory) => mealCategory.id === mealCategoryIdToDelete
-      );
-      if (mealCategoryId === mealCategoryNameDeleted?.id) {
-        updateProperty('mealCategoryId', 'none');
-      }
+      // TODO: refactor later
+      // // If the user has selected a specific meal category (e.g. main course) in the /meal-category page, which corresponds to
+      // // the meal category that is about to be deleted, make sure to delete it and replace it by 'none'
+      // const mealCategoryNameDeleted = this.mealCategories().find(
+      //   (mealCategory) => mealCategory.id === mealCategoryIdToDelete,
+      // );
+      // if (mealCategoryId === mealCategoryNameDeleted?.id) {
+      //   updateProperty('mealCategoryId', 'none');
+      // }
 
       await this.firestoreService.removeDocumentFromFirestore(
         'meal-categories',
@@ -134,10 +124,8 @@ export class MealCategoryBackendService {
         () => {
           // This callback runs once Firestore returns
           this._deleting.set(false);
-        }
+        },
       );
-
-      mustPreserveState.set(true);
     } catch (error) {
       console.error('Error deleting cuisine: ', error);
     }
