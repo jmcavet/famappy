@@ -1,29 +1,29 @@
 <div class="items-container">
   <ul>
     @for (recipeCategory of dbRecipeCategories(); track $index) {
-    <li>
-      <span>{{ recipeCategory.name | capitalize }}</span>
-      <div class="buttons-container">
-        <button type="button">
+      <li>
+        <span>{{ recipeCategory.name | capitalize }}</span>
+        <div class="buttons-container">
+          <button type="button">
+            <button
+              type="button"
+              (click)="openModalUpdateRecipeCategory(recipeCategory)"
+            >
+              <i
+                class="fa-regular fa-pen-to-square text-primary-600 dark:text-primary-500 text-xl"
+              ></i>
+            </button>
+          </button>
           <button
             type="button"
-            (click)="openModalUpdateRecipeCategory(recipeCategory)"
+            (click)="openDeleteModal($event, recipeCategory.id)"
           >
             <i
-              class="fa-regular fa-pen-to-square text-primary-600 dark:text-primary-500 text-xl"
+              class="fa-regular fa-trash-can text-danger-600 dark:text-danger-500 text-xl"
             ></i>
           </button>
-        </button>
-        <button
-          type="button"
-          (click)="openModalDeleteRecipeCategory(recipeCategory)"
-        >
-          <i
-            class="fa-regular fa-trash-can text-danger-600 dark:text-danger-500 text-xl"
-          ></i>
-        </button>
-      </div>
-    </li>
+        </div>
+      </li>
     }
   </ul>
 </div>
@@ -35,7 +35,7 @@
   <i class="fa-solid fa-plus fa-xl"></i>
 </button>
 
-<app-modal-input
+<!-- <app-modal-input
   title="Enter new recipe category"
   [inputValue]="recipeCategoryName()"
   [existingItems]="dbRecipeCategories()"
@@ -53,19 +53,10 @@
   btnConfirmColor="primary"
   [isModalOpen]="showModalUpdateRecipeCategory()"
   (confirmEventTest)="onConfirmModalUpdateRecipeCategory($event)"
-/>
-
-<app-modal-confirm
-  title="Delete confirmation"
-  [message]="getDeleteMessage()"
-  btnConfirmText="Delete"
-  btnConfirmColor="danger"
-  [isModalOpen]="showModalDeleteRecipeCategory()"
-  (confirmEvent)="onConfirmModalDeleteRecipeCategory($event)"
-/>
+/> -->
 
 <div class="flex flex-col items-center">
   @if (canShowPage()) {
-  <app-loading />
+    <app-loading />
   }
 </div>

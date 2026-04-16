@@ -1,7 +1,6 @@
 import {
   Component,
   computed,
-  effect,
   inject,
   Signal,
   signal,
@@ -13,7 +12,6 @@ import {
   MealCategoryDocInBackend,
   RecipeCategoryDocInBackend,
 } from '../../../models/cuisine.model';
-import { NgClass } from '@angular/common';
 import { RecipeStateService } from '../../../services/state/recipe.service';
 import { Router } from '@angular/router';
 import { FilterSectionComponent } from './components/filter-section/filter-section.component';
@@ -24,6 +22,11 @@ import {
   IngredientCategoryDocInBackend,
   IngredientDocInBackend,
 } from '../../../models/ingredient.model';
+import { ButtonComponent } from '../../../shared/ui/button/button.component';
+import { ChipComponent } from '../../../shared/ui/chip/chip.component';
+import { SegmentedControlComponent } from '../../../shared/ui/segmented-control/segmented-control.component';
+import { ToggleBtnWithIconComponent } from '../../../shared/ui/toggle-btn-with-icon/toggle-btn-with-icon.component';
+import { Location } from '@angular/common';
 
 type AllowedStringArrayKeys = 'mealCategoryId' | 'recipeCategoryIds';
 
@@ -44,12 +47,19 @@ interface SeasonTag {
 
 @Component({
   selector: 'app-recipe-filter',
-  imports: [FilterSectionComponent, FilterGroupDefaultComponent, NgClass],
+  imports: [
+    FilterSectionComponent,
+    FilterGroupDefaultComponent,
+    ButtonComponent,
+    ChipComponent,
+    ToggleBtnWithIconComponent,
+  ],
   templateUrl: './recipe-filter.component.html',
   styleUrl: './recipe-filter.component.css',
 })
 export class RecipeFilterComponent {
   private router = inject(Router);
+  private location = inject(Location);
 
   private recipeStateService = inject(RecipeStateService);
   private recipeBackendService = inject(RecipeBackendService);
@@ -59,17 +69,17 @@ export class RecipeFilterComponent {
 
   filteredRecipes = signal<RecipeWithId[]>(history.state.filteredRecipes ?? []);
   mealCategories = signal<MealCategoryDocInBackend[]>(
-    history.state.mealCategories ?? []
+    history.state.mealCategories ?? [],
   );
   cuisines = signal<CuisineDocInBackend[]>(history.state.cuisines ?? []);
   recipeCategories = signal<RecipeCategoryDocInBackend[]>(
-    history.state.recipeCategories ?? []
+    history.state.recipeCategories ?? [],
   );
   ingredients = signal<IngredientDocInBackend[]>(
-    history.state.ingredients ?? []
+    history.state.ingredients ?? [],
   );
   ingredientCategories = signal<IngredientCategoryDocInBackend[]>(
-    history.state.ingredientCategories ?? []
+    history.state.ingredientCategories ?? [],
   );
 
   /** Declaration of local signals */
@@ -78,36 +88,41 @@ export class RecipeFilterComponent {
   stateFilterPrices = this.recipeState().filter.prices;
   stateFilterFrequencies = this.recipeState().filter.frequencies;
   stateFilterSeasons = this.recipeState().filter.seasons;
-  gerard = this.recipeState().ingredientId;
+  ingredientFilterMode = computed(
+    () => this.recipeState().filter.ingredientFilterMode,
+  );
 
-  monique = computed(() => this.recipeState().filter.ingredientIds);
+  ingredientIds = computed(() => this.recipeState().filter.ingredientIds);
 
   ingredientsFiltered = computed(() => {
     const ingredientsFiltered = this.ingredients().filter((ingredient) => {
-      return this.monique().includes(ingredient.id);
+      return this.ingredientIds().includes(ingredient.id);
     });
 
-    console.log('ingredientsFiltered: ', ingredientsFiltered);
     return ingredientsFiltered;
   });
 
   mealCategoriesSelected = signal<string[]>(
-    this.recipeState().filter.mealCategories
+    this.recipeState().filter.mealCategories,
   );
 
   cuisinesSelected = signal<string[]>(this.recipeState().filter.cuisines);
 
   recipeCategoriesSelected = signal<string[]>(
-    this.recipeState().filter.recipeCategories
+    this.recipeState().filter.recipeCategories,
   );
 
   ingredientCategoriesSelected = signal<string[]>(
-    this.recipeState().filter.ingredientCategories
+    this.recipeState().filter.ingredientCategories,
+  );
+
+  ingredientsSelected = signal<string[]>(
+    this.recipeState().filter.ingredientIds,
   );
 
   mealCategoryTags = computed(() => {
     const mealCategoryIds = this.filteredRecipes().map(
-      (recipe) => recipe.mealCategoryId
+      (recipe) => recipe.mealCategoryId,
     );
     const uniqueNonEmpty = [
       ...new Set(mealCategoryIds.filter((str) => str.trim() !== '')),
@@ -135,7 +150,7 @@ export class RecipeFilterComponent {
 
   recipeCategoryTags = computed(() => {
     const recipeCategoryIds = this.filteredRecipes().map(
-      (recipe) => recipe.recipeCategoryIds
+      (recipe) => recipe.recipeCategoryIds,
     );
     const uniqueNonEmpty = [
       ...new Set(recipeCategoryIds.flat().filter((str) => str.trim() !== '')),
@@ -151,7 +166,7 @@ export class RecipeFilterComponent {
   /** USE THIS SIGNAL WHENEVER I WANT TO START FILTER BY INGREDIENTS... */
   ingredientTags = computed(() => {
     const recipeIngredients = this.filteredRecipes().map(
-      (recipe) => recipe.ingredients
+      (recipe) => recipe.ingredients,
     );
 
     const recipeIngredientIds = recipeIngredients
@@ -171,7 +186,7 @@ export class RecipeFilterComponent {
 
   ingredientCategoryTags = computed(() => {
     const recipeIngredients = this.filteredRecipes().map(
-      (recipe) => recipe.ingredients
+      (recipe) => recipe.ingredients,
     );
 
     const recipeIngredientIds = recipeIngredients
@@ -191,7 +206,7 @@ export class RecipeFilterComponent {
     ];
 
     return this.ingredientCategories().filter((cat) =>
-      uniqueIngredientCategoryIds.includes(cat.id)
+      uniqueIngredientCategoryIds.includes(cat.id),
     );
   });
 
@@ -234,7 +249,7 @@ export class RecipeFilterComponent {
 
   recipeCategoryNames = computed(() => {
     const recipeCategoryIds = this.filteredRecipes().map(
-      (recipe) => recipe.recipeCategoryIds
+      (recipe) => recipe.recipeCategoryIds,
     );
 
     const uniqueNonEmpty = [
@@ -252,7 +267,7 @@ export class RecipeFilterComponent {
 
   selectDeselectAllItems(
     selectedItemsSignal: WritableSignal<string[]>,
-    allTagsSignal: Signal<{ id: string; name: string }[]>
+    allTagsSignal: Signal<{ id: string; name: string }[]>,
   ) {
     const allTags = allTagsSignal().map((tag) => tag.id);
 
@@ -273,7 +288,7 @@ export class RecipeFilterComponent {
 
   createToggleSelectAll<T>(
     selectedItemsSignal: Signal<string[]>, // E.g. this.cuisinesSelected signal: ['111'] if only 1 is being selected by user
-    itemTags: Signal<{ id: string; name: string }[]> // e.g. [{id: '111', name: 'italian' }, {id: '222', name: 'french' }] for the cuisine tags
+    itemTags: Signal<{ id: string; name: string }[]>, // e.g. [{id: '111', name: 'italian' }, {id: '222', name: 'french' }] for the cuisine tags
   ) {
     return computed(() => {
       return selectedItemsSignal().length === itemTags().length
@@ -286,7 +301,7 @@ export class RecipeFilterComponent {
     recipesFilteredByTagSelected: any[],
     tags: WritableSignal<any[]>,
     propertySignal: WritableSignal<any[]>,
-    key: AllowedStringArrayKeys
+    key: AllowedStringArrayKeys,
   ) {
     /** If 2 recipes are filtered and the first one has ['id1'] and the second one ['id1', 'id2'],
      * then the category ids for these 2 selected recipes are: ['id1', 'id2']
@@ -295,17 +310,14 @@ export class RecipeFilterComponent {
       ...new Set(recipesFilteredByTagSelected.flatMap((obj) => obj[key])),
     ];
 
-    console.log('selectedBlablaIds: ', selectedBlablaIds);
     const propertyIds = [
       ...new Set(
         this.filteredRecipes()
           .map((obj) => obj[key])
           .flat()
-          .filter((str) => str.trim() !== '')
+          .filter((str) => str.trim() !== ''),
       ),
     ];
-
-    console.log('propertyIds: ', propertyIds);
 
     const _tags = propertySignal()
       .filter((cat) => propertyIds.includes(cat.id))
@@ -327,7 +339,7 @@ export class RecipeFilterComponent {
   toto(
     recipesFilteredByTagSelected: any[],
     tags: WritableSignal<any[]>,
-    key: any
+    key: any,
   ) {
     const correspondingProperties = [
       ...new Set(recipesFilteredByTagSelected.map((obj) => obj[key])),
@@ -342,7 +354,7 @@ export class RecipeFilterComponent {
               ? false
               : !correspondingProperties.includes(item.name),
         };
-      })
+      }),
     );
   }
 
@@ -388,28 +400,31 @@ export class RecipeFilterComponent {
     );
   });
 
-  nbRecipesFiltered = computed(() => {
+  readonly nbRecipesFiltered = computed(() => {
     const selectedDifficultyTags = this.difficultyOptionTags().filter(
-      (tag) => tag.selected
+      (tag) => tag.selected,
     );
 
     const selectedPriceTags = this.priceOptionTags().filter(
-      (tag) => tag.selected
+      (tag) => tag.selected,
     );
 
     const selectedFrequencyTags = this.frequencyOptionTags().filter(
-      (tag) => tag.selected
+      (tag) => tag.selected,
     );
 
     const selectedSeasonTags = this.seasonOptionTags().filter(
-      (tag) => tag.selected
+      (tag) => tag.selected,
     );
 
+    console.log('ingredientsSelected: ', this.ingredientsSelected());
+    // Condition: NONE of the chips are selected (= all are activated per default)
     if (
       this.mealCategoriesSelected().length === 0 &&
       this.cuisinesSelected().length === 0 &&
       this.recipeCategoriesSelected().length === 0 &&
       this.ingredientCategoriesSelected().length === 0 &&
+      this.ingredientsSelected().length === 0 &&
       selectedDifficultyTags.length === 0 &&
       selectedPriceTags.length === 0 &&
       selectedFrequencyTags.length === 0 &&
@@ -434,7 +449,7 @@ export class RecipeFilterComponent {
         this.recipeCategoriesSelected().length === 0
           ? true
           : obj.recipeCategoryIds.some((id) =>
-              this.recipeCategoriesSelected().includes(id)
+              this.recipeCategoriesSelected().includes(id),
             );
 
       const cond4 =
@@ -460,14 +475,14 @@ export class RecipeFilterComponent {
         selectedSeasonTags.length === 0
           ? true
           : obj.seasonsSelected.some((season) =>
-              selectedSeasonTags.map((tag) => tag.name).includes(season)
+              selectedSeasonTags.map((tag) => tag.name).includes(season),
             );
 
       let cond8 = true;
       if (this.ingredientCategoriesSelected().length > 0) {
         // Each object has potentially multiple ingredients. Get their ids in a list
         const ingredientIds = obj.ingredients.map(
-          (ingredient) => ingredient.id
+          (ingredient) => ingredient.id,
         );
 
         // Get the ingredients (among all from the database) which id can be found in the ingredientIds.
@@ -479,21 +494,38 @@ export class RecipeFilterComponent {
         // Get a unique set of the 'recipeIngredientCategories' list
         const uniqueRecipeIngredientCategoryIds = [
           ...new Set(
-            recipeIngredientCategoryIds.filter((str) => str.trim() !== '')
+            recipeIngredientCategoryIds.filter((str) => str.trim() !== ''),
           ),
         ];
 
         // The condition is true if at least one of the recipe ingredient category ids is included
         // in the list of ingredient category tag selected by the user
         cond8 = this.ingredientCategoriesSelected().some((item) =>
-          uniqueRecipeIngredientCategoryIds.includes(item)
+          uniqueRecipeIngredientCategoryIds.includes(item),
         );
       }
 
-      const cond9 = obj.ingredients.some((ingredient) =>
-        this.ingredientsFiltered()
-          .map((ingredientFiltered) => ingredientFiltered.id)
-          .includes(ingredient.id)
+      let cond9 = true;
+      if (this.ingredientFilterMode() === 0) {
+        cond9 =
+          this.ingredientsSelected().length === 0
+            ? true
+            : obj.ingredients.some((ingredient) =>
+                this.ingredientsSelected().includes(ingredient.id),
+              );
+      } else {
+        cond9 =
+          this.ingredientsSelected().length === 0
+            ? true
+            : this.ingredientsSelected().every((el) =>
+                obj.ingredients.map((item) => item.id).includes(el),
+              );
+      }
+
+      const cond10 = obj.ingredients.some((ingredient) =>
+        this.ingredientsFiltered().map((ingredientFiltered) =>
+          ingredientFiltered.id.includes(ingredient.id),
+        ),
       );
 
       return (
@@ -505,7 +537,8 @@ export class RecipeFilterComponent {
         cond6 &&
         cond7 &&
         cond8 &&
-        cond9
+        cond9 &&
+        cond10
       );
     }).length;
   });
@@ -530,10 +563,17 @@ export class RecipeFilterComponent {
         .map((tag) => tag.name),
       this.seasonOptionTags()
         .filter((tag) => tag.selected)
-        .map((tag) => tag.name)
+        .map((tag) => tag.name),
+      this.ingredientFilterMode(),
     );
 
-    this.router.navigate(['/recipes']);
+    // this.router.navigate(['/recipes']);
+    this.location.back();
+  }
+
+  cancel() {
+    // this.router.navigate(['/recipes']);
+    this.location.back();
   }
 
   navigateToFilterIngredients() {
@@ -549,30 +589,50 @@ export class RecipeFilterComponent {
       tags.map((tag) => ({
         ...tag,
         selected: false,
-      }))
+      })),
     );
     this.priceOptionTags.update((tags) =>
       tags.map((tag) => ({
         ...tag,
         selected: false,
-      }))
+      })),
     );
     this.frequencyOptionTags.update((tags) =>
       tags.map((tag) => ({
         ...tag,
         selected: false,
-      }))
+      })),
     );
     this.seasonOptionTags.update((tags) =>
       tags.map((tag) => ({
         ...tag,
         selected: false,
-      }))
+      })),
     );
   }
 
   resetFilterIngredientIds() {
-    console.log('About to reset...');
     this.recipeStateService.resetFilterIngredientIds();
+
+    this.ingredientsSelected.update(() => []);
+  }
+
+  toggleIngredientFilterMode(position: number) {
+    this.recipeState.update((state) => ({
+      ...state,
+      filter: {
+        ...state.filter,
+        ingredientFilterMode: position,
+      },
+    }));
+  }
+
+  toggleTag(id: string) {
+    const current = this.ingredientsSelected();
+    this.ingredientsSelected.set(
+      current.includes(id)
+        ? current.filter((el) => el !== id)
+        : [...current, id],
+    );
   }
 }

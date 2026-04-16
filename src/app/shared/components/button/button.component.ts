@@ -1,6 +1,5 @@
 import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { Subject } from 'rxjs';
 
 @Component({
   selector: 'app-button',
@@ -9,9 +8,10 @@ import { Subject } from 'rxjs';
   styleUrl: './button.component.css',
 })
 export class ButtonComponent {
-  @Input() type: string = 'button';
+  @Input() type: 'button' | 'submit' | 'reset' = 'button';
+  @Input() fullWidth: false | true = false;
   @Input() btnStyle: 'filled' | 'outlined' | 'text-based' = 'filled';
-  @Input() size: 'small' | 'medium' | 'large' = 'medium';
+  @Input() size: 'sm' | 'md' | 'lg' = 'md';
   @Input() color: 'primary' | 'secondary' | 'danger' = 'primary';
   @Input() icon: string = '';
   @Input() iconPos: 'left' | 'right' = 'left';
@@ -20,6 +20,7 @@ export class ButtonComponent {
   getClasses() {
     return [
       'btn',
+      `btn-${this.fullWidth}`,
       `btn-${this.size}`,
       `btn-${this.color}`,
       `btn-${this.btnStyle}`,
@@ -32,12 +33,12 @@ export class ButtonComponent {
   }
 
   // Output event to notify parent on button click
-  @Output() clickEvent: EventEmitter<void> = new EventEmitter<void>();
+  @Output() click: EventEmitter<void> = new EventEmitter<void>();
 
   // Method to emit click event
   onClick(): void {
     if (!this.disabled) {
-      this.clickEvent.emit(); // Emit event when clicked
+      this.click.emit(); // Emit event when clicked
     }
   }
 }

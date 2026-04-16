@@ -1,0 +1,19 @@
+<div class="summary-meal-type">
+  <app-meal-type-header
+    [mealType]="mealType"
+    [servings]="servings()"
+    [dailyMealPerMealType]="[]"
+  />
+
+  <div class="list-meals">
+    @for (meal of mealsWithCategoryName(); track $index) {
+      @if (mealType === meal.mealType) {
+        <app-meal-recipe-item
+          [recipe]="meal"
+          [canViewRecipe]="true"
+          [canDeleteMeal]="false"
+        />
+      }
+    }
+  </div>
+</div>

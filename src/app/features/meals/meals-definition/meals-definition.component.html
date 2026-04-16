@@ -1,57 +1,49 @@
-<div class="flex justify-center px-4 py-6">
-  <main class="w-full max-w-3xl bg-primary-100">
-    @if (isLoading()) {
-    <div class="flex flex-col items-center">
-      <app-loading />
-    </div>
-    } @else {
-    <h1 class="text-4xl mb-8">Meal definition</h1>
+<div class="h-full layout-hcf">
+  <header class="page-full-width">
+    <app-stepper [navStep]="2" />
+  </header>
 
-    <p class="text-2xl">How many meals do you want to plan?</p>
-
-    <select id="number" [formControl]="nbMealSelected">
-      @for (n of nbMeals; track $index) {
-      <option [value]="n">
-        {{ n }}
-      </option>
-      }
-    </select>
-
-    <p class="block text-2xl font-medium text-gray-700 mt-8 mb-1">
-      Which meal categories are you interested in?
-    </p>
-
-    <div class="mb-6">
-      @for (cat of filteredCategories(); track cat.id) {
-      <div
-        class="flex items-center space-x-2 mb-2 hover:bg-gray-50 p-1 rounded"
-        (click)="toggleSelection(cat)"
-      >
-        <input
-          type="checkbox"
-          [checked]="selectedCategoriesIds().includes(cat.id)"
-          class="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
-        />
-        <label class="text-gray-800">
-          {{ cat.name }}
-        </label>
+  <div class="section-scroll space-y-6 py-4">
+    @if (dataIsLoading()) {
+      <div class="flex-col-center">
+        <app-loading />
       </div>
-      }
-    </div>
+    } @else {
+      <section>
+        <h2 class="question">How many meals do you want to plan?</h2>
 
-    <button
-      class="text-white px-4 py-2 w-full rounded-lg border"
-      [ngClass]="
-        filteredCategories().length === 0 || selectedCategories().length === 0
-          ? 'bg-gray-200 cursor-not-allowed border-gray-400'
-          : 'bg-primary-600 cursor-pointer border-primary-600'
-      "
-      [disabled]="filteredCategories().length === 0"
-      routerLink="/meals/filter"
+        <app-select
+          [options]="nbMeals"
+          [control]="mealNbSelected"
+          [responsive]="true"
+        ></app-select>
+      </section>
+
+      <section>
+        <h2 class="question">Which categories are you interested in?</h2>
+
+        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+          @for (cat of filteredCategories(); track cat.id) {
+            <app-chip
+              [fullWidth]="true"
+              [selected]="selectedCategoriesIds().includes(cat.id)"
+              (toggle)="toggleSelection(cat)"
+              >{{ cat.name }}</app-chip
+            >
+          }
+        </div>
+      </section>
+    }
+  </div>
+
+  <div class="page-full-width page-x-padding py-2">
+    <app-button
+      [fullWidth]="true"
+      [disabled]="proceedButtonIsDisabled()"
       (click)="proceed()"
+      routerLink="/meals/filter"
     >
       Proceed
-    </button>
-    }
-  </main>
+    </app-button>
+  </div>
 </div>

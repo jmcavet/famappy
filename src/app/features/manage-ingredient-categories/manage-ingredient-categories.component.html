@@ -1,28 +1,28 @@
 <ul>
   @for (ingredientCategory of dbIngredientCategories(); track $index) {
-  <li>
-    <div>{{ ingredientCategory.name }}</div>
+    <li>
+      <div>{{ ingredientCategory.name }}</div>
 
-    <div class="btns-container">
-      <button
-        type="button"
-        (click)="openModalUpdateIngredientCategory(ingredientCategory)"
-      >
-        <i
-          class="fa-regular fa-pen-to-square text-primary-600 dark:text-primary-500 text-xl"
-        ></i>
-      </button>
+      <div class="btns-container">
+        <button
+          type="button"
+          (click)="openModalUpdateIngredientCategory(ingredientCategory)"
+        >
+          <i
+            class="fa-regular fa-pen-to-square text-primary-600 dark:text-primary-500 text-xl"
+          ></i>
+        </button>
 
-      <button
-        type="button"
-        (click)="onConfirmRemoveCategory(ingredientCategory.id)"
-      >
-        <i
-          class="fa-regular fa-trash-can text-danger-600 dark:text-danger-500 text-xl"
-        ></i>
-      </button>
-    </div>
-  </li>
+        <button
+          type="button"
+          (click)="openDeleteModal($event, ingredientCategory.id)"
+        >
+          <i
+            class="fa-regular fa-trash-can text-danger-600 dark:text-danger-500 text-xl"
+          ></i>
+        </button>
+      </div>
+    </li>
   }
 </ul>
 
@@ -33,7 +33,7 @@
   <i class="fa-solid fa-plus fa-xl"></i>
 </button>
 
-<app-modal-input
+<!-- <app-modal-input
   title="Enter new ingredient category"
   [inputValue]="ingredientCategoryName()"
   [existingItems]="dbIngredientCategories()"
@@ -51,19 +51,10 @@
   btnConfirmColor="primary"
   [isModalOpen]="showModalUpdateIngredientCategory()"
   (confirmEventTest)="onConfirmModalUpdateIngredientCategory($event)"
-/>
-
-<app-modal-confirm
-  title="Delete confirmation"
-  [message]="deleteMessage()"
-  btnConfirmText="Delete"
-  btnConfirmColor="danger"
-  [isModalOpen]="showConfirmDeleteModal()"
-  (confirmEvent)="onConfirmModalAction($event)"
-/>
+/> -->
 
 <div class="flex flex-col items-center">
   @if (canShowPage()) {
-  <app-loading />
+    <app-loading />
   }
 </div>

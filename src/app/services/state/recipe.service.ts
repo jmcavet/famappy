@@ -45,6 +45,7 @@ export class RecipeStateService {
       prices: [],
       frequencies: [],
       seasons: [],
+      ingredientFilterMode: 0,
     },
     nbFilters: 0,
     imageUrl: '',
@@ -203,7 +204,7 @@ export class RecipeStateService {
    */
   updateProperty<key extends keyof RecipeState>(
     key: key,
-    value: RecipeState[key]
+    value: RecipeState[key],
   ) {
     this.recipeState.update((state) => {
       return {
@@ -239,7 +240,7 @@ export class RecipeStateService {
     if (this.recipeState().seasonsSelected.includes(seasonSelected)) {
       const index = this.recipeState().seasonsSelected.indexOf(seasonSelected);
       seasonsUpdated = this.recipeState().seasonsSelected.filter(
-        (_, i) => i !== index
+        (_, i) => i !== index,
       );
     } else {
       seasonsUpdated = [...this.recipeState().seasonsSelected, seasonSelected];
@@ -254,7 +255,7 @@ export class RecipeStateService {
       const index =
         this.recipeState().difficultiesSelected.indexOf(difficultySelected);
       difficultiesUpdated = this.recipeState().difficultiesSelected.filter(
-        (_, i) => i !== index
+        (_, i) => i !== index,
       );
     } else {
       difficultiesUpdated = [
@@ -272,7 +273,7 @@ export class RecipeStateService {
       const index =
         this.recipeState().frequenciesSelected.indexOf(frequencySelected);
       frequenciesUpdated = this.recipeState().frequenciesSelected.filter(
-        (_, i) => i !== index
+        (_, i) => i !== index,
       );
     } else {
       frequenciesUpdated = [
@@ -290,7 +291,7 @@ export class RecipeStateService {
       const index =
         this.recipeState().cuisinesSelected.indexOf(cuisineSelected);
       cuisinesUpdated = this.recipeState().cuisinesSelected.filter(
-        (_, i) => i !== index
+        (_, i) => i !== index,
       );
     } else {
       cuisinesUpdated = [
@@ -308,10 +309,10 @@ export class RecipeStateService {
       this.recipeState().recipeCategoryIds.includes(recipeCategorySelected.id)
     ) {
       const index = this.recipeState().recipeCategoryIds.indexOf(
-        recipeCategorySelected.id
+        recipeCategorySelected.id,
       );
       recipeCategoryIdsUpdated = this.recipeState().recipeCategoryIds.filter(
-        (_, i) => i !== index
+        (_, i) => i !== index,
       );
     } else {
       recipeCategoryIdsUpdated = [
@@ -342,7 +343,8 @@ export class RecipeStateService {
     difficulties: string[],
     prices: string[],
     frequencies: string[],
-    seasons: string[]
+    seasons: string[],
+    ingredientFilterMode: number,
   ) {
     this.recipeState.update((state) => ({
       ...state,
@@ -356,6 +358,7 @@ export class RecipeStateService {
         prices,
         frequencies,
         seasons,
+        ingredientFilterMode,
       },
     }));
     this.preserveState(true);

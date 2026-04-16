@@ -1,4 +1,4 @@
-import { IngredientDocInBackend, RecipeIngredient } from './ingredient.model';
+import { RecipeIngredient } from './ingredient.model';
 
 export type Difficulty = 'low' | 'normal' | 'high';
 export type Price = 'low' | 'normal' | 'high';
@@ -37,14 +37,14 @@ export interface RecipeState {
     prices: string[];
     frequencies: string[];
     seasons: string[];
+    ingredientFilterMode: number;
   };
   nbFilters: number;
   imageUrl: null | string;
   thumbnailUrl: string;
 }
 
-export interface RecipeDocInBackend
-  extends Omit<
-    RecipeState,
-    'ingredient' | 'ingredientId' | 'selectedTabTitle' | 'filter' | 'nbFilters'
-  > {}
+export interface RecipeDocInBackend extends Omit<
+  RecipeState,
+  'ingredient' | 'ingredientId' | 'selectedTabTitle' | 'filter' | 'nbFilters'
+> {}

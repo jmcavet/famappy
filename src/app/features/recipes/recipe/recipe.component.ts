@@ -24,21 +24,17 @@ import {
 } from '../../../models/cuisine.model';
 import { RecipeCategoryBackendService } from '../../../services/backend/recipe-category.service';
 import { CommonModule, NgIf } from '@angular/common';
+import { ModalService } from '../../../shared/modal/modal.service';
 
 @Component({
   selector: 'app-recipe',
-  imports: [
-    LoadingComponent,
-    ModalConfirmComponent,
-    IngredientQuantityPipe,
-    NgIf,
-    CommonModule,
-  ],
+  imports: [LoadingComponent, IngredientQuantityPipe, CommonModule],
   templateUrl: './recipe.component.html',
   styleUrl: './recipe.component.css',
 })
 export class RecipeComponent {
   private router = inject(Router);
+  private modalService = inject(ModalService);
 
   /** Services */
   private recipeStateService = inject(RecipeStateService);
@@ -67,7 +63,6 @@ export class RecipeComponent {
 
   /** Declaration of local signals */
   servings = signal<number>(0);
-  showConfirmDeleteModal = signal<boolean>(false);
 
   // 'recipeId' is the exact parameter passed in the url: /recipes/:recipeId
   recipeId = input.required<string>();
@@ -95,8 +90,6 @@ export class RecipeComponent {
       ? recipeFromHistory
       : this.dbRecipes().find((recipe) => recipe.id === this.recipeId());
 
-    console.log('recipe: ', recipe);
-
     return recipe;
   });
 
@@ -114,7 +107,7 @@ export class RecipeComponent {
       return 'none';
     }
     const cuisineSearched = this.dbCuisines().find(
-      (cuisine) => cuisine.id === this.recipe().cuisineId
+      (cuisine) => cuisine.id === this.recipe().cuisineId,
     );
 
     return cuisineSearched?.name ?? 'none';
@@ -127,7 +120,7 @@ export class RecipeComponent {
     }
 
     const mealCategorySearched = this.dbMealCategories().find(
-      (mealCategory) => mealCategory.id === this.recipe().mealCategoryId
+      (mealCategory) => mealCategory.id === this.recipe().mealCategoryId,
     );
     return mealCategorySearched?.name ?? 'none';
   });
@@ -188,9 +181,30 @@ export class RecipeComponent {
     });
   }
 
-  async removeRecipeFromStore() {
+  openDeleteModal(event: MouseEvent, recipeId: string) {
+    event.stopPropagation();
+
+    this.modalService.open(
+      ModalConfirmComponent,
+      {
+        title: 'Delete confirmation',
+        message: this.modalDeleteMessage(),
+        btnConfirmText: 'Delete',
+        btnConfirmColor: 'danger',
+      },
+      {
+        onConfirm: () => this.deleteRecipe(recipeId),
+      },
+    );
+  }
+
+  readonly modalDeleteMessage = computed(() => {
+    return `Do you really want to remove '${this.recipe().title}'?`;
+  });
+
+  async deleteRecipe(recipeId: string) {
     try {
-      await this.recipeService.removeRecipeFromStore(this.recipeId());
+      await this.recipeService.removeRecipeFromStore(recipeId);
 
       this.toastService.show('Recipe removed from database', 'success');
 
@@ -198,28 +212,10 @@ export class RecipeComponent {
     } catch (error) {
       this.toastService.show(
         'Recipe could not be removed from database',
-        'error'
+        'error',
       );
     }
   }
-
-  onConfirmModalAction(confirm: boolean) {
-    // Close the Cancel/Confirm modal
-    this.showConfirmDeleteModal.set(false);
-
-    if (confirm) {
-      // User has confirmed the action provided within the modal window
-      this.removeRecipeFromStore();
-    }
-  }
-
-  onConfirmRemoveRecipe() {
-    this.showConfirmDeleteModal.set(true);
-  }
-
-  readonly getDeleteMessage = computed(() => {
-    return `Do you really want to remove '${this.recipe().title}'?`;
-  });
 
   sanitizeUrl(url: string): string {
     if (!/^https?:\/\//i.test(url)) {

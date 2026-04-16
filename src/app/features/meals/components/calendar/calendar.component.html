@@ -1,0 +1,58 @@
+@if (dataLoading()) {
+  <div class="flex flex-col items-center">
+    <app-loading />
+  </div>
+} @else {
+  <div class="font-roboto surface-1 flex items-stretch justify-between py-1">
+    @if (calendarDaysWithCooks()) {
+      @for (day of calendarDaysWithCooks(); track $index; let i = $index) {
+        <div
+          class="day-container"
+          [class.active]="day.dayName === selectedDay().dayName"
+          (click)="toggleDay(day)"
+          [class.weekend]="
+            ['saturday', 'sunday'].includes(day.dayName) &&
+            day.dayName !== selectedDay().dayName
+          "
+        >
+          <div
+            class="day-month"
+            [class.active]="day.dayName === selectedDay().dayName"
+          >
+            {{ day.dayOfMonth }}
+          </div>
+          <div class="font-semibold text-md sm:text-lg relative">
+            {{ day.dayName | calendar | capitalize }}
+            @if (weekDaysWithMeals().includes(day.dayName)) {
+              <span class="text-xs absolute -top-2 -right-2 text-amber-500"
+                ><i class="fa-solid fa-circle fa-xs"></i
+              ></span>
+            }
+          </div>
+
+          <div
+            class="day-month"
+            [class.active]="day.dayName === selectedDay().dayName"
+          >
+            <div class="flex items-center gap-1">
+              @for (cook of day.cooks; track $index) {
+                <p
+                  class="cook"
+                  [class.firstCook]="parentNames().indexOf(cook) === 0"
+                  [class.secondCook]="parentNames().indexOf(cook) === 1"
+                >
+                  @if (cook && cook.length > 0) {
+                    <!--First letter of the cook -->
+                    {{ cook[0] }}
+                  } @else {
+                    ?
+                  }
+                </p>
+              }
+            </div>
+          </div>
+        </div>
+      }
+    }
+  </div>
+}

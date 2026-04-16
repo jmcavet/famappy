@@ -9,10 +9,10 @@ import {
   Validators,
 } from '@angular/forms';
 import { Member } from '../member/member.model';
-import { ButtonComponent } from '../../../../shared/components/button/button.component';
 import { LoadingComponent } from '../../../../shared/components/loading/loading.component';
 import { MemberBackendService } from '../../../../services/backend/member.service';
 import { pastDateValidator } from '../../../../shared/validators/form-validators';
+import { ButtonComponent } from '../../../../shared/ui/button/button.component';
 
 @Component({
   selector: 'app-member-modal',

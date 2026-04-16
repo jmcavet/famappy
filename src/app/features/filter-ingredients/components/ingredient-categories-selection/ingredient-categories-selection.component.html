@@ -1,18 +1,10 @@
-<div class="flex flex-wrap items-center justify-start gap-2 mt-6">
-  @for (ingredientCategory of ingredientCategories(); track $index) {
-  <button
-    class="ingredient-type"
-    [class.active]="
-      ingredientCategorySelected()?.name === ingredientCategory.name
-    "
-    (click)="
-      selectIngredientType(
-        ingredientCategory,
-        ingredientCategorySelected()?.name === ingredientCategory.name
-      )
-    "
-  >
-    {{ ingredientCategory.name }}
-  </button>
-  }
+<div class="main-container no-scrollbar">
+  <app-segmented-control
+    [fullWidth]="false"
+    size="md"
+    [options]="ingredientCategoriesNames()"
+    color="primary"
+    [selectedInput]="ingredientCatNameSelected()!"
+    (selectionChange)="toggleCategory($event)"
+  ></app-segmented-control>
 </div>

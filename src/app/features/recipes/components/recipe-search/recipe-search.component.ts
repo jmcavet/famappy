@@ -1,4 +1,4 @@
-import { Component, inject, input, model, signal } from '@angular/core';
+import { Component, inject, input, model } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { RecipeWithId } from '../recipe-card/recipe.model';
@@ -57,6 +57,7 @@ export class RecipeSearchComponent {
   }
 
   toggleSorting() {
+    console.log('recipeState: ', this.recipeState());
     this.dateIsIncreasing.update((curr) => !curr);
   }
 }

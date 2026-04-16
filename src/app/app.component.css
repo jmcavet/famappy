@@ -1,4 +1,7 @@
-main {
-  /* @apply bg-slate-300 dark:bg-slate-900 flex-col items-center overflow-auto my-10vh h-main sm:px-8 md:px-16 lg:px-24 xl:px-40; */
-  @apply bg-gray-100 dark:bg-gray-900 mx-auto overflow-auto my-8vh h-main;
-}
+/* main {
+  @apply surface-0 mx-auto overflow-auto my-8vh h-main;
+} */
+
+/* main {
+  @apply surface-0 flex flex-1 flex-col min-h-0 overflow-y-auto;
+} */

@@ -3,9 +3,11 @@ import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { MemberComponent } from './components/member/member.component';
 import { MemberModalComponent } from './components/member-modal/member-modal.component';
-import { ButtonComponent } from '../../shared/components/button/button.component';
+// import { ButtonComponent } from '../../shared/components/button/button.component';
 import { LoadingComponent } from '../../shared/components/loading/loading.component';
 import { MemberBackendService } from '../../services/backend/member.service';
+import { SegmentedControlComponent } from '../../shared/ui/segmented-control/segmented-control.component';
+import { ButtonComponent } from '../../shared/ui/button/button.component';
 
 @Component({
   selector: 'app-members',
@@ -16,6 +18,7 @@ import { MemberBackendService } from '../../services/backend/member.service';
     ButtonComponent,
     MemberModalComponent,
     LoadingComponent,
+    SegmentedControlComponent,
   ],
   templateUrl: './members.component.html',
   styleUrl: './members.component.css',
@@ -32,15 +35,20 @@ export class MembersComponent {
   memberType = signal<string>('parent');
   modalTitle = signal<string>('');
 
-  showParents() {
-    this.memberType.set('parent');
-    this.modalTitle.set(`Enter new ${this.memberType}`);
+  toggleMember(member: string) {
+    this.memberType.update(() => member);
+    this.modalTitle.set(`Enter new ${this.memberType()}`);
   }
 
-  showChildren() {
-    this.memberType.set('child');
-    this.modalTitle.set(`Enter new ${this.memberType}`);
-  }
+  // showParents() {
+  //   this.memberType.set('parent');
+  //   this.modalTitle.set(`Enter new ${this.memberType}`);
+  // }
+
+  // showChildren() {
+  //   this.memberType.set('child');
+  //   this.modalTitle.set(`Enter new ${this.memberType}`);
+  // }
 
   getMembersByTypeComputed(memberType: string): Signal<any[]> {
     return computed(() => {

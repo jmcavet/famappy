@@ -1,0 +1,35 @@
+.summary-meal-type {
+  @apply flex flex-col gap-2 mb-2 rounded-t-2xl shadow-[0_0_6px_rgba(0,0,0,0.25)] dark:shadow-[0_0_6px_rgba(255,255,255,0.18)] dark:border dark:border-neutral-600;
+}
+
+.summary-header {
+  @apply bg-primary-100 text-neutral-900 dark:bg-primary-700 dark:text-neutral-100 flex items-center justify-between gap-6 p-2 rounded-t-2xl;
+}
+
+.meal-type {
+  @apply font-semibold text-lg sm:text-xl text-primary-700 dark:text-primary-200;
+}
+
+.btn-add-meal {
+  @apply text-neutral-300 dark:text-neutral-600 cursor-not-allowed;
+}
+
+.btn-add-meal.active {
+  @apply text-primary-500 dark:text-primary-300 cursor-pointer;
+}
+
+.people-container {
+  @apply flex items-center justify-between gap-1;
+}
+
+.people {
+  @apply text-neutral-600 border-neutral-500 dark:text-neutral-300 dark:border-neutral-400 flex items-center justify-between border px-2 py-1 rounded-3xl gap-2 sm:gap-4;
+}
+
+.cook {
+  @apply bg-indigo-400 text-white hover:bg-indigo-500 dark:bg-indigo-600 dark:text-neutral-50 dark:hover:bg-indigo-500 text-xs sm:text-base p-2 rounded-full;
+}
+
+.list-meals {
+  @apply flex flex-col justify-between gap-2 my-4;
+}

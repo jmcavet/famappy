@@ -1,31 +1,27 @@
-.card-container {
-  @apply flex flex-col gap-2;
+.card {
+  @apply flex flex-col h-full space-y-3 surface-1 p-2 rounded-lg shadow-md hover:cursor-pointer hover:bg-primary-50 dark:hover:bg-primary-950;
 }
 
-.left-container {
-  @apply col-span-1 bg-primary-100 dark:bg-primary-900;
+.card-image {
+  @apply w-full h-40 object-cover;
 }
 
-.right-container {
-  @apply col-span-2 flex flex-col justify-between gap-2 p-2;
+.card-image-empty {
+  @apply w-full h-40 bg-primary-100 dark:bg-primary-900 flex-center font-bold text-3xl;
 }
 
-.header {
-  @apply flex items-center justify-between;
+.card-image-empty i {
+  @apply text-primary-200 dark:text-primary-600;
 }
 
-.title {
-  @apply text-lg font-medium;
+.card-body {
+  @apply flex flex-col justify-between gap-2 flex-1;
 }
 
-.summary {
-  @apply flex justify-between text-gray-500 dark:text-gray-400;
+.card-title {
+  @apply font-bold line-clamp-2;
 }
 
-.categories {
-  @apply flex justify-between text-gray-500 dark:text-gray-400 text-center text-xs;
-}
-
-.category {
-  @apply flex items-center justify-start gap-1 px-2 bg-transparent border border-gray-400 rounded-xl py-2 dark:text-gray-500 dark:border-gray-600;
+.card-info {
+  @apply flex-between gap-1 text-neutral-600 dark:text-neutral-300 text-xs;
 }

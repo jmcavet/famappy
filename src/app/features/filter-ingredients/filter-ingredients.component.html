@@ -1,37 +1,44 @@
-<div class="flex flex-col items-start justify-between gap-4 p-4">
-  <div class="input-wrapper">
-    <input
-      type="text"
-      id="search"
-      name="search"
-      placeholder="Search for an ingredient"
-      autocomplete="off"
-      [(ngModel)]="filter"
-    />
+<div class="page-container">
+  <div class="surface-1 sticky-top space-y-4 p-4 min-w-0">
+    <div class="input-wrapper">
+      <input
+        type="text"
+        id="search"
+        name="search"
+        placeholder="Search for an ingredient"
+        autocomplete="off"
+        [(ngModel)]="filter"
+      />
 
-    @if(filter()) {
-    <button type="button" (click)="onResetFilterText()" class="btn-reset">
-      <i class="fa-solid fa-close fa-lg"></i>
-    </button>
-    }
-    <i class="fa-solid fa-search fa-lg icon-search"></i>
+      @if (filter()) {
+        <button type="button" (click)="onResetFilterText()" class="btn-reset">
+          <i class="fa-solid fa-close fa-lg"></i>
+        </button>
+      }
+      <i class="fa-solid fa-search fa-lg icon-search"></i>
+    </div>
+
+    <div>
+      <app-ingredient-categories-selection-page />
+    </div>
   </div>
 
-  <app-ingredient-categories-selection-page />
-
-  <div class="w-full">
-    @for(ingredient of ingredientsFiltered(); track $index) {
-    <app-ingredient-item
-      [ingredient]="ingredient"
-      [selectedIngredientIds]="selectedIngredientIds()"
-      (toggleItem)="toggleItem($event)"
-    />
+  <div class="section-scroll space-y-2 p-4">
+    @for (ingredient of ingredientsFiltered(); track $index) {
+      <div class="rounded-md">
+        <app-ingredient-item
+          [ingredient]="ingredient"
+          [selectedIngredientIds]="selectedIngredientIds()"
+          (toggleItem)="toggleItem($event)"
+        />
+      </div>
     }
   </div>
 
-  @if(nbIngredientsFiltered()) {
-  <button (click)="applyFilter()" class="btn-apply-filter">
-    {{ btnText() }}
-  </button>
-  }
+  <app-button
+    (click)="applyFilter()"
+    [fullWidth]="true"
+    [disabled]="!nbIngredientsFiltered()"
+    >{{ btnText() }}</app-button
+  >
 </div>

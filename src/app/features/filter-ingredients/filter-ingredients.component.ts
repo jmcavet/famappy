@@ -17,6 +17,7 @@ import { IngredientDocInBackend } from '../../models/ingredient.model';
 import { IngredientTypeWithDate } from '../../models/ingredient-type.model';
 import { RecipeStateService } from '../../services/state/recipe.service';
 import { Location } from '@angular/common';
+import { ButtonComponent } from '../../shared/ui/button/button.component';
 
 @Component({
   selector: 'app-filter-ingredients',
@@ -24,6 +25,7 @@ import { Location } from '@angular/common';
     FormsModule,
     IngredientCategoriesSelectionComponent,
     IngredientItemComponent,
+    ButtonComponent,
   ],
   templateUrl: './filter-ingredients.component.html',
   styleUrl: './filter-ingredients.component.css',
@@ -53,7 +55,7 @@ export class FilterIngredientsComponent {
 
   // Initialize the ingredients IDs (eventually) previously selected by the user
   selectedIngredientIds = signal<string[]>(
-    this.recipeStateService.recipeState().filter.ingredientIds
+    this.recipeStateService.recipeState().filter.ingredientIds,
   );
 
   filter = model.required();
@@ -80,7 +82,7 @@ export class FilterIngredientsComponent {
 
     let filtered = categorySelected
       ? ingredientsWithCategoryName.filter(
-          (ingredient) => ingredient.categoryId === categorySelected.id
+          (ingredient) => ingredient.categoryId === categorySelected.id,
         )
       : ingredientsWithCategoryName;
 
@@ -106,13 +108,13 @@ export class FilterIngredientsComponent {
 
     return nbIngredientsSelected > 0
       ? 'Filter ' + nbIngredientsSelected + ' ingredients'
-      : '';
+      : 'Filter';
   });
 
   applyFilter() {
     console.log('Applying filter...');
     this.recipeStateService.saveFilterIngredientIds(
-      this.selectedIngredientIds()
+      this.selectedIngredientIds(),
     );
 
     this.location.back();

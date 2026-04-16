@@ -10,18 +10,21 @@
       autocomplete="off"
       class="col-span-2"
     />
-    @if (form.get('title')?.touched && form.get('title')?.invalid) {
-    <div class="validator">
-      @if (form.get('title')?.errors?.['required']) {
-      <small>Title is required.</small>
-      } @if (form.get('title')?.errors?.['minlength']) {
-      <small>Title must be at least 3 characters long.</small>
-      } @if (form.get('title')?.errors?.['maxlength']) {
-      <small>Title must be no greater than 36 characters long.</small>
-      }
-    </div>
-    } @if(messageUniqueTitle()) {
-    <small>{{ messageUniqueTitle() }}</small>
+    @if (form.get("title")?.touched && form.get("title")?.invalid) {
+      <div class="validator">
+        @if (form.get("title")?.errors?.["required"]) {
+          <small>Title is required.</small>
+        }
+        @if (form.get("title")?.errors?.["minlength"]) {
+          <small>Title must be at least 3 characters long.</small>
+        }
+        @if (form.get("title")?.errors?.["maxlength"]) {
+          <small>Title must be no greater than 36 characters long.</small>
+        }
+      </div>
+    }
+    @if (messageUniqueTitle()) {
+      <small>{{ messageUniqueTitle() }}</small>
     }
   </div>
 
@@ -41,21 +44,22 @@
       <span><i class="fa-solid fa-camera mr-2"></i></span> Upload Image
     </label>
     @if (imageUrl) {
-    <div class="flex items-center justify-between gap-4">
-      <div class="image-name italic">{{ imageFile()?.name }}</div>
-      <button
-        class="text-danger-600 dark:text-danger-500"
-        (click)="removeImage()"
-      >
-        <i class="fa-solid fa-trash"></i>
-      </button>
-    </div>
-    } @if (imageUrl) {
-    <img
-      [src]="imageUrl"
-      alt="Image preview"
-      class="w-auto h-[35vh] rounded shadow border border-gray-200 dark:border-gray-700"
-    />
+      <div class="flex items-center justify-between gap-4">
+        <div class="image-name italic">{{ imageFile()?.name }}</div>
+        <button
+          class="text-danger-600 dark:text-danger-500"
+          (click)="removeImage()"
+        >
+          <i class="fa-solid fa-trash"></i>
+        </button>
+      </div>
+    }
+    @if (imageUrl) {
+      <img
+        [src]="imageUrl"
+        alt="Image preview"
+        class="w-auto h-[35vh] rounded shadow border border-gray-200 dark:border-gray-700"
+      />
     }
   </div>
 
@@ -76,15 +80,18 @@
       <span class="unit">min</span>
     </div>
 
-    @if (form.get('preparationTime')?.touched &&
-    form.get('preparationTime')?.invalid) {
-    <div class="validator">
-      @if (form.get('preparationTime')?.errors?.['required']) {
-      <small>Time in minute is required.</small>
-      } @if (form.get('preparationTime')?.errors?.['pattern']) {
-      <small>Input must be a positive number.</small>
-      }
-    </div>
+    @if (
+      form.get("preparationTime")?.touched &&
+      form.get("preparationTime")?.invalid
+    ) {
+      <div class="validator">
+        @if (form.get("preparationTime")?.errors?.["required"]) {
+          <small>Time in minute is required.</small>
+        }
+        @if (form.get("preparationTime")?.errors?.["pattern"]) {
+          <small>Input must be a positive number.</small>
+        }
+      </div>
     }
 
     <div class="flex items-center justify-start gap-2">
@@ -103,14 +110,15 @@
       <span class="unit">min</span>
     </div>
 
-    @if (form.get('cookingTime')?.touched && form.get('cookingTime')?.invalid) {
-    <div class="validator">
-      @if (form.get('cookingTime')?.errors?.['required']) {
-      <small>Time in minute is required.</small>
-      } @if (form.get('cookingTime')?.errors?.['pattern']) {
-      <small>Input must be a positive number.</small>
-      }
-    </div>
+    @if (form.get("cookingTime")?.touched && form.get("cookingTime")?.invalid) {
+      <div class="validator">
+        @if (form.get("cookingTime")?.errors?.["required"]) {
+          <small>Time in minute is required.</small>
+        }
+        @if (form.get("cookingTime")?.errors?.["pattern"]) {
+          <small>Input must be a positive number.</small>
+        }
+      </div>
     }
 
     <div class="flex items-center justify-start gap-2">
@@ -137,13 +145,13 @@
     </div>
     <div class="group-items">
       @for (difficultyOption of difficultyOptions; track $index) {
-      <button
-        class="btn-tag"
-        [class.active]="difficulty() === difficultyOption"
-        (click)="setDifficulty(difficultyOption)"
-      >
-        {{ difficultyOption | capitalize }}
-      </button>
+        <button
+          class="btn-tag"
+          [class.active]="difficulty() === difficultyOption"
+          (click)="setDifficulty(difficultyOption)"
+        >
+          {{ difficultyOption | capitalize }}
+        </button>
       }
     </div>
     <div class="flex items-center justify-start gap-2">
@@ -152,21 +160,22 @@
     </div>
     <div class="group-items">
       @for (priceOption of priceOptions; track $index) {
-      <button
-        class="btn-tag"
-        [class.active]="price() === priceOption"
-        (click)="setPrice(priceOption)"
-      >
-        @if (priceOption === "low") {<i class="fa-solid fa-euro-sign"></i>}
-        @else if (priceOption === "normal") {
-        <i class="fa-solid fa-euro-sign"></i
-        ><i class="fa-solid fa-euro-sign"></i>
-        } @else {
-        <i class="fa-solid fa-euro-sign"></i
-        ><i class="fa-solid fa-euro-sign"></i>
-        <i class="fa-solid fa-euro-sign"></i>
-        }
-      </button>
+        <button
+          class="btn-tag"
+          [class.active]="price() === priceOption"
+          (click)="setPrice(priceOption)"
+        >
+          @if (priceOption === "low") {
+            <i class="fa-solid fa-euro-sign"></i>
+          } @else if (priceOption === "normal") {
+            <i class="fa-solid fa-euro-sign"></i
+            ><i class="fa-solid fa-euro-sign"></i>
+          } @else {
+            <i class="fa-solid fa-euro-sign"></i
+            ><i class="fa-solid fa-euro-sign"></i>
+            <i class="fa-solid fa-euro-sign"></i>
+          }
+        </button>
       }
     </div>
     <div class="flex items-center justify-start gap-2">
@@ -175,13 +184,13 @@
     </div>
     <div class="group-items">
       @for (frequencyOption of frequencyOptions; track $index) {
-      <button
-        class="btn-tag"
-        [class.active]="frequency() === frequencyOption"
-        (click)="setFrequency(frequencyOption)"
-      >
-        {{ frequencyOption | capitalize }}
-      </button>
+        <button
+          class="btn-tag"
+          [class.active]="frequency() === frequencyOption"
+          (click)="setFrequency(frequencyOption)"
+        >
+          {{ frequencyOption | capitalize }}
+        </button>
       }
     </div>
   </div>
@@ -193,13 +202,13 @@
     </div>
     <div class="flex items-center justify-between gap-2">
       @for (seasonOption of seasonOptions; track $index) {
-      <button
-        class="btn-tag"
-        [class.active]="seasonsSelected().includes(seasonOption)"
-        (click)="setSeason(seasonOption)"
-      >
-        {{ seasonOption | capitalize }}
-      </button>
+        <button
+          class="btn-tag"
+          [class.active]="seasonsSelected().includes(seasonOption)"
+          (click)="setSeason(seasonOption)"
+        >
+          {{ seasonOption | capitalize }}
+        </button>
       }
     </div>
   </div>
@@ -251,7 +260,7 @@
       <app-button
         icon="fa fa-plus"
         iconPos="left"
-        size="medium"
+        size="md"
         color="primary"
         btnStyle="text-based"
         (click)="openModalInput()"
@@ -261,13 +270,13 @@
 
     <ul class="flex flex-wrap justify-start gap-2">
       @for (recipeCategory of dbRecipeCategories(); track $index) {
-      <li
-        class="btn-tag"
-        [class.active]="selectedCategoryIds().has(recipeCategory.id)"
-        (click)="setRecipeCategory(recipeCategory)"
-      >
-        {{ recipeCategory.name }}
-      </li>
+        <li
+          class="btn-tag"
+          [class.active]="selectedCategoryIds().has(recipeCategory.id)"
+          (click)="setRecipeCategory(recipeCategory)"
+        >
+          {{ recipeCategory.name }}
+        </li>
       }
     </ul>
   </div>
@@ -289,8 +298,8 @@
       />
     </div>
   </div>
-  @if (form.get('source')?.touched && form.get('source')?.invalid) {
-  <small>A valid URL must be entered.</small>
+  @if (form.get("source")?.touched && form.get("source")?.invalid) {
+    <small>A valid URL must be entered.</small>
   }
 
   <div class="group-comment">
@@ -312,17 +321,17 @@
   </div>
 </form>
 
-<app-modal-input
+<!-- <app-modal-input
   title="Enter recipe category"
   [existingItems]="dbRecipeCategories()"
   btnConfirmText="Apply"
   btnConfirmColor="primary"
   [isModalOpen]="showModalInput()"
   (confirmEventTest)="onConfirmModalAction($event)"
-/>
+/> -->
 
 <div class="flex flex-col items-center">
   @if (!canShowTemplate()) {
-  <app-loading />
+    <app-loading />
   }
 </div>

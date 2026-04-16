@@ -1,0 +1,11 @@
+<div class="segmented">
+  @for (option of options(); track option; let i = $index) {
+    <button
+      [class]="classes"
+      [class.active]="selected() === i"
+      (click)="select(i)"
+    >
+      <i class="{{ option }}"></i>
+    </button>
+  }
+</div>

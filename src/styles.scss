@@ -2,11 +2,20 @@
 @tailwind components;
 @tailwind utilities;
 
+@import "./styles/surfaces";
+@import "./styles/texts";
+@import "./styles/colors";
+@import "./styles/layouts";
+@import "./styles/segmented_control";
+@import "./styles/select";
+@import "./styles/buttons";
+@import "./styles/chips";
+@import "./styles/utilities";
+
 html,
 body {
   height: 100%;
   margin: 0;
-  font-family: Roboto, "Helvetica Neue", sans-serif;
   overflow: hidden;
 }
 

@@ -1,11 +1,11 @@
 <div class="container-grid">
   @if (showMessageNoCategories()) {
-  <div class="message-no-category">
-    <p class="dark:text-white">
-      You have not specified any ingredient category yet!
-    </p>
-    <app-ingredient-categories-selection-page />
-  </div>
+    <div class="message-no-category">
+      <p class="dark:text-white">
+        You have not specified any ingredient category yet!
+      </p>
+      <app-ingredient-categories-selection-page />
+    </div>
   }
   <app-ingredient-categories-selection-page />
 
@@ -44,9 +44,9 @@
             (change)="onCategoryChange($event)"
           >
             @for (ingredientCategory of ingredientCategories(); track $index) {
-            <option [value]="ingredientCategory.name">
-              {{ ingredientCategory.name }}
-            </option>
+              <option [value]="ingredientCategory.name">
+                {{ ingredientCategory.name }}
+              </option>
             }
           </select>
 
@@ -80,20 +80,12 @@
         <button
           type="button"
           class="bg-transparent"
-          (click)="onConfirmRemoveIngredient(ingredient.id)"
+          (click)="openDeleteModal($event, ingredient.id)"
         >
           <i
             class="fa-regular fa-trash-can text-danger-600 dark:text-danger-500 text-xl"
           ></i>
         </button>
-        <app-modal-confirm
-          title="Delete confirmation"
-          [message]="getDeleteMessage()"
-          btnConfirmText="Delete"
-          btnConfirmColor="danger"
-          [isModalOpen]="showConfirmDeleteModal()"
-          (confirmEvent)="onConfirmDeleteModalAction($event)"
-        />
       </div>
     </li>
   </ul>
@@ -101,6 +93,6 @@
 
 <div class="flex flex-col items-center">
   @if (pageIsLoading()) {
-  <app-loading />
+    <app-loading />
   }
 </div>

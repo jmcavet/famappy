@@ -1,53 +1,40 @@
-<div class="flex flex-col justify-center items-center">
-  <h1 class="text-3xl my-6 text-center dark:text-gray-300">Family members</h1>
-  <div
-    class="inline-flex items-center justify-center mb-6 bg-primary-100 dark:bg-primary-900 rounded-md"
-  >
-    <button
-      class="px-4 py-2 rounded-l-md my-1 ml-1"
-      [ngClass]="
-        memberType() === 'parent'
-          ? 'bg-primary-600 text-white hover:bg-primary-700 dark:bg-primary-500 dark:hover:bg-primary-600'
-          : 'bg-white text-primary-400 hover:bg-primary-50 dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-gray-400'
-      "
-      (click)="showParents()"
-    >
-      Parents
-    </button>
-    <button
-      class="px-4 py-2 rounded-r-md my-1 mr-1"
-      [ngClass]="
-        memberType() === 'child'
-          ? 'bg-primary-600 text-white hover:bg-primary-700 dark:bg-primary-500 dark:hover:bg-primary-600'
-          : 'bg-white text-primary-400 hover:bg-primary-50 dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-gray-400'
-      "
-      (click)="showChildren()"
-    >
-      Children
-    </button>
-  </div>
+<div class="space-y-8">
+  <h1 class="title">Family members</h1>
 
-  @if ((getMembersByTypeComputed("parent").length < 4 || memberType() ===
-  "child") && !isLoading()) {
-  <app-member-modal [type]="memberType()" [title]="modalTitle()"
-    ><div class="mx-auto text-center mb-4">
-      <app-button
-        icon="fa fa-plus"
-        iconPos="left"
-        size="medium"
-        btnStyle="text-based"
-        >Add {{ memberType() }}</app-button
-      >
-    </div>
-  </app-member-modal>
-  }
+  <section class="member-selection-container">
+    <app-segmented-control
+      [fullWidth]="false"
+      size="lg"
+      [options]="['parent', 'child']"
+      [selectedInput]="memberType()"
+      (selectionChange)="toggleMember($event)"
+    >
+    </app-segmented-control>
 
-  <div class="flex flex-col items-center">
+    @if (
+      (getMembersByTypeComputed("parent").length < 4 ||
+        memberType() === "child") &&
+      !isLoading()
+    ) {
+      <app-member-modal [type]="memberType()" [title]="modalTitle()"
+        ><div class="mx-auto text-center">
+          <app-button variant="ghost" size="md"
+            ><i class="fa fa-plus fa-xl mr-2"></i>Add
+            {{ memberType() }}</app-button
+          >
+        </div>
+      </app-member-modal>
+    }
+  </section>
+
+  <section class="member-cards-container">
     @if (isLoading()) {
-    <app-loading />
-    } @for (member of dbMembers(); track $index) { @if ( member.type ===
-    (memberType()) && !isLoading()) {
-    <app-member [member]="member" [members]="dbMembers()" />
-    } }
-  </div>
+      <app-loading />
+    }
+    @for (member of dbMembers(); track $index) {
+      @if (member.type === memberType() && !isLoading()) {
+        <app-member [member]="member" [members]="dbMembers()" />
+      }
+    }
+  </section>
 </div>

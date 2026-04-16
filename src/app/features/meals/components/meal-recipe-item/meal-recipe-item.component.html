@@ -1,0 +1,47 @@
+<div
+  class="font-inter w-full flex-center gap-2 sm:gap-4 px-1 py-1 cursor-pointerx hover:bg-neutral-50/60 dark:hover:bg-neutral-700/60"
+  (click)="viewRecipe()"
+>
+  @if (showImage()) {
+    @if (thumbnailUrl()) {
+      <img
+        [src]="thumbnailUrl()"
+        alt="{{ recipe()?.title }}"
+        loading="lazy"
+        class="w-14 h-14 object-cover"
+      />
+    } @else {
+      <i
+        class="w-14 h-14 bg-gradient-to-r from-neutral-200 to-neutral-300 dark:from-neutral-700 dark:to-neutral-600 flex items-center justify-center text-lg font-bold fa-solid fa-utensils"
+      ></i>
+    }
+  } @else {
+    <i class="fa-solid fa-cart-shopping"></i>
+  }
+
+  <div class="flex-1">
+    <p class="text-neutral-800 dark:text-neutral-200">
+      {{ recipeTitle() }}
+    </p>
+  </div>
+  <div
+    class="flex flex-col items-end gap-2 text-neutral-600 dark:text-neutral-400"
+  >
+    <p
+      class="text-xs bg-neutral-100 text-neutral-600 dark:bg-neutral-700 dark:text-neutral-300 rounded-xl px-2 py-1"
+    >
+      {{ mealCategoryName() }}
+    </p>
+    <div class="flex items-center justify-center gap-2">
+      <i class="fa-regular fa-clock"></i>
+      <p class="text-sm">
+        {{ totalTime() | mintohour }}
+      </p>
+    </div>
+  </div>
+  <button (click)="openDeleteModal($event)">
+    <i
+      class="fa-solid fa-trash-arrow-up fa-md text-red-500 dark:text-red-700"
+    ></i>
+  </button>
+</div>

@@ -1,3 +1,7 @@
+section {
+  @apply surface-1 flex-center gap-6 flex-wrap p-4;
+}
+
 button {
-  @apply bg-blue-600 text-white dark:bg-blue-500 dark:text-black px-6 py-4 rounded-lg flex items-center justify-center;
+  @apply bg-primary text-white dark:bg-primary-dark dark:text-neutral-50 px-6 py-4 rounded-lg flex items-center justify-center;
 }

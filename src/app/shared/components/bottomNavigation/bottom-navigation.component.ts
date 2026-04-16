@@ -3,7 +3,6 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatIconModule } from '@angular/material/icon';
 import { RouterLink, RouterLinkActive } from '@angular/router';
-import { ButtonComponent } from '../button/button.component';
 
 @Component({
   selector: 'app-bottom-navigation',
@@ -13,7 +12,6 @@ import { ButtonComponent } from '../button/button.component';
     MatIconModule,
     RouterLink,
     RouterLinkActive,
-    ButtonComponent,
   ],
   templateUrl: './bottom-navigation.component.html',
   styleUrl: './bottom-navigation.component.css',

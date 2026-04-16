@@ -1,12 +1,4 @@
-import {
-  AfterViewInit,
-  Component,
-  Inject,
-  inject,
-  OnInit,
-  signal,
-  ViewChild,
-} from '@angular/core';
+import { AfterViewInit, Component, ViewChild } from '@angular/core';
 
 import { RouterOutlet } from '@angular/router';
 import { FormsModule } from '@angular/forms';
@@ -18,30 +10,19 @@ import { MatButtonModule } from '@angular/material/button';
 import { CommonModule } from '@angular/common';
 import { ToastContainerComponent } from './shared/components/toast-container/toast-container.component';
 import { ToastService } from './services/toast.service';
-import { HeaderComponent } from './shared/components/header/header.component';
 import { FooterComponent } from './shared/components/footer/footer.component';
-import { BottomNavigationComponent } from './shared/components/bottomNavigation/bottom-navigation.component';
-
-interface Item {
-  id: string;
-  text: string;
-}
+import { ModalHostComponent } from './shared/modal/modal-host.component';
+import { ContextMenuHostComponent } from './shared/context-menu/context-menu-host/context-menu-host.component';
 
 @Component({
   selector: 'app-root',
   imports: [
     RouterOutlet,
     CommonModule,
-    FormsModule,
-    HeaderComponent,
-    ButtonModule,
-    InputTextModule,
-    DialogModule,
-    MatMenuModule,
-    MatButtonModule,
-    BottomNavigationComponent,
     FooterComponent,
     ToastContainerComponent,
+    ModalHostComponent,
+    ContextMenuHostComponent,
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css',
@@ -52,26 +33,7 @@ export class AppComponent implements AfterViewInit {
 
   constructor(private toastService: ToastService) {}
 
-  message: string = '';
-
-  visible: boolean = false;
-
-  showDialog() {
-    this.visible = true;
-  }
-
   ngAfterViewInit(): void {
     this.toastService.registerContainer(this.toastContainer.viewContainerRef);
-  }
-
-  items?: Item[];
-
-  onSubmit() {
-    this.message = '';
-  }
-
-  toggleDarkMode() {
-    const element = document.querySelector('html');
-    element?.classList.toggle('my-app-dark');
   }
 }

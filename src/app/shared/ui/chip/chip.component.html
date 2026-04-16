@@ -1,0 +1,6 @@
+<button type="button" [disabled]="false" [class]="classes" (click)="onClick()">
+  @if (selected) {
+    <span class="mr-2"><i class="fa-solid fa-check"></i></span>
+  }
+  <ng-content />
+</button>

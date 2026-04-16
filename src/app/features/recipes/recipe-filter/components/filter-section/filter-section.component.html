@@ -1,23 +1,23 @@
 <div>
-  <div class="flex items-center justify-start gap-6 mb-2">
+  <div class="flex-start gap-6">
     <div class="header">
       <i class="{{ icon }}"></i>
-      <p>{{ sectionTitle }}</p>
+      <p class="font-semibold">{{ sectionTitle }}</p>
     </div>
-    <button class="select-all" (click)="selectDeselectAll()">
-      {{ labelToggleSelectAll() }}
-    </button>
+    @if (canSelectAll()) {
+      <app-button variant="ghost" (click)="selectDeselectAll()">{{
+        labelToggleSelectAll()
+      }}</app-button>
+    }
   </div>
 
-  <div class="flex flex-wrap items-center justify-start gap-x-2 gap-y-4">
+  <div class="flex-start flex-wrap gap-x-2 gap-y-4">
     @for (tag of tags(); track tag.id) {
-    <button
-      class="btn-tag"
-      [class.active]="selectedIds().includes(tag.id)"
-      (click)="toggleTag(tag.id)"
-    >
-      {{ tag.name }}
-    </button>
+      <app-chip
+        [selected]="selectedIds().includes(tag.id)"
+        (click)="toggleTag(tag.id)"
+        >{{ tag.name }}</app-chip
+      >
     }
   </div>
 </div>

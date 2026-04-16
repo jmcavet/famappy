@@ -5,7 +5,7 @@
 
   <div
     [ngClass]="isModalOpen() ? 'block' : 'hidden'"
-    class="fixed inset-0 bg-gray-800 bg-opacity-75 flex justify-center items-center"
+    class="fixed inset-0 bg-neutral-800 bg-opacity-75 flex justify-center items-center"
     (click)="closeModalOnOutsideClick($event)"
   >
     <div class="modal">
@@ -76,25 +76,19 @@
       </form>
 
       <app-button
-        icon="fa fa-xmark"
-        btnStyle="text-based"
-        iconPos="right"
-        size="medium"
+        variant="ghost"
         class="absolute top-0 right-0"
-        (clickEvent)="closeModal()"
+        (click)="closeModal()"
+        ><i class="fa fa-xmark fa-xl"></i
       ></app-button>
 
-      <div class="flex items-center justify-between">
-        <app-button
-          btnStyle="outlined"
-          color="danger"
-          (clickEvent)="closeModal()"
+      <div class="flex-between">
+        <app-button variant="outline" color="neutral" (click)="closeModal()"
           >Cancel</app-button
         >
 
         <app-button
-          size="medium"
-          (clickEvent)="onSaveOrUpdateMember()"
+          (click)="onSaveOrUpdateMember()"
           [disabled]="buttonIsDisabled"
           >{{ mainBtnText }}</app-button
         >
@@ -105,6 +99,6 @@
 
 <div class="flex flex-col items-cente">
   @if (pageIsRefreshing()) {
-  <app-loading />
+    <app-loading />
   }
 </div>

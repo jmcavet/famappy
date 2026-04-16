@@ -1,135 +1,158 @@
-<div class="flex justify-center px-4 py-6">
-  <main class="w-full max-w-2xl bg-white">
-    @if (isLoading()) {
-    <div class="flex flex-col items-center">
-      <app-loading />
-    </div>
-    } @else {
-    <div class="flex items-center justify-between gap-4 mb-6">
-      <button
-        class="bg-primary-600 text-white rounded-full w-8 h-8 shadow-lg"
-        (click)="toggleRecipeView()"
-      >
-        <i
-          class="{{
-            recipesDisplayedViaCards()
-              ? 'fa-regular fa-credit-card'
-              : 'fa-solid fa-list-ul'
-          }}"
-        ></i>
-      </button>
+<!-- <div class="h-full layout-hcf"> -->
+<div class="h-full flex flex-col">
+  <div>
+    <!-- <header class="page-full-width"> -->
+    <header class="page-full-width shrink-0">
+      <app-stepper [navStep]="3" />
+    </header>
 
-      <div class="flex items-center justify-between gap-2">
-        <button
-          class="bg-primary-600 text-white rounded-full w-8 h-8 shadow-lg"
-          routerLink="/meals/filter"
-        >
-          <i class="fa-solid fa-filter"></i>
-        </button>
-        <div class="relative inline-block">
-          <button
-            class="bg-primary-600 text-white rounded-full w-8 h-8 shadow-lg flex items-center justify-center"
-            routerLink="/meals/cart"
+    <div class="space-y-2">
+      <section class="mt-2">
+        <div class="flex-between mb-2">
+          <h2 class="title">Selection method</h2>
+
+          <app-segmented-control
+            [fullWidth]="false"
+            size="sm"
+            [options]="['Card', 'List']"
+            color="secondary"
+            [selectedInput]="viewMode()"
+            (selectionChange)="toggleView($event)"
           >
-            <i class="fa-solid fa-cart-shopping"></i>
-          </button>
-          @if (cart().length > 0) {
-          <span class="badge">{{ cart().length }}</span>
+          </app-segmented-control>
+        </div>
+
+        <div
+          class="overflow-x-auto overflow-y-hidden flex gap-4 snap-x snap-mandatory scroll-smooth"
+        >
+          <app-segmented-control
+            [fullWidth]="false"
+            size="sm"
+            [options]="this.categoriesNames()"
+            [selectedInput]="mealCategoryNameSelected()"
+            (selectionChange)="toggleMealCategory($event)"
+          >
+          </app-segmented-control>
+        </div>
+
+        <div class="flex items-center justify-start gap-4 mb-4">
+          <app-select
+            [options]="recipeMethods"
+            [control]="methodControl"
+            [responsive]="true"
+          ></app-select>
+
+          <div
+            class="flex-center shrink-0 whitespace-nowrap gap-2 rounded-lg border border-neutral-300 dark:bg-neutral-800 dark:border-neutral-700 px-2 py-1"
+          >
+            <button (click)="decreaseRatio()">
+              <i class="fa-solid fa-minus"></i>
+            </button>
+            <div class="px-2">
+              Sample *<span>{{ mealRatio() }}</span>
+            </div>
+            <button (click)="increaseRatio()">
+              <i class="fa-solid fa-plus"></i>
+            </button>
+          </div>
+          <div class="flex items-center justify-start gap-1">
+            <p class="text-2xl">{{ recipesFilteredByCategory().length }}</p>
+            <i class="fa-solid fa-utensils"></i>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <div class="flex-between" (click)="toggleShowIngredientCategories()">
+          <h2 class="title">Ingredient Categories</h2>
+          @if (showIngredientCategories()) {
+            <i class="fa-solid fa-caret-up fa-xl"></i>
+          } @else {
+            <i class="fa-solid fa-caret-down fa-xl"></i>
           }
         </div>
-      </div>
-    </div>
-    <div class="flex items-center justify-start gap-2 mb-6">
-      @for (mealCategory of mealCategories(); track $index) {
-      <button
-        class="btn-tag"
-        (click)="setMealCategory(mealCategory)"
-        [class.active]="mealCategoryIdSelected() === mealCategory.id"
-      >
-        {{ mealCategory.name }}
-      </button>
-      }
-    </div>
-
-    <p>Number of planned meals: {{ mealState().nbPlannedMeals }}</p>
-    <h2 class="text-2xl">Selection method</h2>
-    <div class="flex items-center justify-start gap-4 mb-6">
-      <select id="method" [formControl]="defaultMethod">
-        @for (method of methods; track $index) {
-        <option [value]="method">
-          {{ method }}
-        </option>
+        @if (showIngredientCategories()) {
+          <div class="flex flex-wrap items-center justify-start gap-2 mb-6">
+            @for (
+              ingredientCategory of ingredientCategoriesByMealCategory();
+              track $index
+            ) {
+              <app-chip
+                [fullWidth]="false"
+                size="sm"
+                [selected]="
+                  ingredientCategoriesSelected().includes(ingredientCategory)
+                "
+                (toggle)="setIngredientCategory(ingredientCategory)"
+                >{{ ingredientCategory.name | capitalize }}</app-chip
+              >
+            }
+          </div>
         }
-      </select>
-      <div class="flex items-center gap-2 rounded-lg bg-gray-100 px-4 py-2">
-        <button (click)="decreaseRatio()">
-          <i class="fa-solid fa-minus"></i>
-        </button>
-        <div class="px-2">
-          Ratio <span>{{ ratio() }}</span>
+      </section>
+    </div>
+  </div>
+
+  <div class="flex-1 min-h-0 overflow-y-auto space-y-6 py-4">
+    <section>
+      @if (viewMode() === "Card") {
+        <div class="cards-container">
+          @for (recipe of recipesFilteredByCategory(); track $index) {
+            <div
+              class="card"
+              [class.active]="selectedRecipes().includes(recipe)"
+              (click)="toggleRecipe(recipe)"
+            >
+              <app-recipe-card [recipeState]="recipe"></app-recipe-card>
+            </div>
+          }
         </div>
-        <button (click)="increaseRatio()">
-          <i class="fa-solid fa-plus"></i>
-        </button>
-      </div>
-      <div class="flex items-center justify-start gap-1">
-        <p class="text-2xl">{{ recipesFilteredByCategory().length }}</p>
-        <i class="fa-solid fa-utensils"></i>
-      </div>
-    </div>
+      } @else {
+        <div class="flex flex-col items-start justify-items gap-2 mb-2">
+          @for (recipe of recipesFilteredByCategory(); track $index) {
+            <div
+              class="list-item"
+              [class.active]="selectedRecipes().includes(recipe)"
+              (click)="toggleRecipe(recipe)"
+            >
+              <div class="flex-between">
+                <div class="flex-start">
+                  @if (selectedRecipes().includes(recipe)) {
+                    <span class="mr-2"><i class="fa-solid fa-check"></i></span>
+                  }
+                  <p>{{ recipe.title }}</p>
+                </div>
+              </div>
 
-    <h2 class="text-2xl">Ingredient Categories</h2>
-    <div class="flex flex-wrap items-center justify-start gap-2 mb-6">
-      @for (ingredientCategory of ingredientCategoriesByMealCategory(); track
-      $index) {
-      <button
-        class="btn-tag"
-        [class.active]="
-          ingredientCategoriesSelected().includes(ingredientCategory)
-        "
-        (click)="setIngredientCategory(ingredientCategory)"
-      >
-        {{ ingredientCategory.name | capitalize }}
-      </button>
+              <p class="text-neutral-600 dark:text-neutral-400 text-sm">
+                {{ getCuisineName(recipe.cuisineId) }}
+              </p>
+            </div>
+          }
+        </div>
       }
-    </div>
+    </section>
+  </div>
 
-    @if (recipesDisplayedViaCards()) {
-    <div class="cards-container">
-      @for (recipe of recipesFilteredByCategory(); track $index) {
+  <!-- <div class="page-full-width page-x-padding py-2"> -->
+  <div class="shrink-0 page-full-width page-x-padding py-2">
+    <app-button
+      [fullWidth]="true"
+      [disabled]="cartItems().length === 0"
+      routerLink="/meals/cart"
+      >{{ btnValidateCartText() }}</app-button
+    >
+  </div>
+</div>
 
-      <div
-        class="card"
-        [class.active]="selectedRecipes().includes(recipe)"
-        (click)="toggleRecipe(recipe)"
-      >
-        <app-recipe-card [recipeState]="recipe"></app-recipe-card>
-      </div>
-      }
-    </div>
-    } @else {
-
-    <div class="flex flex-col items-start justify-items gap-2 mb-2">
-      @for (recipe of recipesFilteredByCategory(); track $index) {
-      <div
-        class="list-item"
-        [class.active]="selectedRecipes().includes(recipe)"
-        (click)="toggleRecipe(recipe)"
-      >
-        <div class="font-semibold">{{ recipe.title }}</div>
-        <div>{{ getCuisineName(recipe.cuisineId) }}</div>
-      </div>
-      }
-    </div>
-    } @if (selectedRecipes().length > 0) {
-    <div
-      class="flex items-center justify-end mr-4 mb-4"
+@if (selectedRecipes().length > 0) {
+  <div class="fixed bottom-32 left-1/2 -translate-x-1/2 z-50">
+    <button
+      class="bg-secondary-600 rounded-full p-2 w-12 h-12 text-white shadow-lg"
+      [disabled]="selectedRecipes().length === 0"
       (click)="addRecipesToCart()"
     >
-      <button class="btn-add-to-cart">
-        <i class="fa-solid fa-cart-shopping fa-lg"></i>
-      </button>
-    </div>
-    } }
-  </main>
-</div>
+      <i class="fa-solid fa-plus fa-xl"></i>
+    </button>
+  </div>
+}

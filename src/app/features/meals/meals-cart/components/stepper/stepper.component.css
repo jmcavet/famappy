@@ -1,0 +1,31 @@
+.stepper {
+  @apply font-inter grid grid-cols-[repeat(3,1fr)_auto] surface-nav text-neutral-600 dark:text-neutral-400 dark:border-b dark:border-b-neutral-800 px-4 sm:px-8 lg:px-16 py-1 w-full;
+}
+
+.circle {
+  @apply w-8 h-8 flex items-center justify-center rounded-full;
+}
+
+.line {
+  @apply flex-grow h-0.5 border-t-2 border-dashed border-neutral-300 dark:border-neutral-500;
+}
+
+.line.active {
+  @apply border-solid border-t-2 border-primary-500 dark:border-primary-400;
+}
+
+.line.done {
+  @apply border-solid border-t-2 border-emerald-500 dark:border-emerald-400;
+}
+
+.step-name {
+  @apply w-full text-start font-normal;
+}
+
+.step-name.active {
+  @apply text-neutral-900 dark:text-white font-semibold;
+}
+
+.step-name.done {
+  @apply text-neutral-900 dark:text-white font-normal;
+}

@@ -1,0 +1,105 @@
+<div
+  class="surface-3 max-h-[90dvh] rounded-xl shadow-xl p-4 overflow-auto flex flex-col items-center justify-center gap-8"
+>
+  <header class="w-full">
+    <div class="relative flex-center">
+      <h2 class="text-lg font-semibold mb-4">{{ title() }}</h2>
+    </div>
+    <section class="w-full">
+      <h3 class="text-start mb-2">Meal name</h3>
+      <input
+        #autoFocusInput
+        type="text"
+        id="mealDescription"
+        name="mealDescription"
+        required
+        placeholder="Provide a meal description"
+        autocomplete="off"
+        [value]="mealDescription()"
+        (input)="mealDescription.set($any($event.target).value)"
+        class="border rounded px-3 py-2 w-full dark:bg-neutral-800"
+      />
+    </section>
+  </header>
+
+  <section class="w-full">
+    <h3 class="text-start mb-2">Ingredients</h3>
+    <div class="flex-between gap-4 w-full">
+      <input
+        type="text"
+        id="ingredient"
+        name="ingredient"
+        required
+        placeholder="Search/enter an ingredient"
+        autocomplete="off"
+        [value]="ingredientSearched()"
+        (input)="ingredientSearched.set($any($event.target).value)"
+        (keydown.enter)="ingredientSearched() ? addIngredient() : null"
+        class="border rounded px-3 py-2 w-full dark:bg-neutral-800"
+      />
+      <button (click)="addIngredient()">
+        <i class="fa-regular fa-plus fa-2xl"></i>
+      </button>
+    </div>
+    <div class="flex flex-col items-start justify-start gap-2 w-full mt-2">
+      @for (suggestedIngredient of suggestedIngredients(); track $index) {
+        <button
+          class="w-full text-start px-4 py-1 border-b border-b-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-800"
+          (click)="selectSuggestedIngredient(suggestedIngredient)"
+        >
+          {{ suggestedIngredient }}
+        </button>
+      }
+    </div>
+  </section>
+  <section class="w-full flex-1 overflow-y-auto">
+    <div class="flex flex-col items-start justify-start gap-2 w-full">
+      @for (ingredient of ingredients(); track $index) {
+        <div
+          class="w-full text-start bg-neutral-100 dark:bg-neutral-800 px-4 py-2"
+        >
+          <div class="flex-between gap-6">
+            <p class="flex-1">{{ ingredient.name }}</p>
+            @if (ingredient.fromDb) {
+              <i class="fa-solid fa-utensils"></i>
+            }
+            <button (click)="removeIngredient($index)">
+              <i class="fa-regular fa-trash-can text-danger-600"></i>
+            </button>
+          </div>
+        </div>
+      }
+    </div>
+  </section>
+
+  <footer class="w-full">
+    <div class="flex-between gap-4">
+      <div class="shrink-0" (click)="toggleCreateAnother()">
+        <input
+          type="checkbox"
+          [checked]="createAnother()"
+          class="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+        />
+        <label class="w-full text-neutral-800 dark:text-neutral-100">
+          Create another
+        </label>
+      </div>
+      <div class="flex flex-1 gap-2">
+        <app-button
+          class="flex-1"
+          [fullWidth]="true"
+          (click)="onConfirm()"
+          [disabled]="mealDescription().length === 0"
+          >Add</app-button
+        >
+        <app-button
+          class="flex-1"
+          variant="outline"
+          [fullWidth]="true"
+          (click)="cancel()"
+          >Cancel</app-button
+        >
+      </div>
+    </div>
+  </footer>
+</div>

@@ -1,0 +1,16 @@
+.overlay {
+  /* @apply fixed inset-0 z-50 bg-black/40 flex items-start justify-center pt-4; */
+  @apply fixed inset-0 z-[9999] bg-black/40 pt-4;
+}
+
+button.disabled {
+  @apply bg-neutral-300 dark:bg-neutral-700 dark:text-neutral-400 cursor-not-allowed;
+}
+
+.mealType {
+  @apply w-full bg-transparent text-neutral-950 dark:bg-transparent dark:text-neutral-200 border border-neutral-500 dark:border-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-800 px-4 py-2 rounded-xl;
+}
+
+.mealType.active {
+  @apply bg-primary text-neutral-50 dark:bg-primary-dark border-primary dark:border-primary-dark;
+}

@@ -1,4 +1,4 @@
-import { Component, inject, Input } from '@angular/core';
+import { Component, computed, inject, input, Input } from '@angular/core';
 import { RecipeState } from '../../../../models/recipe.model';
 import { MinToHourPipe } from '../../../../shared/pipes/mintohour.pipe';
 import { CuisineBackendService } from '../../../../services/backend/cuisine.service';
@@ -38,4 +38,14 @@ export class RecipeCardComponent {
 
     return totalTime;
   }
+
+  difficultyMessage = computed(() => {
+    if (this.recipeState?.difficulty === 'low') {
+      return 'easy';
+    } else if (this.recipeState?.difficulty === 'normal') {
+      return 'normal';
+    } else {
+      return 'difficult';
+    }
+  });
 }

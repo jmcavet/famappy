@@ -1,0 +1,36 @@
+@layer utilities {
+  .flex-center {
+    @apply flex items-center justify-center;
+  }
+  .flex-between {
+    @apply flex items-center justify-between;
+  }
+  .flex-around {
+    @apply flex items-center justify-around;
+  }
+  .flex-start {
+    @apply flex items-center justify-start;
+  }
+  .flex-col-center {
+    @apply flex flex-col items-center justify-center;
+  }
+  .flex-col-between {
+    @apply flex flex-col items-center justify-between;
+  }
+  .flex-col-end {
+    @apply flex flex-col items-center justify-end;
+  }
+
+  .mx-auto-lg {
+    @apply mx-12;
+  }
+
+  .no-scrollbar {
+    -ms-overflow-style: none; /* IE + Edge */
+    scrollbar-width: none; /* Firefox */
+  }
+
+  .no-scrollbar::-webkit-scrollbar {
+    display: none; /* Chrome, Safari */
+  }
+}

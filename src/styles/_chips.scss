@@ -1,0 +1,65 @@
+@layer components {
+  /* Base/default chip */
+  .chip {
+    @apply inline-flex items-center justify-center rounded-2xl text-base tracking-wide leading-none transition-all duration-100 select-none border;
+  }
+
+  .chip-interactive {
+    @apply cursor-pointer hover:scale-[1.03] active:scale-95;
+  }
+
+  .chip-disabled {
+    @apply opacity-50 cursor-not-allowed pointer-events-none;
+  }
+
+  /* Sizes */
+  .chip-sm {
+    @apply px-3 py-1.5 min-h-8;
+  }
+
+  .chip-md {
+    @apply px-4 py-2 min-h-10;
+  }
+
+  .chip-lg {
+    @apply px-4 py-3 min-h-11;
+  }
+
+  /* Variants */
+  .chip-surface {
+    @apply bg-white text-neutral-900 border-neutral-400
+           dark:bg-neutral-900 dark:text-neutral-300 dark:border-neutral-400;
+  }
+
+  .chip-outline {
+    @apply bg-transparent text-neutral-700 border-neutral-400
+           hover:bg-neutral-100
+           dark:text-neutral-300 dark:border-neutral-500 dark:hover:bg-neutral-700/50;
+  }
+
+  .chip-ghost {
+    @apply bg-transparent border-transparent text-neutral-700
+           hover:bg-neutral-100
+           dark:text-neutral-300 dark:hover:bg-neutral-700/50;
+  }
+
+  /* Selected states */
+
+  .chip-selected-primary {
+    @apply bg-primary-100/70 text-primary-700 border-none
+           dark:bg-primary-400/30 dark:text-primary-200 dark:border-none
+           shadow-md scale-[1.02];
+  }
+
+  .chip-selected-secondary {
+    @apply bg-secondary-100 text-secondary-700 border-secondary-300
+           dark:bg-secondary-900/40 dark:text-secondary-100 dark:border-secondary-400
+           shadow-md scale-[1.02];
+  }
+
+  .chip-selected-neutral {
+    @apply bg-neutral-100 text-neutral-700 border-neutral-300
+           dark:bg-neutral-900/40 dark:text-neutral-100 dark:border-neutral-400
+           shadow-md scale-[1.02];
+  }
+}

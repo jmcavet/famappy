@@ -1,32 +1,33 @@
 @if (canShowPage()) {
-<div class="flex flex-col items-center">
-  <app-loading />
-</div>
-} @else {
-<app-recipe-search
-  [(filter)]="filterText"
-  [recipesFilteredByTitle]="recipesFilteredByTitle()"
-  [recipesFiltered]="recipesFiltered()"
-  [dbMealCategories]="dbMealCategories()"
-  [dbCuisines]="dbCuisines()"
-  [dbRecipeCategories]="dbRecipeCategories()"
-  [dbIngredients]="dbIngredients()"
-  [dbIngredientCategories]="dbIngredientCategories()"
-/>
-
-<div class="cards-container">
-  @for (recipe of recipesFiltered(); track $index) {
-  <div
-    class="card"
-    [routerLink]="['/recipes', recipe.id]"
-    (click)="navigateToRecipe(recipe)"
-  >
-    <app-recipe-card [recipeState]="recipe"></app-recipe-card>
+  <div class="flex flex-col items-center">
+    <app-loading />
   </div>
-  }
-</div>
+} @else {
+  <div class="main-container">
+    <section class="recipe-search-container">
+      <app-recipe-search
+        [(filter)]="filterText"
+        [recipesFilteredByTitle]="recipesFilteredByTitle()"
+        [recipesFiltered]="recipesFiltered()"
+        [dbMealCategories]="dbMealCategories()"
+        [dbCuisines]="dbCuisines()"
+        [dbRecipeCategories]="dbRecipeCategories()"
+        [dbIngredients]="dbIngredients()"
+        [dbIngredientCategories]="dbIngredientCategories()"
+      />
+    </section>
 
-<button routerLink="/new-recipe">
-  <i class="fa-solid fa-plus fa-xl"></i>
-</button>
+    <section class="cards">
+      @for (recipe of recipesFiltered(); track $index) {
+        <app-recipe-card
+          [recipeState]="recipe"
+          (click)="clickOnRecipeCard(recipe)"
+        ></app-recipe-card>
+      }
+    </section>
+  </div>
+
+  <button class="btn-add-recipe" routerLink="/new-recipe">
+    <i class="fa-solid fa-plus fa-xl"></i>
+  </button>
 }

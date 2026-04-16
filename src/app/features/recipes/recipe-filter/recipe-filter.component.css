@@ -1,5 +1,13 @@
+.page-container {
+  @apply h-full page-full-width layout-cf;
+}
+
 .filter-container {
-  @apply flex flex-col justify-between gap-8;
+  @apply space-y-4;
+}
+
+section {
+  @apply surface-1 p-4 rounded-lg;
 }
 
 .clear {
@@ -12,4 +20,10 @@
 
 .btn-apply.disabled {
   @apply bg-gray-300 dark:bg-gray-800 cursor-not-allowed;
+}
+
+.btn-test {
+  @apply inline-flex items-center justify-center rounded-2xl text-base tracking-wide leading-none select-none border px-4 py-2 min-h-10
+  bg-transparent text-neutral-700 border-neutral-400
+  dark:text-neutral-300 dark:border-neutral-500;
 }

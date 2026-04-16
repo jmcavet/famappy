@@ -1,0 +1,52 @@
+/*
+A surface system should mainly define:
+  -Background
+  - Default text color
+  - Border (optional but common)
+  - Shadow only for elevated surfaces
+
+It should NOT include spacing, typography, animation, or layout.
+
+Use shadows only for elevation:
+  - dropdowns
+  - dialogs
+  - floating menus
+*/
+
+@layer components {
+  /* Navigation section */
+  .surface-nav {
+    @apply bg-white text-neutral-900
+           dark:bg-neutral-950 dark:text-neutral-100;
+  }
+
+  /* Page background */
+  .surface-0 {
+    @apply bg-neutral-50 text-neutral-900
+           dark:bg-neutral-950 dark:text-neutral-100;
+  }
+
+  /* Cards / sections / main UI containers */
+  .surface-1 {
+    @apply bg-white text-neutral-900
+          dark:bg-neutral-900 dark:text-neutral-100
+          border border-neutral-100 dark:border-neutral-800;
+  }
+
+  /* Nested containers */
+  .surface-2 {
+    @apply bg-neutral-50 text-neutral-900 
+           dark:bg-neutral-800 dark:text-neutral-100
+           border border-neutral-100 dark:border-neutral-700;
+  }
+
+  /* Elevated/floating surfaces (menus / dialogs / modals) */
+  .surface-3 {
+    @apply bg-white text-neutral-900 shadow-lg
+           dark:bg-neutral-800 dark:text-neutral-100 dark:shadow-black/40;
+  }
+
+  .surface-hover {
+    @apply transition-shadow hover:shadow-md;
+  }
+}

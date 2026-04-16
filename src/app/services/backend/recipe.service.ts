@@ -12,12 +12,10 @@ import { RecipeWithId } from '../../features/recipes/components/recipe-card/reci
 import {
   getDownloadURL,
   StorageReference,
-  uploadBytes,
   uploadBytesResumable,
 } from 'firebase/storage';
 import { NgxImageCompressService } from 'ngx-image-compress';
 import { RecipeDocInBackend } from '../../models/recipe.model';
-import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',

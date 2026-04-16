@@ -1,0 +1,56 @@
+@if (membersAreLoaded()) {
+  <div class="summary-header">
+    <div class="flex items-center justify-between gap-2">
+      <p class="meal-type" [class.dinner]="mealType === 'dinner'">
+        {{ mealType | capitalize }}
+      </p>
+      <span class="ml-2"
+        ><app-meal-adding-options
+          [dailyMealPlan]="dailyMealPlan()!"
+          [mealType]="mealType"
+      /></span>
+      @if (showAssignButton) {
+        <button (click)="assignMeal()">
+          <i
+            class="fa-solid fa-plus fa-2xl text-neutral-300 dark:text-neutral-600 cursor-not-allowed"
+            [class.active]="selectedRecipes.length > 0"
+          ></i>
+        </button>
+      }
+    </div>
+
+    @if (showServingIncrements) {
+      <div class="people-container">
+        <i class="fa-solid fa-user"></i>
+
+        <div class="people">
+          <button (click)="decreaseServings()">
+            <i class="fa-solid fa-minus"></i>
+          </button>
+          <p>{{ uiServings() }}</p>
+          <button (click)="increaseServings()">
+            <i class="fa-solid fa-plus"></i>
+          </button>
+        </div>
+      </div>
+    } @else {
+      @if (dailyMealPerMealType().length) {
+        <div class="people-container">
+          <i class="fa-solid fa-user"></i>
+          <app-modal-servings-selection
+            [dailyMealPerMealType]="dailyMealPerMealType()"
+            [servings]="servings()"
+            [mealType]="mealType"
+          />
+        </div>
+      }
+    }
+
+    <app-meal-cook-selection
+      [dailyMealPerMealType]="dailyMealPerMealType()"
+      [selectedDay]="selectedDay()"
+      mealType="{{ mealType }}"
+      [cookName]="uiCookName()"
+    />
+  </div>
+}

@@ -1,16 +1,11 @@
-import { Component, inject, signal, Signal } from '@angular/core';
-import { RouterLink } from '@angular/router';
-
-import { ButtonComponent } from '../../../../shared/components/button/button.component';
+import { Component, computed, inject, signal, Signal } from '@angular/core';
 import { IngredientCategoryBackendService } from '../../../../services/backend/ingredient-category.service';
-import {
-  IngredientType,
-  IngredientTypeWithDate,
-} from '../../../../models/ingredient-type.model';
+import { IngredientTypeWithDate } from '../../../../models/ingredient-type.model';
+import { SegmentedControlComponent } from '../../../../shared/ui/segmented-control/segmented-control.component';
 
 @Component({
   selector: 'app-ingredient-categories-selection-page',
-  imports: [ButtonComponent, RouterLink],
+  imports: [SegmentedControlComponent],
   templateUrl: './ingredient-categories-selection.component.html',
   styleUrl: './ingredient-categories-selection.component.css',
 })
@@ -23,18 +18,25 @@ export class IngredientCategoriesSelectionComponent {
     this.ingredientCategoryService.ingredientCategories;
 
   /** Declaration of local signals */
-  ingredientCategorySelected = signal<IngredientType | undefined>(undefined);
+  ingredientCatNameSelected = signal<string | undefined>(undefined);
 
-  selectIngredientType(
-    ingredientTypeElement: IngredientType,
-    atLeastOneUnitSelected: boolean
-  ) {
-    this.ingredientCategorySelected.set(
-      atLeastOneUnitSelected ? undefined : ingredientTypeElement
+  ingredientCategoriesNames = computed(() =>
+    this.ingredientCategories().map((cat) => cat.name),
+  );
+
+  toggleCategory(categoryName: string) {
+    const alreadySelected = categoryName === this.ingredientCatNameSelected();
+
+    this.ingredientCatNameSelected.update(() =>
+      alreadySelected ? '' : categoryName,
+    );
+
+    const categorySelected = this.ingredientCategories().find(
+      (cat) => cat.name === categoryName,
     );
 
     this.ingredientCategoryService.setSelectedIngredientCategory(
-      this.ingredientCategorySelected()
+      alreadySelected ? undefined : categorySelected,
     );
   }
 }

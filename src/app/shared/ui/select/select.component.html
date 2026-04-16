@@ -1,0 +1,14 @@
+<div class="select-container">
+  @if (label) {
+    <label [class]="classesLabel">
+      {{ label }}
+    </label>
+  }
+  <select [class]="classesSelect" [formControl]="control">
+    @for (option of options; track $index) {
+      <option [value]="option">
+        {{ option }}
+      </option>
+    }
+  </select>
+</div>

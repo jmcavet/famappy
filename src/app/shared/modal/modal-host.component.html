@@ -1,0 +1,18 @@
+@if (modalService.config(); as config) {
+  <div
+    class="fixed inset-0 z-50 flex items-end sm:items-center justify-center"
+    (click)="modalService.cancel()"
+  >
+    <!-- Backdrop -->
+    <div class="absolute inset-0 bg-neutral-950/60 backdrop-blur-sm"></div>
+
+    <div
+      class="relative w-full sm:max-w-lg mx-2 rounded-t-2xl sm:rounded-2xl shadow-xl z-10 max-h-[90dvh] overflow-y-auto"
+      (click)="$event.stopPropagation()"
+    >
+      <ng-container
+        *ngComponentOutlet="config.component; inputs: config.data"
+      />
+    </div>
+  </div>
+}

@@ -1,13 +1,12 @@
 import { Component, inject, signal } from '@angular/core';
-import { ButtonModule } from 'primeng/button';
-import { MatButtonModule } from '@angular/material/button';
-import { MatIconModule } from '@angular/material/icon';
 import { RouterLink } from '@angular/router';
 import { AuthService } from '../../services/backend/auth.service';
+import { getAuth, onAuthStateChanged, User } from 'firebase/auth';
+import { ButtonComponent } from '../../shared/ui/button/button.component';
 
 @Component({
   selector: 'app-home',
-  imports: [ButtonModule, MatButtonModule, MatIconModule, RouterLink],
+  imports: [RouterLink, ButtonComponent],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css',
 })
@@ -17,4 +16,15 @@ export class HomeComponent {
 
   /** Declaration of local signals */
   readonly userName = this.authService.userName;
+
+  user = signal<User | null>(null);
+
+  ngOnInit(): void {
+    const auth = getAuth(); // Get Firebase Auth instance
+
+    // Listen for changes in the authentication state
+    onAuthStateChanged(auth, (user) => {
+      this.user.set(user ? user : null);
+    });
+  }
 }

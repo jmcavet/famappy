@@ -29,8 +29,11 @@ import {
 } from '../../models/ingredient.model';
 import { IngredientBackendService } from '../../services/backend/ingredient.service';
 import { IngredientCategoryBackendService } from '../../services/backend/ingredient-category.service';
+import { MealType } from '../meals/state/mealCart.model';
+import { MealBackendService } from '../../services/backend/meal.service';
+import { Location } from '@angular/common';
 
-interface RecipeWithDate extends RecipeWithId {
+export interface RecipeWithDate extends RecipeWithId {
   dateCreated: Date | string | Timestamp;
 }
 
@@ -48,8 +51,10 @@ interface RecipeWithDate extends RecipeWithId {
 })
 export class RecipesComponent {
   private router = inject(Router);
+  private location = inject(Location);
 
-  /** Services */
+  /** Transitional state (shared by several ui) */
+  private mealBackendService = inject(MealBackendService);
   private recipeBackendService = inject(RecipeBackendService);
   private mealCategoryBackendService = inject(MealCategoryBackendService);
   private cuisineBackendService = inject(CuisineBackendService);
@@ -57,7 +62,7 @@ export class RecipesComponent {
   private recipeStateService = inject(RecipeStateService);
   private ingredientBackendService = inject(IngredientBackendService);
   private ingredientCategoryBackendService = inject(
-    IngredientCategoryBackendService
+    IngredientCategoryBackendService,
   );
 
   /** Declaration of signals communicating with firestore */
@@ -95,13 +100,15 @@ export class RecipesComponent {
   filterText = signal<string>('');
 
   monique = computed(() => this.recipeState().filter.ingredientIds);
+  ingredientFilterMode = computed(
+    () => this.recipeState().filter.ingredientFilterMode,
+  );
 
   ingredientsFiltered = computed(() => {
     const ingredientsFiltered = this.dbIngredients().filter((ingredient) => {
       return this.monique().includes(ingredient.id);
     });
 
-    console.log('ingredientsFiltered: ', ingredientsFiltered);
     return ingredientsFiltered;
   });
 
@@ -111,6 +118,7 @@ export class RecipesComponent {
         const dateA = this.toDate(a.dateCreated);
         const dateB = this.toDate(b.dateCreated);
 
+        console.log('JUST CHECKING...');
         return this.recipeStateService.dateIsIncreasing()
           ? dateB.getTime() - dateA.getTime()
           : dateA.getTime() - dateB.getTime();
@@ -120,11 +128,12 @@ export class RecipesComponent {
 
   recipesFilteredByTitle = computed(() => {
     return this.dbRecipes().filter((recipe) =>
-      recipe.title.toLowerCase().includes(this.filterText().toLowerCase())
+      recipe.title.toLowerCase().includes(this.filterText().toLowerCase()),
     );
   });
 
   recipesFiltered = computed(() => {
+    console.log('Recomputing');
     const recipeFilter = this.recipeState().filter;
 
     const mealCategoriesFiltered = recipeFilter.mealCategories;
@@ -145,6 +154,7 @@ export class RecipesComponent {
       priceOptionsFiltered.length === 0 &&
       frequencyOptionsFiltered.length === 0 &&
       seasonOptionsFiltered.length === 0 &&
+      ingredientCategoriesFiltered.length === 0 &&
       ingredientIdsFiltered.length == 0
     ) {
       return this.recipesFilteredByTitle();
@@ -165,7 +175,7 @@ export class RecipesComponent {
         recipeCategoriesFiltered.length === 0
           ? true
           : obj.recipeCategoryIds.some((id) =>
-              recipeCategoriesFiltered.includes(id)
+              recipeCategoriesFiltered.includes(id),
             );
 
       const cond4 =
@@ -187,14 +197,14 @@ export class RecipesComponent {
         seasonOptionsFiltered.length === 0
           ? true
           : obj.seasonsSelected.some((freq) =>
-              seasonOptionsFiltered.includes(freq)
+              seasonOptionsFiltered.includes(freq),
             );
 
       let cond8 = true;
       if (ingredientCategoriesFiltered.length > 0) {
         // Each object has potentially multiple ingredients. Get their ids in a list
         const ingredientIds = obj.ingredients.map(
-          (ingredient) => ingredient.id
+          (ingredient) => ingredient.id,
         );
 
         // Get the ingredients (among all from the database) which id can be found in the ingredientIds.
@@ -206,21 +216,38 @@ export class RecipesComponent {
         // Get a unique set of the 'recipeIngredientCategories' list
         const uniqueRecipeIngredientCategoryIds = [
           ...new Set(
-            recipeIngredientCategoryIds.filter((str) => str.trim() !== '')
+            recipeIngredientCategoryIds.filter((str) => str.trim() !== ''),
           ),
         ];
 
         // The condition is true if at least one of the recipe ingredient category ids is included
         // in the list of ingredient category tag selected by the user
         cond8 = ingredientCategoriesFiltered.some((item) =>
-          uniqueRecipeIngredientCategoryIds.includes(item)
+          uniqueRecipeIngredientCategoryIds.includes(item),
         );
       }
 
-      const cond9 = obj.ingredients.some((ingredient) =>
-        this.ingredientsFiltered()
-          .map((ingredientFiltered) => ingredientFiltered.id)
-          .includes(ingredient.id)
+      let cond9 = true;
+      if (this.ingredientFilterMode() === 0) {
+        cond9 =
+          this.ingredientsFiltered().length === 0
+            ? true
+            : obj.ingredients.some((ingredient) =>
+                this.monique().includes(ingredient.id),
+              );
+      } else {
+        cond9 =
+          this.ingredientsFiltered().length === 0
+            ? true
+            : this.monique().every((el) =>
+                obj.ingredients.map((item) => item.id).includes(el),
+              );
+      }
+
+      const cond10 = obj.ingredients.some((ingredient) =>
+        this.ingredientsFiltered().map((ingredientFiltered) =>
+          ingredientFiltered.id.includes(ingredient.id),
+        ),
       );
 
       return (
@@ -232,7 +259,8 @@ export class RecipesComponent {
         cond6 &&
         cond7 &&
         cond8 &&
-        cond9
+        cond9 &&
+        cond10
       );
     });
 
@@ -260,10 +288,49 @@ export class RecipesComponent {
     );
   });
 
-  navigateToRecipe(recipe: RecipeWithId) {
-    // Navigate with the recipe ID and pass the recipe object in the state
-    this.router.navigate(['/recipes', recipe.id], {
-      state: { recipe: recipe },
-    });
+  /** When clicking on recipe card, it should either:
+   * - view the recipe itself (navigate to /recipes/<recipeId>)
+   * - or select the recipe clicked and add it to the corresponding section (lunch or dinner) on the /meals page
+   */
+  async clickOnRecipeCard(recipe: RecipeWithId) {
+    const { weekDay, mealType, servings, cookId } = history.state;
+    if (mealType) {
+      this.saveRecipeIntoCalendar(weekDay, recipe, mealType, servings, cookId);
+
+      this.location.back();
+    } else {
+      // Navigate with the recipe ID and pass the recipe object in the state
+      this.router.navigate(['/recipes', recipe.id], {
+        state: { recipe: recipe },
+      });
+    }
+  }
+
+  private async saveRecipeIntoCalendar(
+    weekDay: any,
+    recipe: RecipeWithId,
+    mealType: MealType,
+    servings: number,
+    cookId: string,
+  ) {
+    try {
+      const mealToSave = {
+        weekDay,
+        recipe,
+        mealType,
+        servings,
+        cookId,
+        manualRecipe: null,
+      };
+      const mealIds = await this.mealBackendService.saveMealsIntoStore([
+        mealToSave,
+      ]);
+
+      if (!mealIds) throw new Error('No meal IDs returned');
+    } catch (error) {
+      console.log('SOME ERROR WHILE SAVING MEALS: ', error);
+    } finally {
+      console.log('...');
+    }
   }
 }

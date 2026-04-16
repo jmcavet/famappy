@@ -1,31 +1,51 @@
 <div class="text-black dark:text-white flex flex-col items-center mt-8">
   <h1 class="text-2xl">Welcome to Fam'appy v0.1.0</h1>
-  <p
-    class="mt-6 bg-primary-100 text-primary-800 text-xl text-center px-4 py-2 rounded"
-  >
-    {{ userName() }}
-  </p>
 
-  <p class="my-6">Plan your daily family life...</p>
+  @if (!user()) {
+    <div class="flex-between mt-16 gap-4">
+      <app-button
+        [fullWidth]="true"
+        variant="outline"
+        size="lg"
+        routerLink="/login"
+        >Log in</app-button
+      >
+      <app-button [fullWidth]="true" size="lg" routerLink="/signup"
+        >sign up</app-button
+      >
+    </div>
+  } @else {
+    <p
+      class="mt-6 bg-primary-100 text-primary-800 text-xl text-center px-4 py-2 rounded"
+    >
+      {{ userName() }}
+    </p>
 
-  <div class="flex gap-6 flex-wrap mx-4">
-    <button routerLink="/members">
-      <span class="mr-4 py-4"><i class="fa-solid fa-person fa-2xl"></i></span
-      >Members
-    </button>
+    <p class="my-6">Plan your daily family life...</p>
 
-    <button routerLink="/recipes">
-      <span class="mr-4 py-4"><i class="fa-solid fa-utensils fa-2xl"></i></span
-      >Recipes
-    </button>
+    <section>
+      <button routerLink="/recipes">
+        <span class="mr-4 py-4"
+          ><i class="fa-solid fa-utensils fa-2xl"></i></span
+        >Recipes
+      </button>
 
-    <button routerLink="/new-recipe">
-      <span class="mr-4 py-4"><i class="fa-solid fa-plus fa-2xl"></i></span>New
-      Recipe
-    </button>
-    <button routerLink="/meals">
-      <span class="mr-4 py-4"><i class="fa-solid fa-list-check fa-2xl"></i></span>
-      Meals
-    </button>
-  </div>
+      <button routerLink="/new-recipe">
+        <span class="mr-4 py-4"><i class="fa-solid fa-plus fa-2xl"></i></span
+        >New Recipe
+      </button>
+      <button routerLink="/ingredients">
+        <span class="mr-4 py-4"
+          ><i class="fa-solid fa-list-check fa-2xl"></i
+        ></span>
+        Ingredients
+      </button>
+      <button routerLink="/meals">
+        <span class="mr-4 py-4"
+          ><i class="fa-solid fa-list-check fa-2xl"></i
+        ></span>
+        Meals
+      </button>
+    </section>
+  }
 </div>

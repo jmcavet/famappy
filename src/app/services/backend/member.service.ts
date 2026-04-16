@@ -8,6 +8,7 @@ import {
 import { FirebaseService } from './firebase.service';
 import { FirestoreService } from './generic.service';
 import { AuthService } from './auth.service';
+import { MemberWithId } from '../../features/members/components/member/member.model';
 
 @Injectable({
   providedIn: 'root',
@@ -17,7 +18,7 @@ export class MemberBackendService {
   private firestoreService = inject(FirestoreService);
   private authService = inject(AuthService);
 
-  members = signal<any[]>([]);
+  members = signal<MemberWithId[]>([]);
 
   private readonly _loading = signal<boolean>(false);
   readonly loading = this._loading.asReadonly();

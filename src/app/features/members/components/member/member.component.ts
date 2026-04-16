@@ -15,17 +15,18 @@ import {
 import { MemberWithId } from './member.model';
 import { MemberModalComponent } from '../member-modal/member-modal.component';
 import { DatePipe } from '@angular/common';
-import { ButtonComponent } from '../../../../shared/components/button/button.component';
+// import { ButtonComponent } from '../../../../shared/components/button/button.component';
 import { ModalConfirmComponent } from '../../../../shared/components/modal-confirm/modal-confirm.component';
 import { MemberBackendService } from '../../../../services/backend/member.service';
 import { LoadingComponent } from '../../../../shared/components/loading/loading.component';
+import { ButtonComponent } from '../../../../shared/ui/button/button.component';
+import { ModalService } from '../../../../shared/modal/modal.service';
 
 @Component({
   selector: 'app-member',
   imports: [
     ButtonComponent,
     ReactiveFormsModule,
-    ModalConfirmComponent,
     MemberModalComponent,
     DatePipe,
     LoadingComponent,
@@ -34,6 +35,7 @@ import { LoadingComponent } from '../../../../shared/components/loading/loading.
   styleUrl: './member.component.css',
 })
 export class MemberComponent {
+  private modalService = inject(ModalService);
   private _formBuilder = inject(FormBuilder);
 
   /** Services */
@@ -44,7 +46,6 @@ export class MemberComponent {
 
   /** Declaration of local signals */
   title = signal<string>('Test');
-  showConfirmModal = signal<boolean>(false);
 
   member = input.required<MemberWithId>();
   members = input.required<MemberWithId[]>();
@@ -67,7 +68,7 @@ export class MemberComponent {
       .findIndex((member) => member.name === this.member().name);
 
     this.title.set(
-      `${this.capitalizeFirstLetter(this.member().type)} ${index + 1}`
+      `${this.capitalizeFirstLetter(this.member().type)} ${index + 1}`,
     );
   }
 
@@ -76,24 +77,27 @@ export class MemberComponent {
     return str.charAt(0).toUpperCase() + str.slice(1);
   }
 
-  onConfirmRemoveMember() {
-    // Open the Cancel/Confirm modal
-    this.showConfirmModal.set(true);
-  }
+  openDeleteModal(event: MouseEvent, cuisineId: string) {
+    event.stopPropagation();
 
-  onConfirmModalAction(confirm: boolean) {
-    // Close the Cancel/Confirm modal
-    this.showConfirmModal.set(false);
-
-    if (confirm) {
-      // User has confirmed the action provided within the modal window
-      this.onRemoveMember();
-    }
+    this.modalService.open(
+      ModalConfirmComponent,
+      {
+        title: 'Delete confirmation',
+        message:
+          'Do you really want to remove this member? You will lose all your data...',
+        btnConfirmText: 'Delete',
+        btnConfirmColor: 'danger',
+      },
+      {
+        onConfirm: () => this.onRemoveMember(),
+      },
+    );
   }
 
   async onRemoveMember() {
     try {
-      this.memberBackendService.removeMemberFromStore(this.member().id);
+      await this.memberBackendService.removeMemberFromStore(this.member().id);
     } catch (error) {
       console.error('Error removing member: ', error);
     }

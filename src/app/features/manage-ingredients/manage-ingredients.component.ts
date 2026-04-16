@@ -11,7 +11,6 @@ import {
 import { FormsModule } from '@angular/forms';
 import { LoadingComponent } from '../../shared/components/loading/loading.component';
 import { ModalConfirmComponent } from '../../shared/components/modal-confirm/modal-confirm.component';
-import { FirestoreService } from '../../services/backend/generic.service';
 import { IngredientBackendService } from '../../services/backend/ingredient.service';
 import { IngredientTypeWithDate } from '../../models/ingredient-type.model';
 import { IngredientCategoryBackendService } from '../../services/backend/ingredient-category.service';
@@ -26,6 +25,7 @@ import { RecipeStateService } from '../../services/state/recipe.service';
 import { IngredientAdderComponent } from './components/ingredient-adder/ingredient-adder.component';
 import { IngredientCategoriesSelectionComponent } from './components/ingredient-categories-selection/ingredient-categories-selection.component';
 import { IngredientFilterComponent } from './components/ingredient-filter/ingredient-filter.component';
+import { ModalService } from '../../shared/modal/modal.service';
 
 @Component({
   selector: 'app-manage-ingredients',
@@ -33,7 +33,6 @@ import { IngredientFilterComponent } from './components/ingredient-filter/ingred
     FormsModule,
     NgFor,
     NgIf,
-    ModalConfirmComponent,
     LoadingComponent,
     IngredientAdderComponent,
     IngredientCategoriesSelectionComponent,
@@ -44,6 +43,7 @@ import { IngredientFilterComponent } from './components/ingredient-filter/ingred
 })
 export class ManageIngredientsComponent {
   /** Services */
+  private modalService = inject(ModalService);
   private ingredientService = inject(IngredientBackendService);
   private ingredientCategoryService = inject(IngredientCategoryBackendService);
   private recipeService = inject(RecipeStateService);
@@ -85,7 +85,7 @@ export class ManageIngredientsComponent {
 
   /** Compute the ingredient names available, in order to avoid creating duplicates */
   existingIngredientNames = computed(() =>
-    this.ingredients().map((i) => i.name)
+    this.ingredients().map((i) => i.name),
   );
 
   /** Compute the ingredients filtered, whenever the following signals change:
@@ -108,7 +108,7 @@ export class ManageIngredientsComponent {
 
     let filtered = categorySelected
       ? ingredientsWithCategoryName.filter(
-          (ingredient) => ingredient.categoryId === categorySelected.id
+          (ingredient) => ingredient.categoryId === categorySelected.id,
         )
       : ingredientsWithCategoryName;
     return filtered.sort((a, b) => {
@@ -143,7 +143,7 @@ export class ManageIngredientsComponent {
     return text
       .replace(
         /([\u2700-\u27BF]|[\uE000-\uF8FF]|[\uD83C-\uDBFF\uDC00-\uDFFF]|\u200D|\uFE0F)/g,
-        ''
+        '',
       )
       .trim();
   }
@@ -161,7 +161,7 @@ export class ManageIngredientsComponent {
   showMessageNoCategories = computed(
     () =>
       this.ingredientCategories().length === 0 &&
-      !this.ingredientCategoriesAreLoading()
+      !this.ingredientCategoriesAreLoading(),
   );
 
   onCategoryChange(event: Event): void {
@@ -185,7 +185,7 @@ export class ManageIngredientsComponent {
 
   onEditPressEnterIngredient(
     event: KeyboardEvent,
-    ingredient: IngredientWithIdAndDate
+    ingredient: IngredientWithIdAndDate,
   ) {
     if (event.key === 'Enter') {
       event.preventDefault();
@@ -204,7 +204,7 @@ export class ManageIngredientsComponent {
      * drop down menu in the edit mode.
      */
     const updatedIngredientCategorySearched = this.ingredientCategories().find(
-      (category) => category.name === this.categoryNameTyped()
+      (category) => category.name === this.categoryNameTyped(),
     );
 
     const updatedIngredientCategoryId = updatedIngredientCategorySearched
@@ -219,7 +219,7 @@ export class ManageIngredientsComponent {
     this.ingredientService.updateIngredientInStore(
       ingredient.id,
       propertiesToUpdate,
-      this.recipeService.mustPreserveState
+      this.recipeService.mustPreserveState,
     );
   }
 
@@ -228,29 +228,32 @@ export class ManageIngredientsComponent {
     this.editIngredientIndex.set(null);
   }
 
-  onConfirmRemoveIngredient(ingredientId: string) {
-    this.ingredientIdToRemove.set(ingredientId);
-    this.showConfirmDeleteModal.set(true);
-  }
+  openDeleteModal(event: MouseEvent, ingredientId: string) {
+    event.stopPropagation();
 
-  getDeleteMessage() {
-    const ingredientToRemove = this.ingredients().find(
-      (ingredient) => ingredient.id === this.ingredientIdToRemove()
+    this.modalService.open(
+      ModalConfirmComponent,
+      {
+        title: 'Delete confirmation',
+        message: this.modalDeleteMessage(ingredientId),
+        btnConfirmText: 'Delete',
+        btnConfirmColor: 'danger',
+      },
+      {
+        onConfirm: () => this.deleteIngredient(ingredientId),
+      },
     );
-    return `Do you really want to remove '${ingredientToRemove?.name}'?`;
   }
 
-  onConfirmDeleteModalAction(confirm: boolean) {
-    // Close the Cancel/Confirm modal
-    this.showConfirmDeleteModal.set(false);
+  public modalDeleteMessage(ingredientId: string) {
+    const ingredientToDelete = this.ingredients().find(
+      (ingredient) => ingredient.id === ingredientId,
+    );
 
-    if (confirm) {
-      // User has confirmed the action provided within the modal window
-      this.deleteIngredientId(this.ingredientIdToRemove());
-    }
+    return `Do you really want to remove '${ingredientToDelete?.name}' ?`;
   }
 
-  async deleteIngredientId(ingredientId: string) {
+  async deleteIngredient(ingredientId: string) {
     this.ingredientService.deleteIngredientfromStore(ingredientId);
   }
 }

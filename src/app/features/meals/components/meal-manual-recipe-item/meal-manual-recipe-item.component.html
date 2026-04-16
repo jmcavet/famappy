@@ -1,0 +1,16 @@
+<div
+  class="px-2 py-2 w-full flex-between cursor-pointer dark:bg-neutral-700/20 hover:bg-neutral-50/60 dark:hover:bg-neutral-700/60"
+  (click)="viewMeal()"
+>
+  <div class="flex-between gap-2 sm:gap-4">
+    <!-- <i class="fa-solid fa-pen-nib fa-md"></i> -->
+    <i class="fa-solid fa-bolt-lightning"></i>
+    <p>{{ mealName() }}</p>
+  </div>
+
+  <button (click)="openDeleteModal()">
+    <i
+      class="fa-solid fa-trash-arrow-up fa-md text-red-500 dark:text-red-700"
+    ></i>
+  </button>
+</div>

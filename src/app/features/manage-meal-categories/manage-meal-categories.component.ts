@@ -8,19 +8,17 @@ import { MealCategoryBackendService } from '../../services/backend/meal-category
 import { MealCategoryDocInBackend } from '../../models/cuisine.model';
 import { RecipeWithId } from '../recipes/components/recipe-card/recipe.model';
 import { RecipeBackendService } from '../../services/backend/recipe.service';
+import { ModalService } from '../../shared/modal/modal.service';
 
 @Component({
   selector: 'app-manage-meal-categories',
-  imports: [
-    CapitalizePipe,
-    ModalInputComponent,
-    ModalConfirmComponent,
-    LoadingComponent,
-  ],
+  imports: [CapitalizePipe, ModalInputComponent, LoadingComponent],
   templateUrl: './manage-meal-categories.component.html',
   styleUrl: './manage-meal-categories.component.css',
 })
 export class ManageMealCategoriesComponent {
+  private modalService = inject(ModalService);
+
   /** Services */
   private recipeStateService = inject(RecipeStateService);
   private mealCategoryService = inject(MealCategoryBackendService);
@@ -43,7 +41,6 @@ export class ManageMealCategoriesComponent {
   showModalUpdateMealCategory = signal<boolean>(false);
   mealCategoryIdToUpdate = signal<string>('');
   mealCategoryNameToUpdate = signal<string>('');
-  showModalDeleteMealCategory = signal<boolean>(false);
   mealCategoryIdToDelete = signal<string>('');
   mealCategoryName = signal<string>('');
 
@@ -98,46 +95,42 @@ export class ManageMealCategoriesComponent {
 
   async updateMealCategory(
     mealCategoryIdToUpdate: string,
-    newMealCategoryName: string
+    newMealCategoryName: string,
   ) {
     this.mealCategoryService.updateMealCategoryInStore(
       mealCategoryIdToUpdate,
       newMealCategoryName,
-      this.recipeStateService.mustPreserveState
+      this.recipeStateService.mustPreserveState,
     );
   }
 
-  openModalDeleteMealCategory(cuisine: any) {
-    this.showModalDeleteMealCategory.set(true);
-    this.mealCategoryIdToDelete.set(cuisine.id);
+  openDeleteModal(event: MouseEvent, mealCategoryId: string) {
+    event.stopPropagation();
+
+    this.modalService.open(
+      ModalConfirmComponent,
+      {
+        title: 'Delete confirmation',
+        message: this.modalDeleteMessage(mealCategoryId),
+        btnConfirmText: 'Delete',
+        btnConfirmColor: 'danger',
+      },
+      {
+        onConfirm: () => this.deleteMealCategoryId(mealCategoryId),
+      },
+    );
   }
 
-  onConfirmModalDeleteMealCategory(confirm: boolean) {
-    // Close the Cancel/Confirm modal
-    this.showModalDeleteMealCategory.set(false);
-
-    if (confirm) {
-      this.deleteMealCategoryId(this.mealCategoryIdToDelete());
-    }
-  }
-
-  getDeleteMessage() {
+  modalDeleteMessage(mealCategoryId: string) {
     const mealCategoryToDelete = this.dbMealCategories().find(
-      (mealCategory) => mealCategory.id === this.mealCategoryIdToDelete()
+      (mealCategory) => mealCategory.id === mealCategoryId,
     );
     return `Do you really want to remove '${mealCategoryToDelete?.name}'?`;
   }
 
   async deleteMealCategoryId(mealCategoryIdToDelete: string) {
-    // this.mealCategoryService.deleteMealCategoryInStore(
-    //   mealCategoryIdToDelete,
-    //   this.mealCategoryId(),
-    //   () => this.recipeService.updateProperty,
-    //   this.recipeService.mustPreserveState
-    // );
-
     const recipesWithMealCategoryId = this.dbRecipes().filter(
-      (recipe) => recipe.mealCategoryId === mealCategoryIdToDelete
+      (recipe) => recipe.mealCategoryId === mealCategoryIdToDelete,
     );
 
     // Reset the 'mealCategoryId' property (to '') of the recipes which mealCategoryId
@@ -145,7 +138,7 @@ export class ManageMealCategoriesComponent {
     await this.recipeBackendService.resetRecipesPropertiesInStore(
       recipesWithMealCategoryId,
       { mealCategoryId: '' },
-      this.recipeStateService.mustPreserveState
+      this.recipeStateService.mustPreserveState,
     );
   }
 }

@@ -19,6 +19,7 @@ import {
   where,
   getDocs,
   getDoc,
+  writeBatch,
 } from 'firebase/firestore';
 
 import { BehaviorSubject } from 'rxjs';
@@ -29,6 +30,7 @@ import {
   RecipeWithId,
 } from '../../features/recipes/components/recipe-card/recipe.model';
 import { deleteObject, ref } from 'firebase/storage';
+import { CloseScrollStrategy } from '@angular/cdk/overlay';
 
 @Injectable({
   providedIn: 'root',
@@ -81,6 +83,7 @@ export class FirestoreService {
     onSnapshot(colQuery, (snapshot) => {
       const data = snapshot.docs.map((doc) => {
         const docData = doc.data();
+
         return {
           id: doc.id,
           ...docData,
@@ -103,18 +106,15 @@ export class FirestoreService {
   ): Promise<string | void> {
     console.log('THIS IS MY newDocument: ', newDocument);
     try {
-      const recipesCollection = collection(
-        this.firebaseService.db,
-        collectionName
-      );
+      const collectionRef = collection(this.firebaseService.db, collectionName);
 
       const user = this.authService.user();
 
-      if (!user || !user.uid) {
-        throw new Error('User not authenticated or uid missing');
+      if (!user?.uid) {
+        throw new Error('User not authenticated');
       }
 
-      const docRef = await addDoc(recipesCollection, {
+      const docRef = await addDoc(collectionRef, {
         ...newDocument,
         userId: user.uid,
         dateCreated: Timestamp.now(), // Add the current timestamp as dateCreated
@@ -130,6 +130,37 @@ export class FirestoreService {
     }
   }
 
+  async saveDocumentsIntoStore(
+    collectionName: string,
+    documents: object[]
+  ): Promise<string[]> {
+    const user = this.authService.user();
+
+    if (!user?.uid) {
+      throw new Error('User not authenticated');
+    }
+
+    const batch = writeBatch(this.firebaseService.db);
+    const collectionRef = collection(this.firebaseService.db, collectionName);
+
+    const docIds: string[] = [];
+
+    documents.forEach((document) => {
+      const docRef = doc(collectionRef);
+      docIds.push(docRef.id);
+
+      batch.set(docRef, {
+        ...document,
+        userId: user.uid,
+        dateCreated: Timestamp.now(),
+      });
+    });
+
+    await batch.commit();
+
+    return docIds;
+  }
+
   /** Update a Firestore document */
   async updateDocumentInFirestore(
     collectionName: string,
@@ -138,11 +169,7 @@ export class FirestoreService {
     onDataLoaded?: () => void
   ): Promise<string | void> {
     try {
-      console.log('collectionName: ', collectionName);
-      console.log('idToUpdate: ', idToUpdate);
       const docRef = doc(this.firebaseService.db, collectionName, idToUpdate);
-      console.log('docRef: ', docRef);
-      console.log('propertiesToUpdate: ', propertiesToUpdate);
       await updateDoc(docRef, propertiesToUpdate);
 
       // Notify once Firestore responds

@@ -1,23 +1,18 @@
-import { Component, computed, inject, signal, Signal } from '@angular/core';
-import { MealStateService } from '../../../services/state/meal.service';
+import { Component, computed, inject } from '@angular/core';
 import { RecipeCardComponent } from '../../recipes/components/recipe-card/recipe-card.component';
-import {
-  MealCategoryDocInBackend,
-  RecipeCategoryDocInBackend,
-} from '../../../models/cuisine.model';
+import { MealCategoryDocInBackend } from '../../../models/cuisine.model';
 import { RouterLink } from '@angular/router';
-import { FormControl, ReactiveFormsModule } from '@angular/forms';
-import { IngredientCategoryBackendService } from '../../../services/backend/ingredient-category.service';
-import {
-  IngredientCategoryDocInBackend,
-  IngredientDocInBackend,
-} from '../../../models/ingredient.model';
-import { CapitalizePipe } from '../../../shared/pipes/capitalize.pipe';
+import { ReactiveFormsModule } from '@angular/forms';
+import { IngredientCategoryDocInBackend } from '../../../models/ingredient.model';
 import { RecipeWithId } from '../../recipes/components/recipe-card/recipe.model';
-import { RecipeBackendService } from '../../../services/backend/recipe.service';
-import { IngredientBackendService } from '../../../services/backend/ingredient.service';
-import { LoadingComponent } from '../../../shared/components/loading/loading.component';
-import { CuisineBackendService } from '../../../services/backend/cuisine.service';
+import { CapitalizePipe } from '../../../shared/pipes/capitalize.pipe';
+import { MealSelectionFacade } from './meals-selection.facade';
+import { StepperComponent } from '../meals-cart/components/stepper/stepper.component';
+import { SelectComponent } from '../../../shared/ui/select/select.component';
+import { ChipComponent } from '../../../shared/ui/chip/chip.component';
+import { SegmentedControlComponent } from '../../../shared/ui/segmented-control/segmented-control.component';
+import { SelectionViewMode } from '../state/mealSelection.model';
+import { ButtonComponent } from '../../../shared/ui/button/button.component';
 
 @Component({
   selector: 'app-meals-selection',
@@ -26,243 +21,86 @@ import { CuisineBackendService } from '../../../services/backend/cuisine.service
     RecipeCardComponent,
     RouterLink,
     CapitalizePipe,
-    LoadingComponent,
+    StepperComponent,
+    SelectComponent,
+    ButtonComponent,
+    ChipComponent,
+    SegmentedControlComponent,
   ],
   templateUrl: './meals-selection.component.html',
   styleUrl: './meals-selection.component.css',
 })
 export class MealsSelectionComponent {
-  methods = ['Random', 'Newest first', 'Oldest first'];
-  defaultMethod = new FormControl(this.methods[0]);
-  ingredientCategoryOptions: IngredientCategoryDocInBackend[] = [];
+  // Facade service and view model
+  private facade = inject(MealSelectionFacade);
 
-  ngOnInit() {
-    this.defaultMethod.valueChanges.subscribe((value) => {
-      this.selectedMethod.set(value || '');
-    });
-  }
+  // Direct facade signals exposed to HTML template
+  plannedMealsCount = this.facade.plannedMealsCount;
+  mealCategoryIdSelected = this.facade.mealCategoryIdSelected;
+  viewMode = this.facade.viewMode;
+  ingredientCategoriesSelected = this.facade.ingredientCategoriesSelected;
+  mealCategoryNameSelected = this.facade.mealCategoryNameSelected;
+  cartItems = this.facade.cartItems;
+  btnValidateCartText = this.facade.btnValidateCartText;
 
-  constructor() {
-    // Activate the first meal category tag
-    this.setMealCategory(this.mealCategories()[0]);
-  }
+  mealRatio = this.facade.mealRatio;
+  mealCategories = this.facade.mealCategories;
+  categoriesNames = this.facade.categoriesNames;
+  ingredientCategoriesByMealCategory =
+    this.facade.ingredientCategoriesByMealCategory;
+  recipesFilteredByCategory = this.facade.recipesFilteredByCategory;
+  dataIsLoading = this.facade.dataIsLoading;
 
-  /** Services */
-  private stateMealService = inject(MealStateService);
-  private ingredientCategoryBackendService = inject(
-    IngredientCategoryBackendService
-  );
-  private recipeBackendService = inject(RecipeBackendService);
-  private ingredientService = inject(IngredientBackendService);
-  private cuisineService = inject(CuisineBackendService);
+  selectedRecipes = this.facade.selectedRecipes;
+  showIngredientCategories = this.facade.showIngredientCategories;
+  recipeMethods = this.facade.recipeMethods;
+  methodControl = this.facade.methodControl;
 
-  /** Declaration of signals communicating with firestore */
-  readonly dbIngredientCategories: Signal<IngredientCategoryDocInBackend[]> =
-    this.ingredientCategoryBackendService.ingredientCategories;
-  readonly ingredientCategoriesAreLoading =
-    this.ingredientCategoryBackendService.loading;
-  readonly dbRecipes: Signal<RecipeWithId[]> =
-    this.recipeBackendService.recipes;
-  readonly dbIngredients: Signal<IngredientDocInBackend[]> =
-    this.ingredientService.ingredients;
-
-  /** Declaration of local signals */
-  mealState = this.stateMealService.mealState;
-  // ratio = signal<number>(1);
-  selectedMethod = signal<string>(this.methods[0]);
-  selectedRecipes = signal<RecipeWithId[]>([]);
-
-  readonly recipesDisplayedViaCards = computed(
-    () => this.mealState().recipesDisplayedViaCards
-  );
-
-  readonly ratio = computed(() => this.mealState().ratio);
-
-  readonly ingredientCategoriesSelected = computed(
-    () => this.mealState().ingredientCategoriesSelected
-  );
-
-  readonly ingredientsSelected = computed(
-    () => this.mealState().ingredientsSelected
-  );
-
-  readonly mealCategoriesSelected = computed<RecipeCategoryDocInBackend[]>(
-    () => {
-      return this.mealState().mealCategoriesSelected;
-    }
-  );
-
-  readonly mealCategoryIdSelected = computed<string>(() => {
-    return this.mealState().mealCategoryIdSelected;
-  });
-
-  readonly recipesFiltered = computed<RecipeWithId[]>(() => {
-    return this.mealState().recipesFiltered;
-  });
-
-  readonly cart = computed<RecipeWithId[]>(() => {
-    return this.mealState().cart;
-  });
-
+  /*
+  ----------------------------
+  METHODS
+  ----------------------------
+  */
   getCuisineName(cuisineId: string): string {
-    const cuisines = this.cuisineService.cuisines();
-    const cuisine = cuisines.find((c) => c.id === cuisineId);
-    return cuisine?.name ?? 'None';
+    return this.facade.getCuisineName(cuisineId);
   }
-
-  /** Declaration of meal state signals */
-  // Ingredient categories based on the meal category selected by users and recipes filtered previously
-  readonly ingredientCategoriesByMealCategory = computed(() => {
-    const recipesIngredientsByMealCategory = this.recipesFiltered().filter(
-      (item) => item.mealCategoryId === this.mealCategoryIdSelected()
-    );
-
-    // All ingredients of previously filtered recipes
-    const flatFilteredRecipesIngredients =
-      recipesIngredientsByMealCategory.flatMap((el) => el.ingredients);
-
-    const filteredRecipesIngredients = [
-      ...new Map(
-        flatFilteredRecipesIngredients.map((item) => [item.id, item])
-      ).values(),
-    ];
-
-    // All ingredients ids of previously filtered recipes
-    const filteredRecipesIngredientsIds = filteredRecipesIngredients.map(
-      (el) => el.id
-    );
-
-    const filteredIngredients = this.dbIngredients().filter((item) =>
-      filteredRecipesIngredientsIds.includes(item.id)
-    );
-
-    const ingredientCategoriesIdsByMealCategory = [
-      ...new Map(
-        filteredIngredients.map((item) => [item.categoryId, item])
-      ).values(),
-    ].map((item) => item.categoryId);
-
-    const finalArray = this.dbIngredientCategories().filter((item) =>
-      ingredientCategoriesIdsByMealCategory.includes(item.id)
-    );
-
-    return finalArray;
-  });
-
-  readonly recipesFilteredByCategory = computed(() => {
-    const ingredientsIdsSelected = this.ingredientsSelected().flatMap(
-      (obj) => obj.id
-    );
-
-    const ingredientCategoriesIdsSelected =
-      this.ingredientCategoriesSelected().map((item) => item.id);
-
-    // Use case: user activates 1 meal category (e.g. dessert). Corresponding recipes are displayed.
-    // User activates an ingredient category (e.g. vegetable) and the recipes are being filtered (only those that contain vegetables).
-    // User then activates another meal category (e.g. main course), for which the 'vegetable' category might not exist (no displayed recipes contain
-    // this category). Since 1 ingredient category (vegetable) is activated but no recipes for the second meal category have this ingredient category,
-    // our 'conditionIngredients' condition will be false and our ingredient categories corresponding to the second activated meal category will no be displayed!
-    // Therefore, we need the following check
-    const recipesPerMealCategoryHaveSomeOfSelectedIngredients =
-      this.ingredientCategoriesByMealCategory()
-        .map((item) => item.id)
-        .some((id) => ingredientCategoriesIdsSelected.includes(id));
-
-    const dbIngredientsByIngredientCategory = this.dbIngredients().filter(
-      (item) => ingredientCategoriesIdsSelected.includes(item.categoryId)
-    );
-
-    const arrayBeforeMethod = this.recipesFiltered().filter((recipe) => {
-      const recipeIngredientsIds = recipe.ingredients.map((item) => item.id);
-
-      const conditionIngredients =
-        ingredientCategoriesIdsSelected.length === 0 ||
-        !recipesPerMealCategoryHaveSomeOfSelectedIngredients
-          ? true
-          : dbIngredientsByIngredientCategory.some((item) =>
-              recipeIngredientsIds.includes(item.id)
-            );
-
-      return (
-        recipe.mealCategoryId === this.mealCategoryIdSelected() &&
-        ingredientsIdsSelected.length === 0 &&
-        conditionIngredients
-      );
-    });
-
-    let finalArray = arrayBeforeMethod;
-    if (this.selectedMethod() === this.methods[0]) {
-      const shuffled = [...arrayBeforeMethod].sort(() => Math.random() - 0.5);
-      const rangeValue = this.mealState().nbPlannedMeals * this.ratio();
-      finalArray = shuffled.slice(0, rangeValue);
-    }
-
-    const titi = finalArray.filter(
-      (item) =>
-        !this.cart()
-          .map((item) => item.id)
-          .includes(item.id)
-    );
-    console.log('Titi: ', titi);
-    return titi;
-  });
-
-  // Filter only categories previously selected by users and which exist within the
-  // list of recipes filtered in the previous page (meals/filter)
-  readonly mealCategories = computed(() => {
-    const mealCategoriesIdsByFilteredRecipes = this.recipesFiltered().map(
-      (recipe) => recipe.mealCategoryId
-    );
-
-    return this.mealCategoriesSelected().filter((cat) =>
-      mealCategoriesIdsByFilteredRecipes.includes(cat.id)
-    );
-  });
 
   setMealCategory(mealCategorySelected: MealCategoryDocInBackend) {
-    this.stateMealService.setMealCategory(mealCategorySelected);
+    this.facade.setMealCategory(mealCategorySelected);
   }
 
   setIngredientCategory(ingredientCategory: IngredientCategoryDocInBackend) {
-    this.stateMealService.setIngredientCategory(ingredientCategory);
-
-    this.stateMealService.filterRecipesTest(this.recipesFiltered());
+    this.facade.setIngredientCategory(ingredientCategory);
   }
 
   decreaseRatio() {
-    this.stateMealService.updateRatio('decrease');
+    this.facade.decreaseRatio();
   }
 
   increaseRatio() {
-    this.stateMealService.updateRatio('increase');
+    this.facade.increaseRatio();
   }
 
   toggleRecipe(recipe: RecipeWithId) {
-    const current = this.selectedRecipes();
-
-    const isSelected = current.some((r) => r.id === recipe.id);
-
-    if (isSelected) {
-      // Remove recipe
-      this.selectedRecipes.set(current.filter((r) => r.id !== recipe.id));
-    } else {
-      // Add recipe
-      this.selectedRecipes.set([...current, recipe]);
-    }
+    this.facade.toggleRecipe(recipe);
   }
 
-  readonly isLoading = computed(() => {
-    return this.ingredientCategoriesAreLoading();
-  });
+  toggleView(viewMode: SelectionViewMode) {
+    this.facade.toggleView(viewMode);
+  }
 
-  toggleRecipeView() {
-    this.stateMealService.toggleRecipeView();
+  toggleShowIngredientCategories() {
+    this.facade.toggleShowIngredientCategories();
   }
 
   addRecipesToCart() {
-    this.stateMealService.addRecipesToCart(this.selectedRecipes());
+    this.facade.addRecipesToCart();
 
-    // Reset the list of selected recipes
-    this.selectedRecipes.set([]);
+    // Reset the list of recipe items selected by the user once they have been added to the cart
+    this.facade.resetSelectedRecipes();
+  }
+
+  toggleMealCategory(mealCategoryName: string) {
+    this.facade.toggleMealCategory(mealCategoryName);
   }
 }

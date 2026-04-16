@@ -1,185 +1,189 @@
-<div class="dark:text-white px-8 py-4">
+<div class="dark:text-white page-x-padding space-y-4">
   @if (canShowTemplate()) {
-  <div class="text-center text-2xl mb-6">{{ recipe().title }}</div>
-  <div class="flex items-center justify-end gap-4 mb-6">
-    <button (click)="onEditRecipe()">
-      <i
-        class="fa-solid fa-edit fa-lg text-primary-600 dark:text-primary-500"
-      ></i>
-    </button>
-    <button (click)="onConfirmRemoveRecipe()">
-      <i
-        class="fa-solid fa-trash fa-lg text-danger-600 dark:text-danger-500"
-      ></i>
-    </button>
-  </div>
-
-  <div class="rounded-lg overflow-hidden shadow-md">
-    @if (!recipe().imageUrl) {
-    <p
-      class="w-full h-48 bg-gradient-to-r from-gray-200 to-primary-100 dark:from-gray-700 dark:to-primary-900 flex items-center justify-center text-lg font-bold"
-    >
-      {{ recipe().title }}
-    </p>
-    } @else { @if (!imageLoadedMap()[recipe().id]) {
-    <div class="absolute inset-0 bg-gray-200 animate-pulse z-0"></div>
-    }
-
-    <img
-      [src]="recipe().imageUrl"
-      alt="'recipe().title'"
-      (load)="onImageLoad(recipe().id)"
-      class="w-full h-80 object-cover transition-all duration-700 ease-in-out z-10"
-      [class.blur-sm]="!imageLoadedMap()[recipe().id]"
-      [class.opacity-0]="!imageLoadedMap()[recipe().id]"
-    />
-    }
-  </div>
-
-  @if (recipe().source) {
-  <div
-    class="flex items-center justify-end gap-2 mt-2 mb-6 text-primary-600 dark:text-primary-500"
-  >
-    <i class="fa-brands fa-sourcetree"></i>
-    <a
-      [href]="sanitizeUrl(recipe().source)"
-      target="_blank"
-      rel="noopener noreferrer"
-    >
-      Source
-    </a>
-  </div>
-  }
-
-  <div class="group mb-6">
-    <div class="flex items-center justify-start gap-2">
-      <i class="fa-solid fa-clock"></i>
-      <label for="preparationTime" class="text-lg">Preparation Time</label>
-    </div>
-    <div>{{ recipe().preparationTime }}</div>
-
-    <div class="flex items-center justify-start gap-2">
-      <i class="fa-solid fa-utensils"></i>
-      <label for="cookingTime" class="text-lg">Cooking Time</label>
-    </div>
-    <div>{{ recipe().cookingTime }}</div>
-
-    <div class="flex items-center justify-start gap-2">
-      <i class="fa-solid fa-person-hiking"></i>
-      <label for="difficulty" class="text-lg">Difficulty</label>
-    </div>
-    <div>{{ recipe().difficulty }}</div>
-
-    <div class="flex items-center justify-start gap-2">
-      <i class="fa-solid fa-barcode"></i>
-      <label for="price" class="text-lg">Price</label>
-    </div>
-    <div>{{ recipe().price }}</div>
-
-    <div class="flex items-center justify-start gap-2">
-      <i class="fa-solid fa-calendar-days"></i>
-      <label for="frequency" class="text-lg">Frequency</label>
-    </div>
-    <div>{{ recipe().frequency }}</div>
-
-    <div class="flex items-center justify-start gap-2">
-      <i class="fa-solid fa-cake-candles"></i>
-      <label for="mealCategory" class="text-lg">Meal category</label>
-    </div>
-    <div>{{ mealCategorySearchedName() }}</div>
-
-    <div class="flex items-center justify-start gap-2">
-      <i class="fa-solid fa-flag"></i>
-      <label for="cuisine" class="text-lg">Cuisine</label>
-    </div>
-    <div>{{ cuisineSearchedName() }}</div>
-  </div>
-
-  <div class="font-semibold text-xl mt-4 mb-2">Seasons</div>
-  <ul class="flex items-start gap-2 mb-4">
-    @for (season of recipe().seasonsSelected; track $index) {
-    <li class="tag">
-      {{ season }}
-    </li>
-    }
-  </ul>
-
-  <div class="font-semibold text-xl mt-4 mb-2">Recipe categories</div>
-  <ul class="flex items-start gap-2 mb-2">
-    @for (recipeCategoryName of recipeCategoryNames(); track $index) {
-    <li class="tag">
-      {{ recipeCategoryName }}
-    </li>
-    }
-  </ul>
-
-  <div class="group mt-6">
-    <div class="flex items-center justify-start gap-2">
-      <i class="fa-solid fa-user"></i>
-      <label for="servings" class="text-lg">Servings</label>
-    </div>
-    <div
-      class="flex items-center justify-between bg-white border border:text-gray-300 dark:bg-gray-800 dark:text-white rounded-2xl dark:border-gray-700 px-2 py-2"
-    >
-      <button (click)="decreaseServings()">
-        <i class="fa-solid fa-minus"></i>
+    <div class="text-center text-2xl mb-6">{{ recipe().title }}</div>
+    <div class="flex items-center justify-end gap-4 mb-6">
+      <button (click)="onEditRecipe()">
+        <i
+          class="fa-solid fa-edit fa-lg text-primary-600 dark:text-primary-500"
+        ></i>
       </button>
-      <p>{{ servings() }}</p>
-      <button (click)="increaseServings()">
-        <i class="fa-solid fa-plus"></i>
+      <button (click)="openDeleteModal($event, recipe().id)">
+        <i
+          class="fa-solid fa-trash fa-lg text-danger-600 dark:text-danger-500"
+        ></i>
       </button>
     </div>
-  </div>
 
-  <div class="font-semibold text-xl mt-4 mb-2">Ingredients</div>
-  <ul class="flex flex-col items-start gap-2 mb-4">
-    @for (ingredient of recipe().ingredients; track $index) {
-    <li class="bg-white dark:bg-gray-800 p-2 rounded w-full">
-      <span class="mr-1">{{
-        ingredient.measure * computedMeasureRatio() | ingredientQuantity
-      }}</span>
-      <span>{{ ingredient.unit }}</span>
-      <span class="mx-2">{{ ingredient.name }}</span>
-    </li>
-    }
-  </ul>
+    <div class="rounded-lg overflow-hidden shadow-md">
+      @if (!recipe().imageUrl) {
+        <p
+          class="w-full h-48 bg-gradient-to-r from-gray-200 to-primary-100 dark:from-gray-700 dark:to-primary-900 flex items-center justify-center text-lg font-bold"
+        >
+          {{ recipe().title }}
+        </p>
+      } @else {
+        @if (!imageLoadedMap()[recipe().id]) {
+          <div class="absolute inset-0 bg-gray-200 animate-pulse z-0"></div>
+        }
 
-  @if (recipe().instructions.length > 0) {
-  <div class="font-semibold text-xl mt-4 mb-2">Instructions</div>
-  <ul class="flex flex-col items-start gap-2 mb-4">
-    @for (instruction of recipe().instructions; track $index) {
-    <li class="bg-white dark:bg-gray-800 p-2 rounded w-full">
-      {{ instruction }}
-    </li>
-    }
-  </ul>
-  } @if (commentLines()) {
-  <div class="font-semibold text-xl mt-4 mb-2">Comment</div>
-  <ul class="flex flex-col items-start mb-4">
-    @for (line of commentLines(); track $index) {
-    <li class="bg-white dark:bg-gray-800 p-2 rounded w-full">
-      {{ line }}
-    </li>
+        <img
+          [src]="recipe().imageUrl"
+          alt="'recipe().title'"
+          (load)="onImageLoad(recipe().id)"
+          class="w-full h-80 object-cover transition-all duration-700 ease-in-out z-10"
+          [class.blur-sm]="!imageLoadedMap()[recipe().id]"
+          [class.opacity-0]="!imageLoadedMap()[recipe().id]"
+        />
+      }
+    </div>
 
+    @if (recipe().source) {
+      <div
+        class="flex items-center justify-end gap-2 mt-2 mb-6 text-primary-600 dark:text-primary-500"
+      >
+        <i class="fa-brands fa-sourcetree"></i>
+        <a
+          [href]="sanitizeUrl(recipe().source)"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Source
+        </a>
+      </div>
     }
-  </ul>
-  } } @else {
-  <div class="flex flex-col items-center">
-    <app-loading />
-  </div>
+
+    <section class="group mb-6">
+      <div class="flex items-center justify-start gap-2">
+        <i class="fa-solid fa-clock"></i>
+        <label for="preparationTime" class="text-lg">Preparation Time</label>
+      </div>
+      <div>{{ recipe().preparationTime }}</div>
+
+      <div class="flex items-center justify-start gap-2">
+        <i class="fa-solid fa-utensils"></i>
+        <label for="cookingTime" class="text-lg">Cooking Time</label>
+      </div>
+      <div>{{ recipe().cookingTime }}</div>
+
+      <div class="flex items-center justify-start gap-2">
+        <i class="fa-solid fa-person-hiking"></i>
+        <label for="difficulty" class="text-lg">Difficulty</label>
+      </div>
+      <div>{{ recipe().difficulty }}</div>
+
+      <div class="flex items-center justify-start gap-2">
+        <i class="fa-solid fa-barcode"></i>
+        <label for="price" class="text-lg">Price</label>
+      </div>
+      <div>{{ recipe().price }}</div>
+
+      <div class="flex items-center justify-start gap-2">
+        <i class="fa-solid fa-calendar-days"></i>
+        <label for="frequency" class="text-lg">Frequency</label>
+      </div>
+      <div>{{ recipe().frequency }}</div>
+
+      <div class="flex items-center justify-start gap-2">
+        <i class="fa-solid fa-cake-candles"></i>
+        <label for="mealCategory" class="text-lg">Meal category</label>
+      </div>
+      <div>{{ mealCategorySearchedName() }}</div>
+
+      <div class="flex items-center justify-start gap-2">
+        <i class="fa-solid fa-flag"></i>
+        <label for="cuisine" class="text-lg">Cuisine</label>
+      </div>
+      <div>{{ cuisineSearchedName() }}</div>
+    </section>
+
+    <section>
+      <div class="font-semibold text-xl mt-4 mb-2">Seasons</div>
+      <ul class="flex items-start gap-2 mb-4">
+        @for (season of recipe().seasonsSelected; track $index) {
+          <li class="tag">
+            {{ season }}
+          </li>
+        }
+      </ul>
+    </section>
+
+    <section>
+      <div class="font-semibold text-xl mt-4 mb-2">Recipe categories</div>
+      <ul class="flex items-start gap-2 mb-2">
+        @for (recipeCategoryName of recipeCategoryNames(); track $index) {
+          <li class="tag">
+            {{ recipeCategoryName }}
+          </li>
+        }
+      </ul>
+    </section>
+
+    <section class="group mt-6">
+      <div class="flex items-center justify-start gap-2">
+        <i class="fa-solid fa-user"></i>
+        <label for="servings" class="text-lg">Servings</label>
+      </div>
+      <div
+        class="flex items-center justify-between bg-white border border:text-gray-300 dark:bg-gray-800 dark:text-white rounded-2xl dark:border-gray-700 px-2 py-2"
+      >
+        <button (click)="decreaseServings()">
+          <i class="fa-solid fa-minus"></i>
+        </button>
+        <p>{{ servings() }}</p>
+        <button (click)="increaseServings()">
+          <i class="fa-solid fa-plus"></i>
+        </button>
+      </div>
+    </section>
+
+    <section>
+      <div class="font-semibold text-xl mt-4 mb-2">Ingredients</div>
+      <ul class="flex flex-col items-start gap-2 mb-4">
+        @for (ingredient of recipe().ingredients; track $index) {
+          <li class="bg-white dark:bg-gray-800 p-2 rounded w-full">
+            <span class="mr-1">{{
+              ingredient.measure * computedMeasureRatio() | ingredientQuantity
+            }}</span>
+            <span>{{ ingredient.unit }}</span>
+            <span class="mx-2">{{ ingredient.name }}</span>
+          </li>
+        }
+      </ul>
+    </section>
+
+    @if (recipe().instructions.length > 0) {
+      <section>
+        <div class="font-semibold text-xl mt-4 mb-2">Instructions</div>
+        <ul class="flex flex-col items-start gap-2 mb-4">
+          @for (instruction of recipe().instructions; track $index) {
+            <li class="bg-white dark:bg-gray-800 p-2 rounded w-full">
+              {{ instruction }}
+            </li>
+          }
+        </ul>
+      </section>
+    }
+    @if (commentLines()) {
+      <section>
+        <div class="font-semibold text-xl mt-4 mb-2">Comment</div>
+        <ul class="flex flex-col items-start mb-4">
+          @for (line of commentLines(); track $index) {
+            <li class="bg-white dark:bg-gray-800 p-2 rounded w-full">
+              {{ line }}
+            </li>
+          }
+        </ul>
+      </section>
+    }
+  } @else {
+    <div class="flex flex-col items-center">
+      <app-loading />
+    </div>
   }
 </div>
 
-<app-modal-confirm
-  title="Delete confirmation"
-  [message]="getDeleteMessage()"
-  btnConfirmText="Delete"
-  btnConfirmColor="danger"
-  [isModalOpen]="showConfirmDeleteModal()"
-  (confirmEvent)="onConfirmModalAction($event)"
-/>
 <div class="flex flex-col items-center">
   @if (pageIsLoading()) {
-  <app-loading />
+    <app-loading />
   }
 </div>

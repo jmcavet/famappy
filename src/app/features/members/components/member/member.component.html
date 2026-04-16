@@ -1,12 +1,8 @@
-<div
-  class="bg-white dark:bg-gray-800 rounded-lg shadow-lg w-full max-w-sm mb-6"
->
-  <div
-    class="bg-gray-300 dark:bg-gray-700 text-gray-900 dark:text-white text-center text-2xl mb-4 py-2 rounded-t-lg"
-  >
+<div class="main-content">
+  <div class="title">
     {{ title() }}
   </div>
-  <form class="p-6" [formGroup]="memberForm">
+  <form [formGroup]="memberForm">
     <div class="form-el-container">
       <label for="name">Name</label>
       <span>{{ member().name }}</span>
@@ -20,22 +16,13 @@
       <span>{{ member().birthday | date }}</span>
     </div>
 
-    <div class="flex items-center justify-between gap-x-8">
+    <div class="btns-container">
       <app-button
         color="danger"
-        btnStyle="outlined"
-        (click)="onConfirmRemoveMember()"
+        variant="outline"
+        (click)="openDeleteModal($event, member().id)"
         >Remove</app-button
       >
-
-      <app-modal-confirm
-        title="Delete confirmation"
-        message="Do you really want to remove this member? You will lose all your data..."
-        btnConfirmText="Delete"
-        btnConfirmColor="danger"
-        [isModalOpen]="showConfirmModal()"
-        (confirmEvent)="onConfirmModalAction($event)"
-      />
 
       <app-member-modal
         title="Update member"
@@ -46,15 +33,15 @@
         [birthday]="member().birthday"
         [mainBtnText]="'Update'"
         ><div class="mx-auto text-center">
-          <app-button type="submit">Update</app-button>
+          <app-button type="submit" color="primary">Update</app-button>
         </div>
       </app-member-modal>
     </div>
   </form>
 </div>
 
-<div class="flex flex-col items-center">
+<div class="flex-col-center">
   @if (pageIsRefreshing()) {
-  <app-loading />
+    <app-loading />
   }
 </div>

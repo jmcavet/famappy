@@ -1,0 +1,47 @@
+<div class="stepper">
+  @for (step of steps; let i = $index; track $index) {
+    <div class="w-full flex flex-col items-center gap-1">
+      <button
+        class="w-full flex items-center justify-start mr-1"
+        (click)="selectStep(i + 1)"
+        [disabled]="
+          !(
+            i === 0 ||
+            ((i === 1 || i === 2) && canSelectStep2Or3()) ||
+            (i === 3 && canSelectStep4())
+          )
+        "
+      >
+        <div class="circle">
+          @if (navStep > i + 1 || finalCartIsNotEmpty()) {
+            <i
+              class="fa-solid fa-circle-check fa-xl text-emerald-500 dark:text-emerald-400"
+            ></i>
+          } @else if (navStep === i + 1) {
+            <i
+              class="fa-solid fa-circle-dot fa-xl text-primary-500 dark:text-primary-400"
+            ></i>
+          } @else {
+            <i
+              class="fa-solid fa-circle fa-xl text-neutral-300 dark:text-neutral-500"
+            ></i>
+          }
+        </div>
+        @if (i < 3) {
+          <div
+            class="line"
+            [class.active]="navStep === i + 1"
+            [class.done]="navStep > i + 1"
+          ></div>
+        }
+      </button>
+      <div
+        class="step-name"
+        [class.active]="navStep === i + 1"
+        [class.done]="navStep > i + 1"
+      >
+        {{ step }}
+      </div>
+    </div>
+  }
+</div>

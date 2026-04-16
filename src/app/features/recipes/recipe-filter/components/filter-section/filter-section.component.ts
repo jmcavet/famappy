@@ -1,28 +1,32 @@
 import {
   Component,
   computed,
+  input,
   Input,
+  signal,
   Signal,
   WritableSignal,
 } from '@angular/core';
+import { ButtonComponent } from '../../../../../shared/ui/button/button.component';
+import { ChipComponent } from '../../../../../shared/ui/chip/chip.component';
 
 @Component({
   selector: 'app-filter-section',
-  imports: [],
+  imports: [ButtonComponent, ChipComponent],
   templateUrl: './filter-section.component.html',
   styleUrl: './filter-section.component.css',
 })
 export class FilterSectionComponent {
   @Input() sectionTitle!: string;
   @Input() icon!: string;
-  // @Input() tags!: Signal<{ id: string; name: string }[]>;
   @Input() tags!: Signal<any[]>;
   @Input() selectedIds!: WritableSignal<string[]>;
+  canSelectAll = input<boolean>(true);
 
   labelToggleSelectAll = computed(() =>
     this.selectedIds().length === this.tags().length
       ? 'Deselect all'
-      : 'Select all'
+      : 'Select all',
   );
 
   selectDeselectAll() {
@@ -36,11 +40,10 @@ export class FilterSectionComponent {
 
   toggleTag(id: string) {
     const current = this.selectedIds();
-    console.log('current: ', current);
     this.selectedIds.set(
       current.includes(id)
         ? current.filter((el) => el !== id)
-        : [...current, id]
+        : [...current, id],
     );
   }
 }

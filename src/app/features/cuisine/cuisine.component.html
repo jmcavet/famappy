@@ -1,13 +1,13 @@
 <ul>
   @for (cuisine of dbCuisines(); track $index) {
-  <li (click)="selectCuisine(cuisine.id)">
-    {{ cuisine.name | capitalize }}
-    @if (cuisineId() === cuisine.name) {
-    <i
-      class="fa-solid fa-check fa-xl text-primary-600 dark:text-primary-500"
-    ></i>
-    }
-  </li>
+    <li (click)="selectCuisine(cuisine.id)">
+      {{ cuisine.name | capitalize }}
+      @if (cuisineId() === cuisine.name) {
+        <i
+          class="fa-solid fa-check fa-xl text-primary-600 dark:text-primary-500"
+        ></i>
+      }
+    </li>
   }
 </ul>
 
@@ -18,7 +18,7 @@
   <i class="fa-solid fa-plus fa-xl"></i>
 </button>
 
-<app-modal-input
+<!-- <app-modal-input
   title="Enter new cuisine"
   [inputValue]="cuisineName()"
   [existingItems]="dbCuisines()"
@@ -26,4 +26,4 @@
   btnConfirmColor="primary"
   [isModalOpen]="showModalInput()"
   (confirmEventTest)="onConfirmModalAction($event)"
-/>
+/> -->

@@ -1,0 +1,39 @@
+<div class="relative inline-block">
+  <button
+    type="button"
+    class="servings"
+    [class.dinner]="mealType === 'dinner'"
+    (click)="toggle()"
+  >
+    {{ servings()() }}
+  </button>
+
+  @if (isOpen()) {
+  <div class="popover-container">
+    <div class="people">
+      <button (click)="decreaseServings()">
+        <i class="fa-solid fa-minus"></i>
+      </button>
+      <p>{{ servingsUi() }}</p>
+
+      <button (click)="increaseServings()">
+        <i class="fa-solid fa-plus"></i>
+      </button>
+    </div>
+    <div class="flex items-center justify-between">
+      <button
+        class="border border-neutral-500 text-neutral-400 px-2 py-1 rounded-xl"
+        (click)="close()"
+      >
+        Cancel
+      </button>
+      <button
+        class="bg-primary text-neutral-50 rounded-xl px-2 py-1"
+        (click)="validate()"
+      >
+        Validate
+      </button>
+    </div>
+  </div>
+  }
+</div>

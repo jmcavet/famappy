@@ -1,0 +1,99 @@
+@layer components {
+  .btn {
+    @apply flex items-center justify-center
+           rounded-xl
+           text-button
+           transition-all duration-150
+           active:scale-[0.98];
+  }
+
+  .btn-surface-primary {
+    @apply bg-primary text-neutral-50 border-primary hover:bg-primary/80
+           dark:bg-primary-dark dark:text-neutral-50 dark:border-primary-dark hover:dark:bg-primary-dark/80;
+  }
+
+  .btn-surface-secondary {
+    @apply bg-secondary text-neutral-50 border-secondary
+           dark:bg-secondary-dark dark:text-neutral-50 dark:border-secondary-dark;
+  }
+
+  .btn-surface-danger {
+    @apply bg-danger-500 text-neutral-50 border-danger-500
+           dark:bg-danger-400 dark:text-neutral-50 dark:border-danger-400;
+  }
+
+  .btn-surface-neutral {
+    @apply bg-white text-neutral-900 border-neutral-400
+           dark:bg-neutral-900 dark:text-neutral-300 dark:border-neutral-400;
+  }
+
+  .btn-outline-primary {
+    @apply bg-transparent border border-primary text-primary
+         hover:bg-primary/10
+         dark:text-primary-dark dark:border-primary-dark;
+  }
+
+  .btn-outline-secondary {
+    @apply bg-transparent border border-secondary text-secondary
+         hover:bg-secondary/10
+         dark:text-secondary-dark dark:border-secondary-dark;
+  }
+
+  .btn-outline-neutral {
+    @apply bg-transparent border border-neutral-500 text-neutral-500
+         hover:bg-neutral-500/10
+         dark:text-neutral-400 dark:border-neutral-400;
+  }
+
+  .btn-outline-static {
+    @apply bg-transparent border border-neutral-900 text-neutral-900
+         hover:bg-neutral-900/10
+         dark:text-neutral-50 dark:border-neutral-50;
+  }
+
+  .btn-outline-danger {
+    @apply bg-transparent border border-danger-500 text-danger-500
+         hover:bg-danger-500/10
+         dark:text-danger-400 dark:border-danger-400;
+  }
+
+  .btn-ghost-primary {
+    @apply bg-transparent border-transparent text-primary
+           hover:text-primary/80
+           dark:text-primary-dark dark:hover:text-primary-dark/80;
+  }
+
+  .btn-ghost-secondary {
+    @apply bg-transparent border-transparent text-secondary
+           hover:text-secondary/80
+           dark:text-secondary-dark dark:hover:text-secondary-dark/80;
+  }
+
+  .btn-ghost-danger {
+    @apply bg-transparent border-transparent text-danger-500
+           hover:text-danger-500/80
+           dark:text-danger-400 dark:hover:text-danger-400/80;
+  }
+
+  .btn-ghost-neutral {
+    @apply bg-transparent border-transparent text-neutral-700
+           hover:text-neutral-700/80
+           dark:text-neutral-300 dark:hover:text-neutral-300/80;
+  }
+
+  .btn-disabled {
+    @apply bg-neutral-200 text-neutral-400 dark:bg-neutral-800 dark:text-neutral-500 hover:bg-neutral-300 dark:hover:bg-neutral-700 cursor-not-allowed;
+  }
+
+  .btn-sm {
+    @apply px-3 py-1.5 min-h-8;
+  }
+
+  .btn-md {
+    @apply px-4 py-2.5 min-h-10;
+  }
+
+  .btn-lg {
+    @apply px-6 py-3 min-h-11;
+  }
+}

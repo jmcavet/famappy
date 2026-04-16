@@ -8,24 +8,18 @@ import { FirestoreService } from '../../services/backend/generic.service';
 import { IngredientBackendService } from '../../services/backend/ingredient.service';
 import { RecipeStateService } from '../../services/state/recipe.service';
 import { IngredientTypeWithDate } from '../../models/ingredient-type.model';
-import {
-  IngredientDocInBackend,
-  IngredientWithIdAndDate,
-} from '../../models/ingredient.model';
+import { IngredientDocInBackend } from '../../models/ingredient.model';
+import { ModalService } from '../../shared/modal/modal.service';
 
 @Component({
   selector: 'app-ingredient-categories-selection-page',
-  imports: [
-    FormsModule,
-    LoadingComponent,
-    ModalConfirmComponent,
-    ModalInputComponent,
-  ],
+  imports: [FormsModule, LoadingComponent, ModalInputComponent],
   templateUrl: './manage-ingredient-categories.component.html',
   styleUrl: './manage-ingredient-categories.component.css',
 })
 export class ManageIngredientCategoriesComponent {
   /** Services */
+  private modalService = inject(ModalService);
   private ingredientCategoryService = inject(IngredientCategoryBackendService);
   private firestoreService = inject(FirestoreService);
   private ingredientService = inject(IngredientBackendService);
@@ -50,7 +44,6 @@ export class ManageIngredientCategoriesComponent {
   ingredientCategoryNameToUpdate = signal<string>('');
   showModalAddIngredientCategory = signal<boolean>(false);
   showModalUpdateIngredientCategory = signal<boolean>(false);
-  showConfirmDeleteModal = signal<boolean>(false);
 
   oldIngredientCategoryToBeUpdated: string = '';
   ingredientCategoryIdToRemove: string = '';
@@ -87,7 +80,7 @@ export class ManageIngredientCategoriesComponent {
 
   async addIngredientCategory(ingredientCategoryName: string) {
     this.ingredientCategoryService.saveRecipeCategoryIntoStore(
-      ingredientCategoryName
+      ingredientCategoryName,
     );
   }
 
@@ -108,59 +101,62 @@ export class ManageIngredientCategoriesComponent {
       // User has confirmed the action provided within the modal window
       this.updateIngredientCategory(
         this.ingredientCategoryIdToUpdate(),
-        event.name
+        event.name,
       );
     }
   }
 
   async updateIngredientCategory(
     ingredientCategoryIdToUpdate: string,
-    newIngredientCategoryName: string
+    newIngredientCategoryName: string,
   ) {
     this.ingredientCategoryService.updateIngredientCategoryInStore(
       ingredientCategoryIdToUpdate,
       newIngredientCategoryName,
-      this.recipeService.mustPreserveState
+      this.recipeService.mustPreserveState,
     );
   }
 
-  onConfirmRemoveCategory(ingredientCategoryId: string) {
-    this.ingredientCategoryIdToRemove = ingredientCategoryId;
+  openDeleteModal(event: MouseEvent, ingredientCategoryId: string) {
+    event.stopPropagation();
+
+    this.modalService.open(
+      ModalConfirmComponent,
+      {
+        title: 'Delete confirmation',
+        message: this.modalDeleteMessage(ingredientCategoryId),
+        btnConfirmText: 'Delete',
+        btnConfirmColor: 'danger',
+      },
+      {
+        onConfirm: () => this.onRemoveIngredientCategory(ingredientCategoryId),
+      },
+    );
+  }
+
+  public modalDeleteMessage(ingredientCategoryId: string) {
     const ingredients = this.ingredientService.ingredients();
     this.ingredientsToRemove = ingredients.filter(
-      (ingredient) => ingredient.categoryId === ingredientCategoryId
+      (ingredient) => ingredient.categoryId === ingredientCategoryId,
     );
-    this.showConfirmDeleteModal.set(true);
-  }
 
-  deleteMessage = computed(() => {
     const count = this.ingredientsToRemove.length;
 
     return count > 0
       ? `Do you really want to remove this category? ${count} ingredients from this category will be uncategorized.`
       : 'Do you really want to remove this category?';
-  });
-
-  onConfirmModalAction(confirm: boolean) {
-    // Close the Cancel/Confirm modal
-    this.showConfirmDeleteModal.set(false);
-
-    if (confirm) {
-      // User has confirmed the action provided within the modal window
-      this.onRemoveIngredientCategory(this.ingredientCategoryIdToRemove);
-    }
   }
 
   async onRemoveIngredientCategory(ingredientCategoryIdToDelete: string) {
     this.ingredientCategoryService.deleteIngredientCategoryInStore(
-      ingredientCategoryIdToDelete
+      ingredientCategoryIdToDelete,
     );
 
     try {
       this.firestoreService.removeDocumentByPropertyId(
         'ingredients',
         'typeId',
-        ingredientCategoryIdToDelete
+        ingredientCategoryIdToDelete,
       );
     } catch (error) {
       console.log('Error removing ingredient: ', error);

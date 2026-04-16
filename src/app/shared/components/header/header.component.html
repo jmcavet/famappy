@@ -1,53 +1,47 @@
 <header>
   <div class="flex justify-between items-center px-4 h-full">
-    <div class="flex items-center justify-between gap-4 dark:text-white">
+    <!-- <div class="flex items-center justify-between gap-4 dark:text-white">
       @if (headerConfig().showHomeIcon) {
-      <button
-        class="rounded-full flex items-center justify-center"
-        routerLink="/"
-      >
-        <i class="fa fa-house fa-lg"></i>
-      </button>
-      } @if (headerConfig().showBackIcon) {
-      <button class="dark:text-white" (click)="goBack()">
-        <i class="fa-solid fa-arrow-left-long"></i>
-      </button>
+        <button
+          class="rounded-full flex items-center justify-center"
+          routerLink="/"
+        >
+          <i class="fa fa-house fa-lg"></i>
+        </button>
+      }
+      @if (headerConfig().showBackIcon) {
+        <button class="dark:text-white" (click)="goBack()">
+          <i class="fa-solid fa-arrow-left-long"></i>
+        </button>
       }
 
       <p class="text-xl dark:text-white">{{ headerConfig().title }}</p>
-    </div>
+    </div> -->
 
-    <div class="flex items-center justify-between gap-6">
+    <!-- <div class="flex items-center justify-between gap-6">
       @if (!user()) {
-      <button
-        class="border border-blue-700 dark:border-blue-400 dark:text-blue-400 px-4 py-2 flex items-center justify-center"
-        (click)="login()"
-        routerLink="/login"
-      >
-        Log in
-      </button>
-      <button
-        class="bg-blue-700 text-white dark:bg-blue-400 dark:text-black px-4 py-2 flex items-center justify-center"
-        routerLink="/signup"
-      >
-        Sign up
-      </button>
+        <button
+          class="border border-blue-700 dark:border-blue-400 dark:text-blue-400 px-4 py-2 flex items-center justify-center"
+          (click)="login()"
+          routerLink="/login"
+        >
+          Log in
+        </button>
+        <button
+          class="bg-blue-700 text-white dark:bg-blue-400 dark:text-black px-4 py-2 flex items-center justify-center"
+          routerLink="/signup"
+        >
+          Sign up
+        </button>
       } @else {
-      <button
-        class="border border-blue-700 dark:border-blue-400 dark:text-blue-400 px-4 py-2 flex items-center justify-center"
-        (click)="logout()"
-        routerLink="/logout"
-      >
-        Log out
-      </button>
+        <button
+          class="border border-blue-700 dark:border-blue-400 dark:text-blue-400 px-4 py-2 flex items-center justify-center"
+          (click)="logout()"
+          routerLink="/logout"
+        >
+          Log out
+        </button>
       }
-
-      <button
-        class="bg-blue-400 dark:bg-blue-300 p-1 rounded-full flex items-center justify-center"
-        (click)="toggleTheme()"
-      >
-        <mat-icon>{{ isDarkMode() ? "wb_sunny" : "bedtime" }}</mat-icon>
-      </button>
 
       @if (headerConfig().showDropdown) {
       <ng-container>
@@ -81,6 +75,6 @@
         <i class="{{ action.icon }}"></i>
       </button>
       } }
-    </div>
+    </div> -->
   </div>
 </header>

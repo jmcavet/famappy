@@ -1,0 +1,31 @@
+.day-container {
+  @apply flex flex-col items-center justify-stretch gap-1 px-3 py-1 sm:px-8 rounded-lg hover:bg-neutral-200 dark:hover:bg-neutral-700 cursor-pointer;
+}
+
+.day-container.active {
+  @apply bg-primary-500 text-white dark:bg-primary-dark dark:hover:bg-primary-dark/90;
+}
+
+.day-container.weekend {
+  @apply bg-neutral-100 dark:bg-neutral-800;
+}
+
+.day-month {
+  @apply text-xs sm:text-sm text-neutral-500 dark:text-neutral-400;
+}
+
+.day-month.active {
+  @apply text-primary-200 dark:text-neutral-200;
+}
+
+.cook {
+  @apply text-xs bg-neutral-500 text-neutral-50 dark:text-neutral-800 rounded-full w-4 text-center;
+}
+
+.cook.firstCook {
+  @apply bg-emerald-500 text-emerald-50 dark:text-neutral-800 dark:bg-emerald-500;
+}
+
+.cook.secondCook {
+  @apply bg-rose-500 text-rose-50 dark:text-neutral-800 dark:bg-rose-500;
+}

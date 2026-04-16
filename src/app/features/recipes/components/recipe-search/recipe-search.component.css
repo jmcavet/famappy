@@ -1,19 +1,15 @@
-.main-container {
-  @apply bg-white dark:bg-gray-800 p-2 rounded-lg mb-8;
-}
-
 .input-wrapper {
   @apply w-full relative;
 }
 
 input[type="text"] {
-  @apply w-full shadow appearance-none border rounded px-10 py-4 text-gray-700 dark:bg-gray-800 dark:text-white dark:border-gray-400 leading-tight focus:outline-none;
+  @apply w-full border rounded px-10 py-4 text-neutral-700 dark:bg-neutral-800 dark:text-neutral-50 dark:border-neutral-400 leading-tight focus:outline-none;
 }
 
 .btn-reset {
-  @apply absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600;
+  @apply absolute right-2 top-1/2 -translate-y-1/2 text-neutral-400 hover:text-neutral-600;
 }
 
 .icon-search {
-  @apply absolute left-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600;
+  @apply absolute left-2 top-1/2 -translate-y-1/2 text-neutral-400 hover:text-neutral-600;
 }

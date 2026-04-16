@@ -1,0 +1,16 @@
+<div class="relative inline-block">
+  <button
+    class="cook"
+    (click)="openContextMenu($event)"
+    [class.firstCook]="cookPosition() === 'first'"
+    [class.secondCook]="cookPosition() === 'second'"
+    [disabled]="!canAssignCook()"
+    [class.disabled]="!canAssignCook()"
+  >
+    @if (cookName()) {
+      {{ cookName() }}
+    } @else {
+      <i class="fa-regular fa-question fa-xl"></i>
+    }
+  </button>
+</div>

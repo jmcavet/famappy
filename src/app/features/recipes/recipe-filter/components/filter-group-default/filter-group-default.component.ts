@@ -6,10 +6,12 @@ import {
   Signal,
   WritableSignal,
 } from '@angular/core';
+import { ButtonComponent } from '../../../../../shared/ui/button/button.component';
+import { ChipComponent } from '../../../../../shared/ui/chip/chip.component';
 
 @Component({
   selector: 'app-filter-group-default',
-  imports: [],
+  imports: [ButtonComponent, ChipComponent],
   templateUrl: './filter-group-default.component.html',
   styleUrl: './filter-group-default.component.css',
 })
@@ -33,15 +35,15 @@ export class FilterGroupDefaultComponent {
       tags.map((tag) => ({
         ...tag,
         selected: allTagsAreSelected ? false : true,
-      }))
+      })),
     );
   }
 
   toggleTag(tagName: string) {
     this.tags.update((tags) =>
       tags.map((tag) =>
-        tag.name === tagName ? { ...tag, selected: !tag.selected } : tag
-      )
+        tag.name === tagName ? { ...tag, selected: !tag.selected } : tag,
+      ),
     );
 
     console.log('tags: ', this.tags());

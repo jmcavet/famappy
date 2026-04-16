@@ -1,0 +1,53 @@
+<div class="col-span-4 sm:col-span-12 flex flex-col gap-4 surface-1 rounded-xl">
+  <app-meal-day-header [dailyMealPlan]="dailyMealPlan()" />
+
+  <app-meal-type-header
+    mealType="lunch"
+    [showAssignButton]="false"
+    [showServingIncrements]="false"
+    [servings]="lunchServings"
+    [dailyMealPerMealType]="dailyLunchMeals()"
+    [dailyMealPlan]="dailyMealPlan()"
+  />
+  <div class="flex flex-col justify-between gap-2">
+    @for (recipe of dailyMealPlan().recipes; track $index) {
+      @if (recipe.recipe !== null && recipe.mealType === "lunch") {
+        <app-meal-recipe-item
+          [recipe]="recipe"
+          [canViewRecipe]="true"
+          [canDeleteMeal]="true"
+          [showImage]="true"
+        />
+      }
+      @if (recipe.manualRecipe && recipe.mealType === "lunch") {
+        <app-meal-manual-recipe-item [meal]="recipe" />
+      }
+    }
+  </div>
+
+  <div class="w-full h-1 bg-neutral-50 dark:bg-neutral-900"></div>
+
+  <app-meal-type-header
+    mealType="dinner"
+    [showAssignButton]="false"
+    [showServingIncrements]="false"
+    [servings]="dinnerServings"
+    [dailyMealPerMealType]="dailyDinnerMeals()"
+    [dailyMealPlan]="dailyMealPlan()"
+  />
+  <div class="flex flex-col justify-between gap-2">
+    @for (recipe of dailyMealPlan().recipes; track $index) {
+      @if (recipe.recipe && recipe.mealType === "dinner") {
+        <app-meal-recipe-item
+          [recipe]="recipe"
+          [canViewRecipe]="true"
+          [canDeleteMeal]="true"
+          [showImage]="true"
+        />
+      }
+      @if (recipe.manualRecipe && recipe.mealType === "dinner") {
+        <app-meal-manual-recipe-item [meal]="recipe" />
+      }
+    }
+  </div>
+</div>

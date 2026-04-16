@@ -1,55 +1,33 @@
-<div class="flex items-center justify-between text-blue-800 dark:text-blue-300">
+<div class="flex-around">
   <button
-    class="bg-blue-200 dark:bg-blue-800 p-2 rounded-full flex items-center justify-center"
     routerLink="/"
     routerLinkActive="active-link"
     [routerLinkActiveOptions]="{ exact: true }"
   >
-    <i class="fa fa-house"></i>
-  </button>
-
-  <button
-    class="bg-blue-200 dark:bg-blue-800 p-2 rounded-full flex items-center justify-center"
-    routerLink="/"
-    routerLinkActive="active-link"
-    [routerLinkActiveOptions]="{ exact: true }"
-    [matMenuTriggerFor]="belowMenu"
-  >
-    <i class="fa fa-plus"></i>
-  </button>
-
-  <mat-menu #belowMenu="matMenu" yPosition="above">
-    <button mat-menu-item>Item 1</button>
-    <button mat-menu-item>Item 2</button>
-  </mat-menu>
-
-  <button
-    class="bg-blue-200 dark:bg-blue-800 p-2 rounded-full flex items-center justify-center"
-    routerLink="/"
-    routerLinkActive="active-link"
-    [routerLinkActiveOptions]="{ exact: true }"
-    [matMenuTriggerFor]="beforeMenu"
-  >
-    <i class="fa fa-cart-shopping"></i>
-  </button>
-  <mat-menu #beforeMenu="matMenu" xPosition="before">
-    <button mat-menu-item>Item 1</button>
-    <button mat-menu-item>Item 2</button>
-  </mat-menu>
-
-  <button
-    class="bg-blue-200 dark:bg-blue-800 p-2 rounded-full flex items-center justify-center"
-    routerLink="/"
-    routerLinkActive="active-link"
-    [routerLinkActiveOptions]="{ exact: true }"
-    [matMenuTriggerFor]="afterMenu"
-  >
-    <i class="fa fa-graduation-cap"></i>
-  </button>
-  <mat-menu #afterMenu="matMenu" xPosition="after">
-    <div class="bg-red-200 dark:bg-red-800">
-      <button mat-menu-item class="material-btn-custom">Item 1</button>
+    <div class="btn-container">
+      <i class="fa fa-house"></i>
+      <p>Home</p>
     </div>
-    <button mat-menu-item>Item 2</button>
-  </mat-menu>
+  </button>
+
+  <button routerLink="/meals" routerLinkActive="active-link">
+    <div class="btn-container">
+      <i class="fa-solid fa-utensils"></i>
+      <p>Meals</p>
+    </div>
+  </button>
+
+  <button routerLink="/recipes" routerLinkActive="active-link">
+    <div class="btn-container">
+      <i class="fa fa-cart-shopping"></i>
+      <p>Shopping</p>
+    </div>
+  </button>
+
+  <button routerLink="/settings" routerLinkActive="active-link">
+    <div class="btn-container">
+      <i class="fa fa-gear"></i>
+      <p>Settings</p>
+    </div>
+  </button>
 </div>

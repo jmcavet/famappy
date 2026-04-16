@@ -1,20 +1,11 @@
 header {
-  @apply bg-white dark:bg-gray-800 fixed top-0 w-full h-8vh shadow-md;
+  /* @apply surface-nav fixed top-0 w-full h-8vh; */
+  /* @apply surface-nav w-full h-16; */
+  @apply surface-nav shrink-0;
 }
 
 .active-link {
   background-color: coral;
   color: #1512c4;
   font-weight: bold;
-}
-
-mat-toolbar {
-  justify-content: space-between;
-  padding: 0 2rem;
-}
-
-mat-toolbar.theme-control {
-  display: flex;
-  align-items: center;
-  justify-content: center;
 }

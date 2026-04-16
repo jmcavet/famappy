@@ -1,0 +1,27 @@
+.summary-header {
+  @apply font-inter surface-2 flex items-center justify-between gap-6 p-2;
+}
+
+.meal-type {
+  @apply font-roboto font-medium sm:text-xl border-l-4 border-l-amber-500 pl-2 text-amber-500;
+}
+
+.meal-type.dinner {
+  @apply border-l-cyan-500 pl-2 text-cyan-500;
+}
+
+.btn-add-meal.active {
+  @apply text-primary-500 dark:text-primary-300 cursor-pointer;
+}
+
+.people-container {
+  @apply flex items-center justify-between gap-2;
+}
+
+.people {
+  @apply text-neutral-600 border-neutral-500 dark:text-neutral-300 dark:border-neutral-400 flex items-center justify-between border px-2 py-1 rounded-3xl gap-2 sm:gap-4;
+}
+
+.cook {
+  @apply bg-indigo-400 text-white hover:bg-indigo-500 dark:bg-indigo-600 dark:text-neutral-50 dark:hover:bg-indigo-500 text-xs sm:text-base p-2 rounded-full;
+}

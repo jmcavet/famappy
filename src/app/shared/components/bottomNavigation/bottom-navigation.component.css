@@ -1,13 +1,25 @@
+button {
+  @apply w-16 py-2 px-3 rounded-2xl
+           bg-neutral-50 text-neutral-700
+           hover:bg-neutral-200
+           dark:bg-neutral-900 dark:text-neutral-300
+           dark:hover:bg-neutral-800
+           flex flex-col items-center justify-center gap-1
+           transition-colors duration-150;
+}
+
 .active-link {
-  background-color: coral;
-  color: #1512c4;
-  font-weight: bold;
+  @apply bg-primary text-neutral-50 dark:bg-primary-dark;
 }
 
-.material-btn-custom {
-  color: #f7ec19;
+.active-link p {
+  @apply font-bold;
 }
 
-.material-btn-custom.dark {
-  color: #f719d9;
+.btn-container {
+  @apply flex-col-center gap-1;
+}
+
+p {
+  @apply text-[0.6rem];
 }

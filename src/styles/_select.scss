@@ -1,0 +1,43 @@
+@layer components {
+  .select-container {
+    @apply flex flex-col gap-2;
+  }
+
+  .select-label {
+    @apply font-roboto
+        text-neutral-700 dark:text-neutral-300;
+  }
+
+  .select-label-sm {
+    @apply text-sm font-medium;
+  }
+
+  .select-label-md {
+    @apply text-base font-medium;
+  }
+
+  .select-label-lg {
+    @apply text-lg font-semibold;
+  }
+
+  .select {
+    @apply w-full px-3 py-1.5 rounded-xl
+           bg-white border border-neutral-300
+           text-sm text-neutral-900
+           focus:outline-none focus:ring-2 focus:ring-primary-400 focus:border-primary-400
+           dark:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-50
+           dark:focus:ring-primary-500;
+  }
+
+  .select-sm {
+    @apply px-3 py-0.5 min-h-7;
+  }
+
+  .select-md {
+    @apply px-4 py-1 min-h-8;
+  }
+
+  .select-lg {
+    @apply px-4 py-2.5 min-h-10;
+  }
+}

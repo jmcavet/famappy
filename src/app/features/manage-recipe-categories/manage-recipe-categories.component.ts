@@ -4,25 +4,21 @@ import { ModalInputComponent } from '../../shared/components/modal-input/modal-i
 import { ModalConfirmComponent } from '../../shared/components/modal-confirm/modal-confirm.component';
 import { LoadingComponent } from '../../shared/components/loading/loading.component';
 import { RecipeCategoryBackendService } from '../../services/backend/recipe-category.service';
-import { FirestoreService } from '../../services/backend/generic.service';
 import { RecipeStateService } from '../../services/state/recipe.service';
 import { RecipeCategoryDocInBackend } from '../../models/cuisine.model';
 import { RecipeWithId } from '../recipes/components/recipe-card/recipe.model';
 import { RecipeBackendService } from '../../services/backend/recipe.service';
+import { ModalService } from '../../shared/modal/modal.service';
 
 @Component({
   selector: 'app-manage-recipe-categories',
-  imports: [
-    CapitalizePipe,
-    ModalInputComponent,
-    ModalConfirmComponent,
-    LoadingComponent,
-  ],
+  imports: [CapitalizePipe, ModalInputComponent, LoadingComponent],
   templateUrl: './manage-recipe-categories.component.html',
   styleUrl: './manage-recipe-categories.component.css',
 })
 export class ManageRecipeCategoriesComponent {
   /** Services */
+  private modalService = inject(ModalService);
   private recipeCategoryService = inject(RecipeCategoryBackendService);
   private recipeStateService = inject(RecipeStateService);
   private recipeBackendService = inject(RecipeBackendService);
@@ -41,10 +37,8 @@ export class ManageRecipeCategoriesComponent {
   recipeCategoryName = signal<string>('');
   recipeCategoryIdToUpdate = signal<string>('');
   recipeCategoryNameToUpdate = signal<string>('');
-  recipeCategoryIdToDelete = signal<string>('');
   showModalAddRecipeCategory = signal<boolean>(false);
   showModalUpdateRecipeCategory = signal<boolean>(false);
-  showModalDeleteRecipeCategory = signal<boolean>(false);
 
   readonly canShowPage = computed(() => {
     return (
@@ -93,53 +87,54 @@ export class ManageRecipeCategoriesComponent {
 
   async updateRecipeCategory(
     recipeCategoryIdToUpdate: string,
-    newRecipeCategoryName: string
+    newRecipeCategoryName: string,
   ) {
     this.recipeCategoryService.updateRecipeCategoryInStore(
       recipeCategoryIdToUpdate,
       newRecipeCategoryName,
-      this.recipeStateService.mustPreserveState
+      this.recipeStateService.mustPreserveState,
     );
   }
 
-  openModalDeleteRecipeCategory(recipeCategory: any) {
-    this.showModalDeleteRecipeCategory.set(true);
-    this.recipeCategoryIdToDelete.set(recipeCategory.id);
+  openDeleteModal(event: MouseEvent, recipeCategoryId: string) {
+    event.stopPropagation();
+
+    this.modalService.open(
+      ModalConfirmComponent,
+      {
+        title: 'Delete confirmation',
+        message: this.modalDeleteMessage(recipeCategoryId),
+        btnConfirmText: 'Delete',
+        btnConfirmColor: 'danger',
+      },
+      {
+        onConfirm: () => this.deleteRecipeCategory(recipeCategoryId),
+      },
+    );
   }
 
-  onConfirmModalDeleteRecipeCategory(confirm: boolean) {
-    // Close the Cancel/Confirm modal
-    this.showModalDeleteRecipeCategory.set(false);
-
-    if (confirm) {
-      // User has confirmed the action provided within the modal window
-      this.deleteRecipeCategoryId(this.recipeCategoryIdToDelete());
-    }
-  }
-
-  getDeleteMessage() {
+  public modalDeleteMessage(recipeCategoryId: string) {
     const recipeCategoryToDelete = this.dbRecipeCategories().find(
-      (recipeCategory) => recipeCategory.id === this.recipeCategoryIdToDelete()
+      (recipeCategory) => recipeCategory.id === recipeCategoryId,
     );
-    return `Do you really want to remove '${recipeCategoryToDelete?.name}'?`;
+
+    return `Do you really want to remove the '${recipeCategoryToDelete?.name}' category ?`;
   }
 
-  async deleteRecipeCategoryId(recipeCategoryIdToDelete: string) {
+  async deleteRecipeCategory(recipeCategoryId: string) {
     // Delete the document from the 'recipe-categories' collection in the store
-    this.recipeCategoryService.deleteRecipeCategoryInStore(
-      recipeCategoryIdToDelete
-    );
+    this.recipeCategoryService.deleteRecipeCategoryInStore(recipeCategoryId);
 
     const recipesWithRecipeCategoryId = this.dbRecipes().filter((recipe) =>
-      recipe.recipeCategoryIds.includes(recipeCategoryIdToDelete)
+      recipe.recipeCategoryIds.includes(recipeCategoryId),
     );
 
     // Remove the recipe category Id from the list of ids in the property array 'recipeCategoryIds'
     // from the relevant recipe objects
     await this.recipeBackendService.updateRecipesAfterDeletingRecipeCategoryId(
       recipesWithRecipeCategoryId,
-      recipeCategoryIdToDelete,
-      this.recipeStateService.mustPreserveState
+      recipeCategoryId,
+      this.recipeStateService.mustPreserveState,
     );
   }
 }

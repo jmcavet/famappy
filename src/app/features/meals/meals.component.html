@@ -1,17 +1,29 @@
-<div class="flex justify-end mt-6">
-  <button
-    class="bg-primary-600 text-white px-4 py-2 rounded-xl"
-    routerLink="/meals/definition"
-  >
-    <span class="mr-4 py-4"><i class="fa-solid fa-list-check fa-2xl"></i></span>
-    Meal Planning
-  </button>
-</div>
+@if (dataIsLoading()) {
+  <app-loading />
+} @else {
+  <div class="space-y-4 lg:max-w-[1000px] mx-auto">
+    <header class="sticky-top page-full-width">
+      <app-calendar />
+    </header>
 
-<h2>List of meals for the week:</h2>
-<ul>
-  <li>Meal 1</li>
-  <li>Meal 2</li>
-  <li>Meal 3</li>
-  <li>Meal 4</li>
-</ul>
+    <div class="flex items-center justify-end">
+      <app-button routerLink="/meals/definition"
+        ><i class="fa-solid fa-add"></i>
+        <i class="fa-solid fa-shopping-cart fa-xl"></i
+      ></app-button>
+    </div>
+    <section class="flex flex-col gap-20 sm:gap-24">
+      @for (
+        dailyMealPlan of dailyMealPlans();
+        track dailyMealPlan.weekDay.dayName;
+        let i = $index
+      ) {
+        <app-meal-day-card
+          [dailyMealPlan]="dailyMealPlan"
+          id="day-{{ i }}"
+          class="scroll-mt-20"
+        />
+      }
+    </section>
+  </div>
+}

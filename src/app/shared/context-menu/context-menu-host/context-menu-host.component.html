@@ -1,0 +1,12 @@
+@if (contextMenuService.config(); as config) {
+  <!-- Invisible full-screen layer to catch outside clicks -->
+  <div class="fixed inset-0 z-40" (click)="contextMenuService.close()"></div>
+
+  <div
+    class="fixed z-50 surface-3 rounded-xl shadow-lg"
+    [style.left.px]="config.anchor.x"
+    [style.top.px]="config.anchor.y"
+  >
+    <ng-container *ngComponentOutlet="config.component; inputs: config.data" />
+  </div>
+}

@@ -15,7 +15,6 @@ import {
 } from '@angular/forms';
 
 import { Router } from '@angular/router';
-import { NgClass } from '@angular/common';
 import { CapitalizePipe } from '../../../../shared/pipes/capitalize.pipe';
 import { ButtonComponent } from '../../../../shared/components/button/button.component';
 import { ModalInputComponent } from '../../../../shared/components/modal-input/modal-input.component';
@@ -46,7 +45,6 @@ import { RecipeWithId } from '../../../recipes/components/recipe-card/recipe.mod
     CapitalizePipe,
     ButtonComponent,
     ModalInputComponent,
-    NgClass,
     LoadingComponent,
   ],
   templateUrl: './tab-definition.component.html',

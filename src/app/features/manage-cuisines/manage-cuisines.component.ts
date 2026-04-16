@@ -8,13 +8,13 @@ import { CuisineBackendService } from '../../services/backend/cuisine.service';
 import { CuisineDocInBackend } from '../../models/cuisine.model';
 import { RecipeBackendService } from '../../services/backend/recipe.service';
 import { RecipeWithId } from '../recipes/components/recipe-card/recipe.model';
+import { ModalService } from '../../shared/modal/modal.service';
 
 @Component({
   selector: 'app-manage-cuisines',
   imports: [
     CapitalizePipe,
     ModalInputComponent,
-    ModalConfirmComponent,
     ModalInputComponent,
     LoadingComponent,
   ],
@@ -22,6 +22,8 @@ import { RecipeWithId } from '../recipes/components/recipe-card/recipe.model';
   styleUrl: './manage-cuisines.component.css',
 })
 export class ManageCuisinesComponent {
+  private modalService = inject(ModalService);
+
   /** Services */
   private recipeStateService = inject(RecipeStateService);
   private recipeBackendService = inject(RecipeBackendService);
@@ -45,16 +47,32 @@ export class ManageCuisinesComponent {
   showModalUpdateCuisine = signal<boolean>(false);
   cuisineIdToUpdate = signal<string>('');
   cuisineNameToUpdate = signal<string>('');
-  showModalDeleteCuisine = signal<boolean>(false);
   cuisineIdToDelete = signal<string>('');
 
-  readonly deleteMessage = computed(() => {
+  openDeleteModal(event: MouseEvent, cuisineId: string) {
+    event.stopPropagation();
+
+    this.modalService.open(
+      ModalConfirmComponent,
+      {
+        title: 'Delete confirmation',
+        message: this.modalDeleteMessage(cuisineId),
+        btnConfirmText: 'Delete',
+        btnConfirmColor: 'danger',
+      },
+      {
+        onConfirm: () => this.deleteCuisine(cuisineId),
+      },
+    );
+  }
+
+  public modalDeleteMessage(cuisineId: string) {
     const cuisineToDelete = this.dbCuisines().find(
-      (cuisine) => cuisine.id === this.cuisineIdToDelete()
+      (cuisine) => cuisine.id === cuisineId,
     );
 
-    return `Do you really want to remove '${cuisineToDelete?.name}'?`;
-  });
+    return `Do you really want to remove the '${cuisineToDelete?.name}' cuisine ?`;
+  }
 
   readonly canShowPage = computed(() => {
     return (
@@ -103,7 +121,7 @@ export class ManageCuisinesComponent {
     this.cuisineBackendService.updateCuisineInStore(
       cuisineIdToUpdate,
       newCuisineName,
-      this.recipeStateService.mustPreserveState
+      this.recipeStateService.mustPreserveState,
     );
 
     // try {
@@ -126,27 +144,12 @@ export class ManageCuisinesComponent {
     // }
   }
 
-  openModalDeleteCuisine(cuisine: any) {
-    this.showModalDeleteCuisine.set(true);
-    this.cuisineIdToDelete.set(cuisine.id);
-  }
-
-  onConfirmModalDeleteCuisine(confirm: boolean) {
-    // Close the Cancel/Confirm modal
-    this.showModalDeleteCuisine.set(false);
-
-    if (confirm) {
-      // User has confirmed the action provided within the modal window
-      this.deleteCuisineId(this.cuisineIdToDelete());
-    }
-  }
-
-  async deleteCuisineId(cuisineIdToDelete: string) {
+  async deleteCuisine(cuisineId: string) {
     // Delete the cuisine document from the 'cuisines' collection
-    this.cuisineBackendService.deleteCuisineInStore(cuisineIdToDelete);
+    this.cuisineBackendService.deleteCuisineInStore(cuisineId);
 
     const recipesWithCuisineId = this.dbRecipes().filter(
-      (recipe) => recipe.cuisineId === cuisineIdToDelete
+      (recipe) => recipe.cuisineId === cuisineId,
     );
 
     // Reset the 'cuisineId' property (to '') of the recipes which cuisineId
@@ -154,7 +157,7 @@ export class ManageCuisinesComponent {
     await this.recipeBackendService.resetRecipesPropertiesInStore(
       recipesWithCuisineId,
       { cuisineId: '' },
-      this.recipeStateService.mustPreserveState
+      this.recipeStateService.mustPreserveState,
     );
   }
 }

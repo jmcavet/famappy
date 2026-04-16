@@ -1,1 +1,36 @@
-<p>settings works!</p>
+<div class="h-full layout-hcf">
+  <header class="page-full-width">
+    <p class="text-2xl text-center">Settings</p>
+  </header>
+
+  <div class="space-y-6 py-4">
+    <section>
+      <app-segmented-control
+        [fullWidth]="false"
+        size="md"
+        [options]="['light', 'dark']"
+        color="primary"
+        [selectedInput]="theme.theme()"
+        (selectionChange)="toggleTheme()"
+      >
+      </app-segmented-control>
+    </section>
+
+    <section class="space-y-4">
+      <app-button variant="ghost" routerLink="/members"
+        ><i class="fa-solid fa-person fa-2xl mr-2"></i>Members</app-button
+      >
+    </section>
+  </div>
+
+  <div class="page-full-width page-x-padding py-2">
+    <app-button
+      variant="outline"
+      color="primary"
+      [fullWidth]="true"
+      (click)="logout()"
+    >
+      Log out
+    </app-button>
+  </div>
+</div>

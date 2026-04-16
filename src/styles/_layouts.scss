@@ -1,0 +1,25 @@
+@layer components {
+  .page-x-padding {
+    @apply px-2 sm:px-6;
+  }
+
+  .page-full-width {
+    @apply -mx-2 sm:-mx-6;
+  }
+
+  .layout-cf {
+    @apply grid grid-rows-[1fr_auto];
+  }
+
+  .layout-hcf {
+    @apply grid grid-rows-[auto_1fr_auto];
+  }
+
+  .section-scroll {
+    @apply min-h-0 overflow-y-auto;
+  }
+
+  .sticky-top {
+    @apply sticky top-0 z-40;
+  }
+}
