@@ -20,15 +20,20 @@ export class MealCategoryDomainFacade {
     this.mealCategoryBackendService.saveMealCategoryIntoStore(mealCategoryName);
   }
 
-  public updateMealCategory(
+  public async updateMealCategory(
     mealCategoryIdToUpdate: string,
     newMealCategoryName: string,
     mustPreserveState: WritableSignal<boolean>,
   ) {
-    this.mealCategoryBackendService.updateMealCategoryInStore(
+    await this.mealCategoryBackendService.updateMealCategoryInStore(
       mealCategoryIdToUpdate,
       newMealCategoryName,
-      mustPreserveState,
+    );
+  }
+
+  public async deleteMealCategory(mealCategoryIdToDelete: string) {
+    this.mealCategoryBackendService.deleteMealCategoryInStore(
+      mealCategoryIdToDelete,
     );
   }
 }

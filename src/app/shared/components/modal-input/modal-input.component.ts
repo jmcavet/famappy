@@ -43,6 +43,7 @@ export class ModalInputComponent {
   onConfirm() {
     if (this.invalidMessage) return;
 
+    // Pass the value provided by the user to the onConfirm method of the modal service config.
     this.modalService.confirm(this.inputValue);
   }
 }

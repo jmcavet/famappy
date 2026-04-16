@@ -71,8 +71,9 @@ export class ManageMealCategoryFacade {
       },
       {
         onConfirm: (name: string) => {
-          // TODO: SHOULD I USE AWAIT HERE? YET, I CANNOT ADD ASYNC IN FRONT OF onConfirm!!
-          this.addMealCategory(name);
+          (async () => {
+            await this.addMealCategory(name);
+          })();
         },
       },
     );
@@ -95,8 +96,12 @@ export class ManageMealCategoryFacade {
       },
       {
         onConfirm: (mealCategoryNameUpdated: string) => {
-          // TODO: SHOULD I USE AWAIT HERE? YET, I CANNOT ADD ASYNC IN FRONT OF onConfirm!!
-          this.updateMealCategory(mealCategory.id, mealCategoryNameUpdated);
+          (async () => {
+            await this.updateMealCategory(
+              mealCategory.id,
+              mealCategoryNameUpdated,
+            );
+          })();
         },
       },
     );
@@ -114,7 +119,11 @@ export class ManageMealCategoryFacade {
         btnConfirmColor: 'danger',
       },
       {
-        onConfirm: () => this.deleteMealCategoryId(mealCategoryId),
+        onConfirm: () => {
+          (async () => {
+            await this.deleteMealCategoryId(mealCategoryId);
+          })();
+        },
       },
     );
   }
@@ -128,7 +137,7 @@ export class ManageMealCategoryFacade {
     mealCategoryIdToUpdate: string,
     newMealCategoryName: string,
   ) {
-    this.mealCategoryDomainFacade.updateMealCategory(
+    await this.mealCategoryDomainFacade.updateMealCategory(
       mealCategoryIdToUpdate,
       newMealCategoryName,
       this.recipeService.mustPreserveState,
@@ -147,8 +156,14 @@ export class ManageMealCategoryFacade {
       (recipe) => recipe.mealCategoryId === mealCategoryIdToDelete,
     );
 
+    console.log('recipesWithMealCategoryId: ', recipesWithMealCategoryId);
+
+    await this.mealCategoryDomainFacade.deleteMealCategory(
+      mealCategoryIdToDelete,
+    );
+
     // Reset the 'mealCategoryId' property (to '') of the recipes which mealCategoryId
-    // corresponds to the one just deleted)
+    // corresponds to the one just deleted
     await this.recipeDomainFacade.resetRecipesProperties(
       recipesWithMealCategoryId,
       { mealCategoryId: '' },
