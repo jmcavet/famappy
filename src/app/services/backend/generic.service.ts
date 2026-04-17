@@ -49,35 +49,21 @@ export class FirestoreService {
     return ref(this.firebaseService.storage, pathMatch);
   }
 
-  public loadFirestoreCollection<T>(
-    collectionName: string,
-    subject: BehaviorSubject<T[]>
-  ): void {
-    const colRef = collection(this.firebaseService.db, collectionName);
-    const colQuery = query(colRef, orderBy('dateCreated', 'asc'));
-
-    onSnapshot(colQuery, (snapshot) => {
-      const data = snapshot.docs.map((doc) => ({
-        id: doc.id,
-        dateCreated: doc.data()['dateCreated']?.toDate?.() ?? new Date(),
-        ...doc.data(),
-      })) as T[];
-
-      subject.next(data);
-    });
-  }
-
   public loadFirestoreCollectionTest<T>(
     collectionName: string,
     signal: WritableSignal<T[]>,
     userId: string,
-    onDataLoaded?: () => void
+    onDataLoaded?: () => void,
   ): void {
+    const user = this.authService.user();
+
+    if (!user?.uid) throw new Error('Not authenticated');
+
     const colRef = collection(this.firebaseService.db, collectionName);
     const colQuery = query(
       colRef,
-      where('userId', '==', userId),
-      orderBy('dateCreated', 'asc')
+      where('userId', '==', user?.uid),
+      orderBy('dateCreated', 'asc'),
     );
 
     onSnapshot(colQuery, (snapshot) => {
@@ -102,7 +88,7 @@ export class FirestoreService {
   async saveDocumentIntoStore(
     collectionName: string,
     newDocument: object,
-    onDataLoaded?: () => void
+    onDataLoaded?: () => void,
   ): Promise<string | void> {
     console.log('THIS IS MY newDocument: ', newDocument);
     try {
@@ -132,7 +118,7 @@ export class FirestoreService {
 
   async saveDocumentsIntoStore(
     collectionName: string,
-    documents: object[]
+    documents: object[],
   ): Promise<string[]> {
     const user = this.authService.user();
 
@@ -166,11 +152,15 @@ export class FirestoreService {
     collectionName: string,
     idToUpdate: string,
     propertiesToUpdate: object,
-    onDataLoaded?: () => void
+    onDataLoaded?: () => void,
   ): Promise<string | void> {
     try {
+      const user = this.authService.user();
+
+      if (!user?.uid) throw new Error('Not authenticated');
+
       const docRef = doc(this.firebaseService.db, collectionName, idToUpdate);
-      await updateDoc(docRef, propertiesToUpdate);
+      await updateDoc(docRef, { ...propertiesToUpdate, userId: user?.uid });
 
       // Notify once Firestore responds
       if (onDataLoaded) onDataLoaded();
@@ -184,12 +174,16 @@ export class FirestoreService {
     collectionName: string,
     documentsToUpdate: any[],
     propertiesToUpdate: any,
-    onAllUpdatesComplete?: () => void
+    onAllUpdatesComplete?: () => void,
   ): Promise<void> {
     const updates = documentsToUpdate.map(async (document) => {
       const docRef = doc(this.firebaseService.db, collectionName, document.id);
       try {
-        await updateDoc(docRef, propertiesToUpdate);
+        const user = this.authService.user();
+
+        if (!user?.uid) throw new Error('Not authenticated');
+
+        await updateDoc(docRef, { ...propertiesToUpdate, userId: user?.uid });
         console.log('Updating document id: ', document.id);
       } catch (e) {
         console.error(`Error updating document ${document.id}: `, e);
@@ -209,17 +203,24 @@ export class FirestoreService {
     documentsToUpdate: RecipeWithId[],
     documentIdToDelete: string,
 
-    onAllUpdatesComplete?: () => void
+    onAllUpdatesComplete?: () => void,
   ): Promise<void> {
     const updates = documentsToUpdate.map(async (document) => {
       const updatedProperty = document.recipeCategoryIds.filter(
-        (id) => id !== documentIdToDelete
+        (id) => id !== documentIdToDelete,
       );
 
       const docRef = doc(this.firebaseService.db, collectionName, document.id);
 
       try {
-        await updateDoc(docRef, { recipeCategoryIds: updatedProperty });
+        const user = this.authService.user();
+
+        if (!user?.uid) throw new Error('Not authenticated');
+
+        await updateDoc(docRef, {
+          recipeCategoryIds: updatedProperty,
+          userId: user?.uid,
+        });
       } catch (e) {
         console.error(`Error updating ${document.id}: `, e);
       }
@@ -234,7 +235,7 @@ export class FirestoreService {
   async removeDocumentFromFirestore(
     collectionName: string,
     id: string,
-    onDataLoaded?: () => void
+    onDataLoaded?: () => void,
   ): Promise<void> {
     try {
       // Get a reference to the document with the given cuisineId in the 'cuisines' collection
@@ -244,7 +245,7 @@ export class FirestoreService {
       await deleteDoc(docRef);
 
       console.log(
-        `ID ${id} successfully removed from collection ${collectionName}`
+        `ID ${id} successfully removed from collection ${collectionName}`,
       );
 
       // Notify once Firestore responds
@@ -253,7 +254,7 @@ export class FirestoreService {
       console.error('Error removing document: ', e);
       // Optionally, rethrow the error to be handled by the caller
       throw new Error(
-        `Failed to delete document from collection ${collectionName}`
+        `Failed to delete document from collection ${collectionName}`,
       );
     }
   }
@@ -286,17 +287,23 @@ export class FirestoreService {
   async removeDocumentByPropertyId(
     collectionName: string,
     propertyIdName: string,
-    propertyId: string
+    propertyId: string,
+    userId: string,
   ): Promise<void> {
     try {
       const ingredientsColRef = collection(
         this.firebaseService.db,
-        collectionName
+        collectionName,
       );
+
+      const user = this.authService.user();
+
+      if (!user?.uid) throw new Error('Not authenticated');
 
       const q = query(
         ingredientsColRef,
-        where(propertyIdName, '==', propertyId)
+        where('userId', '==', user?.uid),
+        where(propertyIdName, '==', propertyId),
       );
       const querySnapshot = await getDocs(q);
 
@@ -304,7 +311,7 @@ export class FirestoreService {
         const docRef = doc(
           this.firebaseService.db,
           collectionName,
-          document.id
+          document.id,
         );
         return deleteDoc(docRef);
       });
@@ -312,7 +319,7 @@ export class FirestoreService {
       await Promise.all(deletePromises);
 
       console.log(
-        `All elements with ID "${propertyId}" were successfully removed.`
+        `All elements with ID "${propertyId}" were successfully removed.`,
       );
     } catch (e) {
       console.error('Error removing document: ', e);
