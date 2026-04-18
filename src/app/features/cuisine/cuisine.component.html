@@ -11,19 +11,11 @@
   }
 </ul>
 
-<button
-  class="bg-secondary-600 rounded-full p-2 w-12 h-12 text-white fixed bottom-24 right-6 shadow-lg"
-  (click)="openModalInput()"
->
-  <i class="fa-solid fa-plus fa-xl"></i>
-</button>
-
-<!-- <app-modal-input
-  title="Enter new cuisine"
-  [inputValue]="cuisineName()"
-  [existingItems]="dbCuisines()"
-  btnConfirmText="Apply"
-  btnConfirmColor="primary"
-  [isModalOpen]="showModalInput()"
-  (confirmEventTest)="onConfirmModalAction($event)"
-/> -->
+<div class="fixed bottom-20 left-1/2 -translate-x-1/2 z-50">
+  <button
+    class="bg-secondary-600 rounded-full p-2 w-12 h-12 text-white shadow-lg"
+    (click)="openAddCuisineInputModal($event)"
+  >
+    <i class="fa-solid fa-plus fa-xl"></i>
+  </button>
+</div>
