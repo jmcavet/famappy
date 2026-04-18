@@ -45,7 +45,7 @@ export class MealCategoryBackendService {
   loadMealCategoriesFromFirestore(userId: string) {
     this._loading.set(true);
 
-    this.firestoreService.loadFirestoreCollectionTest<MealCategoryDocInBackend>(
+    this.firestoreService.loadFirestoreCollection<MealCategoryDocInBackend>(
       'meal-categories',
       this.mealCategories,
       userId,

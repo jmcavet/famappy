@@ -32,6 +32,12 @@ export class ModalInputComponent {
     this.modalService.cancel();
   }
 
+  ngOnInit(): void {
+    if (this.inputValue.length === 0) return;
+
+    this.invalidMessage = 'This name already exists in the database!';
+  }
+
   onInputChange(value: string) {
     const existingItemNames = this.existingItems.map((item) => item.name);
 
@@ -41,7 +47,7 @@ export class ModalInputComponent {
   }
 
   onConfirm() {
-    if (this.invalidMessage) return;
+    if (this.invalidMessage || this.inputValue.length === 0) return;
 
     // Pass the value provided by the user to the onConfirm method of the modal service config.
     this.modalService.confirm(this.inputValue);

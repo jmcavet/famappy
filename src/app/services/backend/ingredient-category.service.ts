@@ -52,14 +52,14 @@ export class IngredientCategoryBackendService {
   loadIngredientCategoriesFromFirestore(userId: string) {
     this._loading.set(true);
 
-    this.firestoreService.loadFirestoreCollectionTest<IngredientTypeWithDate>(
+    this.firestoreService.loadFirestoreCollection<IngredientTypeWithDate>(
       'ingredient-categories',
       this.ingredientCategories,
       userId,
       () => {
         // This callback runs once Firestore returns data (even empty)
         this._loading.set(false);
-      }
+      },
     );
   }
 
@@ -86,7 +86,7 @@ export class IngredientCategoryBackendService {
         () => {
           // This callback runs once Firestore returns data (even empty)
           this._saving.set(false);
-        }
+        },
       );
       console.log('New ingredient category document ID: ', docId);
     } catch (error) {
@@ -97,7 +97,7 @@ export class IngredientCategoryBackendService {
   async updateIngredientCategoryInStore(
     ingredientCategoryIdToUpdate: string,
     newIngredientCategoryName: string,
-    mustPreserveState: WritableSignal<boolean>
+    mustPreserveState: WritableSignal<boolean>,
   ) {
     this._updating.set(true);
 
@@ -109,7 +109,7 @@ export class IngredientCategoryBackendService {
         () => {
           // This callback runs once Firestore returns
           this._updating.set(false);
-        }
+        },
       );
 
       // .....
@@ -129,7 +129,7 @@ export class IngredientCategoryBackendService {
         () => {
           // This callback runs once Firestore returns
           this._deleting.set(false);
-        }
+        },
       );
     } catch (error) {
       console.error('Error deleting ingredient category: ', error);

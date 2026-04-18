@@ -45,14 +45,14 @@ export class MemberBackendService {
   loadMembersFromFirestore(userId: string) {
     this._loading.set(true);
 
-    this.firestoreService.loadFirestoreCollectionTest<any>(
+    this.firestoreService.loadFirestoreCollection<any>(
       'members',
       this.members,
       userId,
       () => {
         // This callback runs once Firestore returns data (even empty)
         this._loading.set(false);
-      }
+      },
     );
   }
 
@@ -71,7 +71,7 @@ export class MemberBackendService {
         () => {
           // This callback runs once Firestore returns data (even empty)
           this._saving.set(false);
-        }
+        },
       );
       console.log('New member document ID: ', docId);
     } catch (error) {
@@ -97,7 +97,7 @@ export class MemberBackendService {
         () => {
           // This callback runs once Firestore returns data (even empty)
           this._updating.set(false);
-        }
+        },
       );
     } catch (error) {
       console.error('Error updating member: ', error);
@@ -120,7 +120,7 @@ export class MemberBackendService {
         () => {
           // This callback runs once Firestore returns data (even empty)
           this._deleting.set(false);
-        }
+        },
       );
     } catch (error) {
       console.error('Error deleting member: ', error);

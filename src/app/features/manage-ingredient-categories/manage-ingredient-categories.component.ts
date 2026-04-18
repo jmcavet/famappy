@@ -10,10 +10,11 @@ import { RecipeStateService } from '../../services/state/recipe.service';
 import { IngredientTypeWithDate } from '../../models/ingredient-type.model';
 import { IngredientDocInBackend } from '../../models/ingredient.model';
 import { ModalService } from '../../shared/modal/modal.service';
+import { AuthService } from '../../services/backend/auth.service';
 
 @Component({
   selector: 'app-ingredient-categories-selection-page',
-  imports: [FormsModule, LoadingComponent, ModalInputComponent],
+  imports: [FormsModule, LoadingComponent],
   templateUrl: './manage-ingredient-categories.component.html',
   styleUrl: './manage-ingredient-categories.component.css',
 })
@@ -24,6 +25,7 @@ export class ManageIngredientCategoriesComponent {
   private firestoreService = inject(FirestoreService);
   private ingredientService = inject(IngredientBackendService);
   private recipeService = inject(RecipeStateService);
+  private authService = inject(AuthService);
 
   /** Declaration of signals communicating with firestore */
   readonly dbIngredientCategories: Signal<IngredientTypeWithDate[]> =
@@ -152,14 +154,20 @@ export class ManageIngredientCategoriesComponent {
       ingredientCategoryIdToDelete,
     );
 
-    try {
-      this.firestoreService.removeDocumentByPropertyId(
-        'ingredients',
-        'typeId',
-        ingredientCategoryIdToDelete,
-      );
-    } catch (error) {
-      console.log('Error removing ingredient: ', error);
+    const user = this.authService.user();
+
+    // TODO: move the logic in a service!
+    if (user) {
+      try {
+        this.firestoreService.removeDocumentByPropertyId(
+          'ingredients',
+          'typeId',
+          ingredientCategoryIdToDelete,
+          user.uid,
+        );
+      } catch (error) {
+        console.log('Error removing ingredient: ', error);
+      }
     }
   }
 }
