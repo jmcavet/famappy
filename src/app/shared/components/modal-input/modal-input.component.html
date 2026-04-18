@@ -30,7 +30,7 @@
       [color]="btnConfirmColor"
       size="md"
       (click)="onConfirm()"
-      [disabled]="invalidMessage !== undefined"
+      [disabled]="invalidMessage !== undefined || inputValue.length === 0"
       >{{ btnConfirmText }}</app-button
     >
   </div>
