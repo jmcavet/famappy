@@ -60,20 +60,7 @@ export class MealBackendService {
   loadMealsFromFirestore(userId: string) {
     this._loading.set(true);
 
-    // try {
-    //   this.firestoreService.loadFirestoreCollectionTest<MealDocInBackend>(
-    //     'meals',
-    //     this.meals,
-    //     userId
-    //   );
-    // } catch (error) {
-    //   console.error('Error loading meals: ', error);
-    //   throw error;
-    // } finally {
-    //   this._loading.set(false);
-    // }
-
-    this.firestoreService.loadFirestoreCollectionTest<MealDocInBackend>(
+    this.firestoreService.loadFirestoreCollection<MealDocInBackend>(
       'meals',
       this.meals,
       userId,

@@ -43,14 +43,14 @@ export class IngredientBackendService {
   private loadIngredientsFromFirestore(userId: string) {
     this._loading.set(true);
 
-    this.firestoreService.loadFirestoreCollectionTest<IngredientDocInBackend>(
+    this.firestoreService.loadFirestoreCollection<IngredientDocInBackend>(
       'ingredients',
       this.ingredients,
       userId,
       () => {
         // This callback runs once Firestore returns data (even empty)
         this._loading.set(false);
-      }
+      },
     );
   }
 
@@ -69,7 +69,7 @@ export class IngredientBackendService {
         () => {
           // This callback runs once Firestore returns data (even empty)
           this._saving.set(false);
-        }
+        },
       );
       console.log('New ingredient document ID: ', docId);
     } catch (error) {
@@ -86,7 +86,7 @@ export class IngredientBackendService {
   async updateIngredientInStore(
     ingredientIdToUpdate: string,
     propertiesToUpdate: object,
-    mustPreserveState: WritableSignal<boolean>
+    mustPreserveState: WritableSignal<boolean>,
   ) {
     this._updating.set(true);
 
@@ -98,7 +98,7 @@ export class IngredientBackendService {
         () => {
           // This callback runs once Firestore returns
           this._updating.set(false);
-        }
+        },
       );
 
       // .....
@@ -123,7 +123,7 @@ export class IngredientBackendService {
         () => {
           // This callback runs once Firestore returns
           this._deleting.set(false);
-        }
+        },
       );
     } catch (error) {
       console.error('Error deleting ingredient: ', error);

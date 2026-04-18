@@ -49,7 +49,7 @@ export class FirestoreService {
     return ref(this.firebaseService.storage, pathMatch);
   }
 
-  public loadFirestoreCollectionTest<T>(
+  public loadFirestoreCollection<T>(
     collectionName: string,
     signal: WritableSignal<T[]>,
     userId: string,

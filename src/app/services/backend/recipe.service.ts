@@ -56,14 +56,14 @@ export class RecipeBackendService {
   loadRecipesFromFirestore(userId: string) {
     this._loading.set(true);
 
-    this.firestoreService.loadFirestoreCollectionTest<any>(
+    this.firestoreService.loadFirestoreCollection<any>(
       'recipes',
       this.recipes,
       userId,
       () => {
         // This callback runs once Firestore returns data (even empty)
         this._loading.set(false);
-      }
+      },
     );
   }
 
@@ -82,7 +82,7 @@ export class RecipeBackendService {
         () => {
           // This callback runs once Firestore returns data (even empty)
           this._saving.set(false);
-        }
+        },
       );
       console.log('New recipe document ID: ', docId);
 
@@ -102,7 +102,7 @@ export class RecipeBackendService {
   async updateRecipeInStore(
     recipeIdToUpdate: string,
     recipeObject: any,
-    mustPreserveState: WritableSignal<boolean>
+    mustPreserveState: WritableSignal<boolean>,
   ) {
     this._updating.set(true);
 
@@ -114,7 +114,7 @@ export class RecipeBackendService {
         () => {
           // This callback runs once Firestore returns data (even empty)
           this._updating.set(false);
-        }
+        },
       );
 
       // If the user has selected a specific recipe (e.g. main course) in the /meal-category page, which corresponds to
@@ -135,7 +135,7 @@ export class RecipeBackendService {
   async resetRecipesPropertiesInStore(
     recipesToUpdate: any,
     propertiesToUpdate: any,
-    mustPreserveState: WritableSignal<boolean>
+    mustPreserveState: WritableSignal<boolean>,
   ) {
     this._updating.set(true);
 
@@ -146,7 +146,7 @@ export class RecipeBackendService {
         propertiesToUpdate,
         () => {
           this._updating.set(false); // callback after all updates finish
-        }
+        },
       );
       console.log('Documents have been succesfully deleted...');
       mustPreserveState.set(true);
@@ -159,7 +159,7 @@ export class RecipeBackendService {
   async updateRecipesAfterDeletingRecipeCategoryId(
     recipesToUpdate: RecipeWithId[],
     recipeCategoryIdToDelete: string,
-    mustPreserveState: WritableSignal<boolean>
+    mustPreserveState: WritableSignal<boolean>,
   ) {
     this._updating.set(true);
 
@@ -170,16 +170,16 @@ export class RecipeBackendService {
         recipeCategoryIdToDelete,
         () => {
           this._updating.set(false); // callback after all updates finish
-        }
+        },
       );
       console.log(
-        'The recipes recipeCategoryIds have been succesfully updated...'
+        'The recipes recipeCategoryIds have been succesfully updated...',
       );
       mustPreserveState.set(true);
     } catch (error) {
       console.error(
         'Error updating recipe recipeCategoryIds property: ',
-        error
+        error,
       );
       this._updating.set(false);
     }
@@ -210,7 +210,7 @@ export class RecipeBackendService {
         () => {
           // This callback runs once Firestore returns data (even empty)
           this._deleting.set(false);
-        }
+        },
       );
     } catch (error) {
       console.error('Error deleting recipe: ', error);
@@ -227,7 +227,7 @@ export class RecipeBackendService {
   async uploadImageToFirebase(
     imageRef: StorageReference,
     thumbnailRef: StorageReference,
-    imageFile: File
+    imageFile: File,
   ): Promise<void> {
     this._saving.set(true);
 
@@ -245,7 +245,7 @@ export class RecipeBackendService {
         dataUrl,
         -1,
         50,
-        50
+        50,
       );
 
       // Create thumbnail version (10% size & quality)
@@ -253,7 +253,7 @@ export class RecipeBackendService {
         dataUrl,
         -1,
         10,
-        10
+        10,
       );
 
       const fullBlob = this.dataUrlToBlob(compressedImage);
@@ -279,7 +279,7 @@ export class RecipeBackendService {
           () => {
             console.log('Upload completed');
             resolve();
-          }
+          },
         );
       });
 
@@ -303,7 +303,7 @@ export class RecipeBackendService {
           () => {
             console.log('Upload completed');
             resolve();
-          }
+          },
         );
       });
     } catch (error) {
