@@ -5,7 +5,10 @@
         <span>{{ cuisine.name | capitalize }}</span>
         <div class="buttons-container">
           <button type="button">
-            <button type="button" (click)="openModalUpdateCuisine(cuisine)">
+            <button
+              type="button"
+              (click)="openUpdateCuisineInputModal($event, cuisine)"
+            >
               <i
                 class="fa-regular fa-pen-to-square text-primary-600 dark:text-primary-500 text-xl"
               ></i>
@@ -21,34 +24,15 @@
     }
   </ul>
 </div>
+
 <div class="fixed bottom-20 left-1/2 -translate-x-1/2 z-50">
   <button
     class="bg-secondary-600 rounded-full p-2 w-12 h-12 text-white shadow-lg"
-    (click)="openModalAddCuisine()"
+    (click)="openAddCuisineInputModal($event)"
   >
     <i class="fa-solid fa-plus fa-xl"></i>
   </button>
 </div>
-
-<!-- <app-modal-input
-  title="Enter new cuisine"
-  [inputValue]="cuisineName()"
-  [existingItems]="dbCuisines()"
-  btnConfirmText="Apply"
-  btnConfirmColor="primary"
-  [isModalOpen]="showModalAddCuisine()"
-  (confirmEventTest)="onConfirmModalAddCuisine($event)"
-/>
-
-<app-modal-input
-  title="Update cuisine"
-  [inputValue]="cuisineNameToUpdate()"
-  [existingItems]="dbCuisines()"
-  btnConfirmText="Update"
-  btnConfirmColor="primary"
-  [isModalOpen]="showModalUpdateCuisine()"
-  (confirmEventTest)="onConfirmModalUpdateCuisine($event)"
-/> -->
 
 <div class="flex flex-col items-center">
   @if (canShowPage()) {
