@@ -2,7 +2,7 @@
   [attr.type]="type"
   [disabled]="disabled"
   [ngClass]="getClasses()"
-  (click)="onClick()"
+  (click)="onClick($event)"
 >
   <ng-container *ngIf="iconPos === 'left'">
     <i *ngIf="icon" [ngClass]="getIconClasses()"></i>

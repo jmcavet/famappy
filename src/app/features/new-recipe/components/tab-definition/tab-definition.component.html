@@ -1,5 +1,5 @@
 <form class="form-grid" [formGroup]="form">
-  <div class="group">
+  <div class="surface-1 px-2 py-4 rounded-lg space-y-4">
     <input
       type="text"
       id="title"
@@ -8,7 +8,7 @@
       (ngModelChange)="onTitleChange($event)"
       placeholder="Title"
       autocomplete="off"
-      class="col-span-2"
+      class="w-full col-span-2"
     />
     @if (form.get("title")?.touched && form.get("title")?.invalid) {
       <div class="validator">
@@ -26,47 +26,49 @@
     @if (messageUniqueTitle()) {
       <small>{{ messageUniqueTitle() }}</small>
     }
-  </div>
 
-  <div class="flex flex-col items-center justify-center gap-4">
-    <input
-      type="file"
-      accept="image/*"
-      id="image-upload"
-      (change)="onFileSelected($event)"
-      class="hidden"
-    />
-
-    <label
-      for="image-upload"
-      class="cursor-pointer inline-block bg-blue-100 hover:bg-blue-200 dark:bg-blue-900 dark:hover:bg-blue-800 px-4 py-2 rounded-lg shadow transition"
-    >
-      <span><i class="fa-solid fa-camera mr-2"></i></span> Upload Image
-    </label>
-    @if (imageUrl) {
-      <div class="flex items-center justify-between gap-4">
-        <div class="image-name italic">{{ imageFile()?.name }}</div>
-        <button
-          class="text-danger-600 dark:text-danger-500"
-          (click)="removeImage()"
-        >
-          <i class="fa-solid fa-trash"></i>
-        </button>
-      </div>
-    }
-    @if (imageUrl) {
-      <img
-        [src]="imageUrl"
-        alt="Image preview"
-        class="w-auto h-[35vh] rounded shadow border border-gray-200 dark:border-gray-700"
+    <div class="flex-col-center gap-4">
+      <input
+        type="file"
+        accept="image/*"
+        id="image-upload"
+        (change)="onFileSelected($event)"
+        class="hidden"
       />
-    }
+
+      <label
+        for="image-upload"
+        class="w-full cursor-pointer border border-primary dark:border-primary-dark hover:bg-primary-50 dark:hover:bg-primary-900 px-4 py-2 rounded-lg shadow transition"
+      >
+        <span><i class="fa-solid fa-camera mr-2"></i></span> Upload Image
+      </label>
+
+      @if (imageUrl()) {
+        <div class="flex-between gap-4">
+          <div class="image-name italic">{{ imageFile()?.name }}</div>
+          <app-button
+            class="flex-1"
+            color="danger"
+            size="sm"
+            (click)="removeImage()"
+            ><i class="fa-solid fa-trash"></i
+          ></app-button>
+        </div>
+      }
+      @if (imageUrl()) {
+        <img
+          [src]="imageUrl()"
+          alt="Image preview"
+          class="w-auto h-[35vh] rounded shadow border border-neutral-200 dark:border-neutral-700"
+        />
+      }
+    </div>
   </div>
 
-  <div class="group">
-    <div class="flex items-center justify-start gap-2">
+  <div class="section">
+    <div class="property">
       <i class="fa-solid fa-clock"></i>
-      <label for="preparationTime" class="text-lg">Preparation Time</label>
+      <label for="preparationTime" class="text-lg">Prep Time</label>
     </div>
     <div class="input-wrapper">
       <input
@@ -94,7 +96,7 @@
       </div>
     }
 
-    <div class="flex items-center justify-start gap-2">
+    <div class="property">
       <i class="fa-solid fa-utensils"></i>
       <label for="cookingTime" class="text-lg">Cooking Time</label>
     </div>
@@ -121,13 +123,11 @@
       </div>
     }
 
-    <div class="flex items-center justify-start gap-2">
+    <div class="property">
       <i class="fa-solid fa-person"></i>
       <label for="servings" class="text-lg">Servings</label>
     </div>
-    <div
-      class="flex items-center justify-between bg-white border border:text-gray-300 dark:bg-gray-800 dark:text-white rounded-2xl dark:border-gray-700 px-2 py-2"
-    >
+    <div class="flex-between surface-2 rounded-2xl px-2 py-2">
       <button>
         <i class="fa-solid fa-minus" (click)="decreaseServings()"></i>
       </button>
@@ -138,32 +138,31 @@
     </div>
   </div>
 
-  <div class="group">
-    <div class="flex items-center justify-start gap-2">
+  <div class="section">
+    <div class="property">
       <i class="fa-solid fa-person-hiking"></i>
       <span class="text-lg">Difficulty</span>
     </div>
-    <div class="group-items">
+    <div class="section-items">
       @for (difficultyOption of difficultyOptions; track $index) {
-        <button
-          class="btn-tag"
-          [class.active]="difficulty() === difficultyOption"
-          (click)="setDifficulty(difficultyOption)"
+        <app-chip
+          [selected]="difficulty() === difficultyOption"
+          size="sm"
+          (toggle)="setDifficulty(difficultyOption)"
+          >{{ difficultyOption | capitalize }}</app-chip
         >
-          {{ difficultyOption | capitalize }}
-        </button>
       }
     </div>
-    <div class="flex items-center justify-start gap-2">
+    <div class="property">
       <i class="fa-solid fa-barcode"></i>
       <span class="text-lg">Price</span>
     </div>
-    <div class="group-items">
+    <div class="section-items">
       @for (priceOption of priceOptions; track $index) {
-        <button
-          class="btn-tag"
-          [class.active]="price() === priceOption"
-          (click)="setPrice(priceOption)"
+        <app-chip
+          [selected]="price() === priceOption"
+          size="sm"
+          (toggle)="setPrice(priceOption)"
         >
           @if (priceOption === "low") {
             <i class="fa-solid fa-euro-sign"></i>
@@ -175,118 +174,98 @@
             ><i class="fa-solid fa-euro-sign"></i>
             <i class="fa-solid fa-euro-sign"></i>
           }
-        </button>
+        </app-chip>
       }
     </div>
-    <div class="flex items-center justify-start gap-2">
+    <div class="property-flexible">
       <i class="fa-solid fa-calendar-days"></i>
       <span class="text-lg">Frequency</span>
     </div>
-    <div class="group-items">
+    <div class="section-items-flexible">
       @for (frequencyOption of frequencyOptions; track $index) {
-        <button
-          class="btn-tag"
-          [class.active]="frequency() === frequencyOption"
-          (click)="setFrequency(frequencyOption)"
+        <app-chip
+          [selected]="frequency() === frequencyOption"
+          size="sm"
+          (toggle)="setFrequency(frequencyOption)"
+          >{{ frequencyOption | capitalize }}</app-chip
         >
-          {{ frequencyOption | capitalize }}
-        </button>
       }
     </div>
-  </div>
 
-  <div class="bg-white dark:bg-gray-800 px-2 py-4 rounded-lg">
-    <div class="flex items-center justify-start gap-2 mb-2">
+    <div class="property-flexible">
       <i class="fa-solid fa-snowflake"></i>
       <span class="text-lg">Season</span>
     </div>
-    <div class="flex items-center justify-between gap-2">
+    <div class="section-items-flexible">
       @for (seasonOption of seasonOptions; track $index) {
-        <button
-          class="btn-tag"
-          [class.active]="seasonsSelected().includes(seasonOption)"
-          (click)="setSeason(seasonOption)"
+        <app-chip
+          [fullWidth]="true"
+          size="sm"
+          [selected]="seasonsSelected().includes(seasonOption)"
+          (toggle)="setSeason(seasonOption)"
+          >{{ seasonOption | capitalize }}</app-chip
         >
-          {{ seasonOption | capitalize }}
-        </button>
       }
     </div>
   </div>
 
-  <div>
-    <div
-      class="flex items-center justify-between gap-4 bg-white dark:bg-gray-800 px-2 py-2 rounded-lg"
-      (click)="navigateToMealCategoryPage()"
-    >
-      <div class="flex items-center justify-start gap-2">
+  <div class="surface-1 space-y-6 px-2 py-2 rounded-lg">
+    <div class="flex-between gap-4">
+      <div class="property">
         <i class="fa-solid fa-cake-candles"></i>
         <span class="text-lg">Meal Category</span>
       </div>
-      <button
-        type="button"
-        id="btn-meal-category"
-        class="btn-meal-category"
-        [class.none]="mealCategoryName() === 'none'"
-      >
-        {{ mealCategoryName() | capitalize }}
-      </button>
+
+      <app-button variant="outline" (click)="navigateToMealCategoryPage()">{{
+        mealCategoryName() | capitalize
+      }}</app-button>
     </div>
 
-    <div
-      class="flex items-center justify-between gap-4 bg-white dark:bg-gray-800 px-2 py-2 rounded-lg"
-      (click)="navigateToCuisinePage()"
-    >
-      <div class="flex items-center justify-start gap-2">
+    <div class="flex-between gap-4">
+      <div class="property">
         <i class="fa-solid fa-flag"></i>
         <span class="text-lg">Cuisine</span>
       </div>
-      <button
-        type="button"
-        id="btn-cuisine"
-        class="btn-cuisine"
-        [class.none]="cuisineName() === 'none'"
-      >
-        {{ cuisineName() | capitalize }}
-      </button>
+
+      <app-button variant="outline" (click)="navigateToCuisinePage()">{{
+        cuisineName() | capitalize
+      }}</app-button>
     </div>
   </div>
 
-  <div class="bg-white dark:bg-gray-800 px-2 py-4 rounded">
-    <div class="flex items-center justify-between mb-4">
-      <div class="flex items-center justify-start gap-2">
+  <div class="recipe-categories">
+    <div class="flex-start">
+      <div class="property">
         <i class="fa-solid fa-tag"></i>
         <label for="tags" class="text-lg">Recipe Categories</label>
       </div>
       <app-button
-        icon="fa fa-plus"
-        iconPos="left"
-        size="md"
-        color="primary"
-        btnStyle="text-based"
-        (click)="openModalInput()"
-        >Add Category</app-button
+        variant="ghost"
+        (click)="openAddRecipeCategoryInputModal($event)"
+        ><i class="fa-regular fa-plus mr-2"></i> New Category</app-button
       >
     </div>
 
-    <ul class="flex flex-wrap justify-start gap-2">
+    <div class="property">
       @for (recipeCategory of dbRecipeCategories(); track $index) {
-        <li
-          class="btn-tag"
-          [class.active]="selectedCategoryIds().has(recipeCategory.id)"
-          (click)="setRecipeCategory(recipeCategory)"
+        <app-chip
+          [selected]="selectedCategoryIds().has(recipeCategory.id)"
+          size="sm"
+          (toggle)="setRecipeCategory(recipeCategory)"
+          >{{ recipeCategory.name }}</app-chip
         >
-          {{ recipeCategory.name }}
-        </li>
       }
-    </ul>
+    </div>
   </div>
 
-  <div class="group-source">
-    <div class="flex items-center justify-start gap-2">
+  <div
+    class="grid sm:grid-cols-[auto_1fr] items-start gap-x-2 sm:gap-x-4 gap-y-6 surface-1 px-2 py-4 rounded-lg"
+  >
+    <div class="property">
       <i class="fa-brands fa-sourcetree"></i>
       <label for="source" class="text-lg">Source</label>
     </div>
-    <div class="input-wrapper w-full">
+    <div class="input-wrapper w-full -mt-2 sm:mt-0">
       <input
         type="url"
         id="source"
@@ -297,23 +276,21 @@
         placeholder="Website URL"
       />
     </div>
-  </div>
-  @if (form.get("source")?.touched && form.get("source")?.invalid) {
-    <small>A valid URL must be entered.</small>
-  }
+    @if (form.get("source")?.touched && form.get("source")?.invalid) {
+      <small>A valid URL must be entered.</small>
+    }
 
-  <div class="group-comment">
-    <div class="flex items-center justify-start gap-2 p-2">
+    <div class="property">
       <i class="fa-solid fa-comment"></i>
       <label for="source" class="text-lg">Comment</label>
     </div>
-    <div class="input-wrapper">
+    <div class="input-wrapper w-full -mt-2 sm:mt-0">
       <textarea
         id="comment"
         name="comment"
         formControlName="comment"
-        class="w-full rounded border border-gray-300 p-2 dark:bg-gray-800 dark:text-white dark:border-gray-700"
-        placeholder="e.g. From the book 'Jamie Oliver'"
+        class="w-full rounded surface-2 p-2"
+        placeholder="e.g. From Jamie Oliver's book..."
         autocomplete="off"
         rows="2"
       ></textarea>
@@ -321,17 +298,8 @@
   </div>
 </form>
 
-<!-- <app-modal-input
-  title="Enter recipe category"
-  [existingItems]="dbRecipeCategories()"
-  btnConfirmText="Apply"
-  btnConfirmColor="primary"
-  [isModalOpen]="showModalInput()"
-  (confirmEventTest)="onConfirmModalAction($event)"
-/> -->
-
-<div class="flex flex-col items-center">
-  @if (!canShowTemplate()) {
+<div class="flex-col-center">
+  @if (dataLoading()) {
     <app-loading />
   }
 </div>

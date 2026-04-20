@@ -1,30 +1,34 @@
 .form-grid {
-  @apply flex flex-col justify-center gap-4 dark:text-white;
+  @apply space-y-8 max-w-[860px] mx-auto;
 }
 
-.group {
-  @apply grid grid-cols-[auto_auto] items-center gap-x-4 gap-y-6 bg-white dark:bg-gray-800 px-2 py-4 rounded-lg;
+.section {
+  @apply grid grid-cols-[auto_auto] items-start gap-x-2 sm:gap-x-4 gap-y-8 surface-1 px-2 py-4 rounded-lg;
 }
 
-.group-source {
-  @apply flex items-center justify-between gap-x-4 gap-y-6 bg-white dark:bg-gray-800 px-2 py-4 rounded-lg;
+.property {
+  @apply flex-start gap-2;
 }
 
-.group-items {
-  @apply flex items-center justify-end gap-2;
+.property-flexible {
+  @apply flex-start gap-2 col-span-2 sm:col-span-1 -mb-4 sm:-mb-0;
 }
 
-label {
-  @apply text-gray-600 dark:text-gray-300;
+.section-items {
+  @apply flex-end flex-wrap gap-2;
+}
+
+.section-items-flexible {
+  @apply flex-start flex-wrap sm:justify-end gap-2 col-span-2 sm:col-span-1;
+}
+
+.recipe-categories {
+  @apply surface-1 space-y-4 px-2 py-4 rounded-lg;
 }
 
 input[type="text"],
 input[type="url"] {
-  @apply shadow appearance-none border rounded px-4 py-2 text-gray-700 dark:bg-gray-800 dark:text-white dark:border-gray-700 leading-tight focus:outline-none;
-}
-
-.unit {
-  @apply absolute right-4 top-1/2 text-gray-500 text-sm -translate-y-1/2;
+  @apply shadow appearance-none border rounded px-4 py-2 text-neutral-700 dark:bg-neutral-800 dark:text-white dark:border-neutral-700 leading-tight focus:outline-none;
 }
 
 .btn-tag {
@@ -44,15 +48,6 @@ input[type="url"] {
   @apply bg-transparent text-primary-600 border-none scroll-mt-16;
 }
 
-.btn-meal-category {
-  /*Add 'scroll-mt-16 so that when scrolling down to the cuisine button, it does take the header height into account*/
-  @apply bg-transparent text-primary-600 border border-primary-600 dark:text-white dark:border-white px-4 py-2 rounded-md scroll-mt-16;
-}
-
-.btn-meal-category.none {
-  @apply bg-transparent text-primary-600 border-none scroll-mt-16;
-}
-
 small {
   color: red;
 }
@@ -69,10 +64,14 @@ input.ng-invalid.ng-touched {
   @apply text-sm;
 }
 
-.group-comment {
-  @apply flex items-start gap-x-4 gap-y-6 bg-white dark:bg-gray-800 px-2 py-4 rounded-lg;
+.section-source-comment {
+  @apply flex flex-col items-start gap-x-4 gap-y-2 md:flex-row md:gap-y-4;
 }
 
 .input-wrapper {
   @apply w-full relative;
+}
+
+.unit {
+  @apply absolute right-4 top-1/2 text-neutral-500 text-sm -translate-y-1/2;
 }

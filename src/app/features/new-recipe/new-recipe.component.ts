@@ -26,6 +26,8 @@ import {
   ref,
 } from 'firebase/storage';
 import { ImageUploadLoaderComponent } from '../../shared/components/image-upload-loader/image-upload-loader.component';
+import { ButtonComponent } from '../../shared/ui/button/button.component';
+import { RecipeCategoryDomainFacade } from '../../domain-facades/recipeCategory.facade';
 
 @Component({
   selector: 'app-new-recipe',
@@ -35,6 +37,7 @@ import { ImageUploadLoaderComponent } from '../../shared/components/image-upload
     TabDefinitionComponent,
     TabIngredientsComponent,
     TabInstructionsComponent,
+    ButtonComponent,
     NgClass,
     LoadingComponent,
     ImageUploadLoaderComponent,
@@ -50,8 +53,13 @@ export class NewRecipeComponent {
   private stateRecipeService = inject(RecipeStateService);
   private toastService = inject(ToastService);
 
+  private recipeCategoryDomainFacade = inject(RecipeCategoryDomainFacade);
+
   readonly recipeIsSaving = this.recipeService.saving;
   readonly recipeIsUpdating = this.recipeService.updating;
+
+  readonly recipeCategoriesLoading =
+    this.recipeCategoryDomainFacade.recipeCategoriesLoading;
 
   /** Declaration of local signals */
   recipeState = this.stateRecipeService.recipeState;
@@ -64,8 +72,12 @@ export class NewRecipeComponent {
     return this.stateRecipeService.formIsValid();
   });
 
-  readonly pageIsLoading = computed(() => {
-    return this.recipeIsSaving() || this.recipeIsUpdating();
+  readonly pageLoading = computed(() => {
+    return (
+      this.recipeIsSaving() ||
+      this.recipeIsUpdating() ||
+      this.recipeCategoriesLoading()
+    );
   });
 
   @ViewChild(TabDefinitionComponent) childComponent!: TabDefinitionComponent;
