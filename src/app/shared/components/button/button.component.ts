@@ -33,12 +33,13 @@ export class ButtonComponent {
   }
 
   // Output event to notify parent on button click
-  @Output() click: EventEmitter<void> = new EventEmitter<void>();
+  @Output() buttonClick: EventEmitter<MouseEvent> =
+    new EventEmitter<MouseEvent>();
 
   // Method to emit click event
-  onClick(): void {
+  onClick(event: MouseEvent) {
     if (!this.disabled) {
-      this.click.emit(); // Emit event when clicked
+      this.buttonClick.emit(event); // Emit event when clicked
     }
   }
 }

@@ -1,4 +1,3 @@
-import { NgClass } from '@angular/common';
 import { Component, HostBinding, Input } from '@angular/core';
 
 type ButtonVariant = 'outline' | 'surface' | 'ghost';
