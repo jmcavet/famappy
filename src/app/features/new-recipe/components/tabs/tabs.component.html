@@ -1,12 +1,12 @@
 <div class="tabs-header">
-  <div
-    *ngFor="let tab of tabs"
-    [class.active]="tab.tabTitle === selectedTabTitle()"
-    (click)="selectTab(tab)"
-    class="tab-title"
+  <app-segmented-control
+    [fullWidth]="true"
+    size="lg"
+    [options]="tabsTitles()"
+    [selectedInput]="selectedTabTitle()"
+    (selectionChange)="toggleTab($event)"
   >
-    {{ tab.tabTitle }}
-  </div>
+  </app-segmented-control>
 </div>
 
 <div class="tabs-content">
