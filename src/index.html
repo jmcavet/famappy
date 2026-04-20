@@ -21,8 +21,14 @@
     <meta name="theme-color" content="#1976d2" />
     <link rel="manifest" href="manifest.webmanifest" />
     <meta name="theme-color" content="#1976d2" />
+
+    <script>
+      const theme = localStorage.getItem("theme");
+      if (theme === "dark") {
+        document.documentElement.classList.add("dark");
+      }
+    </script>
   </head>
-  <!-- <body class="min-h-screen surface-0 text-body font-inter"> -->
   <body class="h-dvh overflow-hidden surface-0 text-body font-inter">
     <app-root></app-root>
     <noscript
