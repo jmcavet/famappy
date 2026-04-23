@@ -3,10 +3,19 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgClass } from '@angular/common';
 import { CapitalizePipe } from '../../../../shared/pipes/capitalize.pipe';
 import { TabIngredientsFacade } from './tab-ingredients.facade';
+import { ButtonComponent } from '../../../../shared/ui/button/button.component';
+import { ChipComponent } from '../../../../shared/ui/chip/chip.component';
 
 @Component({
   selector: 'app-tab-ingredients',
-  imports: [FormsModule, ReactiveFormsModule, CapitalizePipe, NgClass],
+  imports: [
+    FormsModule,
+    ReactiveFormsModule,
+    CapitalizePipe,
+    NgClass,
+    ButtonComponent,
+    ChipComponent,
+  ],
   providers: [TabIngredientsFacade],
   templateUrl: './tab-ingredients.component.html',
   styleUrl: './tab-ingredients.component.css',
