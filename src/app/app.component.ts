@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, inject, ViewChild } from '@angular/core';
 
 import { RouterOutlet } from '@angular/router';
 import { FormsModule } from '@angular/forms';
@@ -13,6 +13,7 @@ import { ToastService } from './services/toast.service';
 import { FooterComponent } from './shared/components/footer/footer.component';
 import { ModalHostComponent } from './shared/modal/modal-host.component';
 import { ContextMenuHostComponent } from './shared/context-menu/context-menu-host/context-menu-host.component';
+import { PwaUpdateService } from './pwa/pwa-update.service';
 
 @Component({
   selector: 'app-root',
@@ -28,6 +29,8 @@ import { ContextMenuHostComponent } from './shared/context-menu/context-menu-hos
   styleUrl: './app.component.css',
 })
 export class AppComponent implements AfterViewInit {
+  private pwaUpdateService = inject(PwaUpdateService);
+
   @ViewChild(ToastContainerComponent)
   toastContainer!: ToastContainerComponent;
 

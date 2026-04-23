@@ -1,99 +1,89 @@
-<form class="form-grid" [formGroup]="form">
-  <div
-    class="flex items-center justify-between gap-4 bg-white dark:bg-gray-800 px-2 py-2 rounded-lg cursor-pointer"
-    (click)="navigateToIngredientsPage()"
-  >
-    <div class="flex items-center justify-start gap-2 dark:text-white">
-      <i class="fa-solid fa-carrot"></i>
-      <span class="text-lg">Ingredient</span>
-    </div>
-    <button
-      type="button"
-      id="btn-ingredient"
-      class="btn-ingredient"
-      [class.none]="ingredientName() === 'none'"
+<form class="form" [formGroup]="form">
+  <div class="space-y-4">
+    <div
+      class="section-1 flex-between cursor-pointer"
+      (click)="navigateToIngredientsPage()"
     >
-      {{ ingredientName() | capitalize }}
-    </button>
-  </div>
+      <div class="flex items-center justify-start gap-2">
+        <i class="fa-solid fa-carrot"></i>
+        <span class="text-lg">Ingredient</span>
+      </div>
 
-  <div
-    class="group-quantity"
-    [ngClass]="
-      ingredientName() === 'none'
-        ? 'opacity-25 pointer-events-none'
-        : 'opacity-100'
-    "
-  >
-    <div class="flex items-center justify-start gap-2 dark:text-white">
-      <i class="fa-solid fa-scale-unbalanced-flip"></i>
-      <span class="text-lg">Quantity</span>
+      <app-button
+        [variant]="ingredientName() === 'none' ? 'ghost' : 'outline'"
+        >{{ ingredientName() | capitalize }}</app-button
+      >
     </div>
-    <div class="flex items-center justify-start gap-4">
-      <input
-        type="text"
-        id="measure"
-        name="measure"
-        value="measure"
-        formControlName="measure"
-        class="w-[3rem]"
-        autocomplete="off"
-      />
-      <div class="flex gap-2">
-        @for (unitElement of UNITS; track $index) {
-        <button
-          class="unit"
-          [class.active]="unit() === unitElement"
-          (click)="selectUnit(unitElement)"
-        >
-          {{ unitElement }}
-        </button>
-        }
+
+    <div
+      class="section-1 flex flex-col sm:flex-row sm:justify-between gap-2"
+      [ngClass]="
+        ingredientName() === 'none'
+          ? 'opacity-25 pointer-events-none'
+          : 'opacity-100'
+      "
+    >
+      <div class="flex-start gap-2">
+        <i class="fa-solid fa-scale-unbalanced-flip"></i>
+        <span class="text-lg">Quantity</span>
+      </div>
+      <div class="flex-between sm:flex-start gap-6">
+        <input
+          type="text"
+          id="measure"
+          name="measure"
+          value="measure"
+          formControlName="measure"
+          class="w-[3rem]"
+          autocomplete="off"
+        />
+        <div class="flex gap-2">
+          @for (unitElement of UNITS; track unitElement) {
+            <app-chip
+              [selected]="unit() === unitElement"
+              (toggle)="selectUnit(unitElement)"
+              >{{ unitElement }}</app-chip
+            >
+          }
+        </div>
       </div>
     </div>
+
+    @if (form.get("measure")?.hasError("notANumber")) {
+      <div class="measure-error">Value must be a number.</div>
+    }
+
+    <app-button
+      [fullWidth]="true"
+      [disabled]="buttonIsDisabled()"
+      (click)="addIngredientToRecipe()"
+      ><span class="mr-2"><i class="fa fa-plus"></i></span>Add
+      ingredient</app-button
+    >
   </div>
 
-  @if (form.get('measure')?.hasError('notANumber')) {
-  <div class="measure-error">Value must be a number.</div>
-  }
-
-  <button
-    class="btn-add"
-    [disabled]="buttonIsDisabled()"
-    [class.disabled]="buttonIsDisabled()"
-    (click)="addIngredientToRecipe()"
-  >
-    <span class="mr-2">Add ingredient</span>
-    <i class="fa fa-plus"></i>
-  </button>
-
-  <ul>
+  <ul class="section-1 space-y-2 mt-16">
     @for (ingredient of recipeIngredients(); track $index) {
-    <li class="rounded-sm mb-2">
-      <div class="flex items-center justify-between">
-        <div
-          class="flex items-center justify-start gap-1 w-full bg-gray-200 py-2 dark:bg-gray-800 dark:text-white"
-        >
-          <div class="w-2/6 font-semibold ml-2">
-            <span> {{ ingredient.measure }}</span>
-            <span class="ml-2">{{ ingredient.unit }}</span>
+      <li class="surface-2">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center justify-start gap-1 w-full">
+            <div class="w-2/6 font-semibold ml-2">
+              <span> {{ ingredient.measure }}</span>
+              <span class="ml-2">{{ ingredient.unit }}</span>
+            </div>
+            <div class="w-full">{{ ingredient.name }}</div>
           </div>
-          <div class="w-full dark:text-white">{{ ingredient.name }}</div>
-        </div>
 
-        <div class="flex items-center justify-between gap-2 ml-4">
-          <button
-            type="button"
-            class="bg-transparent"
-            (click)="onDeleteIngredient($index)"
-          >
-            <i
-              class="fa-regular fa-trash-can text-danger-600 dark:text-danger-500 text-xl"
-            ></i>
-          </button>
+          <div class="flex items-center justify-between gap-2 ml-4">
+            <app-button
+              color="danger"
+              variant="ghost"
+              (click)="onDeleteIngredient($index)"
+              ><i class="fa-regular fa-trash-can text-xl"></i>
+            </app-button>
+          </div>
         </div>
-      </div>
-    </li>
+      </li>
     }
   </ul>
 </form>

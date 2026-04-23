@@ -1,43 +1,13 @@
-.form-grid {
-  /* @apply grow grid grid-cols-[auto,1fr] gap-4; */
-  @apply flex flex-col justify-center gap-4;
-}
-
-label {
-  @apply text-gray-600 dark:text-gray-300;
+.form {
+  @apply space-y-12 max-w-[860px] mx-auto;
 }
 
 input[type="text"] {
-  @apply shadow appearance-none border rounded py-2 px-2 text-gray-700 dark:bg-gray-800 dark:text-white dark:border-gray-700 leading-tight focus:outline-none;
-}
-
-small {
-  color: red;
+  @apply shadow appearance-none rounded py-2 px-2 surface-2 leading-tight focus:outline-none;
 }
 
 input.ng-invalid.ng-touched {
   border: 1px solid red;
-}
-
-select {
-  @apply py-2 px-2 border rounded text-gray-700 dark:bg-gray-800 dark:text-white dark:border-gray-700;
-}
-
-.btn-add {
-  /* @apply bg-primary-600 text-white dark:bg-primary-500 rounded w-10 h-10; */
-  @apply bg-primary-600 text-white dark:bg-primary-500 rounded w-full h-10;
-}
-
-.btn-add.disabled {
-  @apply bg-gray-300 opacity-50 dark:bg-gray-700 dark:opacity-25;
-}
-
-.tag-input {
-  @apply inline-block bg-green-100 p-2 mr-2 border border-gray-300 rounded cursor-pointer;
-}
-
-.tag-input[readonly] {
-  @apply bg-gray-200;
 }
 
 .unit {
@@ -48,19 +18,10 @@ select {
   @apply bg-primary-600 text-white dark:bg-primary-500 rounded-md px-4 py-1;
 }
 
-.btn-ingredient {
-  /*Add 'scroll-mt-16 so that when scrolling down to the cuisine button, it does take the header height into account*/
-  @apply bg-transparent text-primary-600 border border-primary-600 dark:text-white dark:border-white px-4 py-2 rounded-md scroll-mt-16;
+.section-1 {
+  @apply surface-1 p-2 rounded-lg;
 }
 
-.btn-ingredient.none {
-  @apply bg-transparent text-primary-600 border-none scroll-mt-16;
-}
-
-.group-quantity {
-  @apply flex items-center justify-between bg-white dark:bg-gray-800 px-2 py-2 rounded-lg;
-}
-
-.mesasure-error {
-  @apply text-center bg-red-100 text-red-600 dark:bg-red-800 dark:text-red-500 px-4 py-2 rounded;
+.measure-error {
+  @apply text-center text-sm text-red-500 dark:text-red-500 px-4 py-2 rounded;
 }
