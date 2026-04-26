@@ -1,4 +1,4 @@
-<div class="card">
+<div class="card surface-1">
   @if (recipeState?.thumbnailUrl) {
     <div class="rounded-lg overflow-hidden shadow-md">
       <img
@@ -9,7 +9,7 @@
       />
     </div>
   } @else {
-    <div class="card-image-empty">
+    <div class="card-image-empty flex-center">
       <i class="fa-solid fa-mortar-pestle fa-2xl"></i>
     </div>
   }
@@ -17,7 +17,7 @@
   <div class="card-body">
     <div class="card-title">{{ recipeState?.title }}</div>
 
-    <div class="card-info">
+    <div class="card-info flex-between">
       <div class="flex-between gap-0.5">
         <i class="fa-solid fa-clock"></i>
         <span class="text-xs tracking-widest">{{ totalTime | mintohour }}</span>

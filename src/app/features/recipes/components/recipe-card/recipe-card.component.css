@@ -1,5 +1,5 @@
 .card {
-  @apply flex flex-col h-full space-y-3 surface-1 p-2 rounded-lg shadow-md hover:cursor-pointer hover:bg-primary-50 dark:hover:bg-primary-950;
+  @apply flex flex-col h-full space-y-3 p-2 rounded-lg shadow-md hover:cursor-pointer hover:bg-primary-50 dark:hover:bg-primary-950;
 }
 
 .card-image {
@@ -7,7 +7,7 @@
 }
 
 .card-image-empty {
-  @apply w-full h-40 bg-primary-100 dark:bg-primary-900 flex-center font-bold text-3xl;
+  @apply w-full h-40 bg-primary-100 dark:bg-primary-900 font-bold text-3xl;
 }
 
 .card-image-empty i {
@@ -23,5 +23,5 @@
 }
 
 .card-info {
-  @apply flex-between gap-1 text-neutral-600 dark:text-neutral-300 text-xs;
+  @apply gap-1 text-neutral-600 dark:text-neutral-300 text-xs;
 }

@@ -1,5 +1,5 @@
 .stepper {
-  @apply font-inter grid grid-cols-[repeat(3,1fr)_auto] surface-nav text-neutral-600 dark:text-neutral-400 dark:border-b dark:border-b-neutral-800 px-4 sm:px-8 lg:px-16 py-1 w-full;
+  @apply font-inter grid grid-cols-[repeat(3,1fr)_auto] text-neutral-600 dark:text-neutral-400 dark:border-b dark:border-b-neutral-800 px-4 sm:px-8 lg:px-16 py-1 w-full;
 }
 
 .circle {

@@ -1,5 +1,5 @@
 .page-container {
-  @apply h-full page-full-width layout-hcf min-w-0;
+  @apply h-full min-w-0;
 }
 
 .input-wrapper {
@@ -7,7 +7,7 @@
 }
 
 input[type="text"] {
-  @apply w-full shadow surface-2 appearance-none border rounded px-10 py-4 leading-tight focus:outline-none;
+  @apply w-full shadow appearance-none border rounded px-10 py-4 leading-tight focus:outline-none;
 }
 
 .btn-reset {

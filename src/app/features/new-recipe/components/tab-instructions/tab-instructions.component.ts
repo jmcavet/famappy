@@ -3,10 +3,11 @@ import { Component, ElementRef, inject, ViewChild } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TabInstructionsFacade } from './tab-instructions.facade';
 import { ButtonComponent } from '../../../../shared/ui/button/button.component';
+import { CapitalizePipe } from '../../../../shared/pipes/capitalize.pipe';
 
 @Component({
   selector: 'app-tab-instructions',
-  imports: [FormsModule, ReactiveFormsModule, NgIf, NgFor, ButtonComponent],
+  imports: [FormsModule, ReactiveFormsModule, ButtonComponent],
   providers: [TabInstructionsFacade],
   templateUrl: './tab-instructions.component.html',
   styleUrl: './tab-instructions.component.css',

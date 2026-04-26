@@ -17,6 +17,11 @@
            dark:bg-secondary-dark dark:text-neutral-50 dark:border-secondary-dark;
   }
 
+  .btn-surface-success {
+    @apply bg-success text-neutral-50 border-success
+           dark:bg-success-dark dark:text-neutral-50 dark:border-success-dark;
+  }
+
   .btn-surface-danger {
     @apply bg-danger-500 text-neutral-50 border-danger-500
            dark:bg-danger-400 dark:text-neutral-50 dark:border-danger-400;
@@ -51,6 +56,12 @@
          dark:text-neutral-50 dark:border-neutral-50;
   }
 
+  .btn-outline-success {
+    @apply bg-transparent border border-success text-success
+         hover:bg-success/10
+         dark:text-success-dark dark:border-success-dark;
+  }
+
   .btn-outline-danger {
     @apply bg-transparent border border-danger-500 text-danger-500
          hover:bg-danger-500/10
@@ -67,6 +78,12 @@
     @apply bg-transparent border-transparent text-secondary
            hover:text-secondary/80
            dark:text-secondary-dark dark:hover:text-secondary-dark/80;
+  }
+
+  .btn-ghost-success {
+    @apply bg-transparent border-transparent text-success
+           hover:text-success/80
+           dark:text-success-dark dark:hover:text-success-dark/80;
   }
 
   .btn-ghost-danger {

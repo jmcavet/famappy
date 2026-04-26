@@ -65,8 +65,8 @@
     </div>
   </div>
 
-  <div class="section">
-    <div class="property">
+  <div class="section surface-1">
+    <div class="flex-start gap-2">
       <i class="fa-solid fa-clock"></i>
       <label for="preparationTime" class="text-lg">Prep Time</label>
     </div>
@@ -96,7 +96,7 @@
       </div>
     }
 
-    <div class="property">
+    <div class="flex-start gap-2">
       <i class="fa-solid fa-utensils"></i>
       <label for="cookingTime" class="text-lg">Cooking Time</label>
     </div>
@@ -123,7 +123,7 @@
       </div>
     }
 
-    <div class="property">
+    <div class="flex-start gap-2">
       <i class="fa-solid fa-person"></i>
       <label for="servings" class="text-lg">Servings</label>
     </div>
@@ -138,12 +138,12 @@
     </div>
   </div>
 
-  <div class="section">
-    <div class="property">
+  <div class="section surface-1">
+    <div class="flex-start gap-2">
       <i class="fa-solid fa-person-hiking"></i>
       <span class="text-lg">Difficulty</span>
     </div>
-    <div class="section-items">
+    <div class="section-items flex-end">
       @for (difficultyOption of difficultyOptions; track $index) {
         <app-chip
           [selected]="difficulty() === difficultyOption"
@@ -153,11 +153,11 @@
         >
       }
     </div>
-    <div class="property">
+    <div class="flex-start gap-2">
       <i class="fa-solid fa-barcode"></i>
       <span class="text-lg">Price</span>
     </div>
-    <div class="section-items">
+    <div class="section-items flex-end">
       @for (priceOption of priceOptions; track $index) {
         <app-chip
           [selected]="price() === priceOption"
@@ -177,11 +177,11 @@
         </app-chip>
       }
     </div>
-    <div class="property-flexible">
+    <div class="property-flexible flex-start">
       <i class="fa-solid fa-calendar-days"></i>
       <span class="text-lg">Frequency</span>
     </div>
-    <div class="section-items-flexible">
+    <div class="section-items-flexible flex-start">
       @for (frequencyOption of frequencyOptions; track $index) {
         <app-chip
           [selected]="frequency() === frequencyOption"
@@ -192,11 +192,11 @@
       }
     </div>
 
-    <div class="property-flexible">
+    <div class="property-flexible flex-start">
       <i class="fa-solid fa-snowflake"></i>
       <span class="text-lg">Season</span>
     </div>
-    <div class="section-items-flexible">
+    <div class="section-items-flexible flex-start">
       @for (seasonOption of seasonOptions; track $index) {
         <app-chip
           [fullWidth]="true"
@@ -211,7 +211,7 @@
 
   <div class="surface-1 space-y-6 px-2 py-2 rounded-lg">
     <div class="flex-between gap-4">
-      <div class="property">
+      <div class="flex-start gap-2">
         <i class="fa-solid fa-cake-candles"></i>
         <span class="text-lg">Meal Category</span>
       </div>
@@ -222,7 +222,7 @@
     </div>
 
     <div class="flex-between gap-4">
-      <div class="property">
+      <div class="flex-start gap-2">
         <i class="fa-solid fa-flag"></i>
         <span class="text-lg">Cuisine</span>
       </div>
@@ -233,9 +233,9 @@
     </div>
   </div>
 
-  <div class="recipe-categories">
+  <div class="recipe-categories surface-1">
     <div class="flex-start">
-      <div class="property">
+      <div class="flex-start gap-2">
         <i class="fa-solid fa-tag"></i>
         <label for="tags" class="text-lg">Recipe Categories</label>
       </div>
@@ -246,7 +246,7 @@
       >
     </div>
 
-    <div class="property">
+    <div class="flex-start gap-2">
       @for (recipeCategory of dbRecipeCategories(); track $index) {
         <app-chip
           [selected]="selectedCategoryIds().has(recipeCategory.id)"
@@ -261,7 +261,7 @@
   <div
     class="grid sm:grid-cols-[auto_1fr] items-start gap-x-2 sm:gap-x-4 gap-y-6 surface-1 px-2 py-4 rounded-lg"
   >
-    <div class="property">
+    <div class="flex-start gap-2">
       <i class="fa-brands fa-sourcetree"></i>
       <label for="source" class="text-lg">Source</label>
     </div>
@@ -280,7 +280,7 @@
       <small>A valid URL must be entered.</small>
     }
 
-    <div class="property">
+    <div class="flex-start gap-2">
       <i class="fa-solid fa-comment"></i>
       <label for="source" class="text-lg">Comment</label>
     </div>

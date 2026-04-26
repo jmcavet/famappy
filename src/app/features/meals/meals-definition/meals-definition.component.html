@@ -9,8 +9,10 @@
         <app-loading />
       </div>
     } @else {
-      <section>
-        <h2 class="question">How many meals do you want to plan?</h2>
+      <section class="surface-1">
+        <h2 class="question font-roboto text-title ui-text-default">
+          How many meals do you want to plan?
+        </h2>
 
         <app-select
           [options]="nbMeals"
@@ -19,8 +21,10 @@
         ></app-select>
       </section>
 
-      <section>
-        <h2 class="question">Which categories are you interested in?</h2>
+      <section class="surface-1">
+        <h2 class="question font-roboto text-title ui-text-default">
+          Which categories are you interested in?
+        </h2>
 
         <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
           @for (cat of filteredCategories(); track cat.id) {

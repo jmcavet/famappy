@@ -1,5 +1,5 @@
 section {
-  @apply surface-1 flex-center gap-6 flex-wrap p-4;
+  @apply gap-6 flex-wrap p-4;
 }
 
 button {

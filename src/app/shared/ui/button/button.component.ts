@@ -1,7 +1,13 @@
 import { Component, HostBinding, Input } from '@angular/core';
 
 type ButtonVariant = 'outline' | 'surface' | 'ghost';
-type ButtonColor = 'primary' | 'secondary' | 'danger' | 'neutral' | 'static';
+type ButtonColor =
+  | 'primary'
+  | 'secondary'
+  | 'success'
+  | 'danger'
+  | 'neutral'
+  | 'static';
 
 @Component({
   selector: 'app-button',

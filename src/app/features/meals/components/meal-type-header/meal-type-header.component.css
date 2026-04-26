@@ -1,5 +1,5 @@
 .summary-header {
-  @apply font-inter surface-2 flex items-center justify-between gap-6 p-2;
+  @apply font-inter flex items-center justify-between gap-6 p-2;
 }
 
 .meal-type {

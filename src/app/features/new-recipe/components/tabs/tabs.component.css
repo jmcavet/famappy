@@ -5,9 +5,9 @@ The layout 'h-full layout-hcf' on the new-recipe template can work now. */
 }
 
 .tabs-header {
-  @apply page-full-width surface-1 px-1 py-2;
+  @apply px-1 py-2;
 }
 
 .tabs-content {
-  @apply section-scroll px-2 py-6;
+  @apply px-2 py-6;
 }

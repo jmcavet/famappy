@@ -1,13 +1,9 @@
-.page-container {
-  @apply h-full page-full-width layout-cf;
-}
-
 .filter-container {
   @apply space-y-4;
 }
 
 section {
-  @apply surface-1 p-4 rounded-lg;
+  @apply p-4 rounded-lg;
 }
 
 .clear {

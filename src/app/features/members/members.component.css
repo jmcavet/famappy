@@ -6,10 +6,6 @@ section {
   @apply p-4 sm:p-8 rounded-xl;
 }
 
-.member-selection-container {
-  @apply surface-1 flex-col-center gap-2;
-}
-
 .member-cards-container {
   @apply grid grid-cols-1 sm:grid-cols-2 gap-8 sm:gap-16;
 }
