@@ -1,7 +1,3 @@
-.form-grid {
-  @apply flex flex-col justify-center gap-4;
-}
-
 label {
   @apply text-gray-600 dark:text-gray-300;
 }
