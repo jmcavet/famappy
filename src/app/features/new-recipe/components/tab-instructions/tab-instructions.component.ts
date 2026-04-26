@@ -1,96 +1,57 @@
 import { NgFor, NgIf } from '@angular/common';
-import {
-  Component,
-  computed,
-  ElementRef,
-  inject,
-  signal,
-  ViewChild,
-} from '@angular/core';
-import {
-  FormBuilder,
-  FormGroup,
-  FormsModule,
-  ReactiveFormsModule,
-  Validators,
-} from '@angular/forms';
-import { RecipeStateService } from '../../../../services/state/recipe.service';
+import { Component, ElementRef, inject, ViewChild } from '@angular/core';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { TabInstructionsFacade } from './tab-instructions.facade';
+import { ButtonComponent } from '../../../../shared/ui/button/button.component';
 
 @Component({
   selector: 'app-tab-instructions',
-  imports: [FormsModule, ReactiveFormsModule, NgIf, NgFor],
+  imports: [FormsModule, ReactiveFormsModule, NgIf, NgFor, ButtonComponent],
+  providers: [TabInstructionsFacade],
   templateUrl: './tab-instructions.component.html',
   styleUrl: './tab-instructions.component.css',
 })
 export class TabInstructionsComponent {
-  private fb = inject(FormBuilder);
+  private facade = inject(TabInstructionsFacade);
 
-  /** Services */
-  private recipeService = inject(RecipeStateService);
-
-  form: FormGroup = this.fb.group({});
-
-  /** Declaration of recipe state signals */
-  recipeState = this.recipeService.recipeState;
-  recipeInstructions = computed(() => this.recipeState().instructions ?? []);
-
-  // Track edit mode for instructions
-  editInstructionIndex = signal<number | null>(null);
+  recipeInstructions = this.facade.recipeInstructions;
+  editInstructionIndex = this.facade.editInstructionIndex;
+  instruction = this.facade.instruction;
+  addButtonIsDisabled = this.facade.addButtonIsDisabled;
+  instructionErrors = this.facade.instructionErrors;
 
   @ViewChild('editInput') editInputRef!: ElementRef<HTMLInputElement>;
 
-  constructor() {
-    this.form = this.fb.group({
-      instruction: ['', [Validators.minLength(5), Validators.maxLength(50)]],
-    });
-  }
-
   onAddInstructionTextAreaKeyDown(event: KeyboardEvent) {
-    if (event.key === 'Enter') {
-      event.preventDefault();
-      this.addInstruction();
-    }
+    this.facade.addInstructionTextAreaKeyDown(event);
   }
 
   onEditInstructionTextAreaKeyDown(index: number, event: KeyboardEvent) {
     if (event.key === 'Enter') {
       event.preventDefault();
-      this.onUpdateInstruction(index);
+      const newInstruction = this.editInputRef?.nativeElement?.value ?? '';
+      this.facade.updateInstruction(index, newInstruction);
     }
   }
 
   addInstruction() {
-    const newInstruction = this.form.get('instruction')?.value;
-
-    if (newInstruction) {
-      this.recipeService.addInstructionToRecipe(newInstruction);
-
-      // Reset the instruction input field
-      this.form.get('instruction')?.reset();
-    }
+    this.facade.addInstruction();
   }
 
-  /** Update instruction at a specific index */
   onUpdateInstruction(index: number): void {
-    const newInstruction = this.editInputRef.nativeElement.value;
-    this.recipeService.updateInstruction(index, newInstruction);
-
-    /** Reset the edit instruction index */
-    this.editInstructionIndex.set(null);
+    const newInstruction = this.editInputRef?.nativeElement?.value ?? '';
+    this.facade.updateInstruction(index, newInstruction);
   }
 
-  /** Focus on the instruction input field when the edit button is clicked */
-  onFocusInstruction(index: number): void {
-    this.editInstructionIndex.set(index);
+  onFocusInstruction(index: number) {
+    this.facade.setEditIndex(index);
 
     setTimeout(() => {
-      // Focus after Angular has rendered the input
-      this.editInputRef.nativeElement.focus();
+      this.editInputRef?.nativeElement?.focus();
     });
   }
 
-  /** Delete an instruction (from the instructions state) by its index */
   onDeleteInstruction(index: number) {
-    this.recipeService.deleteInstruction(index);
+    this.facade.deleteInstruction(index);
   }
 }
