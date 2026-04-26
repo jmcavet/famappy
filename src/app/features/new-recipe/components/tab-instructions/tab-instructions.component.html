@@ -1,31 +1,29 @@
-<form class="form-grid" [formGroup]="form">
+<form class="form-grid">
   <div class="flex items-center justify-between gap-2">
     <textarea
-      id="instruction"
-      name="instruction"
-      formControlName="instruction"
+      [value]="instruction()"
+      (input)="instruction.set($any($event.target).value)"
       class="w-full p-2"
       placeholder="Add a new instruction"
       rows="2"
       (keydown)="onAddInstructionTextAreaKeyDown($event)"
     ></textarea>
 
-    <button (click)="addInstruction()" class="btn-add">
-      <i class="fa fa-plus"></i>
-    </button>
+    <app-button
+      variant="surface"
+      (click)="addInstruction()"
+      [disabled]="addButtonIsDisabled()"
+      ><i class="fa fa-plus"></i>
+    </app-button>
   </div>
 
-  <div
-    class="validator"
-    *ngIf="form.get('instruction')?.touched && form.get('instruction')?.invalid"
-  >
-    <small *ngIf="form.get('instruction')?.errors?.['minlength']"
-      >Instruction must be at least 5 characters long.</small
-    >
-    <small *ngIf="form.get('instruction')?.errors?.['maxlength']"
-      >Instruction must be no greater than 50 characters long.</small
-    >
-  </div>
+  @if (instructionErrors() === "minlength") {
+    <p class="error">Minimum length is 5 characters.</p>
+  }
+
+  @if (instructionErrors() === "maxlength") {
+    <p class="error">Maximum length is 100 characters.</p>
+  }
 
   <ul>
     <li
@@ -40,8 +38,8 @@
             <p class="text-gray-500 dark:text-gray-400 font-bold text-[12px]">
               STEP {{ i + 1 }}
             </p>
-            @for (item of instruction.split('\n'); track $index) {
-            <div class="dark:text-white">{{ item }}</div>
+            @for (item of instruction.split("\n"); track $index) {
+              <div class="dark:text-white">{{ item }}</div>
             }
           </div>
         </ng-container>
@@ -56,32 +54,35 @@
           ></textarea>
         </ng-template>
 
-        <div class="flex items-center justify-between gap-2">
+        <div class="flex-between">
           <ng-container>
             @if (editInstructionIndex() !== i) {
-            <button type="button" (click)="onFocusInstruction(i)">
-              <i
-                class="fa-regular fa-pen-to-square text-primary-600 dark:text-primary-500 text-xl"
-              ></i>
-            </button>
+              <app-button
+                size="sm"
+                variant="ghost"
+                (click)="onFocusInstruction(i)"
+                ><i class="fa-regular fa-pen-to-square text-xl"></i>
+              </app-button>
             } @else {
-            <button type="button" (click)="onUpdateInstruction(i)">
-              <i
-                class="fa-solid fa-check text-green-600 dark:text-success-500 text-xl"
-              ></i>
-            </button>
+              <app-button
+                color="success"
+                size="sm"
+                variant="ghost"
+                (click)="onUpdateInstruction(i)"
+                ><i class="fa-solid fa-check text-xl"></i>
+              </app-button>
             }
           </ng-container>
 
-          <button
-            type="button"
-            class="bg-transparent"
-            (click)="onDeleteInstruction(i)"
-          >
-            <i
-              class="fa-regular fa-trash-can text-danger-600 dark:text-danger-500 text-xl"
-            ></i>
-          </button>
+          <div class="flex items-center justify-between gap-2 ml-4">
+            <app-button
+              color="danger"
+              size="sm"
+              variant="ghost"
+              (click)="onDeleteInstruction(i)"
+              ><i class="fa-regular fa-trash-can text-xl"></i>
+            </app-button>
+          </div>
         </div>
       </div>
     </li>
