@@ -1,5 +1,5 @@
 section {
-  @apply surface-1 space-y-4 p-2 sm:p-4 rounded-xl;
+  @apply space-y-4 p-2 sm:p-4 rounded-xl;
 }
 
 .card {

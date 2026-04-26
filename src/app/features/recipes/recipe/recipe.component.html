@@ -52,7 +52,7 @@
       </div>
     }
 
-    <section class="group mb-6">
+    <section class="surface-1 group mb-6">
       <div class="flex items-center justify-start gap-2">
         <i class="fa-solid fa-clock"></i>
         <label for="preparationTime" class="text-lg">Preparation Time</label>
@@ -96,7 +96,7 @@
       <div>{{ cuisineSearchedName() }}</div>
     </section>
 
-    <section>
+    <section class="surface-1">
       <div class="font-semibold text-xl mt-4 mb-2">Seasons</div>
       <ul class="flex items-start gap-2 mb-4">
         @for (season of recipe().seasonsSelected; track $index) {
@@ -107,7 +107,7 @@
       </ul>
     </section>
 
-    <section>
+    <section class="surface-1">
       <div class="font-semibold text-xl mt-4 mb-2">Recipe categories</div>
       <ul class="flex items-start gap-2 mb-2">
         @for (recipeCategoryName of recipeCategoryNames(); track $index) {
@@ -118,7 +118,7 @@
       </ul>
     </section>
 
-    <section class="group mt-6">
+    <section class="surface-1 group mt-6">
       <div class="flex items-center justify-start gap-2">
         <i class="fa-solid fa-user"></i>
         <label for="servings" class="text-lg">Servings</label>
@@ -136,7 +136,7 @@
       </div>
     </section>
 
-    <section>
+    <section class="surface-1">
       <div class="font-semibold text-xl mt-4 mb-2">Ingredients</div>
       <ul class="flex flex-col items-start gap-2 mb-4">
         @for (ingredient of recipe().ingredients; track $index) {
@@ -152,7 +152,7 @@
     </section>
 
     @if (recipe().instructions.length > 0) {
-      <section>
+      <section class="surface-1">
         <div class="font-semibold text-xl mt-4 mb-2">Instructions</div>
         <ul class="flex flex-col items-start gap-2 mb-4">
           @for (instruction of recipe().instructions; track $index) {
@@ -164,7 +164,7 @@
       </section>
     }
     @if (commentLines()) {
-      <section>
+      <section class="surface-1">
         <div class="font-semibold text-xl mt-4 mb-2">Comment</div>
         <ul class="flex flex-col items-start mb-4">
           @for (line of commentLines(); track $index) {

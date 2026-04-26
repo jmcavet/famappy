@@ -74,7 +74,7 @@
 
   <div class="section-scroll space-y-6 py-4">
     @if (cart().length > 0) {
-      <section>
+      <section class="surface-1">
         @for (mealCategory of mealCategoriesSelected(); track $index) {
           @if (cartMealCategoryIds().includes(mealCategory.id)) {
             <div>
@@ -108,7 +108,7 @@
       </section>
     }
 
-    <section>
+    <section class="surface-1">
       <app-summary-meal-section mealType="lunch" [servings]="lunchServings" />
       <app-summary-meal-section mealType="dinner" [servings]="dinnerServings" />
     </section>

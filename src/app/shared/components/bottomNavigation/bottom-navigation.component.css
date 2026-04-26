@@ -16,10 +16,6 @@ button {
   @apply font-bold;
 }
 
-.btn-container {
-  @apply flex-col-center gap-1;
-}
-
 p {
   @apply text-[0.6rem];
 }

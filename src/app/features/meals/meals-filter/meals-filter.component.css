@@ -3,11 +3,11 @@ main {
 }
 
 section {
-  @apply surface-1 space-y-4 p-4 sm:p-8 rounded-xl;
+  @apply space-y-4 p-4 sm:p-8 rounded-xl;
 }
 
 .options-header {
-  @apply flex items-center justify-start gap-2 mb-2;
+  @apply gap-2 mb-2;
 }
 
 .options-container {

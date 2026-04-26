@@ -3,7 +3,7 @@
 }
 
 .modal {
-  @apply surface-3 p-8 rounded-lg relative flex flex-col gap-8;
+  @apply p-8 rounded-lg relative flex flex-col gap-8;
 }
 
 .header {

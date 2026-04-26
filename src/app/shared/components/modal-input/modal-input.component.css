@@ -1,5 +1,5 @@
 .modal-container {
-  @apply surface-3 shadow-xl p-4;
+  @apply shadow-xl p-4;
 }
 
 .header {

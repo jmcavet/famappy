@@ -1,7 +1,3 @@
 section {
-  @apply surface-1 space-y-4 p-4 sm:p-8 rounded-xl;
-}
-
-.question {
-  @apply font-roboto text-title ui-text-default;
+  @apply space-y-4 p-4 sm:p-8 rounded-xl;
 }

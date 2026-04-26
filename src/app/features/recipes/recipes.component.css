@@ -2,10 +2,6 @@
   @apply space-y-6;
 }
 
-.recipe-search-container {
-  @apply surface-1 sticky-top page-full-width;
-}
-
 .title {
   @apply text-3xl my-6 text-center;
 }

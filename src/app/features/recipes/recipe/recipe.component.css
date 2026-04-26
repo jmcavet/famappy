@@ -1,5 +1,5 @@
 section {
-  @apply surface-1 space-y-4 p-2 sm:p-4 rounded-xl;
+  @apply space-y-4 p-2 sm:p-4 rounded-xl;
 }
 
 .group {
@@ -7,5 +7,5 @@ section {
 }
 
 .tag {
-  @apply border border-gray-900 dark:text-white dark:border-white p-2 rounded;
+  @apply border border-neutral-900 dark:text-white dark:border-white p-2 rounded;
 }
