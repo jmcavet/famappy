@@ -49,4 +49,9 @@ Use shadows only for elevation:
   .surface-hover {
     @apply transition-shadow hover:shadow-md;
   }
+
+  .surface-interactive {
+    @apply transition-colors duration-200 cursor-pointer
+           hover:brightness-95 dark:hover:brightness-125;
+  }
 }

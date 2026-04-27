@@ -54,6 +54,20 @@ export class IngredientsFacade {
     () => this.ingredientsLoading() || this.ingredientCategoriesLoading(),
   );
 
+  readonly IngredientCategoriesNames = computed(() =>
+    this.dbIngredientCategories().map((cat) => cat.name),
+  );
+
+  readonly ingredientCategoryNameSelected = computed(() => {
+    // const toto = this.mealCategories().find(
+    //   (cat) => cat.id === this.selectionService.state().mealCategoryIdSelected,
+    // );
+    // if (toto) {
+    //   return toto.name;
+    // }
+    return 'NOTHING!!';
+  });
+
   /** Define the ingredients filtered by the text entered by user */
   readonly ingredientsFiltered = computed(() => {
     const ingredients = this.dbIngredients().map((ingredient) => {
@@ -78,6 +92,16 @@ export class IngredientsFacade {
    * ================================ */
   resetInput() {
     this.inputText.set('');
+  }
+
+  public toggleIngredientCategory(ingredientCategoryName: string) {
+    // const ingredientCategory = this.ingredientCategories().find(
+    //   (cat) => cat.name === ingredientCategoryName,
+    // );
+    // if (ingredientCategory) {
+    //   this.selectionService.setMealCategory(mealCategory);
+    // }
+    console.log('ingredientCategoryName: ', ingredientCategoryName);
   }
 
   selectIngredient(ingredientId: string) {
