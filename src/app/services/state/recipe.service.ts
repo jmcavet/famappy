@@ -95,14 +95,8 @@ export class RecipeStateService {
     return this.cuisineName();
   }
 
-  constructor() {
-    console.log('RecipeStateService created');
-  }
-
   update(updater: (state: RecipeState) => RecipeState) {
-    console.log('Before update', this.recipeState());
     this.recipeState.update(updater);
-    console.log('After update', this.recipeState());
   }
 
   /**
