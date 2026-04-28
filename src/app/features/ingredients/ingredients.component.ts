@@ -4,6 +4,8 @@ import { RouterLink } from '@angular/router';
 import { LoadingComponent } from '../../shared/components/loading/loading.component';
 import { IngredientsFacade } from './ingredients.facade';
 import { SegmentedControlComponent } from '../../shared/ui/segmented-control/segmented-control.component';
+import { ButtonComponent } from '../../shared/ui/button/button.component';
+import { ChipComponent } from '../../shared/ui/chip/chip.component';
 
 @Component({
   selector: 'app-ingredients',
@@ -11,6 +13,8 @@ import { SegmentedControlComponent } from '../../shared/ui/segmented-control/seg
     FormsModule,
     LoadingComponent,
     RouterLink,
+    ButtonComponent,
+    ChipComponent,
     SegmentedControlComponent,
   ],
   providers: [IngredientsFacade],
@@ -23,7 +27,7 @@ export class IngredientsComponent {
   inputText = this.facade.inputText;
   pageIsLoading = this.facade.pageIsLoading;
   ingredientsFiltered = this.facade.ingredientsFiltered;
-  IngredientCategoriesNames = this.facade.IngredientCategoriesNames;
+  ingredientCategoriesNames = this.facade.ingredientCategoriesNames;
   ingredientCategoryNameSelected = this.facade.ingredientCategoryNameSelected;
 
   @ViewChild('ingredientInput') ingredientInput!: ElementRef<HTMLInputElement>;
@@ -39,8 +43,8 @@ export class IngredientsComponent {
     this.facade.resetInput();
   }
 
-  toggleIngredientCategory(ingredientCategoryName: string) {
-    this.facade.toggleIngredientCategory(ingredientCategoryName);
+  selectIngredientCategoryName(ingredientCategoryName: string) {
+    this.facade.selectIngredientCategoryName(ingredientCategoryName);
   }
 
   selectIngredient(ingredientId: string) {

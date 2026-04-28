@@ -1,38 +1,44 @@
-<div class="h-full layout-cf space-y-8 max-w-[860px] mx-auto my-2">
-  <div class="surface-1 px-6 py-4 space-y-4">
+<div class="space-y-4 lg:max-w-[1000px] mx-auto">
+  <header
+    class="sticky-top page-full-width surface-1 px-2 sm:px-6 py-4 space-y-4"
+  >
     <div class="relative">
       <input
         #ingredientInput
         type="text"
-        id="name"
-        name="name"
         autocomplete="off"
         placeholder="Search for an ingredient"
-        class="w-full surface-1 px-2 py-4 rounded-lg"
+        class="w-full surface-1 font-roboto text-lg p-4 rounded-lg"
         [ngModel]="inputText()"
         (ngModelChange)="inputText.set($event)"
       />
       @if (inputText()) {
-        <button
-          type="button"
+        <app-button
+          variant="ghost"
+          color="neutral"
           (click)="onResetInput()"
-          class="absolute right-5 bottom-5 flex items-center text-gray-400 hover:text-gray-600"
-        >
-          <i class="fa-solid fa-close fa-xl"></i>
-        </button>
+          class="absolute right-2 top-1/2 -translate-y-1/2"
+          ><i class="fa-solid fa-close fa-2xl"></i
+        ></app-button>
       }
     </div>
-    <div>
-      <app-segmented-control
-        [fullWidth]="true"
-        size="lg"
-        [options]="this.IngredientCategoriesNames()"
-        [selectedInput]="ingredientCategoryNameSelected()"
-        (selectionChange)="toggleIngredientCategory($event)"
-      >
-      </app-segmented-control>
+    <div
+      class="min-w-0 overflow-x-auto overflow-y-hidden flex gap-2 snap-x snap-mandatory scroll-smooth"
+    >
+      @for (
+        ingredientCategoryName of ingredientCategoriesNames();
+        track ingredientCategoryName
+      ) {
+        <app-chip
+          [selected]="
+            ingredientCategoryNameSelected() === ingredientCategoryName
+          "
+          (toggle)="selectIngredientCategoryName(ingredientCategoryName)"
+          >{{ ingredientCategoryName }}</app-chip
+        >
+      }
     </div>
-  </div>
+  </header>
 
   <div class="section-scroll surface-1 px-2 py-4 rounded-lg space-y-4">
     @for (
@@ -47,19 +53,21 @@
         <div
           class="italic w-1/3 sm:w-1/4 lg:w-1/6 text-neutral-400 dark:text-neutral-500"
         >
-          {{ ingredient.typeName }}
+          {{ ingredient.categoryName }}
         </div>
         <div class="flex-grow">{{ ingredient.name }}</div>
       </div>
     }
   </div>
 
-  <button
+  <app-button
+    [fullWidth]="false"
+    color="secondary"
     class="btn-navigate-manage-ingredients"
+    [disabled]="false"
     routerLink="/manage-ingredients"
-  >
-    <i class="fa-solid fa-plus fa-xl"></i>
-  </button>
+    ><i class="fa-solid fa-plus fa-xl"></i
+  ></app-button>
 </div>
 
 <div class="flex flex-col items-center">

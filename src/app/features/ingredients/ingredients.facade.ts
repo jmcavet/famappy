@@ -45,6 +45,7 @@ export class IngredientsFacade {
    * ================================ */
   /** Signals rendered on UI */
   inputText = signal<string>('');
+  ingredientCategoryNameSelected = signal<string>('');
 
   /* ================================
    * Local derived state
@@ -54,37 +55,36 @@ export class IngredientsFacade {
     () => this.ingredientsLoading() || this.ingredientCategoriesLoading(),
   );
 
-  readonly IngredientCategoriesNames = computed(() =>
-    this.dbIngredientCategories().map((cat) => cat.name),
+  readonly ingredientCategoriesNames = computed(() =>
+    // Sort categories alphabetically
+    this.dbIngredientCategories()
+      .map((cat) => cat.name)
+      .sort((a, b) => a.localeCompare(b)),
   );
 
-  readonly ingredientCategoryNameSelected = computed(() => {
-    // const toto = this.mealCategories().find(
-    //   (cat) => cat.id === this.selectionService.state().mealCategoryIdSelected,
-    // );
-    // if (toto) {
-    //   return toto.name;
-    // }
-    return 'NOTHING!!';
-  });
-
-  /** Define the ingredients filtered by the text entered by user */
+  /** Define the ingredients filtered by the text entered by user and/or by ingredient category selected */
   readonly ingredientsFiltered = computed(() => {
     const ingredients = this.dbIngredients().map((ingredient) => {
-      const typeName =
+      const categoryName =
         this.dbIngredientCategories().find(
           (t) => t.id === ingredient.categoryId,
         )?.name || '';
-      return { ...ingredient, typeName };
+      return { ...ingredient, categoryName };
     });
 
     const ingredientsFilteredBySearch = ingredients.filter((ingredient) => {
-      return ingredient.name
-        .toLowerCase()
-        .includes(this.inputText().toLowerCase());
+      return this.ingredientCategoryNameSelected().length === 0
+        ? ingredient.name.toLowerCase().includes(this.inputText().toLowerCase())
+        : ingredient.name
+            .toLowerCase()
+            .includes(this.inputText().toLowerCase()) &&
+            ingredient.categoryName === this.ingredientCategoryNameSelected();
     });
 
-    return ingredientsFilteredBySearch;
+    // Sort names alphabetically
+    return ingredientsFilteredBySearch.sort((a, b) =>
+      a.name.localeCompare(b.name),
+    );
   });
 
   /* ================================
@@ -94,14 +94,12 @@ export class IngredientsFacade {
     this.inputText.set('');
   }
 
-  public toggleIngredientCategory(ingredientCategoryName: string) {
-    // const ingredientCategory = this.ingredientCategories().find(
-    //   (cat) => cat.name === ingredientCategoryName,
-    // );
-    // if (ingredientCategory) {
-    //   this.selectionService.setMealCategory(mealCategory);
-    // }
-    console.log('ingredientCategoryName: ', ingredientCategoryName);
+  selectIngredientCategoryName(ingredientCategoryName: string) {
+    this.ingredientCategoryNameSelected.set(
+      ingredientCategoryName === this.ingredientCategoryNameSelected()
+        ? ''
+        : ingredientCategoryName,
+    );
   }
 
   selectIngredient(ingredientId: string) {
