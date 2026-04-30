@@ -26,6 +26,8 @@ export class IngredientFilterComponent {
   filterSelectedChange = output<SortKey>();
 
   options: SortKey[] = ['dateCreated', 'category', 'name'];
+  optionsReduced: SortKey[] = ['dateCreated', 'name'];
+
   optionSelected = signal<SortKey>(this.options[0]);
 
   /** Declaration of signals communicating with firestore */

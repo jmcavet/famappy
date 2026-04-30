@@ -65,6 +65,9 @@ export class IngredientCategoryBackendService {
     );
   }
 
+  // TODO: ingredientCategorySelected does NOT actually belong to this backend service
+  // TODO (or associated domain). It should be moved to some transitional state class.
+
   setSelectedIngredientCategory(category: IngredientType | undefined) {
     this.ingredientCategorySelected.set(category);
   }
