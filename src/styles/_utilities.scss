@@ -14,6 +14,23 @@
   .flex-end {
     @apply flex items-center justify-end;
   }
+
+  .stack-sm {
+    @apply flex flex-col gap-2;
+  }
+
+  .stack-md {
+    @apply flex flex-col gap-4;
+  }
+
+  .stack-lg {
+    @apply flex flex-col gap-6;
+  }
+
+  .stack-xl {
+    @apply flex flex-col gap-8;
+  }
+
   .flex-col-center {
     @apply flex flex-col items-center justify-center;
   }

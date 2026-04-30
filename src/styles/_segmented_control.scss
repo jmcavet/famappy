@@ -7,8 +7,7 @@
   .segmented-btn {
     @apply whitespace-nowrap py-2 text-sm font-medium text-center rounded-3xl
            text-neutral-700 hover:bg-neutral-100
-           dark:text-neutral-300 dark:hover:bg-neutral-700
-           transition-colors duration-150;
+           dark:text-neutral-300 dark:hover:bg-neutral-700;
   }
 
   /* Colors when activated */
