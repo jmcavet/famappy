@@ -3,7 +3,6 @@ import { IngredientCategoryBackendService } from '../../../../services/backend/i
 import { IngredientDomainFacade } from '../../../../domain-facades/ingredient.facade';
 import { IngredientAdderContext } from './ingredient-adder.component';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { numberValidator } from '../../../../shared/validators/form-validators';
 
 @Injectable()
 export class IngredientAdderFacade {
@@ -41,7 +40,7 @@ export class IngredientAdderFacade {
   private nameValue = signal<string>('');
 
   readonly form: FormGroup = this.formBuilder.group({
-    name: [1, [Validators.required, numberValidator]],
+    name: ['', [Validators.required, Validators.maxLength(40)]],
   });
 
   /* ================================
