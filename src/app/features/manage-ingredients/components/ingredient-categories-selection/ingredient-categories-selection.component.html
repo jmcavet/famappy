@@ -1,28 +1,23 @@
-<div class="flex flex-wrap items-center justify-start gap-2 mt-6 mx-2">
+<div class="flex-start flex-wrap gap-2 my-2">
   @for (ingredientCategory of ingredientCategories(); track $index) {
-    <button
-      class="ingredient-type"
-      [class.active]="
+    <app-chip
+      [selected]="
         ingredientCategorySelected()?.name === ingredientCategory.name
       "
-      (click)="
+      (toggle)="
         selectIngredientType(
           ingredientCategory,
           ingredientCategorySelected()?.name === ingredientCategory.name
         )
       "
+      >{{ ingredientCategory.name }}</app-chip
     >
-      {{ ingredientCategory.name }}
-    </button>
   }
 
   <app-button
-    icon="fa-solid fa-pen"
-    iconPos="left"
-    size="md"
+    variant="ghost"
     color="secondary"
-    btnStyle="text-based"
     routerLink="/manage-ingredient-categories"
-    >{{ linkText() }}</app-button
+    ><i class="fa-solid fa-plus mr-2 text-xl"></i>{{ linkText() }}</app-button
   >
 </div>

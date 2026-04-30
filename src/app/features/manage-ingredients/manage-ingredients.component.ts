@@ -1,4 +1,3 @@
-import { NgFor, NgIf } from '@angular/common';
 import {
   Component,
   computed,
@@ -26,17 +25,17 @@ import { IngredientAdderComponent } from './components/ingredient-adder/ingredie
 import { IngredientCategoriesSelectionComponent } from './components/ingredient-categories-selection/ingredient-categories-selection.component';
 import { IngredientFilterComponent } from './components/ingredient-filter/ingredient-filter.component';
 import { ModalService } from '../../shared/modal/modal.service';
+import { ButtonComponent } from '../../shared/ui/button/button.component';
 
 @Component({
   selector: 'app-manage-ingredients',
   imports: [
     FormsModule,
-    NgFor,
-    NgIf,
     LoadingComponent,
     IngredientAdderComponent,
     IngredientCategoriesSelectionComponent,
     IngredientFilterComponent,
+    ButtonComponent,
   ],
   templateUrl: './manage-ingredients.component.html',
   styleUrl: './manage-ingredients.component.css',

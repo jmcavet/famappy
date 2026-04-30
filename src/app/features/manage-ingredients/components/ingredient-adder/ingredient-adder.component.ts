@@ -13,20 +13,20 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { NgIf } from '@angular/common';
 import { PickerModule } from '@ctrl/ngx-emoji-mart';
 import { LoadingComponent } from '../../../../shared/components/loading/loading.component';
 import { IngredientBackendService } from '../../../../services/backend/ingredient.service';
 import { IngredientCategoryBackendService } from '../../../../services/backend/ingredient-category.service';
 import { IngredientType } from '../../../../models/ingredient-type.model';
+import { ButtonComponent } from '../../../../shared/ui/button/button.component';
 
 @Component({
   selector: 'app-ingredient-adder',
   imports: [
     FormsModule,
     ReactiveFormsModule,
-    NgIf,
     LoadingComponent,
+    ButtonComponent,
     PickerModule,
   ],
   templateUrl: './ingredient-adder.component.html',
