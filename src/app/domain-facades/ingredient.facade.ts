@@ -19,10 +19,15 @@ export class IngredientDomainFacade {
   readonly ingredientsLoading = this.ingredientBackendService.loading;
   readonly ingredientsUpdating = this.ingredientBackendService.updating;
   readonly ingredientsDeleting = this.ingredientBackendService.deleting;
+  readonly ingredientsSaving = this.ingredientBackendService.saving;
 
   readonly dbIngredientsNames = computed(() =>
     this.dbIngredients().map((ing) => ing.name),
   );
+
+  saveIngredient(propertiesToSave: object) {
+    this.ingredientBackendService.saveIngredientIntoStore(propertiesToSave);
+  }
 
   deleteIngredient(ingredientId: string) {
     this.ingredientBackendService.deleteIngredientfromStore(ingredientId);
