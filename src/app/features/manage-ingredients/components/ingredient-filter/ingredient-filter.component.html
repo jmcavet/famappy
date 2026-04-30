@@ -1,37 +1,8 @@
-<div class="flex items-center justify-end gap-2 mr-4 my-6">
-  <button
-    class="filter"
-    [class.active]="filterSelected() === 'dateCreated'"
-    (click)="selectFilter('dateCreated')"
+<div class="flex-end gap-2 my-2">
+  <app-segmented-control
+    [options]="ingredientCategorySelected() ? optionsReduced : options"
+    [selectedInput]="optionSelected()"
+    (selectionChange)="selectFilter($event)"
   >
-    Date @if (isAscending()?.dateCreated) {
-    <i class="fa-solid fa-arrow-down-wide-short"></i>
-    } @else {
-    <i class="fa-solid fa-arrow-up-wide-short"></i>
-    }
-  </button>
-  @if (!ingredientCategorySelected()) {
-  <button
-    class="filter"
-    [class.active]="filterSelected() === 'category'"
-    (click)="selectFilter('category')"
-  >
-    Category @if (isAscending()?.category) {
-    <i class="fa-solid fa-arrow-down-wide-short"></i>
-    } @else {
-    <i class="fa-solid fa-arrow-up-wide-short"></i>
-    }
-  </button>
-  }
-  <button
-    class="filter"
-    [class.active]="filterSelected() === 'name'"
-    (click)="selectFilter('name')"
-  >
-    Name @if (isAscending()?.name) {
-    <i class="fa-solid fa-arrow-down-wide-short"></i>
-    } @else {
-    <i class="fa-solid fa-arrow-up-wide-short"></i>
-    }
-  </button>
+  </app-segmented-control>
 </div>

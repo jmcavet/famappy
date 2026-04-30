@@ -1,98 +1,100 @@
-<div class="container-grid">
-  @if (showMessageNoCategories()) {
-    <div class="message-no-category">
-      <p class="dark:text-white">
-        You have not specified any ingredient category yet!
-      </p>
-      <app-ingredient-categories-selection-page />
-    </div>
-  }
-  <app-ingredient-categories-selection-page />
-
-  <app-ingredient-adder [existingIngredientNames]="existingIngredientNames()" />
-
-  <app-ingredient-filter
-    [(filterSelected)]="filterSelected"
-    [isAscending]="isAscending()"
-    (filterSelectedChange)="onFilterSelected($event)"
-  />
-
-  <ul>
-    <li
-      *ngFor="let ingredient of ingredientsFiltered(); let i = index"
-      class="flex items-center justify-between bg-white dark:bg-gray-800 mb-2 px-2"
-    >
-      <ng-container *ngIf="editIngredientIndex() !== i; else editMode">
-        <div
-          class="dark:text-gray-50 my-2 flex items-center justify-start gap-1 w-full"
-        >
-          <div
-            class="italic w-1/3 sm:w-1/4 lg:w-1/6 text-gray-400 dark:text-gray-500"
-          >
-            {{ ingredient.categoryName }}
-          </div>
-          <div class="flex-grow">{{ ingredient.name }}</div>
-        </div>
-      </ng-container>
-
-      <ng-template #editMode>
-        <div class="flex items-center justify-start gap-1 w-full">
-          <select
-            class="w-1/3 sm:w-1/4 lg:w-1/6 py-2"
-            [(ngModel)]="ingredient.categoryName"
-            [ngModelOptions]="{ standalone: true }"
-            (change)="onCategoryChange($event)"
-          >
-            @for (ingredientCategory of ingredientCategories(); track $index) {
-              <option [value]="ingredientCategory.name">
-                {{ ingredientCategory.name }}
-              </option>
-            }
-          </select>
-
-          <input
-            #editInput
-            type="text"
-            [(ngModel)]="ingredient.name"
-            [ngModelOptions]="{ standalone: true }"
-            (keydown)="onEditPressEnterIngredient($event, ingredient)"
-          />
-        </div>
-      </ng-template>
-
-      <div class="flex items-center justify-between gap-2">
-        <ng-container *ngIf="editIngredientIndex() !== i">
-          <button type="button" (click)="editIngredient(i, ingredient)">
-            <i
-              class="fa-regular fa-pen-to-square text-primary-600 dark:text-primary-500 text-xl"
-            ></i>
-          </button>
-        </ng-container>
-
-        <ng-container *ngIf="editIngredientIndex() === i">
-          <button type="button" (click)="onValidateUpdate(ingredient)">
-            <i
-              class="fa-solid fa-check text-green-600 dark:text-success-500 text-xl"
-            ></i>
-          </button>
-        </ng-container>
-
-        <button
-          type="button"
-          class="bg-transparent"
-          (click)="openDeleteModal($event, ingredient.id)"
-        >
-          <i
-            class="fa-regular fa-trash-can text-danger-600 dark:text-danger-500 text-xl"
-          ></i>
-        </button>
-      </div>
-    </li>
-  </ul>
-</div>
-
-<div class="flex flex-col items-center">
-  @if (pageIsLoading()) {
+@if (pageIsLoading()) {
+  <div class="flex flex-col items-center">
     <app-loading />
-  }
-</div>
+  </div>
+} @else {
+  <div class="space-y-4 lg:max-w-[1000px] mx-auto">
+    <header class="sticky-top page-full-width surface-1 px-2 sm:px-6 stack-md">
+      @if (showMessageNoCategories()) {
+        <div class="message-no-category">
+          <p class="dark:text-white">
+            You have not specified any ingredient category yet!
+          </p>
+          <app-ingredient-categories-selection-page />
+        </div>
+      }
+      <app-ingredient-categories-selection-page />
+
+      <app-ingredient-adder
+        [existingIngredientNames]="existingIngredientNames()"
+      />
+
+      <app-ingredient-filter
+        [(filterSelected)]="filterSelected"
+        [isAscending]="isAscending()"
+        (filterSelectedChange)="onFilterSelected($event)"
+      />
+    </header>
+
+    <div class="space-y-4">
+      @for (ingredient of ingredientsFiltered(); track $index; let i = $index) {
+        <div class="flex-between surface-1 rounded-md px-2">
+          @if (editIngredientIndex() !== i) {
+            <div class="my-2 flex-start gap-1 w-full">
+              <div
+                class="italic w-1/3 sm:w-1/4 lg:w-1/6 text-neutral-400 dark:text-neutral-500"
+              >
+                {{ ingredient.categoryName }}
+              </div>
+              <div class="flex-grow">{{ ingredient.name }}</div>
+            </div>
+          } @else {
+            <div class="flex-start gap-2 w-full">
+              <select
+                class="surface-2 w-1/3 sm:w-1/4 lg:w-1/6 py-2"
+                [(ngModel)]="ingredient.categoryName"
+                [ngModelOptions]="{ standalone: true }"
+                (change)="onCategoryChange($event)"
+              >
+                @for (
+                  ingredientCategory of ingredientCategories();
+                  track $index
+                ) {
+                  <option [value]="ingredientCategory.name">
+                    {{ ingredientCategory.name }}
+                  </option>
+                }
+              </select>
+
+              <input
+                #editInput
+                type="text"
+                class="surface-2 appearance-none p-2 focus:outline-none"
+                [(ngModel)]="ingredient.name"
+                [ngModelOptions]="{ standalone: true }"
+                (keydown)="onEditPressEnterIngredient($event, ingredient)"
+              />
+            </div>
+          }
+
+          <div class="flex items-center justify-between gap-2">
+            @if (editIngredientIndex() !== i) {
+              <app-button
+                variant="ghost"
+                size="sm"
+                (click)="editIngredient(i, ingredient)"
+                ><i class="fa-regular fa-pen-to-square text-xl"></i
+              ></app-button>
+            } @else {
+              <app-button
+                variant="ghost"
+                size="sm"
+                color="success"
+                (click)="onValidateUpdate(ingredient)"
+                ><i class="fa-solid fa-check text-xl"></i
+              ></app-button>
+            }
+
+            <app-button
+              variant="ghost"
+              size="sm"
+              color="danger"
+              (click)="openDeleteModal($event, ingredient.id)"
+              ><i class="fa-regular fa-trash-can text-xl"></i
+            ></app-button>
+          </div>
+        </div>
+      }
+    </div>
+  </div>
+}

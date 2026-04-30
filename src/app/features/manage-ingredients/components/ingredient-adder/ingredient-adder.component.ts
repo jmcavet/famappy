@@ -1,99 +1,54 @@
-import {
-  Component,
-  computed,
-  inject,
-  input,
-  signal,
-  Signal,
-} from '@angular/core';
-import {
-  FormBuilder,
-  FormGroup,
-  FormsModule,
-  ReactiveFormsModule,
-  Validators,
-} from '@angular/forms';
-import { NgIf } from '@angular/common';
+import { Component, inject, input, Signal } from '@angular/core';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { PickerModule } from '@ctrl/ngx-emoji-mart';
 import { LoadingComponent } from '../../../../shared/components/loading/loading.component';
-import { IngredientBackendService } from '../../../../services/backend/ingredient.service';
-import { IngredientCategoryBackendService } from '../../../../services/backend/ingredient-category.service';
-import { IngredientType } from '../../../../models/ingredient-type.model';
+import { ButtonComponent } from '../../../../shared/ui/button/button.component';
+import { IngredientAdderFacade } from './ingredient-adder.facade';
+
+export interface IngredientAdderContext {
+  existingIngredientNames: Signal<any>;
+}
 
 @Component({
   selector: 'app-ingredient-adder',
   imports: [
     FormsModule,
     ReactiveFormsModule,
-    NgIf,
     LoadingComponent,
+    ButtonComponent,
     PickerModule,
   ],
+  providers: [IngredientAdderFacade],
   templateUrl: './ingredient-adder.component.html',
   styleUrl: './ingredient-adder.component.css',
 })
 export class IngredientAdderComponent {
-  private fb = inject(FormBuilder);
+  existingIngredientNames = input.required<string[]>();
 
-  /** Services */
-  private ingredientService = inject(IngredientBackendService);
-  private ingredientCategoryService = inject(IngredientCategoryBackendService);
+  private facade = inject(IngredientAdderFacade);
 
-  /** Get the ingredient category selected by user */
-  ingredientCategorySelected: Signal<IngredientType | undefined> =
-    this.ingredientCategoryService.ingredientCategorySelected;
+  private ctx: IngredientAdderContext = {
+    existingIngredientNames: this.existingIngredientNames,
+  };
 
-  /** Declaration of signals communicating with firestore */
-  readonly ingredientsAreSaving = this.ingredientService.saving;
-
-  /** Declaration of local signals */
-  nameValue = signal<string>('');
-
-  existingIngredientNames = input<string[]>([]);
-
-  form: FormGroup = this.fb.group({
-    name: ['', [Validators.required, Validators.maxLength(40)]],
-  });
+  readonly form = this.facade.form;
+  readonly ingredientCategorySelected = this.facade.ingredientCategorySelected;
+  readonly ingredientsAreSaving = this.facade.ingredientsSaving;
+  readonly pageIsLoading = this.facade.pageIsLoading;
+  readonly nameAlreadyExists = this.facade.nameAlreadyExists;
+  readonly buttonIsDisabled = this.facade.buttonIsDisabled;
 
   ngOnInit() {
-    this.form.get('name')?.valueChanges.subscribe((value) => {
-      this.nameValue.set(value);
-    });
+    this.facade.connect(this.ctx);
+
+    this.facade.subscribeForm();
   }
 
-  readonly pageIsLoading = computed(() => this.ingredientsAreSaving());
-
-  readonly nameAlreadyExists = computed(() => {
-    return this.existingIngredientNames().includes(this.nameValue());
-  });
-
-  readonly buttonIsDisabled = computed(() => {
-    return (
-      !this.nameValue() ||
-      this.nameAlreadyExists() ||
-      !this.ingredientCategorySelected()
-    );
-  });
-
   onIngredientEnterPress(event: KeyboardEvent) {
-    if (event.key === 'Enter') {
-      event.preventDefault();
-      this.addIngredient();
-    }
+    this.facade.ingredientEnterPress(event);
   }
 
   async addIngredient() {
-    if (!this.ingredientCategorySelected()) {
-      return;
-    }
-
-    const propertiesToSave = {
-      categoryId: this.ingredientCategorySelected()?.id,
-      name: this.nameValue(),
-    };
-
-    this.ingredientService.saveIngredientIntoStore(propertiesToSave);
-
-    this.form.get('name')?.reset();
+    this.facade.addIngredient();
   }
 }

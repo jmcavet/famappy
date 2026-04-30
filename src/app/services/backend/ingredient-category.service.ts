@@ -25,7 +25,9 @@ export class IngredientCategoryBackendService {
 
   /** Make the signal readonly, it avoids accidental mutations outside the service. */
   readonly ingredientCategories = signal<IngredientCategoryDocInBackend[]>([]);
-  ingredientCategorySelected = signal<IngredientType | undefined>(undefined);
+  readonly ingredientCategorySelected = signal<IngredientType | undefined>(
+    undefined,
+  );
 
   private readonly _loading = signal<boolean>(true);
   readonly loading = this._loading.asReadonly();
@@ -62,6 +64,9 @@ export class IngredientCategoryBackendService {
       },
     );
   }
+
+  // TODO: ingredientCategorySelected does NOT actually belong to this backend service
+  // TODO (or associated domain). It should be moved to some transitional state class.
 
   setSelectedIngredientCategory(category: IngredientType | undefined) {
     this.ingredientCategorySelected.set(category);
