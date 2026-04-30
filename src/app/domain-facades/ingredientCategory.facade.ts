@@ -24,6 +24,9 @@ export class IngredientCategoryDomainFacade {
   readonly ingredientCategoriesDeleting =
     this.ingredientCategoryBackendService.deleting;
 
+  ingredientCategorySelected =
+    this.ingredientCategoryBackendService.ingredientCategorySelected;
+
   public saveRecipeCategory(ingredientCategoryName: string) {
     this.ingredientCategoryBackendService.saveRecipeCategoryIntoStore(
       ingredientCategoryName,
