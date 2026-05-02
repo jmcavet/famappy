@@ -25,8 +25,8 @@ export class IngredientFilterComponent {
   isAscending = input<IsAcending>();
   filterSelectedChange = output<SortKey>();
 
-  options: SortKey[] = ['dateCreated', 'category', 'name'];
-  optionsReduced: SortKey[] = ['dateCreated', 'name'];
+  options: SortKey[] = ['name', 'dateCreated', 'category'];
+  optionsReduced: SortKey[] = ['name', 'dateCreated'];
 
   optionSelected = signal<SortKey>(this.options[0]);
 
