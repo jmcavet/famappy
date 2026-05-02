@@ -1,4 +1,16 @@
 <div class="flex-start flex-wrap gap-2 my-2">
+  <app-button
+    size="sm"
+    color="secondary"
+    routerLink="/manage-ingredient-categories"
+  >
+    @if (linkText().length > 0) {
+      <i class="fa-solid fa-plus mr-2 text-xl"></i>
+      {{ linkText() }}
+    } @else {
+      <i class="fa-solid fa-plus text-xl"></i>
+    }
+  </app-button>
   @for (cat of ingredientCategoriesSorted(); track $index) {
     <app-chip
       [selected]="ingredientCategorySelected()?.name === cat.name"
@@ -11,18 +23,4 @@
       >{{ cat.name }}</app-chip
     >
   }
-
-  <app-button
-    variant="outline"
-    size="sm"
-    color="secondary"
-    routerLink="/manage-ingredient-categories"
-  >
-    @if (linkText().length > 0) {
-      <i class="fa-solid fa-plus mr-2 text-xl"></i>
-      {{ linkText() }}
-    } @else {
-      <i class="fa-solid fa-plus text-xl"></i>
-    }
-  </app-button>
 </div>
