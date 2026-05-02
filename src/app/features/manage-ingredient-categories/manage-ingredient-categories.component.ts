@@ -2,10 +2,11 @@ import { Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { LoadingComponent } from '../../shared/components/loading/loading.component';
 import { ManageIngredientCategoriesFacade } from './manage-ingredient-categories.facade';
+import { ButtonComponent } from '../../shared/ui/button/button.component';
 
 @Component({
   selector: 'app-ingredient-categories-selection-page',
-  imports: [FormsModule, LoadingComponent],
+  imports: [FormsModule, ButtonComponent, LoadingComponent],
   providers: [ManageIngredientCategoriesFacade],
   templateUrl: './manage-ingredient-categories.component.html',
   styleUrl: './manage-ingredient-categories.component.css',
@@ -16,26 +17,17 @@ export class ManageIngredientCategoriesComponent {
 
   /** Declaration of signals communicating with firestore */
   readonly dbIngredientCategories = this.facade.dbIngredientCategories;
-  readonly canShowPage = this.facade.canShowPage;
+  readonly pageIsLoading = this.facade.pageIsLoading;
 
-  openAddIngredientCategoryInputModal(event: MouseEvent) {
-    this.facade.openAddIngredientCategoryInputModal(event);
+  openAddModal(event: MouseEvent) {
+    this.facade.openAddModal(event);
   }
 
-  openUpdateIngredientCategoryInputModal(
-    event: MouseEvent,
-    ingredientCategory: any,
-  ) {
-    this.facade.openUpdateIngredientCategoryInputModal(
-      event,
-      ingredientCategory,
-    );
+  openUpdateModal(event: MouseEvent, ingredientCategory: any) {
+    this.facade.openUpdateModal(event, ingredientCategory);
   }
 
-  openDeleteIngredientCategoryModal(
-    event: MouseEvent,
-    ingredientCategoryId: string,
-  ) {
-    this.facade.openDeleteIngredientCategoryModal(event, ingredientCategoryId);
+  openDeleteModal(event: MouseEvent, ingredientCategoryId: string) {
+    this.facade.openDeleteModal(event, ingredientCategoryId);
   }
 }
