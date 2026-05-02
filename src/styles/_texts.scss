@@ -1,12 +1,12 @@
 @layer components {
   /* Main body text */
   .text-body {
-    @apply text-sm md:text-base leading-normal md:leading-relaxed;
+    @apply text-base leading-6;
   }
 
   /* Section titles */
   .text-title {
-    @apply text-lg md:text-xl font-semibold leading-snug;
+    @apply text-xl md:text-2xl font-semibold leading-tight tracking-tight;
   }
 
   /* Smaller subtitle */
@@ -16,10 +16,10 @@
 
   /* Small helper text */
   .text-caption {
-    @apply text-xs leading-normal;
+    @apply text-xs text-neutral-500 leading-5;
   }
 
   .text-button {
-    @apply text-sm font-semibold tracking-wide leading-none;
+    @apply text-sm font-medium leading-none;
   }
 }

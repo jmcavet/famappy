@@ -1,46 +1,44 @@
-<ul>
-  @for (ingredientCategory of dbIngredientCategories(); track $index) {
-    <li>
-      <div>{{ ingredientCategory.name }}</div>
-
-      <div class="btns-container">
-        <button
-          type="button"
-          (click)="
-            openUpdateIngredientCategoryInputModal($event, ingredientCategory)
-          "
-        >
-          <i
-            class="fa-regular fa-pen-to-square text-primary-600 dark:text-primary-500 text-xl"
-          ></i>
-        </button>
-
-        <button
-          type="button"
-          (click)="
-            openDeleteIngredientCategoryModal($event, ingredientCategory.id)
-          "
-        >
-          <i
-            class="fa-regular fa-trash-can text-danger-600 dark:text-danger-500 text-xl"
-          ></i>
-        </button>
-      </div>
-    </li>
-  }
-</ul>
-
-<div class="fixed bottom-20 left-1/2 -translate-x-1/2 z-50">
-  <button
-    class="bg-secondary-600 rounded-full p-2 w-12 h-12 text-white shadow-lg"
-    (click)="openAddIngredientCategoryInputModal($event)"
-  >
-    <i class="fa-solid fa-plus fa-xl"></i>
-  </button>
-</div>
-
-<div class="flex flex-col items-center">
-  @if (canShowPage()) {
+@if (pageIsLoading()) {
+  <div class="flex flex-col items-center">
     <app-loading />
-  }
-</div>
+  </div>
+} @else {
+  <div class="lg:max-w-[1000px] mx-auto stack-md">
+    <header
+      class="sticky-top page-full-width surface-nav text-title text-center py-8"
+    >
+      Manage ingredient categories
+    </header>
+
+    <div class="flex flex-col gap-6">
+      @for (ingredientCategory of dbIngredientCategories(); track $index) {
+        <div class="surface-1 flex-between p-2 rounded-md">
+          <div>{{ ingredientCategory.name }}</div>
+
+          <div class="flex-between gap-0">
+            <app-button
+              variant="ghost"
+              size="sm"
+              (click)="openUpdateModal($event, ingredientCategory)"
+              ><i class="fa-regular fa-pen-to-square text-xl"></i
+            ></app-button>
+
+            <app-button
+              variant="ghost"
+              size="sm"
+              color="danger"
+              (click)="openDeleteModal($event, ingredientCategory.id)"
+              ><i class="fa-regular fa-trash-can text-xl"></i
+            ></app-button>
+          </div>
+        </div>
+      }
+    </div>
+  </div>
+
+  <div class="fixed bottom-20 left-1/2 -translate-x-1/2 z-50">
+    <app-button color="secondary" (click)="openAddModal($event)">
+      <i class="fa-solid fa-plus text-xl"></i>
+    </app-button>
+  </div>
+}

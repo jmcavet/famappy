@@ -9,13 +9,14 @@ import { IngredientCategoryDomainFacade } from '../../domain-facades/ingredientC
 @Injectable()
 export class ManageIngredientCategoriesFacade {
   /* ================================
-   * Dependencies (injected)
+   * Dependencies
    * ================================ */
+  private modalService = inject(ModalService);
+
   /** Domain access (business state & actions) */
   private ingredientCategoryDomainFacade = inject(
     IngredientCategoryDomainFacade,
   );
-  private modalService = inject(ModalService);
 
   /** Transitional state */
   private recipeService = inject(RecipeStateService);
@@ -35,9 +36,10 @@ export class ManageIngredientCategoriesFacade {
     this.ingredientCategoryDomainFacade.ingredientCategoriesDeleting;
 
   /* ================================
-   * Computed signals
+   * Local derived state
    * ================================ */
-  readonly canShowPage = computed(() => {
+  /** Public signals */
+  readonly pageIsLoading = computed(() => {
     return (
       this.ingredientCategoriesLoading() ||
       this.ingredientCategoriesSaving() ||
@@ -47,10 +49,9 @@ export class ManageIngredientCategoriesFacade {
   });
 
   /* ================================
-   * Methods
+   * PUBLIC API
    * ================================ */
-  /** Public UI methods */
-  public openAddIngredientCategoryInputModal(event: MouseEvent) {
+  openAddModal(event: MouseEvent) {
     event.stopPropagation();
 
     this.modalService.open(
@@ -71,10 +72,7 @@ export class ManageIngredientCategoriesFacade {
     );
   }
 
-  public openUpdateIngredientCategoryInputModal(
-    event: MouseEvent,
-    ingredientCategory: any,
-  ) {
+  openUpdateModal(event: MouseEvent, ingredientCategory: any) {
     event.stopPropagation();
 
     this.modalService.open(
@@ -99,10 +97,7 @@ export class ManageIngredientCategoriesFacade {
     );
   }
 
-  openDeleteIngredientCategoryModal(
-    event: MouseEvent,
-    ingredientCategoryId: string,
-  ) {
+  openDeleteModal(event: MouseEvent, ingredientCategoryId: string) {
     event.stopPropagation();
 
     this.modalService.open(
@@ -119,7 +114,9 @@ export class ManageIngredientCategoriesFacade {
     );
   }
 
-  /** Private methods */
+  /* ================================
+   * PRIVATE HELPERS
+   * ================================ */
   private async addIngredientCategory(ingredientCategoryName: string) {
     this.ingredientCategoryDomainFacade.saveRecipeCategory(
       ingredientCategoryName,

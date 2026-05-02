@@ -14,10 +14,6 @@ li {
   @apply mb-2 flex items-center justify-start w-full;
 }
 
-.btns-container {
-  @apply flex items-center justify-between gap-2 ml-4;
-}
-
 .btn-add {
   @apply border border-primary-600 text-primary-600 dark:bg-primary-500 rounded w-10 h-10;
 }

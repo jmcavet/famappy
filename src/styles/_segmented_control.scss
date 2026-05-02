@@ -5,7 +5,7 @@
   }
 
   .segmented-btn {
-    @apply whitespace-nowrap py-2 text-sm font-medium text-center rounded-3xl
+    @apply whitespace-nowrap py-2 text-base font-medium text-center rounded-3xl
            text-neutral-700 hover:bg-neutral-100
            dark:text-neutral-300 dark:hover:bg-neutral-700;
   }
