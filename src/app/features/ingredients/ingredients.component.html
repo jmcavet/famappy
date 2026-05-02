@@ -1,6 +1,6 @@
 <div class="space-y-4 lg:max-w-[1000px] mx-auto">
   <header
-    class="sticky-top page-full-width surface-1 px-2 sm:px-6 py-4 space-y-4"
+    class="sticky-top page-full-width surface-1 px-2 sm:px-6 py-4 space-y-4 mb-8"
   >
     <div class="relative">
       <input
@@ -30,6 +30,7 @@
         track ingredientCategoryName
       ) {
         <app-chip
+          size="sm"
           [selected]="
             ingredientCategoryNameSelected() === ingredientCategoryName
           "
@@ -40,7 +41,7 @@
     </div>
   </header>
 
-  <div class="section-scroll surface-1 px-2 py-4 rounded-lg space-y-4">
+  <div class="flex flex-col gap-6 page-full-width">
     @for (
       ingredient of ingredientsFiltered();
       track ingredient.id;
@@ -48,7 +49,7 @@
     ) {
       <div
         (click)="selectIngredient(ingredient.id)"
-        class="surface-2 surface-interactive p-2 flex-start w-full"
+        class="surface-1 surface-interactive p-3 flex-start w-full rounded-none sm:rounded-md"
       >
         <div
           class="italic w-1/3 sm:w-1/4 lg:w-1/6 text-neutral-400 dark:text-neutral-500"
