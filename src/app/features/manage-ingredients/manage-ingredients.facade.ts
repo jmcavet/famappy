@@ -49,9 +49,9 @@ export class ManageIngredientsFacade {
    * ================================ */
   /** Signals rendered on UI */
   editIngredientIndex = signal<number | null>(null); // Track edit mode for ingredients
-  filterSelected = signal<SortKey>('dateCreated');
+  filterSelected = signal<SortKey>('name');
   isAscending = signal<IsAcending>({
-    name: false,
+    name: true,
     category: false,
     dateCreated: false,
   });
@@ -90,6 +90,7 @@ export class ManageIngredientsFacade {
     const categorySelected =
       this.ingredientCategoryDomainFacade.ingredientCategorySelected();
     const filter = this.filterSelected();
+    console.log('filter: ', filter);
     const ascending = this.isAscending();
 
     if (!ingredients.length || !categories.length) return [];
@@ -105,6 +106,7 @@ export class ManageIngredientsFacade {
           (ingredient) => ingredient.categoryId === categorySelected.id,
         )
       : ingredientsWithCategoryName;
+
     return filtered.sort((a, b) => {
       if (filter === 'name') {
         return ascending.name
