@@ -1,3 +1,15 @@
+.image-container {
+  @apply rounded-lg overflow-hidden shadow-md;
+}
+
+.card-image-empty {
+  @apply w-full h-40 bg-primary-100 dark:bg-primary-900 font-bold text-3xl;
+}
+
+.card-image-empty i {
+  @apply text-primary-200 dark:text-primary-dark;
+}
+
 section {
   @apply space-y-4 p-2 sm:p-4 rounded-xl;
 }

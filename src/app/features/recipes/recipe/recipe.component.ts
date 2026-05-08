@@ -23,12 +23,26 @@ import {
   MealCategoryDocInBackend,
 } from '../../../models/cuisine.model';
 import { RecipeCategoryBackendService } from '../../../services/backend/recipe-category.service';
-import { CommonModule, NgIf } from '@angular/common';
+import { CommonModule, Location, NgIf } from '@angular/common';
 import { ModalService } from '../../../shared/modal/modal.service';
+import { ButtonComponent } from '../../../shared/ui/button/button.component';
+import { MinToHourPipe } from '../../../shared/pipes/mintohour.pipe';
+import { CapitalizePipe } from '../../../shared/pipes/capitalize.pipe';
+import { TabsComponent } from '../../new-recipe/components/tabs/tabs.component';
+import { TabComponent } from '../../new-recipe/components/tab/tab.component';
 
 @Component({
   selector: 'app-recipe',
-  imports: [LoadingComponent, IngredientQuantityPipe, CommonModule],
+  imports: [
+    MinToHourPipe,
+    LoadingComponent,
+    IngredientQuantityPipe,
+    TabsComponent,
+    TabComponent,
+    CommonModule,
+    ButtonComponent,
+    CapitalizePipe,
+  ],
   templateUrl: './recipe.component.html',
   styleUrl: './recipe.component.css',
 })
@@ -43,6 +57,7 @@ export class RecipeComponent {
   private recipeCategoryBackendService = inject(RecipeCategoryBackendService);
   private cuisineService = inject(CuisineBackendService);
   private toastService = inject(ToastService);
+  private location = inject(Location);
 
   /** Declaration of signals communicating with firestore */
   readonly dbCuisines: Signal<CuisineDocInBackend[]> =
@@ -72,6 +87,18 @@ export class RecipeComponent {
       this.servings.set(this.recipe().servings);
     });
   }
+
+  goBack() {
+    this.location.back();
+  }
+
+  readonly totalTime = computed(() => {
+    const recipe = this.recipe();
+    console.log('RECIPE: ', recipe);
+    if (!recipe) return 0;
+
+    return Number(recipe.preparationTime) + Number(recipe.cookingTime);
+  });
 
   readonly pageIsLoading = computed(() => this.recipeIsBeingDeleted());
 
@@ -223,6 +250,10 @@ export class RecipeComponent {
     }
     return url;
   }
+
+  sortedIngredients = computed(() =>
+    this.recipe().ingredients.sort((a, b) => a.name.localeCompare(b.name)),
+  );
 
   commentLines = computed(() => {
     const lines = this.recipe()

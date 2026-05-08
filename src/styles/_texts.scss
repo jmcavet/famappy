@@ -1,22 +1,22 @@
 @layer components {
   /* Main body text */
   .text-body {
-    @apply text-base leading-6;
+    @apply text-base font-normal leading-6;
   }
 
   /* Section titles */
   .text-title {
-    @apply text-xl md:text-2xl font-semibold leading-tight tracking-tight;
+    @apply text-2xl md:text-3xl font-semibold leading-tight tracking-tight;
   }
 
   /* Smaller subtitle */
   .text-subtitle {
-    @apply text-base md:text-lg font-medium leading-snug;
+    @apply text-lg md:text-xl font-medium leading-snug;
   }
 
   /* Small helper text */
   .text-caption {
-    @apply text-xs text-neutral-500 leading-5;
+    @apply text-sm font-normal leading-normal;
   }
 
   .text-button {
