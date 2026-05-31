@@ -2,10 +2,11 @@ import { Component, inject } from '@angular/core';
 import { CapitalizePipe } from '../../shared/pipes/capitalize.pipe';
 import { ManageMealCategoryFacade } from './manage-meal-category.facade';
 import { LoadingComponent } from '../../shared/layout/overlays/loading/loading.component';
+import { FloatingButtonComponent } from '../../shared/layout/shell/floating-button/floating-button.component';
 
 @Component({
   selector: 'app-manage-meal-categories',
-  imports: [CapitalizePipe, LoadingComponent],
+  imports: [CapitalizePipe, LoadingComponent, FloatingButtonComponent],
   providers: [ManageMealCategoryFacade],
   templateUrl: './manage-meal-categories.component.html',
   styleUrl: './manage-meal-categories.component.css',

@@ -102,13 +102,11 @@
       @if (viewMode() === "Card") {
         <div class="cards-container">
           @for (recipe of recipesFilteredByCategory(); track $index) {
-            <div
-              class="card surface-2"
-              [class.active]="selectedRecipes().includes(recipe)"
+            <app-recipe-card
+              [recipeState]="recipe"
               (click)="toggleRecipe(recipe)"
-            >
-              <app-recipe-card [recipeState]="recipe"></app-recipe-card>
-            </div>
+              [activated]="selectedRecipes().includes(recipe)"
+            ></app-recipe-card>
           }
         </div>
       } @else {
@@ -150,13 +148,5 @@
 </div>
 
 @if (selectedRecipes().length > 0) {
-  <div class="fixed bottom-32 left-1/2 -translate-x-1/2 z-50">
-    <button
-      class="bg-secondary-600 rounded-full p-2 w-12 h-12 text-white shadow-lg"
-      [disabled]="selectedRecipes().length === 0"
-      (click)="addRecipesToCart()"
-    >
-      <i class="fa-solid fa-plus fa-xl"></i>
-    </button>
-  </div>
+  <app-floating-button (clicked)="addRecipesToCart()"></app-floating-button>
 }

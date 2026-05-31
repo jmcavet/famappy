@@ -4,7 +4,7 @@
     shape="pill"
     [routerLink]="routerLink()"
     [shadow]="true"
-    (click)="clicked.emit()"
+    (click)="clicked.emit($event)"
     [disabled]="disabled()"
   >
     <div class="h-5 w-5">

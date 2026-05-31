@@ -3,13 +3,9 @@ import {
   CuisineDocInBackend,
   RecipeCategoryDocInBackend,
 } from '../../../models/cuisine.model';
-import {
-  Difficulty,
-  Frequency,
-  MealFilterState,
-  Season,
-} from './mealFilter.model';
+import { Frequency, MealFilterState, Season } from './mealFilter.model';
 import { RecipeWithId } from '../../recipes/components/recipe-card/recipe.model';
+import { Difficulty } from '../../../models/recipe.model';
 
 @Injectable({
   providedIn: 'root',

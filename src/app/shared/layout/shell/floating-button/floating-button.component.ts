@@ -17,5 +17,5 @@ export class FloatingButtonComponent {
   routerLink = input<string | any[]>();
   icon = input<string>('fa-plus');
   disabled = input<boolean>(false);
-  clicked = output<void>();
+  clicked = output<MouseEvent>();
 }

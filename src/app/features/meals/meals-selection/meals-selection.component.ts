@@ -13,6 +13,7 @@ import { ChipComponent } from '../../../shared/ui/chip/chip.component';
 import { SegmentedControlComponent } from '../../../shared/ui/segmented-control/segmented-control.component';
 import { SelectionViewMode } from '../state/mealSelection.model';
 import { ButtonComponent } from '../../../shared/ui/button/button.component';
+import { FloatingButtonComponent } from '../../../shared/layout/shell/floating-button/floating-button.component';
 
 @Component({
   selector: 'app-meals-selection',
@@ -26,6 +27,7 @@ import { ButtonComponent } from '../../../shared/ui/button/button.component';
     ButtonComponent,
     ChipComponent,
     SegmentedControlComponent,
+    FloatingButtonComponent,
   ],
   templateUrl: './meals-selection.component.html',
   styleUrl: './meals-selection.component.css',

@@ -1,11 +1,50 @@
-@if (canShowPage()) {
-  <div class="flex flex-col items-center">
-    <app-loading />
+<!-- 
+    <app-container maxSize="md" class="bg-blue-800">
+      <app-stack alignTest="start" gap="lg">
+        <button class="bg-rose-200">Test Button 1</button>
+        <button class="bg-violet-200">Test Button number 2</button>
+      </app-stack>
+    </app-container>
+
+    <app-container maxSize="md" class="bg-blue-800">
+      <app-stack alignTest="center" gap="lg">
+        <button class="bg-rose-200">Test Button 1</button>
+        <button class="bg-violet-200">Test Button number 2</button>
+      </app-stack>
+    </app-container>
+
+    <app-container maxSize="md" class="bg-blue-800">
+      <app-stack alignTest="end" gap="lg">
+        <button class="bg-rose-200">Test Button 1</button>
+        <button class="bg-violet-200">Test Button number 2</button>
+      </app-stack>
+    </app-container>
+
+    <app-container maxSize="md" class="bg-blue-800">
+      <app-stack alignTest="stretch" gap="lg">
+        <button class="bg-rose-200">Test Button 1</button>
+        <button class="bg-violet-200">Test Button number 2</button>
+        <app-inline justify="end">
+          <button class="bg-green-200">Test Button 10</button>
+          <button class="bg-blue-200">Test Button number 20</button>
+        </app-inline>
+        <app-inline justify="end" gap="lg">
+          <button class="bg-green-200">Test Button 10</button>
+          <button class="bg-blue-200">Test Button number 20</button>
+        </app-inline>
+      </app-stack>
+    </app-container>
   </div>
+} -->
+
+@if (canShowPage()) {
+  <app-stack align="center">
+    <app-loading />
+  </app-stack>
 } @else {
-  <div class="main-container">
-    <section class="surface-1 sticky-top page-full-width">
-      <app-recipe-search
+  <div class="layout-stack h-dvh">
+    <app-header-shell-shell
+      ><app-recipe-search
         [(filter)]="filterText"
         [recipesFilteredByTitle]="recipesFilteredByTitle()"
         [recipesFiltered]="recipesFiltered()"
@@ -14,20 +53,19 @@
         [dbRecipeCategories]="dbRecipeCategories()"
         [dbIngredients]="dbIngredients()"
         [dbIngredientCategories]="dbIngredientCategories()"
-      />
-    </section>
-
-    <section class="cards">
-      @for (recipe of recipesFiltered(); track $index) {
-        <app-recipe-card
-          [recipeState]="recipe"
-          (click)="clickOnRecipeCard(recipe)"
-        ></app-recipe-card>
-      }
-    </section>
+    /></app-header-shell-shell>
+    <app-page-layout maxSize="lg">
+      <app-grid [colsMd]="3" [colsLg]="4" gap="sm">
+        @for (recipe of recipesFiltered(); track $index) {
+          <app-recipe-card
+            [recipeState]="recipe"
+            (click)="clickOnRecipeCard(recipe)"
+          ></app-recipe-card>
+        }
+      </app-grid>
+    </app-page-layout>
+    <app-footer />
   </div>
 
-  <button class="btn-add-recipe" routerLink="/new-recipe">
-    <i class="fa-solid fa-plus fa-xl"></i>
-  </button>
+  <app-floating-button routerLink="/new-recipe"></app-floating-button>
 }

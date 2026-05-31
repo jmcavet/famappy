@@ -4,10 +4,10 @@ The layout 'h-full layout-hcf' on the new-recipe template can work now. */
   display: contents;
 }
 
-.tabs-header {
+/* .tabs-header {
   @apply px-1 py-2;
 }
 
 .tabs-content {
   @apply px-2 py-6;
-}
+} */

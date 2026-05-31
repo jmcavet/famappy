@@ -3,10 +3,16 @@ import { FormsModule } from '@angular/forms';
 import { ManageIngredientCategoriesFacade } from './manage-ingredient-categories.facade';
 import { ButtonComponent } from '../../shared/ui/button/button.component';
 import { LoadingComponent } from '../../shared/layout/overlays/loading/loading.component';
+import { FloatingButtonComponent } from '../../shared/layout/shell/floating-button/floating-button.component';
 
 @Component({
   selector: 'app-ingredient-categories-selection-page',
-  imports: [FormsModule, ButtonComponent, LoadingComponent],
+  imports: [
+    FormsModule,
+    ButtonComponent,
+    LoadingComponent,
+    FloatingButtonComponent,
+  ],
   providers: [ManageIngredientCategoriesFacade],
   templateUrl: './manage-ingredient-categories.component.html',
   styleUrl: './manage-ingredient-categories.component.css',

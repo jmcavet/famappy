@@ -36,9 +36,5 @@
     </div>
   </div>
 
-  <div class="fixed bottom-20 left-1/2 -translate-x-1/2 z-50">
-    <app-button color="secondary" (click)="openAddModal($event)">
-      <i class="fa-solid fa-plus text-xl"></i>
-    </app-button>
-  </div>
+  <app-floating-button (clicked)="openAddModal($event)"></app-floating-button>
 }
