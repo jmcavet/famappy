@@ -1,11 +1,11 @@
 import { Component, ElementRef, inject, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
-import { LoadingComponent } from '../../shared/components/loading/loading.component';
 import { IngredientsFacade } from './ingredients.facade';
-import { SegmentedControlComponent } from '../../shared/ui/segmented-control/segmented-control.component';
 import { ButtonComponent } from '../../shared/ui/button/button.component';
 import { ChipComponent } from '../../shared/ui/chip/chip.component';
+import { LoadingComponent } from '../../shared/layout/overlays/loading/loading.component';
+import { FloatingButtonComponent } from '../../shared/layout/shell/floating-button/floating-button.component';
 
 @Component({
   selector: 'app-ingredients',
@@ -15,7 +15,7 @@ import { ChipComponent } from '../../shared/ui/chip/chip.component';
     RouterLink,
     ButtonComponent,
     ChipComponent,
-    SegmentedControlComponent,
+    FloatingButtonComponent,
   ],
   providers: [IngredientsFacade],
   templateUrl: './ingredients.component.html',

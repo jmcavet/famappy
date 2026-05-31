@@ -102,6 +102,7 @@ module.exports = {
           950: "hsl(142 54% 7%)",
           dark: "hsl(142 72% 52%)",
         },
+
         danger: {
           50: "hsl(0 100% 97%)",
           100: "hsl(0 100% 92%)",
@@ -116,6 +117,16 @@ module.exports = {
           900: "hsl(0 84% 12%)",
           950: "hsl(0 80% 7%)",
           dark: "hsl(0 100% 52%)",
+        },
+        scale: {
+          high: { bg: "hsl(142, 55%, 82%)", text: "hsl(142, 72%, 20%)" },
+          medium: { bg: "hsl(52,  88%, 80%)", text: "hsl(52,  95%, 24%)" },
+          low: { bg: "hsl(4,   65%, 84%)", text: "hsl(4,   74%, 30%)" },
+        },
+        scaleDark: {
+          high: { bg: "hsl(142, 28%, 28%)", text: "hsl(142, 65%, 75%)" },
+          medium: { bg: "hsl(52,  32%, 28%)", text: "hsl(52,  88%, 70%)" },
+          low: { bg: "hsl(4,   28%, 30%)", text: "hsl(4,   72%, 76%)" },
         },
         background: {
           light: "#ededed",

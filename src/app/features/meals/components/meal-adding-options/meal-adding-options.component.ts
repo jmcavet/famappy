@@ -1,8 +1,8 @@
 import { Component, inject, input } from '@angular/core';
 import { CalendarDay } from '../calendar/calendar.facade';
 import { MealType, MealWithId } from '../../state/mealCart.model';
-import { ContextMenuService } from '../../../../shared/context-menu/context-menu-host/context-menu.service';
 import { MealOptionsContextMenuComponent } from '../meal-options-context-menu/meal-options-context-menu.component';
+import { ContextMenuService } from '../../../../shared/layout/overlays/context-menu/context-menu-host/context-menu.service';
 
 @Component({
   selector: 'app-meal-adding-options',

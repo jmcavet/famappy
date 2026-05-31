@@ -1,52 +1,65 @@
-<div class="card surface-1">
-  @if (recipeState?.thumbnailUrl) {
-    <div class="rounded-lg overflow-hidden shadow-md">
-      <img
-        [src]="recipeState?.thumbnailUrl"
-        alt="{{ recipeState?.title }}"
-        loading="lazy"
-        class="card-image"
-      />
-    </div>
-  } @else {
-    <div class="card-image-empty flex-center">
-      <i class="fa-solid fa-mortar-pestle fa-2xl"></i>
-    </div>
-  }
-
-  <div class="card-body">
-    <div class="card-title">{{ recipeState?.title }}</div>
-
-    <div class="card-info flex-between">
-      <div class="flex-between gap-0.5">
-        <i class="fa-solid fa-clock"></i>
-        <span class="text-xs tracking-widest">{{ totalTime | mintohour }}</span>
-      </div>
-
-      <div class="flex-between gap-0.5">
-        @if (recipeState?.difficulty === "low") {
-          <i class="fa-solid fa-person-hiking"></i>
-          <i
-            class="fa-solid fa-person-hiking text-neutral-200 dark:text-neutral-600"
-          ></i>
-          <i
-            class="fa-solid fa-person-hiking text-neutral-200 dark:text-neutral-600"
-          ></i>
+<app-card inset="sm" [interactive]="true" [activated]="activated()">
+  <app-stack variant="section">
+    <app-stack>
+      <header class="-margin-sm mb-0">
+        @if (recipeState?.thumbnailUrl) {
+          <figure class="rounded-lg rounded-b-none overflow-hidden relative">
+            <img
+              [src]="recipeState?.thumbnailUrl"
+              [alt]="recipeState?.title"
+              loading="lazy"
+              class="card-image"
+            />
+            <app-tag
+              color="neutral"
+              size="xs"
+              class="absolute top-1 left-1 opacity-80"
+            >
+              <span>{{ mealCategoryName() }}</span>
+            </app-tag>
+          </figure>
+        } @else {
+          <figure
+            class="card-image-empty layout-row--center relative"
+            aria-label="No image available"
+          >
+            <div class="text-2xl">
+              <i
+                class="fa-solid fa-mortar-pestle fa-2xl"
+                aria-hidden="true"
+              ></i>
+            </div>
+            <app-tag
+              color="neutral"
+              size="xs"
+              class="absolute top-1 left-1 opacity-80"
+            >
+              <span>{{ mealCategoryName() }}</span>
+            </app-tag>
+          </figure>
         }
-        @if (recipeState?.difficulty === "normal") {
-          <i class="fa-solid fa-person-hiking"></i>
-          <i class="fa-solid fa-person-hiking"></i>
-          <i
-            class="fa-solid fa-person-hiking text-neutral-200 dark:text-neutral-600"
-          ></i>
-        }
-        @if (recipeState?.difficulty === "high") {
-          <i class="fa-solid fa-person-hiking"></i>
-          <i class="fa-solid fa-person-hiking"></i>
-          <i class="fa-solid fa-person-hiking"></i>
-        }
-        <span class="ml-0.5">{{ difficultyMessage() }}</span>
-      </div>
-    </div>
-  </div>
-</div>
+      </header>
+
+      <h2 class="text-card-title color-text-strong">
+        {{ recipeState?.title }}
+      </h2>
+    </app-stack>
+    <footer>
+      <app-row>
+        <app-inline gap="sm">
+          <i class="fa-solid fa-clock" aria-hidden="true"></i>
+          <time class="text-xs tracking-widest">{{
+            totalTime | mintohour
+          }}</time>
+        </app-inline>
+
+        <app-tag [color]="difficultyScale()" size="xs">
+          <app-inline gap="sm">
+            <i class="fa-solid fa-person-hiking"></i>
+            <span>{{ difficultyMessage() | capitalize }}</span>
+          </app-inline>
+        </app-tag>
+      </app-row>
+    </footer>
+  </app-stack>
+</app-card>

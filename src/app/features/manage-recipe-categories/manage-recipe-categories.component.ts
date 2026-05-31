@@ -1,11 +1,12 @@
 import { Component, inject } from '@angular/core';
 import { CapitalizePipe } from '../../shared/pipes/capitalize.pipe';
-import { LoadingComponent } from '../../shared/components/loading/loading.component';
 import { ManageRecipeCategoryFacade } from './manage-recipe-category.facade';
+import { LoadingComponent } from '../../shared/layout/overlays/loading/loading.component';
+import { FloatingButtonComponent } from '../../shared/layout/shell/floating-button/floating-button.component';
 
 @Component({
   selector: 'app-manage-recipe-categories',
-  imports: [CapitalizePipe, LoadingComponent],
+  imports: [CapitalizePipe, LoadingComponent, FloatingButtonComponent],
   providers: [ManageRecipeCategoryFacade],
   templateUrl: './manage-recipe-categories.component.html',
   styleUrl: './manage-recipe-categories.component.css',

@@ -15,12 +15,11 @@ import {
 import { MemberWithId } from './member.model';
 import { MemberModalComponent } from '../member-modal/member-modal.component';
 import { DatePipe } from '@angular/common';
-// import { ButtonComponent } from '../../../../shared/components/button/button.component';
-import { ModalConfirmComponent } from '../../../../shared/components/modal-confirm/modal-confirm.component';
 import { MemberBackendService } from '../../../../services/backend/member.service';
-import { LoadingComponent } from '../../../../shared/components/loading/loading.component';
 import { ButtonComponent } from '../../../../shared/ui/button/button.component';
-import { ModalService } from '../../../../shared/modal/modal.service';
+import { ModalService } from '../../../../shared/layout/overlays/modal/modal.service';
+import { ModalConfirmComponent } from '../../../../shared/layout/overlays/modal/modal-confirm/modal-confirm.component';
+import { LoadingComponent } from '../../../../shared/layout/overlays/loading/loading.component';
 
 @Component({
   selector: 'app-member',

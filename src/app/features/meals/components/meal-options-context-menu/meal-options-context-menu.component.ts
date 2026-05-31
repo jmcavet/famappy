@@ -1,10 +1,10 @@
 import { Component, inject, input } from '@angular/core';
 import { MealOptionsContextMenuFacade } from './meal-options-context-menu.facade';
-import { ContextMenuService } from '../../../../shared/context-menu/context-menu-host/context-menu.service';
-import { ModalService } from '../../../../shared/modal/modal.service';
 import { ManualEntryComponent } from '../manual-entry/manual-entry.component';
 import { CalendarDay } from '../calendar/calendar.facade';
 import { MealType, MealWithId } from '../../state/mealCart.model';
+import { ModalService } from '../../../../shared/layout/overlays/modal/modal.service';
+import { ContextMenuService } from '../../../../shared/layout/overlays/context-menu/context-menu-host/context-menu.service';
 
 @Component({
   selector: 'app-meal-options-context-menu',

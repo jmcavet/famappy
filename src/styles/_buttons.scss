@@ -1,116 +1,145 @@
 @layer components {
+  /*The basic '.btn' class represents the identity of the button. Those properties (e.g. cursor-pointer) are
+  always the same for all any kind of buttons. The font weight is kept here for consistency purposes; it should not
+  vary from button to button. */
   .btn {
-    @apply flex items-center justify-center
-           rounded-xl
-           text-button
+    @apply layout-row--center font-medium leading-none tracking-wide cursor-pointer
            transition-all duration-150
            active:scale-[0.98];
   }
 
-  .btn-surface-primary {
-    @apply bg-primary text-neutral-50 border-primary hover:bg-primary/80
-           dark:bg-primary-dark dark:text-neutral-50 dark:border-primary-dark hover:dark:bg-primary-dark/80;
+  /* ── Size (inset-inline + typography) ── */
+  .btn--xs {
+    @apply inset-inline-xs text-xs;
+  }
+  .btn--sm {
+    @apply inset-inline-sm text-sm;
+  }
+  .btn--md {
+    @apply inset-md text-base;
+  }
+  .btn--lg {
+    @apply inset-inline-lg text-lg;
   }
 
-  .btn-surface-secondary {
-    @apply bg-secondary text-neutral-50 border-secondary
-           dark:bg-secondary-dark dark:text-neutral-50 dark:border-secondary-dark;
+  .btn--primary {
+    --btn-bg: theme("colors.primary.DEFAULT");
+    --btn-bg-hover: theme("colors.primary.DEFAULT / 85%");
+    --btn-border: theme("colors.primary.DEFAULT");
+    --btn-text: theme("colors.primary.50");
+    --btn-text-outline: theme("colors.primary.900");
+    --btn-text-ghost: theme("colors.primary.DEFAULT");
+    --btn-text-hover: theme("colors.primary.DEFAULT / 85%");
+    --btn-hover-light: theme("colors.primary.50");
   }
 
-  .btn-surface-success {
-    @apply bg-success text-neutral-50 border-success
-           dark:bg-success-dark dark:text-neutral-50 dark:border-success-dark;
+  .dark .btn--primary {
+    --btn-bg: theme("colors.primary.dark");
+    --btn-bg-hover: theme("colors.primary.dark / 85%");
+    --btn-border: theme("colors.primary.dark");
+    --btn-text: theme("colors.primary.50");
+    --btn-text-outline: theme("colors.primary.50");
+    --btn-text-ghost: theme("colors.primary.dark");
+    --btn-text-hover: theme("colors.primary.dark / 85%");
+    --btn-hover-light: theme("colors.primary.950");
   }
 
-  .btn-surface-danger {
-    @apply bg-danger-500 text-neutral-50 border-danger-500
-           dark:bg-danger-400 dark:text-neutral-50 dark:border-danger-400;
+  .btn--secondary {
+    --btn-bg: theme("colors.secondary.DEFAULT");
+    --btn-bg-hover: theme("colors.secondary.DEFAULT / 85%");
+    --btn-border: theme("colors.secondary.DEFAULT");
+    --btn-text: theme("colors.secondary.50");
+    --btn-text-outline: theme("colors.secondary.900");
+    --btn-text-ghost: theme("colors.secondary.DEFAULT");
+    --btn-text-hover: theme("colors.secondary.DEFAULT / 85%");
+    --btn-hover-light: theme("colors.secondary.50");
   }
 
-  .btn-surface-neutral {
-    @apply bg-white text-neutral-900 border-neutral-400
-           dark:bg-neutral-900 dark:text-neutral-300 dark:border-neutral-400;
+  .dark .btn--secondary {
+    --btn-bg: theme("colors.secondary.dark");
+    --btn-bg-hover: theme("colors.secondary.dark / 85%");
+    --btn-border: theme("colors.secondary.dark");
+    --btn-text: theme("colors.neutral.950");
+    --btn-text-outline: theme("colors.secondary.50");
+    --btn-text-ghost: theme("colors.secondary.dark");
+    --btn-text-hover: theme("colors.secondary.dark / 85%");
+    --btn-hover-light: theme("colors.secondary.900");
   }
 
-  .btn-outline-primary {
-    @apply bg-transparent border border-primary text-primary
-         hover:bg-primary/10
-         dark:text-primary-dark dark:border-primary-dark;
+  .btn--success {
+    --btn-bg: theme("colors.success.DEFAULT");
+    --btn-bg-hover: theme("colors.success.DEFAULT / 85%");
+    --btn-border: theme("colors.success.DEFAULT");
+    --btn-text: theme("colors.success.50");
+    --btn-text-outline: theme("colors.success.900");
+    --btn-text-ghost: theme("colors.success.DEFAULT");
+    --btn-text-hover: theme("colors.success.DEFAULT / 85%");
+    --btn-hover-light: theme("colors.success.50");
   }
 
-  .btn-outline-secondary {
-    @apply bg-transparent border border-secondary text-secondary
-         hover:bg-secondary/10
-         dark:text-secondary-dark dark:border-secondary-dark;
+  .dark .btn--success {
+    --btn-bg: theme("colors.success.dark");
+    --btn-bg-hover: theme("colors.success.dark / 85%");
+    --btn-border: theme("colors.success.dark");
+    --btn-text: theme("colors.success.50");
+    --btn-text-outline: theme("colors.success.50");
+    --btn-text-ghost: theme("colors.success.dark");
+    --btn-text-hover: theme("colors.success.dark / 85%");
+    --btn-hover-light: theme("colors.success.900");
   }
 
-  .btn-outline-neutral {
-    @apply bg-transparent border border-neutral-500 text-neutral-500
-         hover:bg-neutral-500/10
-         dark:text-neutral-400 dark:border-neutral-400;
+  .btn--danger {
+    --btn-bg: theme("colors.danger.DEFAULT");
+    --btn-bg-hover: theme("colors.danger.DEFAULT / 85%");
+    --btn-border: theme("colors.danger.DEFAULT");
+    --btn-text: theme("colors.danger.50");
+    --btn-text-outline: theme("colors.danger.900");
+    --btn-text-ghost: theme("colors.danger.DEFAULT");
+    --btn-text-hover: theme("colors.danger.DEFAULT / 85%");
+    --btn-hover-light: theme("colors.danger.50");
   }
 
-  .btn-outline-static {
-    @apply bg-transparent border border-neutral-900 text-neutral-900
-         hover:bg-neutral-900/10
-         dark:text-neutral-50 dark:border-neutral-50;
+  .dark .btn--danger {
+    --btn-bg: theme("colors.danger.dark");
+    --btn-bg-hover: theme("colors.danger.dark / 85%");
+    --btn-border: theme("colors.danger.dark");
+    --btn-text: theme("colors.danger.50");
+    --btn-text-outline: theme("colors.danger.50");
+    --btn-text-ghost: theme("colors.danger.dark");
+    --btn-text-hover: theme("colors.danger.dark / 85%");
+    --btn-hover-light: theme("colors.success.900");
   }
 
-  .btn-outline-success {
-    @apply bg-transparent border border-success text-success
-         hover:bg-success/10
-         dark:text-success-dark dark:border-success-dark;
+  .btn--filled {
+    background-color: var(--btn-bg);
+    color: var(--btn-text);
+    border-color: var(--btn-border);
+
+    &:hover {
+      background-color: var(--btn-bg-hover);
+    }
   }
 
-  .btn-outline-danger {
-    @apply bg-transparent border border-danger-500 text-danger-500
-         hover:bg-danger-500/10
-         dark:text-danger-400 dark:border-danger-400;
+  .btn--outline {
+    background-color: transparent;
+    color: var(--btn-text-outline);
+    border: 1px solid var(--btn-border);
+
+    &:hover {
+      background-color: var(--btn-hover-light);
+    }
   }
 
-  .btn-ghost-primary {
-    @apply bg-transparent border-transparent text-primary
-           hover:text-primary/80
-           dark:text-primary-dark dark:hover:text-primary-dark/80;
+  .btn--ghost {
+    background-color: transparent;
+    color: var(--btn-text-ghost);
+
+    &:hover {
+      color: var(--btn-text-hover);
+    }
   }
 
-  .btn-ghost-secondary {
-    @apply bg-transparent border-transparent text-secondary
-           hover:text-secondary/80
-           dark:text-secondary-dark dark:hover:text-secondary-dark/80;
-  }
-
-  .btn-ghost-success {
-    @apply bg-transparent border-transparent text-success
-           hover:text-success/80
-           dark:text-success-dark dark:hover:text-success-dark/80;
-  }
-
-  .btn-ghost-danger {
-    @apply bg-transparent border-transparent text-danger-500
-           hover:text-danger-500/80
-           dark:text-danger-400 dark:hover:text-danger-400/80;
-  }
-
-  .btn-ghost-neutral {
-    @apply bg-transparent border-transparent text-neutral-700
-           hover:text-neutral-700/80
-           dark:text-neutral-300 dark:hover:text-neutral-300/80;
-  }
-
-  .btn-disabled {
-    @apply bg-neutral-200 text-neutral-400 dark:bg-neutral-800 dark:text-neutral-500 hover:bg-neutral-300 dark:hover:bg-neutral-700 cursor-not-allowed;
-  }
-
-  .btn-sm {
-    @apply px-3 py-1.5 min-h-8;
-  }
-
-  .btn-md {
-    @apply px-4 py-2.5 min-h-10;
-  }
-
-  .btn-lg {
-    @apply px-6 py-3 min-h-11;
+  .btn--disabled {
+    @apply bg-neutral-200 text-neutral-400 dark:bg-neutral-800 dark:text-neutral-600 cursor-not-allowed pointer-events-none;
   }
 }

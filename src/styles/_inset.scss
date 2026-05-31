@@ -1,0 +1,73 @@
+@layer components {
+  .inset-x-none {
+    @apply px-0;
+  }
+  .inset-x-xs {
+    @apply px-1 md:px-2;
+  }
+  .inset-x-sm {
+    @apply px-2 md:px-3;
+  }
+  .inset-x-md {
+    @apply px-3 md:px-4 lg:px-5;
+  }
+  .inset-x-lg {
+    @apply px-4 md:px-6 lg:px-8;
+  }
+  .inset-x-xl {
+    @apply px-6 md:px-8 lg:px-10;
+  }
+
+  .inset-y-none {
+    @apply py-0;
+  }
+  .inset-y-xs {
+    @apply py-1 md:py-2;
+  }
+  .inset-y-sm {
+    @apply py-2 md:py-3;
+  }
+  .inset-y-md {
+    @apply py-3 md:py-4 lg:py-5;
+  }
+  .inset-y-lg {
+    @apply py-4 md:py-6 lg:py-8;
+  }
+  .inset-y-xl {
+    @apply py-6 md:py-8 lg:py-10;
+  }
+
+  .inset-none {
+    @apply p-0;
+  }
+  /* ── Inset (symmetric — cards, containers) ── */
+  .inset-xs {
+    @apply p-1;
+  } // very tight: chips, badges, dense list rows
+  .inset-sm {
+    @apply p-2 md:p-3;
+  } // compact: small cards, table cells
+  .inset-md {
+    @apply p-3 md:p-4 lg:p-5;
+  } // default: standard cards, sections
+  .inset-lg {
+    @apply p-4 md:p-6 lg:p-8;
+  } // spacious: feature cards, empty states
+  .inset-xl {
+    @apply p-6 md:p-8 lg:p-10;
+  } // generous: hero sections, onboarding screens
+
+  /* ── Inset inline (asymmetric — buttons, chips, badges, tabs) ── */
+  .inset-inline-xs {
+    @apply px-3 py-1;
+  }
+  .inset-inline-sm {
+    @apply px-4 py-2;
+  }
+  .inset-inline-md {
+    @apply px-5 py-3;
+  }
+  .inset-inline-lg {
+    @apply px-6 py-4;
+  }
+}

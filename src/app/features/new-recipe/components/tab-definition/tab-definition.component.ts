@@ -2,7 +2,6 @@ import { Component, inject, input, Signal } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { CapitalizePipe } from '../../../../shared/pipes/capitalize.pipe';
-import { LoadingComponent } from '../../../../shared/components/loading/loading.component';
 import { RecipeCategoryDocInBackend } from '../../../../models/cuisine.model';
 import {
   Difficulty,
@@ -13,6 +12,7 @@ import {
 import { ChipComponent } from '../../../../shared/ui/chip/chip.component';
 import { TabDefinitionFacade } from './tab-definition.facade';
 import { ButtonComponent } from '../../../../shared/ui/button/button.component';
+import { LoadingComponent } from '../../../../shared/layout/overlays/loading/loading.component';
 
 export interface TabDefinitionContext {
   buttonType: Signal<string>;
@@ -37,7 +37,7 @@ export class TabDefinitionComponent {
 
   private facade = inject(TabDefinitionFacade);
 
-  difficultyOptions: Difficulty[] = ['low', 'normal', 'high'];
+  difficultyOptions: Difficulty[] = ['easy', 'medium', 'hard'];
   priceOptions: Price[] = ['low', 'normal', 'high'];
   frequencyOptions: Frequency[] = ['weekly', 'monthly', 'yearly'];
   seasonOptions: Season[] = ['spring', 'summer', 'autumn', 'winter'];

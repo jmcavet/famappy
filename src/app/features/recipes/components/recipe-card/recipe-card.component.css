@@ -1,27 +1,15 @@
-.card {
-  @apply flex flex-col h-full space-y-3 p-2 rounded-lg shadow-md hover:cursor-pointer hover:bg-primary-50 dark:hover:bg-primary-950;
-}
-
 .card-image {
   @apply w-full h-40 object-cover;
 }
 
 .card-image-empty {
-  @apply w-full h-40 bg-primary-100 dark:bg-primary-900 font-bold text-3xl;
+  @apply w-full h-40 bg-primary-100 dark:bg-primary-900 font-bold rounded-lg;
 }
 
 .card-image-empty i {
   @apply text-primary-200 dark:text-primary-600;
 }
 
-.card-body {
-  @apply flex flex-col justify-between gap-2 flex-1;
-}
-
-.card-title {
-  @apply font-bold line-clamp-2;
-}
-
 .card-info {
-  @apply gap-1 text-neutral-600 dark:text-neutral-300 text-xs;
+  @apply text-neutral-600 dark:text-neutral-300 text-xs;
 }

@@ -1,25 +1,42 @@
 @layer components {
-  .ui-text-default {
-    @apply text-neutral-900 dark:text-neutral-50;
+  /* e.g. for card title or section headings */
+  .color-text-strong {
+    @apply text-neutral-950 dark:text-white;
   }
 
-  .ui-text-muted {
-    @apply text-neutral-500 dark:text-neutral-400;
+  .color-text-default {
+    @apply text-neutral-950 dark:text-neutral-50;
   }
 
-  .ui-text-subtle {
+  .color-text-muted {
+    @apply text-neutral-600 dark:text-neutral-400;
+  }
+
+  .color-text-subtle {
     @apply text-neutral-400 dark:text-neutral-500;
   }
 
-  .ui-text-primary {
+  .ui-text-extrasubtle {
+    @apply text-neutral-200 dark:text-neutral-600;
+  }
+
+  .color-text-primary {
     @apply text-primary dark:text-primary-dark;
   }
 
-  .ui-text-primary-interactive {
+  .color-text-link {
     @apply text-primary dark:text-primary-dark hover:text-primary/80 dark:hover:text-primary-dark/80 transition-colors;
   }
 
-  .ui-text-danger {
-    @apply text-red-600 dark:text-red-400;
+  .color-text-success {
+    @apply text-success dark:text-success-dark;
+  }
+
+  .color-text-danger {
+    @apply text-danger dark:text-danger-dark;
+  }
+
+  .color-text-warning {
+    @apply text-amber-600 dark:text-amber-400;
   }
 }

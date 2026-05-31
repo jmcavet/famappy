@@ -7,8 +7,8 @@ import {
 } from '@angular/core';
 import { CapitalizePipe } from '../../../../shared/pipes/capitalize.pipe';
 import { CalendarPipe } from '../../../../shared/pipes/calendar';
-import { LoadingComponent } from '../../../../shared/components/loading/loading.component';
 import { CalendarDay, CalendarFacade } from './calendar.facade';
+import { LoadingComponent } from '../../../../shared/layout/overlays/loading/loading.component';
 
 @Component({
   selector: 'app-calendar',

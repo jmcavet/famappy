@@ -22,4 +22,32 @@
   .sticky-top {
     @apply sticky top-0 z-40;
   }
+
+  .layout-stack {
+    @apply flex flex-col;
+  }
+
+  .layout-row {
+    @apply flex flex-row items-center justify-start;
+  }
+
+  .layout-row--center {
+    @apply flex flex-row items-center justify-center;
+  }
+
+  .layout-row--end {
+    @apply flex flex-row items-center justify-end;
+  }
+
+  .layout-row--between {
+    @apply flex flex-row items-center justify-between;
+  }
+
+  .layout-row--around {
+    @apply flex flex-row items-center justify-around;
+  }
+
+  .layout-grid {
+    @apply grid grid-cols-2;
+  }
 }

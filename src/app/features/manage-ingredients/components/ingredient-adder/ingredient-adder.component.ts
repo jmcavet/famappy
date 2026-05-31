@@ -1,9 +1,9 @@
 import { Component, inject, input, Signal } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { PickerModule } from '@ctrl/ngx-emoji-mart';
-import { LoadingComponent } from '../../../../shared/components/loading/loading.component';
 import { ButtonComponent } from '../../../../shared/ui/button/button.component';
 import { IngredientAdderFacade } from './ingredient-adder.facade';
+import { LoadingComponent } from '../../../../shared/layout/overlays/loading/loading.component';
 
 export interface IngredientAdderContext {
   existingIngredientNames: Signal<any>;

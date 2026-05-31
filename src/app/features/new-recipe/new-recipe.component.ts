@@ -1,13 +1,5 @@
-import {
-  Component,
-  computed,
-  inject,
-  Signal,
-  signal,
-  ViewChild,
-} from '@angular/core';
+import { Component, computed, inject, signal, ViewChild } from '@angular/core';
 
-import { NgClass } from '@angular/common';
 import { Router } from '@angular/router';
 import { Recipe } from '../recipes/components/recipe-card/recipe.model';
 import { TabsComponent } from './components/tabs/tabs.component';
@@ -15,7 +7,6 @@ import { TabComponent } from './components/tab/tab.component';
 import { TabDefinitionComponent } from './components/tab-definition/tab-definition.component';
 import { TabIngredientsComponent } from './components/tab-ingredients/tab-ingredients.component';
 import { TabInstructionsComponent } from './components/tab-instructions/tab-instructions.component';
-import { LoadingComponent } from '../../shared/components/loading/loading.component';
 import { RecipeBackendService } from '../../services/backend/recipe.service';
 import { ToastService } from '../../services/toast.service';
 import { RecipeStateService } from '../../services/state/recipe.service';
@@ -25,9 +16,10 @@ import {
   getStorage,
   ref,
 } from 'firebase/storage';
-import { ImageUploadLoaderComponent } from '../../shared/components/image-upload-loader/image-upload-loader.component';
 import { ButtonComponent } from '../../shared/ui/button/button.component';
 import { RecipeCategoryDomainFacade } from '../../domain-facades/recipeCategory.facade';
+import { LoadingComponent } from '../../shared/layout/overlays/loading/loading.component';
+import { ImageUploadLoaderComponent } from '../../shared/ui/upload/image-upload-loader/image-upload-loader.component';
 
 @Component({
   selector: 'app-new-recipe',
@@ -38,7 +30,6 @@ import { RecipeCategoryDomainFacade } from '../../domain-facades/recipeCategory.
     TabIngredientsComponent,
     TabInstructionsComponent,
     ButtonComponent,
-    NgClass,
     LoadingComponent,
     ImageUploadLoaderComponent,
   ],
@@ -125,19 +116,19 @@ export class NewRecipeComponent {
           imageFile,
           recipeId,
           storage,
-          recipe
+          recipe,
         );
 
         try {
           await this.recipeService.updateRecipeInStore(
             recipeId,
             updatedRecipe,
-            this.stateRecipeService.mustPreserveState
+            this.stateRecipeService.mustPreserveState,
           );
         } catch (error) {
           this.toastService.show(
             'Could not update the recipe document with imageUrl',
-            'error'
+            'error',
           );
         }
 
@@ -153,19 +144,19 @@ export class NewRecipeComponent {
           imageFile,
           this.recipeId(),
           storage,
-          recipe
+          recipe,
         );
 
         try {
           await this.recipeService.updateRecipeInStore(
             this.recipeId(),
             updatedRecipe,
-            this.stateRecipeService.mustPreserveState
+            this.stateRecipeService.mustPreserveState,
           );
         } catch (error) {
           this.toastService.show(
             'Could not update the recipe document with imageUrl',
-            'error'
+            'error',
           );
         }
 
@@ -201,7 +192,7 @@ export class NewRecipeComponent {
     imageFile: File | null,
     recipeId: string,
     storage: FirebaseStorage,
-    recipe: any
+    recipe: any,
   ) {
     if (imageFile) {
       const imagePath = `recipes/${recipeId}/${imageFile?.name}`;
@@ -213,13 +204,12 @@ export class NewRecipeComponent {
       await this.recipeService.uploadImageToFirebase(
         imageRef,
         thumbnailRef,
-        imageFile
+        imageFile,
       );
 
       // Download both image and thumbnail urls from firebase
-      const imageUrl = await this.recipeService.downloadImageUrlFromFirebase(
-        imageRef
-      );
+      const imageUrl =
+        await this.recipeService.downloadImageUrlFromFirebase(imageRef);
 
       const thumbnailUrl =
         await this.recipeService.downloadImageUrlFromFirebase(thumbnailRef);

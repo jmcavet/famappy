@@ -1,0 +1,40 @@
+@layer components {
+  /* ── Interactive components ── */
+  .btn--rounded {
+    @apply rounded-lg;
+  }
+  .btn--pill {
+    @apply rounded-full;
+  }
+
+  /* ── Containers ── */
+  .card {
+    @apply rounded-xl shadow-lg;
+  }
+  .modal {
+    @apply rounded-2xl;
+  }
+  .drawer {
+    @apply rounded-t-2xl;
+  }
+  .sheet {
+    @apply rounded-t-3xl;
+  }
+
+  /* ── Small components ── */
+  .chip {
+    @apply rounded-full;
+  }
+  .badge {
+    @apply rounded-full;
+  }
+  .avatar {
+    @apply rounded-full;
+  }
+  .input {
+    @apply rounded-lg;
+  }
+  .select {
+    @apply rounded-lg;
+  }
+}

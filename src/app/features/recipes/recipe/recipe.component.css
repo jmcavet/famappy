@@ -1,11 +1,11 @@
-section {
-  @apply space-y-4 p-2 sm:p-4 rounded-xl;
+.image-container {
+  @apply rounded-lg overflow-hidden shadow-md;
 }
 
-.group {
-  @apply grid grid-cols-[auto_auto] items-center gap-x-4 gap-y-6;
+.card-image-empty {
+  @apply w-full h-40 bg-primary-100 dark:bg-primary-900 font-bold text-3xl;
 }
 
-.tag {
-  @apply border border-neutral-900 dark:text-white dark:border-white p-2 rounded;
+.card-image-empty i {
+  @apply text-primary-200 dark:text-primary-dark;
 }

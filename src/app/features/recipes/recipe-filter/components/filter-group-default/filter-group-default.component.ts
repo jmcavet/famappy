@@ -18,7 +18,7 @@ import { ChipComponent } from '../../../../../shared/ui/chip/chip.component';
 export class FilterGroupDefaultComponent {
   @Input() sectionTitle!: string;
   @Input() icon!: string;
-  @Input() tags!: WritableSignal<any[]>; // e,g, for difficult: [{name: 'low', disabled: false}, {name: 'normal', disabled: true}, {...}]
+  @Input() tags!: WritableSignal<any[]>; // e,g, for difficult: [{name: 'easy', disabled: false}, {name: 'medium', disabled: true}, {...}]
 
   labelToggleSelectAll = computed(() => {
     const allTagsAreActivated =

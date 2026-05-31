@@ -1,25 +1,55 @@
 @layer components {
-  /* Main body text */
+  // ── Body ────────────────────────────────────────
+  .text-body-lg {
+    @apply text-lg font-medium leading-relaxed;
+  }
   .text-body {
-    @apply text-base leading-6;
+    @apply text-base font-normal leading-relaxed;
+  }
+  .text-body-sm {
+    @apply text-sm font-normal leading-relaxed;
   }
 
-  /* Section titles */
+  // ── Display & Headings ──────────────────────────
+  /* Hero number, large page titles*/
+  .text-display {
+    @apply text-3xl font-bold tracking-tight;
+  }
+  /* Page headings, card group titles*/
+  .text-headline {
+    @apply text-2xl font-semibold tracking-tight;
+  }
+  /* Card titles, section headings */
   .text-title {
-    @apply text-xl md:text-2xl font-semibold leading-tight tracking-tight;
+    @apply text-xl md:text-2xl font-bold leading-tight tracking-tight;
   }
-
-  /* Smaller subtitle */
+  /* Sub-headings, named values */
   .text-subtitle {
     @apply text-base md:text-lg font-medium leading-snug;
   }
 
-  /* Small helper text */
-  .text-caption {
-    @apply text-xs text-neutral-500 leading-5;
+  // ── Support ─────────────────────────────────────
+  /* Supporting info, timestamps, metadata */
+  .text-meta {
+    @apply text-sm font-normal leading-normal;
+  }
+  /* Form labels */
+  .text-label {
+    @apply text-xs font-medium uppercase tracking-wide;
+  }
+  /* Category tags above a title */
+  .text-overline {
+    @apply text-[0.625rem] font-semibold uppercase tracking-widest;
   }
 
-  .text-button {
-    @apply text-sm font-medium leading-none;
+  /* ── Card-specific typography ── */
+  /* Two-up mobile layout: constrained width (~124px usable)        */
+  /* line-clamp-2 prevents long titles from breaking the grid       */
+  .text-card-title {
+    @apply text-base md:text-lg font-semibold leading-snug line-clamp-2;
+  }
+
+  .text-card-meta {
+    @apply text-xs font-normal leading-none tracking-wide;
   }
 }

@@ -1,0 +1,9 @@
+@layer components {
+  .field-label {
+    @apply text-meta color-text-muted;
+  }
+
+  .field-value {
+    @apply text-body-lg;
+  }
+}

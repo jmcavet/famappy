@@ -3,11 +3,10 @@ import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { MemberComponent } from './components/member/member.component';
 import { MemberModalComponent } from './components/member-modal/member-modal.component';
-// import { ButtonComponent } from '../../shared/components/button/button.component';
-import { LoadingComponent } from '../../shared/components/loading/loading.component';
 import { MemberBackendService } from '../../services/backend/member.service';
 import { SegmentedControlComponent } from '../../shared/ui/segmented-control/segmented-control.component';
 import { ButtonComponent } from '../../shared/ui/button/button.component';
+import { LoadingComponent } from '../../shared/layout/overlays/loading/loading.component';
 
 @Component({
   selector: 'app-members',

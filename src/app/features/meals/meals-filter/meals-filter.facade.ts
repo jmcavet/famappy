@@ -5,10 +5,11 @@ import {
   RecipeCategoryDocInBackend,
 } from '../../../models/cuisine.model';
 import { MealFilterStateService } from '../state/mealFilter.service';
-import { Difficulty, Frequency, Season } from '../state/mealFilter.model';
+import { Frequency, Season } from '../state/mealFilter.model';
 import { RecipeDomainFacade } from '../../../domain-facades/recipe.facade';
 import { RecipeCategoryDomainFacade } from '../../../domain-facades/recipeCategory.facade';
 import { CuisineDomainFacade } from '../../../domain-facades/cuisine.facade';
+import { Difficulty } from '../../../models/recipe.model';
 
 @Injectable({ providedIn: 'root' })
 export class MealFilterFacade {

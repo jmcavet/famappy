@@ -11,7 +11,7 @@ import { IngredientDomainFacade } from '../../../../domain-facades/ingredient.fa
 import { MealBackendService } from '../../../../services/backend/meal.service';
 import { CalendarDay } from '../calendar/calendar.facade';
 import { MealType, MealWithId } from '../../state/mealCart.model';
-import { ModalService } from '../../../../shared/modal/modal.service';
+import { ModalService } from '../../../../shared/layout/overlays/modal/modal.service';
 
 @Injectable({ providedIn: 'root' })
 export class ManualEntryFacade {

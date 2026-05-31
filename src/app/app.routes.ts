@@ -2,7 +2,6 @@ import { Routes } from '@angular/router';
 import { manageIngredientsRoutes } from './features/manage-ingredients/manage-ingredients.routes';
 import { authentificationRoutes } from './authentification/authentification.routes';
 import { recipesRoutes } from './features/recipes/recipes.routes';
-import { settingsRoutes } from './shared/components/settings/settings.routes';
 import { homeRoutes } from './features/home/home.routes';
 import { cuisineRoutes } from './features/cuisine/cuisine.routes';
 import { ingredientCategoriesRoutes } from './features/ingredient-categories/ingredient-categories.routes';
@@ -17,6 +16,7 @@ import { membersRoutes } from './features/members/members.routes';
 import { newRecipeRoutes } from './features/new-recipe/new-recipe.routes';
 import { filterIngredientsRoutes } from './features/filter-ingredients/filter-ingredients.routes';
 import { mealsRoutes } from './features/meals/meals.routes';
+import { settingsRoutes } from './features/settings/settings.routes';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },

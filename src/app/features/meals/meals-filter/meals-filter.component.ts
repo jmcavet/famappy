@@ -5,13 +5,13 @@ import {
   CuisineDocInBackend,
   RecipeCategoryDocInBackend,
 } from '../../../models/cuisine.model';
-import { LoadingComponent } from '../../../shared/components/loading/loading.component';
 import { RouterLink } from '@angular/router';
 import { MealFilterFacade } from './meals-filter.facade';
 import { StepperComponent } from '../meals-cart/components/stepper/stepper.component';
 import { ChipComponent } from '../../../shared/ui/chip/chip.component';
 import { ButtonComponent } from '../../../shared/ui/button/button.component';
 import { ToggleBtnWithIconComponent } from '../../../shared/ui/toggle-btn-with-icon/toggle-btn-with-icon.component';
+import { LoadingComponent } from '../../../shared/layout/overlays/loading/loading.component';
 
 @Component({
   selector: 'app-meals-filter',

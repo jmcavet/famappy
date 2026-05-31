@@ -1,6 +1,6 @@
 import { RecipeIngredient } from './ingredient.model';
 
-export type Difficulty = 'low' | 'normal' | 'high';
+export type Difficulty = 'easy' | 'medium' | 'hard';
 export type Price = 'low' | 'normal' | 'high';
 export type Frequency = 'weekly' | 'monthly' | 'yearly';
 export type Season = '' | 'spring' | 'summer' | 'autumn' | 'winter';

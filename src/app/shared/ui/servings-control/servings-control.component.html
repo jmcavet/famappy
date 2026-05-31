@@ -1,0 +1,14 @@
+<div class="surface-2 rounded-2xl inset-md">
+  <app-row>
+    <button>
+      <i class="fa-solid fa-minus" (click)="decrease()"></i>
+    </button>
+    <app-inline>
+      <span>{{ servings() }}</span>
+      <i class="fa-solid fa-user-group"></i>
+    </app-inline>
+    <button>
+      <i class="fa-solid fa-plus" (click)="increase()"></i>
+    </button>
+  </app-row>
+</div>

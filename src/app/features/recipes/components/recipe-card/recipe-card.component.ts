@@ -3,15 +3,31 @@ import { RecipeState } from '../../../../models/recipe.model';
 import { MinToHourPipe } from '../../../../shared/pipes/mintohour.pipe';
 import { CuisineBackendService } from '../../../../services/backend/cuisine.service';
 import { MealCategoryBackendService } from '../../../../services/backend/meal-category.service';
+import { CardComponent } from '../../../../shared/ui/card/card.component';
+import { InlineComponent } from '../../../../shared/layout/primitives/inline.component';
+import { CapitalizePipe } from '../../../../shared/pipes/capitalize.pipe';
+import { TagComponent } from '../../../../shared/ui/tag/tag.component';
+import { RowComponent } from '../../../../shared/layout/primitives/row.component';
+import { StackComponent } from '../../../../shared/layout/primitives/stack.component';
 
 @Component({
   selector: 'app-recipe-card',
-  imports: [MinToHourPipe],
+  imports: [
+    MinToHourPipe,
+    CardComponent,
+    StackComponent,
+    RowComponent,
+    InlineComponent,
+    CapitalizePipe,
+    RowComponent,
+    TagComponent,
+  ],
   templateUrl: './recipe-card.component.html',
   styleUrl: './recipe-card.component.css',
 })
 export class RecipeCardComponent {
   @Input() recipeState?: RecipeState;
+  activated = input<boolean>(false);
 
   private cuisineService = inject(CuisineBackendService);
   private mealCategoryService = inject(MealCategoryBackendService);
@@ -31,6 +47,17 @@ export class RecipeCardComponent {
     return mealCategory?.name ?? 'None';
   }
 
+  mealCategoryName = computed(() => {
+    const mealCategories = this.mealCategoryService.mealCategories();
+    const mealCategoryId = this.recipeState?.mealCategoryId;
+
+    const mealCategoryName = mealCategories.find(
+      (c) => c.id === mealCategoryId,
+    );
+
+    return mealCategoryName?.name ?? 'None';
+  });
+
   get totalTime() {
     const totalTime =
       Number(this.recipeState?.preparationTime ?? 0) +
@@ -40,12 +67,31 @@ export class RecipeCardComponent {
   }
 
   difficultyMessage = computed(() => {
-    if (this.recipeState?.difficulty === 'low') {
+    if (this.recipeState?.difficulty === 'easy') {
       return 'easy';
-    } else if (this.recipeState?.difficulty === 'normal') {
-      return 'normal';
+    } else if (this.recipeState?.difficulty === 'medium') {
+      return 'medium';
     } else {
-      return 'difficult';
+      return 'hard';
     }
   });
+
+  difficultyClass = computed(() => {
+    const difficulty =
+      this.recipeState?.difficulty === 'easy'
+        ? 'high'
+        : this.recipeState?.difficulty === 'medium'
+          ? 'medium'
+          : 'low';
+
+    return `text-scale-${difficulty} dark:text-scaleDark-${difficulty}`;
+  });
+
+  difficultyScale = computed(() =>
+    this.recipeState?.difficulty === 'easy'
+      ? 'scaleHigh'
+      : this.recipeState?.difficulty === 'medium'
+        ? 'scaleMedium'
+        : 'scaleLow',
+  );
 }

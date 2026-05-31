@@ -1,9 +1,7 @@
 import { computed, inject, Injectable, Signal, signal } from '@angular/core';
-import { ModalService } from '../../../../shared/modal/modal.service';
 import { RecipeDomainFacade } from '../../../../domain-facades/recipe.facade';
 import { RecipeCategoryDomainFacade } from '../../../../domain-facades/recipeCategory.facade';
 import { RecipeCategoryBackendService } from '../../../../services/backend/recipe-category.service';
-import { ModalInputComponent } from '../../../../shared/components/modal-input/modal-input.component';
 import { RecipeStateService } from '../../../../services/state/recipe.service';
 import {
   Difficulty,
@@ -16,6 +14,8 @@ import { Router } from '@angular/router';
 import { MealCategoryDomainFacade } from '../../../../domain-facades/mealCategory.facade';
 import { CuisineDomainFacade } from '../../../../domain-facades/cuisine.facade';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ModalService } from '../../../../shared/layout/overlays/modal/modal.service';
+import { ModalInputComponent } from '../../../../shared/layout/overlays/modal/modal-input/modal-input.component';
 
 export interface TabDefinitionContext {
   buttonType: Signal<string>;
@@ -58,7 +58,7 @@ export class TabDefinitionFacade {
   readonly recipeCategoriesUpdating =
     this.recipeCategoryDomainFacade.recipeCategoriesUpdating;
 
-  difficultyOptions: Difficulty[] = ['low', 'normal', 'high'];
+  difficultyOptions: Difficulty[] = ['easy', 'medium', 'hard'];
   priceOptions: Price[] = ['low', 'normal', 'high'];
   frequencyOptions: Frequency[] = ['weekly', 'monthly', 'yearly'];
   seasonOptions: Season[] = ['spring', 'summer', 'autumn', 'winter'];

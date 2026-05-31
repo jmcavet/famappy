@@ -9,7 +9,6 @@ import {
 import { Router, RouterLink } from '@angular/router';
 import { RecipeCardComponent } from './components/recipe-card/recipe-card.component';
 import { RecipeWithId } from './components/recipe-card/recipe.model';
-import { LoadingComponent } from '../../shared/components/loading/loading.component';
 import { RecipeBackendService } from '../../services/backend/recipe.service';
 import { RecipeSearchComponent } from './components/recipe-search/recipe-search.component';
 import { FormsModule } from '@angular/forms';
@@ -32,6 +31,17 @@ import { IngredientCategoryBackendService } from '../../services/backend/ingredi
 import { MealType } from '../meals/state/mealCart.model';
 import { MealBackendService } from '../../services/backend/meal.service';
 import { Location } from '@angular/common';
+import { ButtonComponent } from '../../shared/ui/button/button.component';
+import { SectionComponent } from '../../shared/layout/primitives/section.component';
+import { ContainerComponent } from '../../shared/layout/primitives/container.component';
+import { StackComponent } from '../../shared/layout/primitives/stack.component';
+import { InlineComponent } from '../../shared/layout/primitives/inline.component';
+import { HeaderShellComponent } from '../../shared/layout/shell/header-shell.component';
+import { PageLayoutComponent } from '../../shared/layout/primitives/page-layout.component';
+import { GridComponent } from '../../shared/layout/primitives/grid.component';
+import { FooterComponent } from '../../shared/layout/shell/footer/footer.component';
+import { LoadingComponent } from '../../shared/layout/overlays/loading/loading.component';
+import { FloatingButtonComponent } from '../../shared/layout/shell/floating-button/floating-button.component';
 
 export interface RecipeWithDate extends RecipeWithId {
   dateCreated: Date | string | Timestamp;
@@ -41,10 +51,20 @@ export interface RecipeWithDate extends RecipeWithId {
   selector: 'app-recipes',
   imports: [
     FormsModule,
+    HeaderShellComponent,
+    PageLayoutComponent,
+    FooterComponent,
     RecipeCardComponent,
     RecipeSearchComponent,
     RouterLink,
     LoadingComponent,
+    ButtonComponent,
+    GridComponent,
+    FloatingButtonComponent,
+    SectionComponent,
+    ContainerComponent,
+    StackComponent,
+    InlineComponent,
   ],
   templateUrl: './recipes.component.html',
   styleUrl: './recipes.component.css',
@@ -118,7 +138,6 @@ export class RecipesComponent {
         const dateA = this.toDate(a.dateCreated);
         const dateB = this.toDate(b.dateCreated);
 
-        console.log('JUST CHECKING...');
         return this.recipeStateService.dateIsIncreasing()
           ? dateB.getTime() - dateA.getTime()
           : dateA.getTime() - dateB.getTime();

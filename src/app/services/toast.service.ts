@@ -1,5 +1,5 @@
 import { ComponentRef, Injectable, ViewContainerRef } from '@angular/core';
-import { ToastComponent } from '../shared/components/toast/toast.component';
+import { ToastComponent } from '../shared/layout/overlays/toast/toast.component';
 
 @Injectable({
   providedIn: 'root',
@@ -13,11 +13,11 @@ export class ToastService {
 
   show(
     message: string,
-    type: 'success' | 'error' | 'warning' | 'info' = 'info'
+    type: 'success' | 'error' | 'warning' | 'info' = 'info',
   ) {
     if (!this.containerRef) {
       throw new Error(
-        'Toast container not set. Call registerContainer() first.'
+        'Toast container not set. Call registerContainer() first.',
       );
     }
 

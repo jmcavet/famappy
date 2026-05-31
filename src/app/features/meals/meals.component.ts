@@ -2,9 +2,9 @@ import { Component, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { MealDayCardComponent } from './components/meal-day-card/meal-day-card.component';
 import { CalendarComponent } from './components/calendar/calendar.component';
-import { LoadingComponent } from '../../shared/components/loading/loading.component';
 import { MealFacade } from './meals.facade';
 import { ButtonComponent } from '../../shared/ui/button/button.component';
+import { LoadingComponent } from '../../shared/layout/overlays/loading/loading.component';
 
 @Component({
   selector: 'app-meals',

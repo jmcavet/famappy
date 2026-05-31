@@ -39,7 +39,7 @@ function createMeal(
       preparationTime: 10,
       cookingTime: 20,
       servings: 2,
-      difficulty: 'low',
+      difficulty: 'easy',
       price: 'low',
       frequency: 'weekly',
       seasonsSelected: [],

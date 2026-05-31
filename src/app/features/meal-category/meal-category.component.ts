@@ -1,10 +1,11 @@
 import { Component, inject } from '@angular/core';
 import { CapitalizePipe } from '../../shared/pipes/capitalize.pipe';
 import { MealCategoryFacade } from './meal-category.facade';
+import { FloatingButtonComponent } from '../../shared/layout/shell/floating-button/floating-button.component';
 
 @Component({
   selector: 'app-meal-category',
-  imports: [CapitalizePipe],
+  imports: [CapitalizePipe, FloatingButtonComponent],
   providers: [MealCategoryFacade],
   templateUrl: './meal-category.component.html',
   styleUrl: './meal-category.component.css',

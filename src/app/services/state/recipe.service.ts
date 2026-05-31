@@ -18,7 +18,7 @@ export class RecipeStateService {
     preparationTime: 0,
     cookingTime: 0,
     servings: 4,
-    difficulty: 'normal',
+    difficulty: 'medium',
     price: 'normal',
     frequency: 'monthly',
     seasonsSelected: [],

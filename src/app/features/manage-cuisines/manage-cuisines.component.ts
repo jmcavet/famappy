@@ -1,11 +1,12 @@
 import { Component, inject } from '@angular/core';
 import { CapitalizePipe } from '../../shared/pipes/capitalize.pipe';
-import { LoadingComponent } from '../../shared/components/loading/loading.component';
 import { ManageCuisinesFacade } from './manage-cuisines.facade';
+import { LoadingComponent } from '../../shared/layout/overlays/loading/loading.component';
+import { FloatingButtonComponent } from '../../shared/layout/shell/floating-button/floating-button.component';
 
 @Component({
   selector: 'app-manage-cuisines',
-  imports: [CapitalizePipe, LoadingComponent],
+  imports: [CapitalizePipe, LoadingComponent, FloatingButtonComponent],
   providers: [ManageCuisinesFacade],
   templateUrl: './manage-cuisines.component.html',
   styleUrl: './manage-cuisines.component.css',

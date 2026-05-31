@@ -3,12 +3,21 @@
 @tailwind utilities;
 
 @import "./styles/surfaces";
+@import "./styles/geometries";
 @import "./styles/texts";
 @import "./styles/colors";
 @import "./styles/layouts";
+@import "./styles/container";
+@import "./styles/inset";
+@import "./styles/space";
+@import "./styles/margin";
+@import "./styles/density";
 @import "./styles/segmented_control";
+@import "./styles/grid";
 @import "./styles/select";
 @import "./styles/buttons";
+@import "./styles/tags";
+@import "./styles/fields";
 @import "./styles/chips";
 @import "./styles/utilities";
 
@@ -29,4 +38,6 @@ body {
 
 p {
   font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.625;
 }

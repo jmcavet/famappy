@@ -10,8 +10,6 @@ import {
 } from '@angular/core';
 import { Router } from '@angular/router';
 import { RecipeWithId } from '../components/recipe-card/recipe.model';
-import { LoadingComponent } from '../../../shared/components/loading/loading.component';
-import { ModalConfirmComponent } from '../../../shared/components/modal-confirm/modal-confirm.component';
 import { IngredientQuantityPipe } from '../../../shared/pipes/measure.pipe';
 import { RecipeStateService } from '../../../services/state/recipe.service';
 import { MealCategoryBackendService } from '../../../services/backend/meal-category.service';
@@ -23,12 +21,49 @@ import {
   MealCategoryDocInBackend,
 } from '../../../models/cuisine.model';
 import { RecipeCategoryBackendService } from '../../../services/backend/recipe-category.service';
-import { CommonModule, NgIf } from '@angular/common';
-import { ModalService } from '../../../shared/modal/modal.service';
+import { CommonModule, Location } from '@angular/common';
+import { ButtonComponent } from '../../../shared/ui/button/button.component';
+import { MinToHourPipe } from '../../../shared/pipes/mintohour.pipe';
+import { CapitalizePipe } from '../../../shared/pipes/capitalize.pipe';
+import { TabsComponent } from '../../new-recipe/components/tabs/tabs.component';
+import { TabComponent } from '../../new-recipe/components/tab/tab.component';
+import { HeaderShellComponent } from '../../../shared/layout/shell/header-shell.component';
+import { SectionComponent } from '../../../shared/layout/primitives/section.component';
+import { InlineComponent } from '../../../shared/layout/primitives/inline.component';
+import { StackComponent } from '../../../shared/layout/primitives/stack.component';
+import { RowComponent } from '../../../shared/layout/primitives/row.component';
+import { ServingsControlComponent } from '../../../shared/ui/servings-control/servings-control.component';
+import { ChipComponent } from '../../../shared/ui/chip/chip.component';
+import { PageLayoutComponent } from '../../../shared/layout/primitives/page-layout.component';
+import { TagComponent } from '../../../shared/ui/tag/tag.component';
+import { FooterComponent } from '../../../shared/layout/shell/footer/footer.component';
+import { ModalService } from '../../../shared/layout/overlays/modal/modal.service';
+import { ModalConfirmComponent } from '../../../shared/layout/overlays/modal/modal-confirm/modal-confirm.component';
+import { LoadingComponent } from '../../../shared/layout/overlays/loading/loading.component';
 
 @Component({
   selector: 'app-recipe',
-  imports: [LoadingComponent, IngredientQuantityPipe, CommonModule],
+  imports: [
+    MinToHourPipe,
+    LoadingComponent,
+    IngredientQuantityPipe,
+    TabsComponent,
+    TabComponent,
+    CommonModule,
+    ButtonComponent,
+    CapitalizePipe,
+    PageLayoutComponent,
+    ChipComponent,
+    RowComponent,
+    ServingsControlComponent,
+    InlineComponent,
+    ButtonComponent,
+    TagComponent,
+    HeaderShellComponent,
+    SectionComponent,
+    StackComponent,
+    FooterComponent,
+  ],
   templateUrl: './recipe.component.html',
   styleUrl: './recipe.component.css',
 })
@@ -43,6 +78,7 @@ export class RecipeComponent {
   private recipeCategoryBackendService = inject(RecipeCategoryBackendService);
   private cuisineService = inject(CuisineBackendService);
   private toastService = inject(ToastService);
+  private location = inject(Location);
 
   /** Declaration of signals communicating with firestore */
   readonly dbCuisines: Signal<CuisineDocInBackend[]> =
@@ -73,7 +109,23 @@ export class RecipeComponent {
     });
   }
 
-  readonly pageIsLoading = computed(() => this.recipeIsBeingDeleted());
+  goBack() {
+    this.location.back();
+  }
+
+  readonly totalTime = computed(() => {
+    const recipe = this.recipe();
+    if (!recipe) return 0;
+
+    return Number(recipe.preparationTime) + Number(recipe.cookingTime);
+  });
+
+  readonly pageIsLoading = computed(
+    () =>
+      this.recipesAreLoading() ||
+      this.mealCategoriesAreLoading() ||
+      this.cuisinesAreLoading(),
+  );
 
   readonly originalServings: Signal<number> = computed(() => {
     return this.recipe().servings;
@@ -90,6 +142,7 @@ export class RecipeComponent {
       ? recipeFromHistory
       : this.dbRecipes().find((recipe) => recipe.id === this.recipeId());
 
+    console.log('RECIPE: ', recipe);
     return recipe;
   });
 
@@ -98,6 +151,10 @@ export class RecipeComponent {
   onImageLoad(recipeId: string): void {
     const current = this.imageLoadedMap();
     this.imageLoadedMap.set({ ...current, [recipeId]: true });
+  }
+
+  onServingsChange(value: number) {
+    this.servings.set(value);
   }
 
   /** When the cuisines (retrieved from firestore) signal changes, find the one that matches the cuisineId from the state */
@@ -135,6 +192,33 @@ export class RecipeComponent {
     return this.dbRecipeCategories()
       .filter((cat) => recipeCategoryIds?.includes(cat.id))
       .map((item) => item.name);
+  });
+
+  difficultyScale = computed(() =>
+    this.recipe().difficulty === 'easy'
+      ? 'scaleHigh'
+      : this.recipe().difficulty === 'medium'
+        ? 'scaleMedium'
+        : 'scaleLow',
+  );
+
+  priceScale = computed(() =>
+    this.recipe().price === 'low'
+      ? 'scaleHigh'
+      : this.recipe().price === 'normal'
+        ? 'scaleMedium'
+        : 'scaleLow',
+  );
+
+  priceClass = computed(() => {
+    const price =
+      this.recipe().price === 'high'
+        ? 'high'
+        : this.recipe().price === 'normal'
+          ? 'medium'
+          : 'low';
+
+    return `text-scale-${price} dark:text-scaleDark-${price}`;
   });
 
   canShowTemplate: Signal<boolean> = computed(() => {
@@ -223,6 +307,10 @@ export class RecipeComponent {
     }
     return url;
   }
+
+  sortedIngredients = computed(() =>
+    this.recipe().ingredients.sort((a, b) => a.name.localeCompare(b.name)),
+  );
 
   commentLines = computed(() => {
     const lines = this.recipe()

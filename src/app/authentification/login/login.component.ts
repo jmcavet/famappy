@@ -3,7 +3,7 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { getAuth } from 'firebase/auth';
 import { AuthService } from '../../services/backend/auth.service';
-import { LoadingComponent } from '../../shared/components/loading/loading.component';
+import { LoadingComponent } from '../../shared/layout/overlays/loading/loading.component';
 
 @Component({
   selector: 'app-login',
