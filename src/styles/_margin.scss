@@ -1,0 +1,35 @@
+@layer components {
+  /* ── Margins */
+  .margin-xs {
+    @apply m-1;
+  }
+  .margin-sm {
+    @apply m-2 md:m-3;
+  }
+  .margin-md {
+    @apply m-3 md:m-4 lg:m-5;
+  }
+  .margin-lg {
+    @apply m-4 md:m-6 lg:m-8;
+  }
+  .margin-xl {
+    @apply m-6 md:m-8 lg:m-10;
+  }
+
+  /* Negative margins*/
+  .-margin-xs {
+    @apply -m-1;
+  }
+  .-margin-sm {
+    @apply -m-2 md:-m-3;
+  }
+  .-margin-md {
+    @apply -m-3 md:-m-4 lg:-m-5;
+  }
+  .-margin-lg {
+    @apply -m-4 md:-m-6 lg:-m-8;
+  }
+  .-margin-xl {
+    @apply -m-6 md:-m-8 lg:-m-10;
+  }
+}

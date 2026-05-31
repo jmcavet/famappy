@@ -1,0 +1,17 @@
+@layer components {
+  .container-sm {
+    @apply max-w-screen-sm mx-auto w-full;
+  } // 640px
+  .container-md {
+    @apply max-w-screen-md mx-auto w-full;
+  } // 768px
+  .container-lg {
+    @apply max-w-screen-lg mx-auto w-full;
+  } // 1024px
+  .container-xl {
+    @apply max-w-screen-xl mx-auto w-full;
+  } // 1280px
+  .container-full {
+    @apply max-w-full mx-auto w-full;
+  } // no limit
+}

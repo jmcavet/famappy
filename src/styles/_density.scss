@@ -1,0 +1,17 @@
+@layer components {
+  .density-xs {
+    @apply inset-xs space-xs;
+  }
+  .density-sm {
+    @apply inset-sm space-sm;
+  }
+  .density-md {
+    @apply space-md inset-md;
+  }
+  .density-lg {
+    @apply inset-lg space-lg;
+  }
+  .density-xl {
+    @apply inset-xl space-xl;
+  }
+}

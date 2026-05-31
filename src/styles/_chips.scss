@@ -13,6 +13,10 @@
   }
 
   /* Sizes */
+  .chip-xs {
+    @apply px-2 py-1 min-h-6;
+  }
+
   .chip-sm {
     @apply px-3 py-1.5 min-h-8;
   }

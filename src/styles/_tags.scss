@@ -1,0 +1,166 @@
+@layer components {
+  /*The basic '.tag' class represents the identity of the tag. The font weight is kept here for consistency purposes; it should not
+  vary from tag to tag. */
+  .tag {
+    @apply layout-row--center font-medium leading-none tracking-wide rounded-2xl;
+  }
+
+  /* ── Size (inset-inline + typography) ── */
+  .tag--xs {
+    @apply inset-inline-xs text-xs;
+  }
+  .tag--sm {
+    @apply inset-inline-sm text-sm;
+  }
+  .tag--md {
+    @apply inset-md text-base;
+  }
+  .tag--lg {
+    @apply inset-inline-lg text-lg;
+  }
+
+  .tag--primary {
+    --tag-bg: theme("colors.primary.DEFAULT");
+    --tag-border: theme("colors.primary.DEFAULT");
+    --tag-text: theme("colors.primary.50");
+    --tag-text-outline: theme("colors.primary.900");
+    --tag-text-ghost: theme("colors.primary.DEFAULT");
+  }
+
+  .dark .tag--primary {
+    --tag-bg: theme("colors.primary.dark");
+    --tag-border: theme("colors.primary.dark");
+    --tag-text: theme("colors.primary.50");
+    --tag-text-outline: theme("colors.primary.50");
+    --tag-text-ghost: theme("colors.primary.dark");
+  }
+
+  .tag--secondary {
+    --tag-bg: theme("colors.secondary.DEFAULT");
+    --tag-border: theme("colors.secondary.DEFAULT");
+    --tag-text: theme("colors.secondary.50");
+    --tag-text-outline: theme("colors.secondary.900");
+    --tag-text-ghost: theme("colors.secondary.DEFAULT");
+  }
+
+  .dark .tag--secondary {
+    --tag-bg: theme("colors.secondary.dark");
+    --tag-border: theme("colors.secondary.dark");
+    --tag-text: theme("colors.neutral.950");
+    --tag-text-outline: theme("colors.secondary.50");
+    --tag-text-ghost: theme("colors.secondary.dark");
+  }
+
+  .tag--success {
+    --tag-bg: theme("colors.success.DEFAULT");
+    --tag-border: theme("colors.success.DEFAULT");
+    --tag-text: theme("colors.success.50");
+    --tag-text-outline: theme("colors.success.900");
+    --tag-text-ghost: theme("colors.success.DEFAULT");
+  }
+
+  .dark .tag--success {
+    --tag-bg: theme("colors.success.dark");
+    --tag-border: theme("colors.success.dark");
+    --tag-text: theme("colors.success.50");
+    --tag-text-outline: theme("colors.success.50");
+    --tag-text-ghost: theme("colors.success.dark");
+  }
+
+  .tag--danger {
+    --tag-bg: theme("colors.danger.DEFAULT");
+    --tag-border: theme("colors.danger.DEFAULT");
+    --tag-text: theme("colors.danger.50");
+    --tag-text-outline: theme("colors.danger.900");
+    --tag-text-ghost: theme("colors.danger.DEFAULT");
+  }
+
+  .dark .tag--danger {
+    --tag-bg: theme("colors.danger.dark");
+    --tag-border: theme("colors.danger.dark");
+    --tag-text: theme("colors.danger.50");
+    --tag-text-outline: theme("colors.danger.50");
+    --tag-text-ghost: theme("colors.danger.dark");
+  }
+
+  .tag--neutral {
+    --tag-bg: theme("colors.neutral.500");
+    --tag-border: theme("colors.neutral.500");
+    --tag-text: theme("colors.neutral.50");
+    --tag-text-outline: theme("colors.neutral.900");
+    --tag-text-ghost: theme("colors.neutral.500");
+  }
+
+  .dark .tag--neutral {
+    --tag-bg: theme("colors.neutral.600");
+    --tag-border: theme("colors.neutral.600");
+    --tag-text: theme("colors.neutral.50");
+    --tag-text-outline: theme("colors.neutral.50");
+    --tag-text-ghost: theme("colors.neutral.600");
+  }
+
+  .tag--scaleHigh {
+    --tag-bg: theme("colors.scale.high.bg");
+    --tag-border: theme("colors.scale.high.bg");
+    --tag-text: theme("colors.scale.high.text");
+    --tag-text-outline: theme("colors.scale.high.text");
+    --tag-text-ghost: theme("colors.scale.high.bg");
+  }
+
+  .dark .tag--scaleHigh {
+    --tag-bg: theme("colors.scaleDark.high.bg");
+    --tag-border: theme("colors.scaleDark.high.bg");
+    --tag-text: theme("colors.scaleDark.high.text");
+    --tag-text-outline: theme("colors.scaleDark.high.text");
+    --tag-text-ghost: theme("colors.scaleDark.high.bg");
+  }
+
+  .tag--scaleMedium {
+    --tag-bg: theme("colors.scale.medium.bg");
+    --tag-border: theme("colors.scale.medium.bg");
+    --tag-text: theme("colors.scale.medium.text");
+    --tag-text-outline: theme("colors.scale.medium.text");
+    --tag-text-ghost: theme("colors.scale.medium.bg");
+  }
+
+  .dark .tag--scaleMedium {
+    --tag-bg: theme("colors.scaleDark.medium.bg");
+    --tag-border: theme("colors.scaleDark.medium.bg");
+    --tag-text: theme("colors.scaleDark.medium.text");
+    --tag-text-outline: theme("colors.scaleDark.medium.text");
+    --tag-text-ghost: theme("colors.scaleDark.medium.bg");
+  }
+
+  .tag--scaleLow {
+    --tag-bg: theme("colors.scale.low.bg");
+    --tag-border: theme("colors.scale.low.bg");
+    --tag-text: theme("colors.scale.low.text");
+    --tag-text-outline: theme("colors.scale.low.text");
+    --tag-text-ghost: theme("colors.scale.low.bg");
+  }
+
+  .dark .tag--scaleLow {
+    --tag-bg: theme("colors.scaleDark.low.bg");
+    --tag-border: theme("colors.scaleDark.low.bg");
+    --tag-text: theme("colors.scaleDark.low.text");
+    --tag-text-outline: theme("colors.scaleDark.low.text");
+    --tag-text-ghost: theme("colors.scaleDark.low.bg");
+  }
+
+  .tag--filled {
+    background-color: var(--tag-bg);
+    color: var(--tag-text);
+    border-color: var(--tag-border);
+  }
+
+  .tag--outline {
+    background-color: transparent;
+    color: var(--tag-text-outline);
+    border: 1px solid var(--tag-border);
+  }
+
+  .tag--ghost {
+    background-color: transparent;
+    color: var(--tag-text-ghost);
+  }
+}

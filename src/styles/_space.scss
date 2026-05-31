@@ -1,0 +1,25 @@
+@layer components {
+  /*-----------------------------------------*/
+  /*Start without the x/y split, and introduce it only when you have a grid layout that genuinely needs asymmetric gaps.*/
+  /*-----------------------------------------*/
+
+  /* ── Space (gap — flex and grid layouts) ── */
+  .space-xs {
+    @apply gap-1;
+  } // very tight, inline elements (icons)
+  .space-sm {
+    @apply gap-2;
+  } // compact: dense list rows, tight grids
+  .space-md {
+    @apply gap-4;
+  } // default: standard card sections
+  .space-lg {
+    @apply gap-6 md:gap-8;
+  } // spacious: feature cards, section groups
+  .space-xl {
+    @apply gap-8 md:gap-12;
+  } // generous: page-level section separation
+  .space-2xl {
+    @apply gap-12 md:gap-20;
+  } // very generous: large page blocks
+}
