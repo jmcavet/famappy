@@ -1,0 +1,19 @@
+<div class="modal-container surface-3">
+  <h2 class="header">{{ title }}</h2>
+
+  <div class="message-container">{{ message }}</div>
+
+  <div class="flex-between">
+    <app-button
+      variant="ghost"
+      [color]="btnConfirmColor"
+      size="lg"
+      (click)="onCancel()"
+      >Cancel</app-button
+    >
+
+    <app-button [color]="btnConfirmColor" (click)="onConfirm()">{{
+      btnConfirmText
+    }}</app-button>
+  </div>
+</div>

@@ -8,12 +8,12 @@ import { DialogModule } from 'primeng/dialog';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatButtonModule } from '@angular/material/button';
 import { CommonModule } from '@angular/common';
-import { ToastContainerComponent } from './shared/components/toast-container/toast-container.component';
 import { ToastService } from './services/toast.service';
-import { FooterComponent } from './shared/components/footer/footer.component';
-import { ModalHostComponent } from './shared/modal/modal-host.component';
-import { ContextMenuHostComponent } from './shared/context-menu/context-menu-host/context-menu-host.component';
 import { PwaUpdateService } from './pwa/pwa-update.service';
+import { FooterComponent } from './shared/layout/shell/footer/footer.component';
+import { ModalHostComponent } from './shared/layout/overlays/modal/modal-host.component';
+import { ContextMenuHostComponent } from './shared/layout/overlays/context-menu/context-menu-host/context-menu-host.component';
+import { ToastContainerComponent } from './shared/layout/overlays/toast-container/toast-container.component';
 
 @Component({
   selector: 'app-root',

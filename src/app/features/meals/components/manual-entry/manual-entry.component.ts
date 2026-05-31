@@ -4,7 +4,7 @@ import { ManualEntryFacade } from './manual-entry.facade';
 import { CalendarDay } from '../calendar/calendar.facade';
 import { MealType, MealWithId } from '../../state/mealCart.model';
 import { ButtonComponent } from '../../../../shared/ui/button/button.component';
-import { ModalService } from '../../../../shared/modal/modal.service';
+import { ModalService } from '../../../../shared/layout/overlays/modal/modal.service';
 
 @Component({
   selector: 'app-manual-entry',

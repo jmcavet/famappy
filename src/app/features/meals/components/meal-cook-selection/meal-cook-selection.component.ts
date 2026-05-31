@@ -3,8 +3,8 @@ import { MealWithId } from '../../state/mealCart.model';
 import { MealCookSelectionFacade } from './meal-cook-selection.facade';
 import { CalendarDay } from '../calendar/calendar.facade';
 import { MemberDomainFacade } from '../../../../domain-facades/member.facade';
-import { ContextMenuService } from '../../../../shared/context-menu/context-menu-host/context-menu.service';
-import { ContextMenuCooksComponent } from '../../../../shared/context-menu/context-menu-cooks/context-menu-cooks.component';
+import { ContextMenuService } from '../../../../shared/layout/overlays/context-menu/context-menu-host/context-menu.service';
+import { ContextMenuCooksComponent } from '../../../../shared/layout/overlays/context-menu/context-menu-cooks/context-menu-cooks.component';
 
 @Component({
   selector: 'app-meal-cook-selection',

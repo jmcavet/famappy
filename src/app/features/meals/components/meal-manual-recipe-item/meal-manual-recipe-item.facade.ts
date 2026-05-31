@@ -2,7 +2,7 @@ import { inject, Injectable, Signal, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { ToastService } from '../../../../services/toast.service';
 import { MealDomainFacade } from '../../../../domain-facades/meal.facade';
-import { ModalService } from '../../../../shared/modal/modal.service';
+import { ModalService } from '../../../../shared/layout/overlays/modal/modal.service';
 
 /** This UI facade may inject domain facades. However, domain facades must NEVER inject UI facades!! */
 @Injectable({ providedIn: 'root' })

@@ -2,14 +2,14 @@ import { computed, inject, Injectable, signal } from '@angular/core';
 import { RecipeStateService } from '../../services/state/recipe.service';
 import { IngredientDomainFacade } from '../../domain-facades/ingredient.facade';
 import { IngredientCategoryDomainFacade } from '../../domain-facades/ingredientCategory.facade';
-import { ModalService } from '../../shared/modal/modal.service';
-import { ModalConfirmComponent } from '../../shared/components/modal-confirm/modal-confirm.component';
 import {
   IngredientWithIdAndDate,
   IngredientWithTypeName,
   IsAcending,
   SortKey,
 } from '../../models/ingredient.model';
+import { ModalService } from '../../shared/layout/overlays/modal/modal.service';
+import { ModalConfirmComponent } from '../../shared/layout/overlays/modal/modal-confirm/modal-confirm.component';
 
 @Injectable()
 export class ManageIngredientsFacade {

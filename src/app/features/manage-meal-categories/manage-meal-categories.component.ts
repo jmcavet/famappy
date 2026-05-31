@@ -1,7 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { CapitalizePipe } from '../../shared/pipes/capitalize.pipe';
-import { LoadingComponent } from '../../shared/components/loading/loading.component';
 import { ManageMealCategoryFacade } from './manage-meal-category.facade';
+import { LoadingComponent } from '../../shared/layout/overlays/loading/loading.component';
 
 @Component({
   selector: 'app-manage-meal-categories',

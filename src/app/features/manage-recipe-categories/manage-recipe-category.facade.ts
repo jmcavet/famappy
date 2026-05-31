@@ -1,12 +1,12 @@
 import { computed, inject, Injectable } from '@angular/core';
-import { ModalService } from '../../shared/modal/modal.service';
-import { ModalInputComponent } from '../../shared/components/modal-input/modal-input.component';
 import { RecipeStateService } from '../../services/state/recipe.service';
-import { ModalConfirmComponent } from '../../shared/components/modal-confirm/modal-confirm.component';
 import { RecipeDomainFacade } from '../../domain-facades/recipe.facade';
 import { RecipeCategoryBackendService } from '../../services/backend/recipe-category.service';
 import { RecipeCategoryDomainFacade } from '../../domain-facades/recipeCategory.facade';
 import { RecipeBackendService } from '../../services/backend/recipe.service';
+import { ModalService } from '../../shared/layout/overlays/modal/modal.service';
+import { ModalInputComponent } from '../../shared/layout/overlays/modal/modal-input/modal-input.component';
+import { ModalConfirmComponent } from '../../shared/layout/overlays/modal/modal-confirm/modal-confirm.component';
 
 /** This UI facade may inject domain facades. However, domain facades must NEVER inject UI facades!! */
 @Injectable()

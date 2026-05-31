@@ -1,7 +1,7 @@
 import { Component, computed, inject, input } from '@angular/core';
 import { MealManualRecipeItemFacade } from './meal-manual-recipe-item.facade';
-import { ModalConfirmComponent } from '../../../../shared/components/modal-confirm/modal-confirm.component';
-import { ModalService } from '../../../../shared/modal/modal.service';
+import { ModalService } from '../../../../shared/layout/overlays/modal/modal.service';
+import { ModalConfirmComponent } from '../../../../shared/layout/overlays/modal/modal-confirm/modal-confirm.component';
 
 @Component({
   selector: 'app-meal-manual-recipe-item',

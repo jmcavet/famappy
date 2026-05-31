@@ -1,8 +1,8 @@
 import { NgFor } from '@angular/common';
 import { Component, computed, inject, Signal } from '@angular/core';
-import { LoadingComponent } from '../../shared/components/loading/loading.component';
 import { IngredientCategoryBackendService } from '../../services/backend/ingredient-category.service';
 import { IngredientTypeWithDate } from '../../models/ingredient-type.model';
+import { LoadingComponent } from '../../shared/layout/overlays/loading/loading.component';
 
 @Component({
   selector: 'app-ingredient-categories',

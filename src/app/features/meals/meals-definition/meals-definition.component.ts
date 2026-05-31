@@ -1,7 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { RecipeCategoryDocInBackend } from '../../../models/cuisine.model';
-import { LoadingComponent } from '../../../shared/components/loading/loading.component';
 import { NgClass } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { MealDefinitionFacade } from './meals-definition.facade';
@@ -9,6 +8,7 @@ import { StepperComponent } from '../meals-cart/components/stepper/stepper.compo
 import { ButtonComponent } from '../../../shared/ui/button/button.component';
 import { ChipComponent } from '../../../shared/ui/chip/chip.component';
 import { SelectComponent } from '../../../shared/ui/select/select.component';
+import { LoadingComponent } from '../../../shared/layout/overlays/loading/loading.component';
 
 @Component({
   selector: 'app-meals-definition',

@@ -12,10 +12,11 @@ type ChipColor = 'primary' | 'secondary' | 'neutral';
 export class ChipComponent {
   @Input() variant: ChipVariant = 'surface';
   @Input() color: ChipColor = 'primary';
-  @Input() size: 'sm' | 'md' | 'lg' = 'md';
-  @Input() fullWidth = false;
-  @Input() selected = false;
-  @Input() disabled = false;
+  @Input() size: 'xs' | 'sm' | 'md' | 'lg' = 'md';
+  @Input() fullWidth: false | true = false;
+  @Input() selected: false | true = false;
+  @Input() disabled: false | true = false;
+  @Input() interactive: false | true = true;
 
   @Output() toggle = new EventEmitter<void>();
 
@@ -35,7 +36,7 @@ export class ChipComponent {
     if (this.disabled) {
       classes.push('chip-disabled');
     } else {
-      classes.push('chip-interactive');
+      classes.push(this.interactive ? 'chip-interactive' : '');
     }
 
     if (this.selected) {

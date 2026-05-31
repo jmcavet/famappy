@@ -1,10 +1,10 @@
 import { computed, inject, Injectable } from '@angular/core';
 import { Location } from '@angular/common';
-import { ModalService } from '../../shared/modal/modal.service';
-import { ModalInputComponent } from '../../shared/components/modal-input/modal-input.component';
 import { MealCategoryDomainFacade } from '../../domain-facades/mealCategory.facade';
 import { MealCategoryBackendService } from '../../services/backend/meal-category.service';
 import { RecipeStateService } from '../../services/state/recipe.service';
+import { ModalService } from '../../shared/layout/overlays/modal/modal.service';
+import { ModalInputComponent } from '../../shared/layout/overlays/modal/modal-input/modal-input.component';
 
 /** This UI facade may inject domain facades. However, domain facades must NEVER inject UI facades!! */
 @Injectable()

@@ -15,7 +15,12 @@ import {
 import { RecipeStateService } from '../../../services/state/recipe.service';
 import { Router } from '@angular/router';
 import { FilterSectionComponent } from './components/filter-section/filter-section.component';
-import { Difficulty, Frequency, Season } from '../../../models/recipe.model';
+import {
+  Difficulty,
+  Frequency,
+  Price,
+  Season,
+} from '../../../models/recipe.model';
 import { FilterGroupDefaultComponent } from './components/filter-group-default/filter-group-default.component';
 import { RecipeBackendService } from '../../../services/backend/recipe.service';
 import {
@@ -30,8 +35,13 @@ import { Location } from '@angular/common';
 
 type AllowedStringArrayKeys = 'mealCategoryId' | 'recipeCategoryIds';
 
-interface PropertyTag {
+interface DifficultyTag {
   name: Difficulty;
+  selected: boolean;
+}
+
+interface PriceTag {
+  name: Price;
   selected: boolean;
 }
 
@@ -210,16 +220,16 @@ export class RecipeFilterComponent {
     );
   });
 
-  difficultyOptionTags = signal<PropertyTag[]>([
-    { name: 'low', selected: this.stateFilterDifficulties.includes('low') },
+  difficultyOptionTags = signal<DifficultyTag[]>([
+    { name: 'easy', selected: this.stateFilterDifficulties.includes('easy') },
     {
-      name: 'normal',
-      selected: this.stateFilterDifficulties.includes('normal'),
+      name: 'medium',
+      selected: this.stateFilterDifficulties.includes('medium'),
     },
-    { name: 'high', selected: this.stateFilterDifficulties.includes('high') },
+    { name: 'hard', selected: this.stateFilterDifficulties.includes('hard') },
   ]);
 
-  priceOptionTags = signal<PropertyTag[]>([
+  priceOptionTags = signal<PriceTag[]>([
     { name: 'low', selected: this.stateFilterPrices.includes('low') },
     { name: 'normal', selected: this.stateFilterPrices.includes('normal') },
     { name: 'high', selected: this.stateFilterPrices.includes('high') },

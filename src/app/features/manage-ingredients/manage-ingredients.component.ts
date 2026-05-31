@@ -1,6 +1,5 @@
 import { Component, ElementRef, inject, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { LoadingComponent } from '../../shared/components/loading/loading.component';
 import {
   IngredientWithIdAndDate,
   IngredientWithTypeName,
@@ -11,6 +10,7 @@ import { IngredientCategoriesSelectionComponent } from './components/ingredient-
 import { IngredientFilterComponent } from './components/ingredient-filter/ingredient-filter.component';
 import { ButtonComponent } from '../../shared/ui/button/button.component';
 import { ManageIngredientsFacade } from './manage-ingredients.facade';
+import { LoadingComponent } from '../../shared/layout/overlays/loading/loading.component';
 
 @Component({
   selector: 'app-manage-ingredients',

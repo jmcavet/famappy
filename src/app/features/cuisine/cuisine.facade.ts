@@ -1,10 +1,10 @@
 import { computed, inject, Injectable } from '@angular/core';
-import { ModalService } from '../../shared/modal/modal.service';
-import { ModalInputComponent } from '../../shared/components/modal-input/modal-input.component';
 import { CuisineDomainFacade } from '../../domain-facades/cuisine.facade';
 import { CuisineBackendService } from '../../services/backend/cuisine.service';
 import { RecipeStateService } from '../../services/state/recipe.service';
 import { Location } from '@angular/common';
+import { ModalService } from '../../shared/layout/overlays/modal/modal.service';
+import { ModalInputComponent } from '../../shared/layout/overlays/modal/modal-input/modal-input.component';
 
 @Injectable()
 export class CuisineFacade {

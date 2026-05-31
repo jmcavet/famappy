@@ -1,12 +1,12 @@
 import { computed, inject, Injectable } from '@angular/core';
-import { ModalService } from '../../shared/modal/modal.service';
-import { ModalInputComponent } from '../../shared/components/modal-input/modal-input.component';
 import { CuisineDomainFacade } from '../../domain-facades/cuisine.facade';
 import { CuisineBackendService } from '../../services/backend/cuisine.service';
 import { RecipeStateService } from '../../services/state/recipe.service';
 import { RecipeDomainFacade } from '../../domain-facades/recipe.facade';
-import { ModalConfirmComponent } from '../../shared/components/modal-confirm/modal-confirm.component';
 import { RecipeBackendService } from '../../services/backend/recipe.service';
+import { ModalService } from '../../shared/layout/overlays/modal/modal.service';
+import { ModalInputComponent } from '../../shared/layout/overlays/modal/modal-input/modal-input.component';
+import { ModalConfirmComponent } from '../../shared/layout/overlays/modal/modal-confirm/modal-confirm.component';
 
 @Injectable()
 export class ManageCuisinesFacade {

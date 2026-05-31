@@ -1,0 +1,13 @@
+@if (dataIsLoading()) {
+  <div class="flex-col-center">
+    <app-loading />
+  </div>
+} @else {
+  <div class="menu-container">
+    @for (parent of parents(); track parent.id) {
+      <button class="btn-parent" (click)="assignCook(parent)">
+        {{ parent.name }}
+      </button>
+    }
+  </div>
+}

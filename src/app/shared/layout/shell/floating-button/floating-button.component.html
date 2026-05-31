@@ -1,0 +1,14 @@
+<div class="fixed bottom-12 left-1/2 -translate-x-1/2 z-50">
+  <app-button
+    [color]="color()"
+    shape="pill"
+    [routerLink]="routerLink()"
+    [shadow]="true"
+    (click)="clicked.emit()"
+    [disabled]="disabled()"
+  >
+    <div class="h-5 w-5">
+      <i class="fa-solid fa-xl" [ngClass]="icon()"></i>
+    </div>
+  </app-button>
+</div>

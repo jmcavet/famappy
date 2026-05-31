@@ -1,8 +1,8 @@
 import { Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { LoadingComponent } from '../../shared/components/loading/loading.component';
 import { ManageIngredientCategoriesFacade } from './manage-ingredient-categories.facade';
 import { ButtonComponent } from '../../shared/ui/button/button.component';
+import { LoadingComponent } from '../../shared/layout/overlays/loading/loading.component';
 
 @Component({
   selector: 'app-ingredient-categories-selection-page',
