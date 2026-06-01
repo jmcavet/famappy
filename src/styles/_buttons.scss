@@ -133,6 +133,8 @@
   .btn--ghost {
     background-color: transparent;
     color: var(--btn-text-ghost);
+    // Remove padding (for links)
+    @apply inset-none;
 
     &:hover {
       color: var(--btn-text-hover);
