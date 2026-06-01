@@ -32,6 +32,12 @@ import { ChipComponent } from '../../../shared/ui/chip/chip.component';
 import { SegmentedControlComponent } from '../../../shared/ui/segmented-control/segmented-control.component';
 import { ToggleBtnWithIconComponent } from '../../../shared/ui/toggle-btn-with-icon/toggle-btn-with-icon.component';
 import { Location } from '@angular/common';
+import { HeaderShellComponent } from '../../../shared/layout/shell/header-shell.component';
+import { PageLayoutComponent } from '../../../shared/layout/primitives/page-layout.component';
+import { RowComponent } from '../../../shared/layout/primitives/row.component';
+import { SectionComponent } from '../../../shared/layout/primitives/section.component';
+import { StackComponent } from '../../../shared/layout/primitives/stack.component';
+import { InlineComponent } from '../../../shared/layout/primitives/inline.component';
 
 type AllowedStringArrayKeys = 'mealCategoryId' | 'recipeCategoryIds';
 
@@ -58,10 +64,15 @@ interface SeasonTag {
 @Component({
   selector: 'app-recipe-filter',
   imports: [
+    HeaderShellComponent,
+    PageLayoutComponent,
+    SectionComponent,
+    StackComponent,
+    RowComponent,
+    InlineComponent,
     FilterSectionComponent,
     FilterGroupDefaultComponent,
     ButtonComponent,
-    ChipComponent,
     ToggleBtnWithIconComponent,
   ],
   templateUrl: './recipe-filter.component.html',

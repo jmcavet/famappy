@@ -1,23 +1,27 @@
-<div>
-  <div class="flex-start gap-6">
-    <div class="header">
-      <i class="{{ icon }}"></i>
-      <p class="font-semibold">{{ sectionTitle }}</p>
-    </div>
-    @if (canSelectAll()) {
-      <app-button variant="ghost" (click)="selectDeselectAll()">{{
-        labelToggleSelectAll()
-      }}</app-button>
-    }
-  </div>
+<app-stack>
+  <app-row>
+    <app-inline>
+      <app-inline gap="sm">
+        <i class="{{ icon }}"></i>
+        <span class="font-semibold whitespace-nowrap">{{ sectionTitle }}</span>
+      </app-inline>
+      @if (canSelectAll()) {
+        <app-button variant="ghost" (click)="selectDeselectAll()">{{
+          labelToggleSelectAll()
+        }}</app-button>
+      }
+    </app-inline>
+  </app-row>
 
-  <div class="flex-start flex-wrap gap-x-2 gap-y-4">
-    @for (tag of tags(); track tag.id) {
-      <app-chip
-        [selected]="selectedIds().includes(tag.id)"
-        (click)="toggleTag(tag.id)"
-        >{{ tag.name }}</app-chip
-      >
-    }
-  </div>
-</div>
+  <app-row>
+    <app-inline gap="sm" [wrap]="true">
+      @for (tag of tags(); track tag.id) {
+        <app-chip
+          [selected]="selectedIds().includes(tag.id)"
+          (click)="toggleTag(tag.id)"
+          >{{ tag.name }}</app-chip
+        >
+      }
+    </app-inline>
+  </app-row>
+</app-stack>
