@@ -1,5 +1,7 @@
 <div class="p-2">
-  <div class="input-wrapper">
+  <div class="w-full relative">
+    <i class="fa-solid fa-magnifying-glass fa-xl icon-search"></i>
+
     <input
       type="text"
       id="search"
@@ -11,10 +13,9 @@
 
     @if (filter()) {
       <button type="button" (click)="onResetFilterText()" class="btn-reset">
-        <i class="fa-solid fa-close fa-lg"></i>
+        <i class="fa-solid fa-close fa-xl"></i>
       </button>
     }
-    <i class="fa-solid fa-search fa-lg icon-search"></i>
   </div>
 
   <div class="flex items-center justify-between mt-6">
