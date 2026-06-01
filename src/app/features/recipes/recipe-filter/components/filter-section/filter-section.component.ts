@@ -9,10 +9,19 @@ import {
 } from '@angular/core';
 import { ButtonComponent } from '../../../../../shared/ui/button/button.component';
 import { ChipComponent } from '../../../../../shared/ui/chip/chip.component';
+import { RowComponent } from '../../../../../shared/layout/primitives/row.component';
+import { InlineComponent } from '../../../../../shared/layout/primitives/inline.component';
+import { StackComponent } from '../../../../../shared/layout/primitives/stack.component';
 
 @Component({
   selector: 'app-filter-section',
-  imports: [ButtonComponent, ChipComponent],
+  imports: [
+    ButtonComponent,
+    ChipComponent,
+    StackComponent,
+    RowComponent,
+    InlineComponent,
+  ],
   templateUrl: './filter-section.component.html',
   styleUrl: './filter-section.component.css',
 })
