@@ -93,8 +93,10 @@
       <app-stack variant="section">
         <app-row>
           <app-inline>
-            <i class="fa-solid fa-carrot"></i>
-            <p class="font-semibold">Ingredients</p>
+            <app-inline gap="sm">
+              <i class="fa-solid fa-carrot"></i>
+              <p class="font-semibold">Ingredients</p>
+            </app-inline>
             <button (click)="navigateToFilterIngredients()">
               <i class="fa-solid fa-plus fa-xl"></i>
             </button>
