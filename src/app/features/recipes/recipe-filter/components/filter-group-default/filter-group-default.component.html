@@ -1,19 +1,25 @@
-<div class="flex-start gap-6 mb-2">
-  <div class="header">
-    <i class="{{ icon }}"></i>
-    <p class="font-semibold">{{ sectionTitle }}</p>
-  </div>
-  <app-button variant="ghost" (click)="selectDeselectAll()">{{
-    labelToggleSelectAll()
-  }}</app-button>
-</div>
+<app-stack>
+  <app-row>
+    <app-inline>
+      <app-inline gap="sm">
+        <i class="{{ icon }}"></i>
+        <span class="font-semibold whitespace-nowrap">{{ sectionTitle }}</span>
+      </app-inline>
+      <app-button variant="ghost" (click)="selectDeselectAll()">{{
+        labelToggleSelectAll()
+      }}</app-button>
+    </app-inline>
+  </app-row>
 
-<div class="flex-start flex-wrap gap-2">
-  @for (tag of tags(); track $index) {
-    <app-chip
-      [selected]="tag.selected === true"
-      (click)="toggleTag(tag.name)"
-      >{{ tag.name }}</app-chip
-    >
-  }
-</div>
+  <app-row>
+    <app-inline gap="sm" [wrap]="true">
+      @for (tag of tags(); track tag.id) {
+        <app-chip
+          [selected]="tag.selected === true"
+          (click)="toggleTag(tag.name)"
+          >{{ tag.name }}</app-chip
+        >
+      }
+    </app-inline>
+  </app-row>
+</app-stack>

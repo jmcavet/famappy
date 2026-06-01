@@ -1,17 +1,19 @@
-import {
-  Component,
-  computed,
-  effect,
-  Input,
-  Signal,
-  WritableSignal,
-} from '@angular/core';
+import { Component, computed, Input, WritableSignal } from '@angular/core';
 import { ButtonComponent } from '../../../../../shared/ui/button/button.component';
 import { ChipComponent } from '../../../../../shared/ui/chip/chip.component';
+import { StackComponent } from '../../../../../shared/layout/primitives/stack.component';
+import { RowComponent } from '../../../../../shared/layout/primitives/row.component';
+import { InlineComponent } from '../../../../../shared/layout/primitives/inline.component';
 
 @Component({
   selector: 'app-filter-group-default',
-  imports: [ButtonComponent, ChipComponent],
+  imports: [
+    ButtonComponent,
+    ChipComponent,
+    StackComponent,
+    RowComponent,
+    InlineComponent,
+  ],
   templateUrl: './filter-group-default.component.html',
   styleUrl: './filter-group-default.component.css',
 })
@@ -45,7 +47,5 @@ export class FilterGroupDefaultComponent {
         tag.name === tagName ? { ...tag, selected: !tag.selected } : tag,
       ),
     );
-
-    console.log('tags: ', this.tags());
   }
 }
