@@ -2,10 +2,10 @@
   (click)="selectItem()"
   [ngClass]="['item-container', isSelected() ? 'selected' : '']"
 >
-  <div class="flex-between gap-4">
-    <div class="text-gray-400 dark:text-gray-400 italic">
+  <app-row>
+    <span class="text-neutral-400 dark:text-neutral-400 italic">
       {{ ingredient().categoryName }}
-    </div>
-    <div>{{ ingredient().name }}</div>
-  </div>
+    </span>
+    <span>{{ ingredient().name }}</span>
+  </app-row>
 </button>
