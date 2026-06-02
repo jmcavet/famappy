@@ -43,7 +43,7 @@
   </app-stack>
 } @else {
   <div class="layout-stack h-dvh">
-    <app-header-shell-shell
+    <app-header-shell
       ><app-recipe-search
         [(filter)]="filterText"
         [recipesFilteredByTitle]="recipesFilteredByTitle()"
@@ -53,7 +53,7 @@
         [dbRecipeCategories]="dbRecipeCategories()"
         [dbIngredients]="dbIngredients()"
         [dbIngredientCategories]="dbIngredientCategories()"
-    /></app-header-shell-shell>
+    /></app-header-shell>
     <app-page-layout maxSize="lg">
       <app-grid [colsMd]="3" [colsLg]="4" gap="sm">
         @for (recipe of recipesFiltered(); track $index) {

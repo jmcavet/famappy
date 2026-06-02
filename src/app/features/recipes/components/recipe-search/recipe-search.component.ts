@@ -57,7 +57,6 @@ export class RecipeSearchComponent {
   }
 
   toggleSorting() {
-    console.log('recipeState: ', this.recipeState());
     this.dateIsIncreasing.update((curr) => !curr);
   }
 }

@@ -1,4 +1,4 @@
-<app-stack>
+<app-stack variant="section">
   <app-row>
     <app-inline>
       <app-inline gap="sm">
@@ -13,7 +13,7 @@
 
   <app-row>
     <app-inline gap="sm" [wrap]="true">
-      @for (tag of tags(); track tag.id) {
+      @for (tag of tags(); track $index) {
         <app-chip
           [selected]="tag.selected === true"
           (click)="toggleTag(tag.name)"

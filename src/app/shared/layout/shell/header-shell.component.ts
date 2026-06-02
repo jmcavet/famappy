@@ -1,7 +1,7 @@
 import { Component, computed } from '@angular/core';
 
 @Component({
-  selector: 'app-header-shell-shell',
+  selector: 'app-header-shell',
   standalone: true,
   template: `<ng-content />`,
   host: {

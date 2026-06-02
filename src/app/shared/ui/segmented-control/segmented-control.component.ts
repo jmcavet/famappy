@@ -19,6 +19,7 @@ type ButtonColor = 'primary' | 'secondary' | 'neutral';
 export class SegmentedControlComponent<T extends string> {
   // Options to display
   options = input.required<T[]>();
+  hasBadge = input<boolean>(false);
 
   // initial selected value from parent
   selectedInput = input<T | null>(null);

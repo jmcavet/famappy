@@ -21,7 +21,7 @@ export class IngredientFilterComponent {
   /** Services */
   private ingredientCategoryService = inject(IngredientCategoryBackendService);
 
-  filterSelected = input<SortKey>();
+  filterSelected = input<string>();
   isAscending = input<IsAcending>();
   filterSelectedChange = output<SortKey>();
 
