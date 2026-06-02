@@ -1,45 +1,55 @@
-<div class="page-container page-full-width layout-hcf">
-  <div class="surface-1 sticky-top space-y-4 p-4 min-w-0">
-    <div class="input-wrapper">
-      <input
-        type="text"
-        id="search"
-        name="search"
-        class="surface-2"
-        placeholder="Search for an ingredient"
-        autocomplete="off"
-        [(ngModel)]="filter"
-      />
+@if (pageLoading()) {
+  <app-stack align="center">
+    <app-loading />
+  </app-stack>
+} @else {
+  <div class="layout-stack h-dvh">
+    <app-header-shell
+      ><div class="inset-md">
+        <app-stack>
+          <h1 class="text-headline font-roboto text-center">
+            Filter Ingredients
+          </h1>
 
-      @if (filter()) {
-        <button type="button" (click)="onResetFilterText()" class="btn-reset">
-          <i class="fa-solid fa-close fa-lg"></i>
-        </button>
+          <div
+            class="overflow-x-auto overflow-y-hidden flex gap-4 snap-x snap-mandatory scroll-smooth"
+          >
+            <app-segmented-control
+              [fullWidth]="false"
+              size="sm"
+              [hasBadge]="true"
+              [options]="availableCategoriesNames()"
+              [selectedInput]="ingredientCategoryNameSelected()"
+              (selectionChange)="toggleIngredientCategory($event)"
+            >
+            </app-segmented-control>
+          </div>
+        </app-stack></div
+    ></app-header-shell>
+
+    <app-page-layout>
+      @if (sortedIngredients().length > 0) {
+        <app-section>
+          <app-stack variant="compact">
+            @for (ingredient of sortedIngredients(); track $index) {
+              <app-ingredient-item
+                [ingredient]="ingredient"
+                [selectedIngredientIds]="selectedIngredientIds()"
+                (toggleItem)="toggleIngredient($event)"
+              />
+            }
+          </app-stack>
+        </app-section>
       }
-      <i class="fa-solid fa-search fa-lg icon-search"></i>
-    </div>
+    </app-page-layout>
 
-    <div>
-      <app-ingredient-categories-selection-page />
+    <div class="inset-md">
+      <app-button
+        (click)="applyFilter()"
+        [fullWidth]="true"
+        [disabled]="!nbIngredientsFiltered()"
+        >{{ btnText() }}</app-button
+      >
     </div>
   </div>
-
-  <div class="section-scroll space-y-2 p-4">
-    @for (ingredient of ingredientsFiltered(); track $index) {
-      <div class="rounded-md">
-        <app-ingredient-item
-          [ingredient]="ingredient"
-          [selectedIngredientIds]="selectedIngredientIds()"
-          (toggleItem)="toggleItem($event)"
-        />
-      </div>
-    }
-  </div>
-
-  <app-button
-    (click)="applyFilter()"
-    [fullWidth]="true"
-    [disabled]="!nbIngredientsFiltered()"
-    >{{ btnText() }}</app-button
-  >
-</div>
+}
