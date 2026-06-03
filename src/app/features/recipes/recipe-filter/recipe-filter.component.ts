@@ -573,7 +573,7 @@ export class RecipeFilterComponent {
     }).length;
   });
 
-  validateFilters() {
+  saveFilters() {
     this.recipeStateService.saveNumberFilters(this.nbFilters());
 
     this.recipeStateService.saveFilter(
@@ -596,17 +596,19 @@ export class RecipeFilterComponent {
         .map((tag) => tag.name),
       this.ingredientFilterMode(),
     );
+  }
 
-    // this.router.navigate(['/recipes']);
-    this.location.back();
+  saveFiltersAndGoBack() {
+    this.saveFilters();
+    this.goBack();
   }
 
   cancel() {
-    // this.router.navigate(['/recipes']);
-    this.location.back();
+    this.goBack();
   }
 
   navigateToFilterIngredients() {
+    this.saveFilters();
     this.router.navigate(['/filter-ingredients']);
   }
 
@@ -639,6 +641,7 @@ export class RecipeFilterComponent {
         selected: false,
       })),
     );
+    this.resetFilterIngredientIds();
   }
 
   resetFilterIngredientIds() {
@@ -664,5 +667,9 @@ export class RecipeFilterComponent {
         ? current.filter((el) => el !== id)
         : [...current, id],
     );
+  }
+
+  goBack() {
+    this.location.back();
   }
 }

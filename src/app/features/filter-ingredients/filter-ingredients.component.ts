@@ -24,6 +24,8 @@ import { PageLayoutComponent } from '../../shared/layout/primitives/page-layout.
 import { HeaderShellComponent } from '../../shared/layout/shell/header-shell.component';
 import { SegmentedControlComponent } from '../../shared/ui/segmented-control/segmented-control.component';
 import { LoadingComponent } from '../../shared/layout/overlays/loading/loading.component';
+import { RowComponent } from '../../shared/layout/primitives/row.component';
+import { InlineComponent } from '../../shared/layout/primitives/inline.component';
 
 @Component({
   selector: 'app-filter-ingredients',
@@ -34,6 +36,8 @@ import { LoadingComponent } from '../../shared/layout/overlays/loading/loading.c
     PageLayoutComponent,
     HeaderShellComponent,
     StackComponent,
+    RowComponent,
+    InlineComponent,
     SectionComponent,
     SegmentedControlComponent,
     LoadingComponent,
@@ -119,7 +123,7 @@ export class FilterIngredientsComponent {
       .sort((a, b) => a.name.localeCompare(b.name));
   });
 
-  readonly availableCategoriesNames = computed(() => {
+  readonly availableCategories = computed(() => {
     const availableRecipesIngredientIds = [
       ...new Set(
         this.dbRecipes().flatMap((recipe) =>
@@ -136,9 +140,15 @@ export class FilterIngredientsComponent {
       (ingr) => ingr.categoryId,
     );
 
-    const availableCategoriesNames = this.ingredientCategories()
-      .filter((cat) => availableCategoriesIds.includes(cat.id))
-      .map((cat) => cat.name);
+    return this.ingredientCategories().filter((cat) =>
+      availableCategoriesIds.includes(cat.id),
+    );
+  });
+
+  readonly availableCategoriesNames = computed(() => {
+    const availableCategoriesNames = this.availableCategories().map(
+      (cat) => cat.name,
+    );
 
     availableCategoriesNames.sort((a, b) => a.localeCompare(b));
 
@@ -165,7 +175,32 @@ export class FilterIngredientsComponent {
     });
   }
 
-  pageLoading = computed(() => this.ingredientsAreLoading());
+  resetIngredientsSelected() {
+    this.selectedIngredientIds.update(() => []);
+  }
+
+  badgeValues = computed(() => {
+    const sortedAvailableCategories = this.availableCategories().sort((a, b) =>
+      a.name.localeCompare(b.name),
+    );
+
+    const count = sortedAvailableCategories.map((cat) => {
+      const selectedIngredients = this.ingredients().filter((ingr) =>
+        this.selectedIngredientIds().includes(ingr.id),
+      );
+      const selectedCategoriesIds = selectedIngredients.map(
+        (ingr) => ingr.categoryId,
+      );
+
+      return selectedCategoriesIds.filter((id) => cat.id === id).length;
+    });
+
+    return count;
+  });
+
+  pageLoading = computed(
+    () => this.ingredientsAreLoading() || this.ingredientCategoriesAreLoading(),
+  );
 
   nbIngredientsFiltered = computed(() => {
     return this.selectedIngredientIds().length;
@@ -184,6 +219,14 @@ export class FilterIngredientsComponent {
       this.selectedIngredientIds(),
     );
 
+    this.goBack();
+  }
+
+  cancel() {
+    this.goBack();
+  }
+
+  goBack() {
     this.location.back();
   }
 }
