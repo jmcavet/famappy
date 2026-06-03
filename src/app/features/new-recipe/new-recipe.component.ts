@@ -20,6 +20,12 @@ import { ButtonComponent } from '../../shared/ui/button/button.component';
 import { RecipeCategoryDomainFacade } from '../../domain-facades/recipeCategory.facade';
 import { LoadingComponent } from '../../shared/layout/overlays/loading/loading.component';
 import { ImageUploadLoaderComponent } from '../../shared/ui/upload/image-upload-loader/image-upload-loader.component';
+import { StackComponent } from '../../shared/layout/primitives/stack.component';
+import { RowComponent } from '../../shared/layout/primitives/row.component';
+import { InlineComponent } from '../../shared/layout/primitives/inline.component';
+import { PageLayoutComponent } from '../../shared/layout/primitives/page-layout.component';
+import { SectionComponent } from '../../shared/layout/primitives/section.component';
+import { HeaderShellComponent } from '../../shared/layout/shell/header-shell.component';
 
 @Component({
   selector: 'app-new-recipe',
@@ -32,6 +38,12 @@ import { ImageUploadLoaderComponent } from '../../shared/ui/upload/image-upload-
     ButtonComponent,
     LoadingComponent,
     ImageUploadLoaderComponent,
+    HeaderShellComponent,
+    PageLayoutComponent,
+    SectionComponent,
+    StackComponent,
+    RowComponent,
+    InlineComponent,
   ],
   templateUrl: './new-recipe.component.html',
   styleUrl: './new-recipe.component.css',

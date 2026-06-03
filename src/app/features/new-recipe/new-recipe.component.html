@@ -1,5 +1,7 @@
-@if (pageLoading()) {
-  <app-loading />
+<!-- @if (pageLoading()) {
+  <app-stack align="center">
+    <app-loading />
+  </app-stack>
 } @else {
   <div class="h-full layout-hcf">
     <app-tabs>
@@ -24,6 +26,44 @@
         >
       </div>
     </div>
+  </div>
+}
+
+@if (uploadProgress() > 0 && uploadProgress() < 100) {
+  <app-image-upload-loader
+    [progress]="uploadProgress()"
+  ></app-image-upload-loader>
+} -->
+
+@if (pageLoading()) {
+  <app-stack align="center">
+    <app-loading />
+  </app-stack>
+} @else {
+  <div class="layout-stack h-dvh">
+    <app-page-layout insetY="none">
+      <app-section inset="none" [surface]="0" [shadow]="false">
+        <app-stack variant="section">
+          <app-tabs [surface]="0" insetX="none" insetX="md" [fixedTop]="true">
+            <app-tab tabTitle="definition" [active]="true">
+              <app-tab-definition [buttonType]="buttonSaveOrUpdate()" />
+            </app-tab>
+            <app-tab tabTitle="ingredients">
+              <app-tab-ingredients />
+            </app-tab>
+            <app-tab tabTitle="instructions">
+              <app-tab-instructions />
+            </app-tab>
+          </app-tabs>
+        </app-stack>
+      </app-section>
+
+      <app-section>
+        <app-stack variant="section">
+          <app-row> Test 2 </app-row>
+        </app-stack>
+      </app-section>
+    </app-page-layout>
   </div>
 }
 
