@@ -78,17 +78,17 @@
       <app-button
         variant="ghost"
         class="absolute top-0 right-0"
-        (click)="closeModal()"
+        (clicked)="closeModal()"
         ><i class="fa fa-xmark fa-xl"></i
       ></app-button>
 
       <div class="flex-between">
-        <app-button variant="outline" color="neutral" (click)="closeModal()"
+        <app-button variant="outline" color="neutral" (clicked)="closeModal()"
           >Cancel</app-button
         >
 
         <app-button
-          (click)="onSaveOrUpdateMember()"
+          (clicked)="onSaveOrUpdateMember()"
           [disabled]="buttonIsDisabled"
           >{{ mainBtnText }}</app-button
         >

@@ -1,13 +1,3 @@
-/* <app-tabs> vanishes from the layout perspective, and .tabs-header and .tabs-content become direct children of .layout-hcf.
-The layout 'h-full layout-hcf' on the new-recipe template can work now. */
 :host {
   display: contents;
 }
-
-/* .tabs-header {
-  @apply px-1 py-2;
-}
-
-.tabs-content {
-  @apply px-2 py-6;
-} */

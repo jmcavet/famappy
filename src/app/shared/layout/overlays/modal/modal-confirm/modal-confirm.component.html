@@ -8,11 +8,11 @@
       variant="ghost"
       [color]="btnConfirmColor"
       size="lg"
-      (click)="onCancel()"
+      (clicked)="onCancel()"
       >Cancel</app-button
     >
 
-    <app-button [color]="btnConfirmColor" (click)="onConfirm()">{{
+    <app-button [color]="btnConfirmColor" (clicked)="onConfirm()">{{
       btnConfirmText
     }}</app-button>
   </div>

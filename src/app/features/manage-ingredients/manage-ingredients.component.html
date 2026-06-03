@@ -72,7 +72,7 @@
               <app-button
                 variant="ghost"
                 size="sm"
-                (click)="editIngredient(i, ingredient)"
+                (clicked)="editIngredient(i, ingredient)"
                 ><i class="fa-regular fa-pen-to-square text-xl"></i
               ></app-button>
             } @else {
@@ -80,7 +80,7 @@
                 variant="ghost"
                 size="sm"
                 color="success"
-                (click)="onValidateUpdate(ingredient)"
+                (clicked)="onValidateUpdate(ingredient)"
                 ><i class="fa-solid fa-check text-xl"></i
               ></app-button>
             }
@@ -89,7 +89,7 @@
               variant="ghost"
               size="sm"
               color="danger"
-              (click)="openDeleteModal($event, ingredient.id)"
+              (clicked)="openDeleteModal($event, ingredient.id)"
               ><i class="fa-regular fa-trash-can text-xl"></i
             ></app-button>
           </div>

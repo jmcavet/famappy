@@ -56,7 +56,7 @@
     <app-button
       [fullWidth]="true"
       [disabled]="buttonIsDisabled()"
-      (click)="addIngredientToRecipe()"
+      (clicked)="addIngredientToRecipe()"
       ><span class="mr-2"><i class="fa fa-plus"></i></span>Add
       ingredient</app-button
     >
@@ -78,7 +78,7 @@
             <app-button
               color="danger"
               variant="ghost"
-              (click)="onDeleteIngredient($index)"
+              (clicked)="onDeleteIngredient($index)"
               ><i class="fa-regular fa-trash-can text-xl"></i>
             </app-button>
           </div>

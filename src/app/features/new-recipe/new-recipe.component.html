@@ -18,7 +18,7 @@
       <div class="w-full">
         <app-button
           [fullWidth]="true"
-          (click)="onAddOrUpdateRecipe()"
+          (clicked)="onAddOrUpdateRecipe()"
           [disabled]="!formIsValid()"
           >{{ buttonSaveOrUpdate() }}</app-button
         >

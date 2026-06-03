@@ -1,9 +1,11 @@
 import { Component, input, output } from '@angular/core';
 import { NgClass } from '@angular/common';
+import { RowComponent } from '../../../../shared/layout/primitives/row.component';
+import { InlineComponent } from '../../../../shared/layout/primitives/inline.component';
 
 @Component({
   selector: 'app-ingredient-item',
-  imports: [NgClass],
+  imports: [RowComponent, InlineComponent, NgClass],
   templateUrl: './ingredient-item.component.html',
   styleUrl: './ingredient-item.component.css',
 })

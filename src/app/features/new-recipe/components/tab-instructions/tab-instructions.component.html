@@ -11,7 +11,7 @@
 
     <app-button
       variant="filled"
-      (click)="addInstruction()"
+      (clicked)="addInstruction()"
       [disabled]="addButtonIsDisabled()"
       ><i class="fa fa-plus"></i>
     </app-button>
@@ -60,7 +60,7 @@
             size="sm"
             [color]="editInstructionIndex() === i ? 'success' : 'primary'"
             variant="ghost"
-            (click)="
+            (clicked)="
               editInstructionIndex() === i
                 ? onUpdateInstruction(i)
                 : onFocusInstruction(i)
@@ -78,7 +78,7 @@
             color="danger"
             size="sm"
             variant="ghost"
-            (click)="onDeleteInstruction(i)"
+            (clicked)="onDeleteInstruction(i)"
             ><i class="fa-regular fa-trash-can text-xl"></i>
           </app-button>
         </div>

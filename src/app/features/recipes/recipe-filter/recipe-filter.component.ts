@@ -38,6 +38,7 @@ import { RowComponent } from '../../../shared/layout/primitives/row.component';
 import { SectionComponent } from '../../../shared/layout/primitives/section.component';
 import { StackComponent } from '../../../shared/layout/primitives/stack.component';
 import { InlineComponent } from '../../../shared/layout/primitives/inline.component';
+import { TagComponent } from '../../../shared/ui/tag/tag.component';
 
 type AllowedStringArrayKeys = 'mealCategoryId' | 'recipeCategoryIds';
 
@@ -74,6 +75,7 @@ interface SeasonTag {
     FilterGroupDefaultComponent,
     ButtonComponent,
     ToggleBtnWithIconComponent,
+    TagComponent,
   ],
   templateUrl: './recipe-filter.component.html',
   styleUrl: './recipe-filter.component.css',
@@ -137,9 +139,17 @@ export class RecipeFilterComponent {
     this.recipeState().filter.ingredientCategories,
   );
 
-  ingredientsSelected = signal<string[]>(
+  ingredientsIdsSelected = signal<string[]>(
     this.recipeState().filter.ingredientIds,
   );
+
+  ingredientsNamesSelected = computed(() => {
+    const name = this.ingredients()
+      .filter((ingr) => this.ingredientsIdsSelected().includes(ingr.id))
+      .map((ingr) => ingr.name);
+
+    return name.sort((a, b) => a.localeCompare(b));
+  });
 
   mealCategoryTags = computed(() => {
     const mealCategoryIds = this.filteredRecipes().map(
@@ -438,14 +448,13 @@ export class RecipeFilterComponent {
       (tag) => tag.selected,
     );
 
-    console.log('ingredientsSelected: ', this.ingredientsSelected());
     // Condition: NONE of the chips are selected (= all are activated per default)
     if (
       this.mealCategoriesSelected().length === 0 &&
       this.cuisinesSelected().length === 0 &&
       this.recipeCategoriesSelected().length === 0 &&
       this.ingredientCategoriesSelected().length === 0 &&
-      this.ingredientsSelected().length === 0 &&
+      this.ingredientsIdsSelected().length === 0 &&
       selectedDifficultyTags.length === 0 &&
       selectedPriceTags.length === 0 &&
       selectedFrequencyTags.length === 0 &&
@@ -529,17 +538,17 @@ export class RecipeFilterComponent {
       let cond9 = true;
       if (this.ingredientFilterMode() === 0) {
         cond9 =
-          this.ingredientsSelected().length === 0
+          this.ingredientsIdsSelected().length === 0
             ? true
             : obj.ingredients.some((ingredient) =>
-                this.ingredientsSelected().includes(ingredient.id),
+                this.ingredientsIdsSelected().includes(ingredient.id),
               );
       } else {
         cond9 =
-          this.ingredientsSelected().length === 0
+          this.ingredientsIdsSelected().length === 0
             ? true
-            : this.ingredientsSelected().every((el) =>
-                obj.ingredients.map((item) => item.id).includes(el),
+            : this.ingredientsIdsSelected().every((id) =>
+                obj.ingredients.map((item) => item.id).includes(id),
               );
       }
 
@@ -564,7 +573,7 @@ export class RecipeFilterComponent {
     }).length;
   });
 
-  validateFilters() {
+  saveFilters() {
     this.recipeStateService.saveNumberFilters(this.nbFilters());
 
     this.recipeStateService.saveFilter(
@@ -587,17 +596,19 @@ export class RecipeFilterComponent {
         .map((tag) => tag.name),
       this.ingredientFilterMode(),
     );
+  }
 
-    // this.router.navigate(['/recipes']);
-    this.location.back();
+  saveFiltersAndGoBack() {
+    this.saveFilters();
+    this.goBack();
   }
 
   cancel() {
-    // this.router.navigate(['/recipes']);
-    this.location.back();
+    this.goBack();
   }
 
   navigateToFilterIngredients() {
+    this.saveFilters();
     this.router.navigate(['/filter-ingredients']);
   }
 
@@ -630,12 +641,13 @@ export class RecipeFilterComponent {
         selected: false,
       })),
     );
+    this.resetFilterIngredientIds();
   }
 
   resetFilterIngredientIds() {
     this.recipeStateService.resetFilterIngredientIds();
 
-    this.ingredientsSelected.update(() => []);
+    this.ingredientsIdsSelected.update(() => []);
   }
 
   toggleIngredientFilterMode(position: number) {
@@ -649,11 +661,15 @@ export class RecipeFilterComponent {
   }
 
   toggleTag(id: string) {
-    const current = this.ingredientsSelected();
-    this.ingredientsSelected.set(
+    const current = this.ingredientsIdsSelected();
+    this.ingredientsIdsSelected.set(
       current.includes(id)
         ? current.filter((el) => el !== id)
         : [...current, id],
     );
+  }
+
+  goBack() {
+    this.location.back();
   }
 }

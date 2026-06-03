@@ -19,17 +19,19 @@ type ButtonColor = 'primary' | 'secondary' | 'neutral';
 export class SegmentedControlComponent<T extends string> {
   // Options to display
   options = input.required<T[]>();
+  hasBadge = input<boolean>(false);
+  badgeValues = input<number[]>([]);
 
   // initial selected value from parent
   selectedInput = input<T | null>(null);
 
   @Input() color: ButtonColor = 'primary';
   @Input() size: 'sm' | 'md' | 'lg' = 'md';
-  @Input() fullWidth = false;
+  fullWidth = input<boolean>(false);
 
   @HostBinding('class.w-full')
   get hostFullWidth() {
-    return this.fullWidth;
+    return this.fullWidth();
   }
 
   // Currently selected option
@@ -53,6 +55,7 @@ export class SegmentedControlComponent<T extends string> {
       `segmented-btn-${this.size}`,
       `segmented-btn-${this.color}`,
       'flex-1',
+      `${this.fullWidth() ? 'w-full' : ''}`,
     ];
 
     return classes.join(' ');

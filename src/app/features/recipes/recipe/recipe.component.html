@@ -29,14 +29,17 @@
               />
             }
 
-            <div class="absolute w-full top-0 left-0">
+            <div class="absolute w-full top-0 left-0 inset-inline-sm">
               <app-row>
-                <app-button variant="ghost" size="sm" (click)="goBack()"
+                <app-button variant="ghost" size="sm" (clicked)="goBack()"
                   ><i class="fa-solid fa-arrow-left-long text-xl"></i
                 ></app-button>
 
                 <app-inline gap="xs">
-                  <app-button variant="ghost" size="sm" (click)="onEditRecipe()"
+                  <app-button
+                    variant="ghost"
+                    size="sm"
+                    (clicked)="onEditRecipe()"
                     ><i class="fa-solid fa-edit text-xl"></i
                   ></app-button>
 
@@ -44,7 +47,7 @@
                     variant="ghost"
                     color="danger"
                     size="sm"
-                    (click)="openDeleteModal($event, recipe().id)"
+                    (clicked)="openDeleteModal($event, recipe().id)"
                     ><i class="fa-solid fa-trash text-xl"></i
                   ></app-button>
                 </app-inline>

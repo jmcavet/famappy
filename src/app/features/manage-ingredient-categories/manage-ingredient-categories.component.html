@@ -19,7 +19,7 @@
             <app-button
               variant="ghost"
               size="sm"
-              (click)="openUpdateModal($event, ingredientCategory)"
+              (clicked)="openUpdateModal($event, ingredientCategory)"
               ><i class="fa-regular fa-pen-to-square text-xl"></i
             ></app-button>
 
@@ -27,7 +27,7 @@
               variant="ghost"
               size="sm"
               color="danger"
-              (click)="openDeleteModal($event, ingredientCategory.id)"
+              (clicked)="openDeleteModal($event, ingredientCategory.id)"
               ><i class="fa-regular fa-trash-can text-xl"></i
             ></app-button>
           </div>

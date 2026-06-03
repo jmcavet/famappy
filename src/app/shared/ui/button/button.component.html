@@ -1,5 +1,10 @@
 <div [class.w-full]="fullWidth()">
-  <button [attr.type]="type()" [disabled]="disabled()" [class]="classes">
+  <button
+    [attr.type]="type()"
+    [disabled]="disabled()"
+    [class]="classes"
+    (click)="onClick($event)"
+  >
     <ng-content />
   </button>
 </div>

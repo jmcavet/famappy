@@ -2,6 +2,7 @@ import {
   Component,
   computed,
   inject,
+  linkedSignal,
   model,
   Signal,
   signal,
@@ -9,7 +10,6 @@ import {
 import { RecipeBackendService } from '../../services/backend/recipe.service';
 import { RecipeWithId } from '../recipes/components/recipe-card/recipe.model';
 import { FormsModule } from '@angular/forms';
-import { IngredientCategoriesSelectionComponent } from './components/ingredient-categories-selection/ingredient-categories-selection.component';
 import { IngredientItemComponent } from './components/ingredient-item/ingredient-item.component';
 import { IngredientBackendService } from '../../services/backend/ingredient.service';
 import { IngredientCategoryBackendService } from '../../services/backend/ingredient-category.service';
@@ -18,14 +18,29 @@ import { IngredientTypeWithDate } from '../../models/ingredient-type.model';
 import { RecipeStateService } from '../../services/state/recipe.service';
 import { Location } from '@angular/common';
 import { ButtonComponent } from '../../shared/ui/button/button.component';
+import { StackComponent } from '../../shared/layout/primitives/stack.component';
+import { SectionComponent } from '../../shared/layout/primitives/section.component';
+import { PageLayoutComponent } from '../../shared/layout/primitives/page-layout.component';
+import { HeaderShellComponent } from '../../shared/layout/shell/header-shell.component';
+import { SegmentedControlComponent } from '../../shared/ui/segmented-control/segmented-control.component';
+import { LoadingComponent } from '../../shared/layout/overlays/loading/loading.component';
+import { RowComponent } from '../../shared/layout/primitives/row.component';
+import { InlineComponent } from '../../shared/layout/primitives/inline.component';
 
 @Component({
   selector: 'app-filter-ingredients',
   imports: [
     FormsModule,
-    IngredientCategoriesSelectionComponent,
     IngredientItemComponent,
     ButtonComponent,
+    PageLayoutComponent,
+    HeaderShellComponent,
+    StackComponent,
+    RowComponent,
+    InlineComponent,
+    SectionComponent,
+    SegmentedControlComponent,
+    LoadingComponent,
   ],
   templateUrl: './filter-ingredients.component.html',
   styleUrl: './filter-ingredients.component.css',
@@ -67,7 +82,18 @@ export class FilterIngredientsComponent {
   /** Compute the ingredients filtered, whenever the following signals change:
    * ingredients, ingredientCategories, ingredientCategorySelected, filterSelected, isAscending */
   ingredientsFiltered = computed(() => {
-    const ingredients = this.ingredients();
+    const availableRecipesIngredientIds = [
+      ...new Set(
+        this.dbRecipes().flatMap((recipe) =>
+          recipe.ingredients.flatMap((ing) => ing.id),
+        ),
+      ),
+    ];
+
+    const ingredients = this.ingredients().filter((ingr) =>
+      availableRecipesIngredientIds.includes(ingr.id),
+    );
+
     const categories = this.ingredientCategories();
     const categorySelected =
       this.ingredientCategoryService.ingredientCategorySelected();
@@ -89,7 +115,57 @@ export class FilterIngredientsComponent {
     return filtered;
   });
 
-  toggleItem(ingredientId: string) {
+  readonly sortedIngredients = computed(() => {
+    return this.ingredientsFiltered()
+      .filter(
+        (ingr) => ingr.categoryName === this.ingredientCategoryNameSelected(),
+      )
+      .sort((a, b) => a.name.localeCompare(b.name));
+  });
+
+  readonly availableCategories = computed(() => {
+    const availableRecipesIngredientIds = [
+      ...new Set(
+        this.dbRecipes().flatMap((recipe) =>
+          recipe.ingredients.flatMap((ing) => ing.id),
+        ),
+      ),
+    ];
+
+    const availableIngredients = this.ingredients().filter((ingr) =>
+      availableRecipesIngredientIds.includes(ingr.id),
+    );
+
+    const availableCategoriesIds = availableIngredients.flatMap(
+      (ingr) => ingr.categoryId,
+    );
+
+    return this.ingredientCategories().filter((cat) =>
+      availableCategoriesIds.includes(cat.id),
+    );
+  });
+
+  readonly availableCategoriesNames = computed(() => {
+    const availableCategoriesNames = this.availableCategories().map(
+      (cat) => cat.name,
+    );
+
+    availableCategoriesNames.sort((a, b) => a.localeCompare(b));
+
+    return availableCategoriesNames;
+  });
+
+  readonly ingredientCategoryNameSelected = linkedSignal(() => {
+    return this.availableCategoriesNames()
+      ? this.availableCategoriesNames()[0]
+      : 'none';
+  });
+
+  public toggleIngredientCategory(ingredientCategoryName: string) {
+    this.ingredientCategoryNameSelected.set(ingredientCategoryName);
+  }
+
+  public toggleIngredient(ingredientId: string) {
     this.selectedIngredientIds.update((current) => {
       if (current.includes(ingredientId)) {
         return current.filter((id) => id !== ingredientId);
@@ -98,6 +174,33 @@ export class FilterIngredientsComponent {
       }
     });
   }
+
+  resetIngredientsSelected() {
+    this.selectedIngredientIds.update(() => []);
+  }
+
+  badgeValues = computed(() => {
+    const sortedAvailableCategories = this.availableCategories().sort((a, b) =>
+      a.name.localeCompare(b.name),
+    );
+
+    const count = sortedAvailableCategories.map((cat) => {
+      const selectedIngredients = this.ingredients().filter((ingr) =>
+        this.selectedIngredientIds().includes(ingr.id),
+      );
+      const selectedCategoriesIds = selectedIngredients.map(
+        (ingr) => ingr.categoryId,
+      );
+
+      return selectedCategoriesIds.filter((id) => cat.id === id).length;
+    });
+
+    return count;
+  });
+
+  pageLoading = computed(
+    () => this.ingredientsAreLoading() || this.ingredientCategoriesAreLoading(),
+  );
 
   nbIngredientsFiltered = computed(() => {
     return this.selectedIngredientIds().length;
@@ -112,11 +215,18 @@ export class FilterIngredientsComponent {
   });
 
   applyFilter() {
-    console.log('Applying filter...');
     this.recipeStateService.saveFilterIngredientIds(
       this.selectedIngredientIds(),
     );
 
+    this.goBack();
+  }
+
+  cancel() {
+    this.goBack();
+  }
+
+  goBack() {
     this.location.back();
   }
 }

@@ -152,7 +152,6 @@ export class RecipesComponent {
   });
 
   recipesFiltered = computed(() => {
-    console.log('Recomputing');
     const recipeFilter = this.recipeState().filter;
 
     const mealCategoriesFiltered = recipeFilter.mealCategories;

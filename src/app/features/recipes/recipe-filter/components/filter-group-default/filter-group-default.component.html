@@ -1,11 +1,11 @@
-<app-stack>
+<app-stack variant="section">
   <app-row>
     <app-inline>
       <app-inline gap="sm">
         <i class="{{ icon }}"></i>
         <span class="font-semibold whitespace-nowrap">{{ sectionTitle }}</span>
       </app-inline>
-      <app-button variant="ghost" (click)="selectDeselectAll()">{{
+      <app-button variant="ghost" (clicked)="selectDeselectAll()">{{
         labelToggleSelectAll()
       }}</app-button>
     </app-inline>
@@ -13,7 +13,7 @@
 
   <app-row>
     <app-inline gap="sm" [wrap]="true">
-      @for (tag of tags(); track tag.id) {
+      @for (tag of tags(); track $index) {
         <app-chip
           [selected]="tag.selected === true"
           (click)="toggleTag(tag.name)"

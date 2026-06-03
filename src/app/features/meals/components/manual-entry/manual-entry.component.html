@@ -88,7 +88,7 @@
         <app-button
           class="flex-1"
           [fullWidth]="true"
-          (click)="onConfirm()"
+          (clicked)="onConfirm()"
           [disabled]="mealDescription().length === 0"
           >Add</app-button
         >
@@ -96,7 +96,7 @@
           class="flex-1"
           variant="outline"
           [fullWidth]="true"
-          (click)="cancel()"
+          (clicked)="cancel()"
           >Cancel</app-button
         >
       </div>

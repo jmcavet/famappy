@@ -22,14 +22,14 @@
       btnStyle="text-based"
       color="primary"
       size="lg"
-      (click)="onCancel()"
+      (clicked)="onCancel()"
       >Cancel</app-button
     >
 
     <app-button
       [color]="btnConfirmColor"
       size="md"
-      (click)="onConfirm()"
+      (clicked)="onConfirm()"
       [disabled]="invalidMessage !== undefined || inputValue.length === 0"
       >{{ btnConfirmText }}</app-button
     >

@@ -1,9 +1,18 @@
 <div class="layout-stack h-dvh">
-  <app-header-shell-shell
+  <app-header-shell
     ><div class="inset-md">
-      <h1 class="text-headline font-roboto text-center">Filter recipes</h1>
-    </div></app-header-shell-shell
-  >
+      <app-row>
+        <app-button variant="ghost" (clicked)="goBack()"
+          ><i class="fa-solid fa-arrow-left-long text-xl"></i
+        ></app-button>
+
+        <h1 class="text-headline font-roboto text-center">Filter recipes</h1>
+
+        <app-button variant="ghost" (clicked)="onClearFilter()"
+          ><i class="fa-solid fa-arrow-rotate-left text-xl"></i
+        ></app-button>
+      </app-row></div
+  ></app-header-shell>
   <app-page-layout maxSize="lg">
     <app-section>
       <app-stack variant="section">
@@ -97,9 +106,16 @@
               <i class="fa-solid fa-carrot"></i>
               <p class="font-semibold">Ingredients</p>
             </app-inline>
+
             <button (click)="navigateToFilterIngredients()">
               <i class="fa-solid fa-plus fa-xl"></i>
             </button>
+
+            @if (ingredientsNamesSelected().length > 0) {
+              <button (click)="resetFilterIngredientIds()">
+                <i class="fa-solid fa-eraser fa-xl"></i>
+              </button>
+            }
           </app-inline>
 
           <app-toggle-btn-with-icon
@@ -109,11 +125,22 @@
             [selectedInput]="ingredientFilterMode()"
             (selectionChange)="toggleIngredientFilterMode($event)"
           ></app-toggle-btn-with-icon>
-
-          <button (click)="resetFilterIngredientIds()">
-            <i class="fa-solid fa-eraser fa-xl"></i>
-          </button>
         </app-row>
+
+        @if (ingredientsNamesSelected().length > 0) {
+          <app-row>
+            <app-inline gap="sm" [wrap]="true">
+              @for (
+                ingredientName of ingredientsNamesSelected();
+                track $index
+              ) {
+                <app-tag variant="outline" color="neutral" size="sm">{{
+                  ingredientName
+                }}</app-tag>
+              }
+            </app-inline>
+          </app-row>
+        }
       </app-stack>
     </app-section>
   </app-page-layout>
@@ -123,7 +150,7 @@
         variant="outline"
         [fullWidth]="true"
         [disabled]="nbRecipesFiltered() === 0"
-        (click)="cancel()"
+        (clicked)="cancel()"
       >
         Cancel</app-button
       >
@@ -131,7 +158,7 @@
       <app-button
         [fullWidth]="true"
         [disabled]="nbRecipesFiltered() === 0"
-        (click)="validateFilters()"
+        (clicked)="saveFiltersAndGoBack()"
         >Filter
         <span class="font-bold text-white mx-2">{{ nbRecipesFiltered() }}</span>
         recipes</app-button

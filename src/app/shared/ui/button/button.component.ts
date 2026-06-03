@@ -1,4 +1,4 @@
-import { Component, HostBinding, input } from '@angular/core';
+import { Component, HostBinding, input, output } from '@angular/core';
 
 type ButtonType = 'button' | 'submit' | 'reset';
 type ButtonShape = 'rounded' | 'pill';
@@ -26,9 +26,11 @@ export class ButtonComponent {
   fullWidth = input<boolean>(false);
   shadow = input<boolean>(false);
 
+  clicked = output<MouseEvent>();
+
   @HostBinding('class.w-full')
   get hostFullWidth() {
-    return this.fullWidth;
+    return this.fullWidth();
   }
 
   get classes(): string {
@@ -44,5 +46,11 @@ export class ButtonComponent {
     ];
 
     return classes.join(' ');
+  }
+
+  onClick(event: MouseEvent) {
+    if (!this.disabled()) {
+      this.clicked.emit(event);
+    }
   }
 }
