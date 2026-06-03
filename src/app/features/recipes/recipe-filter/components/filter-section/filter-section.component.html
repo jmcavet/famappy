@@ -6,7 +6,7 @@
         <span class="font-semibold whitespace-nowrap">{{ sectionTitle }}</span>
       </app-inline>
       @if (canSelectAll()) {
-        <app-button variant="ghost" (click)="selectDeselectAll()">{{
+        <app-button variant="ghost" (clicked)="selectDeselectAll()">{{
           labelToggleSelectAll()
         }}</app-button>
       }

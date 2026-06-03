@@ -141,7 +141,7 @@
         variant="outline"
         [fullWidth]="true"
         [disabled]="nbRecipesFiltered() === 0"
-        (click)="cancel()"
+        (clicked)="cancel()"
       >
         Cancel</app-button
       >
@@ -149,7 +149,7 @@
       <app-button
         [fullWidth]="true"
         [disabled]="nbRecipesFiltered() === 0"
-        (click)="validateFilters()"
+        (clicked)="validateFilters()"
         >Filter
         <span class="font-bold text-white mx-2">{{ nbRecipesFiltered() }}</span>
         recipes</app-button

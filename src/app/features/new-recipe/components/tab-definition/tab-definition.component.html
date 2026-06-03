@@ -50,7 +50,7 @@
             class="flex-1"
             color="danger"
             size="sm"
-            (click)="removeImage()"
+            (clicked)="removeImage()"
             ><i class="fa-solid fa-trash"></i
           ></app-button>
         </div>
@@ -216,7 +216,7 @@
         <span class="text-lg">Meal Category</span>
       </div>
 
-      <app-button variant="outline" (click)="navigateToMealCategoryPage()">{{
+      <app-button variant="outline" (clicked)="navigateToMealCategoryPage()">{{
         mealCategoryName() | capitalize
       }}</app-button>
     </div>
@@ -227,7 +227,7 @@
         <span class="text-lg">Cuisine</span>
       </div>
 
-      <app-button variant="outline" (click)="navigateToCuisinePage()">{{
+      <app-button variant="outline" (clicked)="navigateToCuisinePage()">{{
         cuisineName() | capitalize
       }}</app-button>
     </div>
@@ -241,7 +241,7 @@
       </div>
       <app-button
         variant="ghost"
-        (click)="openAddRecipeCategoryInputModal($event)"
+        (clicked)="openAddRecipeCategoryInputModal($event)"
         ><i class="fa-regular fa-plus mr-2"></i> New Category</app-button
       >
     </div>

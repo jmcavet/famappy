@@ -18,6 +18,7 @@
               [fullWidth]="false"
               size="sm"
               [hasBadge]="true"
+              [badgeValues]="badgeValues()"
               [options]="availableCategoriesNames()"
               [selectedInput]="ingredientCategoryNameSelected()"
               (selectionChange)="toggleIngredientCategory($event)"
@@ -45,7 +46,7 @@
 
     <div class="inset-md">
       <app-button
-        (click)="applyFilter()"
+        (clicked)="applyFilter()"
         [fullWidth]="true"
         [disabled]="!nbIngredientsFiltered()"
         >{{ btnText() }}</app-button
