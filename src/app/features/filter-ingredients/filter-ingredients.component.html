@@ -7,9 +7,19 @@
     <app-header-shell
       ><div class="inset-md">
         <app-stack>
-          <h1 class="text-headline font-roboto text-center">
-            Filter Ingredients
-          </h1>
+          <app-row>
+            <h1 class="text-headline font-roboto text-center relative w-full">
+              Filter Ingredients
+
+              <div class="absolute top-0 right-4">
+                <app-button
+                  variant="ghost"
+                  (clicked)="resetIngredientsSelected()"
+                  ><i class="fa-solid fa-arrow-rotate-left text-xl"></i
+                ></app-button>
+              </div>
+            </h1>
+          </app-row>
 
           <div
             class="overflow-x-auto overflow-y-hidden flex gap-4 snap-x snap-mandatory scroll-smooth"
@@ -45,12 +55,18 @@
     </app-page-layout>
 
     <div class="inset-md">
-      <app-button
-        (clicked)="applyFilter()"
-        [fullWidth]="true"
-        [disabled]="!nbIngredientsFiltered()"
-        >{{ btnText() }}</app-button
-      >
+      <app-inline>
+        <app-button variant="outline" [fullWidth]="true" (clicked)="cancel()">
+          Cancel</app-button
+        >
+
+        <app-button
+          (clicked)="applyFilter()"
+          [fullWidth]="true"
+          [disabled]="!nbIngredientsFiltered()"
+          >{{ btnText() }}</app-button
+        >
+      </app-inline>
     </div>
   </div>
 }
