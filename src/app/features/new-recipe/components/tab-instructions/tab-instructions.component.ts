@@ -4,10 +4,25 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TabInstructionsFacade } from './tab-instructions.facade';
 import { ButtonComponent } from '../../../../shared/ui/button/button.component';
 import { CapitalizePipe } from '../../../../shared/pipes/capitalize.pipe';
+import { StackComponent } from '../../../../shared/layout/primitives/stack.component';
+import { RowComponent } from '../../../../shared/layout/primitives/row.component';
+import { InlineComponent } from '../../../../shared/layout/primitives/inline.component';
+import { SectionComponent } from '../../../../shared/layout/primitives/section.component';
+import { FormGridComponent } from '../../../../shared/layout/primitives/form-grid.component';
 
 @Component({
   selector: 'app-tab-instructions',
-  imports: [FormsModule, ReactiveFormsModule, ButtonComponent],
+  imports: [
+    FormsModule,
+    ReactiveFormsModule,
+    ButtonComponent,
+    SectionComponent,
+    StackComponent,
+
+    FormGridComponent,
+    RowComponent,
+    InlineComponent,
+  ],
   providers: [TabInstructionsFacade],
   templateUrl: './tab-instructions.component.html',
   styleUrl: './tab-instructions.component.css',

@@ -1,145 +1,102 @@
-<div class="space-y-12 max-w-[860px] mx-auto">
-  <div class="flex items-center justify-between gap-2">
-    <textarea
-      [value]="instruction()"
-      (input)="instruction.set($any($event.target).value)"
-      class="w-full p-2"
-      placeholder="Add a new instruction Test"
-      rows="2"
-      (keydown)="onAddInstructionTextAreaKeyDown($event)"
-    ></textarea>
+<app-stack variant="page">
+  <app-section>
+    <app-stack variant="compact">
+      <app-form-grid maxContent="1fr_max-content" [responsive]="true">
+        <textarea
+          [value]="instruction()"
+          (input)="instruction.set($any($event.target).value)"
+          class="p-2"
+          placeholder="Add a new instruction"
+          rows="2"
+          (keydown)="onAddInstructionTextAreaKeyDown($event)"
+        ></textarea>
 
-    <app-button
-      variant="filled"
-      (clicked)="addInstruction()"
-      [disabled]="addButtonIsDisabled()"
-      ><i class="fa fa-plus"></i>
-    </app-button>
-  </div>
-
-  @if (instructionErrors() === "minlength") {
-    <p class="error">Minimum length is 5 characters.</p>
-  }
-
-  @if (instructionErrors() === "maxlength") {
-    <p class="error">Maximum length is 100 characters.</p>
-  }
-
-  <ol class="space-y-2">
-    @for (
-      instruction of recipeInstructions();
-      track instruction;
-      let i = $index
-    ) {
-      <li class="rounded-sm">
-        <div class="flex-between gap-2">
-          @if (editInstructionIndex() !== i) {
-            <div
-              class="flex flex-col px-4 py-2 w-full border-l-2 border-l-neutral-500 dark:border-l-neutral-400"
-            >
-              <p
-                class="text-neutral-500 dark:text-neutral-400 font-bold text-[12px]"
-              >
-                STEP {{ i + 1 }}
-              </p>
-              @for (item of instruction.split("\n"); track $index) {
-                <div class="dark:text-white">{{ item }}</div>
-              }
-            </div>
-          } @else {
-            <textarea
-              [value]="recipeInstructions()[i]"
-              #editInput
-              class="tag-input w-full"
-              (keydown)="onEditInstructionTextAreaKeyDown(i, $event)"
-              rows="2"
-            ></textarea>
-          }
-
-          <app-button
-            size="sm"
-            [color]="editInstructionIndex() === i ? 'success' : 'primary'"
-            variant="ghost"
-            (clicked)="
-              editInstructionIndex() === i
-                ? onUpdateInstruction(i)
-                : onFocusInstruction(i)
-            "
-            ><i
-              [class]="
-                editInstructionIndex() === i
-                  ? 'fa-solid fa-check text-xl'
-                  : 'fa-regular fa-pen-to-square text-xl'
-              "
-            ></i>
-          </app-button>
-
-          <app-button
-            color="danger"
-            size="sm"
-            variant="ghost"
-            (clicked)="onDeleteInstruction(i)"
-            ><i class="fa-regular fa-trash-can text-xl"></i>
-          </app-button>
-        </div>
-      </li>
-    }
-
-    <!-- <li
-      *ngFor="let instruction of recipeInstructions(); let i = index"
-      class="rounded-sm mb-2"
-    >
-      <div class="flex items-center justify-between gap-2">
-        <ng-container *ngIf="editInstructionIndex() !== i; else editMode">
-          <div
-            class="flex flex-col px-4 py-2 w-full border-l-2 border-l-gray-500 dark:border-l-gray-400"
+        <app-button
+          variant="filled"
+          (clicked)="addInstruction()"
+          [disabled]="addButtonIsDisabled()"
+          [fullWidth]="true"
+        >
+          <app-inline gap="sm"
+            ><i class="fa fa-plus"></i><span>Add</span></app-inline
           >
-            <p class="text-gray-500 dark:text-gray-400 font-bold text-[12px]">
-              STEP {{ i + 1 }}
-            </p>
-            @for (item of instruction.split("\n"); track $index) {
-              <div class="dark:text-white">{{ item }}</div>
+        </app-button>
+      </app-form-grid>
+
+      @if (instructionErrors() === "minlength") {
+        <p class="error">Minimum length is 5 characters.</p>
+      }
+
+      @if (instructionErrors() === "maxlength") {
+        <p class="error">Maximum length is 100 characters.</p>
+      }
+    </app-stack>
+  </app-section>
+
+  @if (recipeInstructions().length > 0) {
+    <app-section>
+      <app-stack>
+        @for (
+          instruction of recipeInstructions();
+          track instruction;
+          let i = $index
+        ) {
+          <app-row>
+            @if (editInstructionIndex() !== i) {
+              <div
+                class="border-l-2 inset-x-md border-l-primary-300 dark:border-l-primary-700"
+              >
+                <app-stack>
+                  <span
+                    class="text-neutral-500 dark:text-neutral-400 font-bold text-[12px]"
+                  >
+                    STEP {{ i + 1 }}
+                  </span>
+                  @for (item of instruction.split("\n"); track $index) {
+                    <span class="dark:text-white">{{ item }}</span>
+                  }
+                </app-stack>
+              </div>
+            } @else {
+              <textarea
+                [value]="recipeInstructions()[i]"
+                #editInput
+                class="tag-input w-full"
+                (keydown)="onEditInstructionTextAreaKeyDown(i, $event)"
+                rows="2"
+              ></textarea>
             }
-          </div>
-        </ng-container>
 
-        <ng-template #editMode>
-          <textarea
-            [value]="recipeInstructions()[i]"
-            #editInput
-            class="tag-input w-full"
-            (keydown)="onEditInstructionTextAreaKeyDown(i, $event)"
-            rows="2"
-          ></textarea>
-        </ng-template>
+            <app-inline>
+              <app-button
+                size="sm"
+                [color]="editInstructionIndex() === i ? 'success' : 'primary'"
+                variant="ghost"
+                (clicked)="
+                  editInstructionIndex() === i
+                    ? onUpdateInstruction(i)
+                    : onFocusInstruction(i)
+                "
+                ><i
+                  [class]="
+                    editInstructionIndex() === i
+                      ? 'fa-solid fa-check text-xl'
+                      : 'fa-regular fa-pen-to-square text-xl'
+                  "
+                ></i>
+              </app-button>
 
-        <div class="flex-between">
-          @if (editInstructionIndex() !== i) {
-            <app-button
-              size="sm"
-              variant="ghost"
-              (click)="onFocusInstruction(i)"
-              ><i class="fa-regular fa-pen-to-square text-xl"></i>
-            </app-button>
-          } @else {
-            <app-button
-              color="success"
-              size="sm"
-              variant="ghost"
-              (click)="onUpdateInstruction(i)"
-              ><i class="fa-solid fa-check text-xl"></i>
-            </app-button>
-          }
-
-          <app-button
-            color="danger"
-            size="sm"
-            variant="ghost"
-            (click)="onDeleteInstruction(i)"
-            ><i class="fa-regular fa-trash-can text-xl"></i>
-          </app-button>
-        </div>
-      </div>
-    </li> -->
-  </ol>
-</div>
+              <app-button
+                color="danger"
+                size="sm"
+                variant="ghost"
+                (clicked)="onDeleteInstruction(i)"
+                ><i class="fa-regular fa-trash-can text-xl"></i>
+              </app-button>
+            </app-inline>
+          </app-row>
+        }
+      </app-stack>
+    </app-section>
+  }
+</app-stack>
