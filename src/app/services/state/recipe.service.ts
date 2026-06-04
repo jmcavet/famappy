@@ -208,24 +208,33 @@ export class RecipeStateService {
     });
   }
 
-  increaseServings() {
+  // increaseServings() {
+  //   this.recipeState.update((state) => {
+  //     return {
+  //       ...state,
+  //       servings: state.servings + 1,
+  //     };
+  //   });
+  // }
+
+  // decreaseServings() {
+  //   if (this.recipeState().servings > 1) {
+  //     this.recipeState.update((state) => {
+  //       return {
+  //         ...state,
+  //         servings: state.servings - 1,
+  //       };
+  //     });
+  //   }
+  // }
+
+  changeServings(servings: number) {
     this.recipeState.update((state) => {
       return {
         ...state,
-        servings: state.servings + 1,
+        servings,
       };
     });
-  }
-
-  decreaseServings() {
-    if (this.recipeState().servings > 1) {
-      this.recipeState.update((state) => {
-        return {
-          ...state,
-          servings: state.servings - 1,
-        };
-      });
-    }
   }
 
   setSeason(seasonSelected: Season) {
