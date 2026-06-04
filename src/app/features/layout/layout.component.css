@@ -1,0 +1,7 @@
+p {
+  @apply text-neutral-600 text-lg font-semibold;
+}
+
+span {
+  @apply border border-neutral-300;
+}

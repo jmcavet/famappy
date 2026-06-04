@@ -1,0 +1,202 @@
+<div class="layout-stack h-dvh">
+  <app-page-layout maxSize="xl">
+    <app-section>
+      <app-stack>
+        <h2 class="text-2xl text-center font-bold">Row component</h2>
+        <app-stack variant="tight">
+          <p>Default distribution</p>
+
+          <app-row class="bg-neutral-100">
+            <div class="bg-rose-100">Element 1</div>
+            <div class="bg-blue-100">Element 2</div>
+            <div class="bg-green-100">Element 3</div>
+          </app-row>
+        </app-stack>
+
+        <app-stack variant="tight">
+          <p>Justify start</p>
+
+          <app-row justify="start" class="bg-neutral-100">
+            <div class="bg-rose-100">Element 1</div>
+            <div class="bg-blue-100">Element 2</div>
+          </app-row>
+        </app-stack>
+
+        <app-stack variant="tight">
+          <p>Justify center</p>
+
+          <app-row justify="center" class="bg-neutral-100">
+            <div class="bg-rose-100">Element 1</div>
+            <div class="bg-blue-100">Element 2</div>
+          </app-row>
+        </app-stack>
+
+        <app-stack variant="tight">
+          <p>Justify end</p>
+
+          <app-row justify="end" class="bg-neutral-100">
+            <div class="bg-rose-100">Element 1</div>
+            <div class="bg-blue-100">Element 2</div>
+          </app-row>
+        </app-stack>
+
+        <app-stack variant="tight">
+          <p>First and third elements have full width</p>
+
+          <app-row class="bg-neutral-100">
+            <div class="bg-rose-100 w-full">Element 1</div>
+            <div class="bg-blue-100 whitespace-nowrap">Element 2</div>
+            <div class="bg-green-100 w-full">Element 3</div>
+          </app-row>
+        </app-stack>
+
+        <app-stack variant="tight">
+          <p>Default row with buttons</p>
+
+          <app-row>
+            <app-button variant="outline">Cancel</app-button>
+            <app-button>Validate</app-button>
+          </app-row>
+        </app-stack>
+
+        <h2 class="text-2xl text-center font-bold">Inline component</h2>
+
+        <app-stack variant="tight">
+          <p>Inline with default div elements</p>
+
+          <app-inline>
+            <div class="bg-rose-200">Element 1</div>
+            <div class="bg-green-200">Element 2</div>
+          </app-inline>
+        </app-stack>
+
+        <app-stack variant="tight">
+          <p>Inline with div elements (first has full width)</p>
+
+          <app-inline>
+            <div class="bg-rose-200 w-full">Element 1</div>
+            <div class="bg-green-200 whitespace-nowrap">Element 2</div>
+          </app-inline>
+        </app-stack>
+
+        <app-stack variant="tight">
+          <p>Default Inline</p>
+
+          <app-inline>
+            <app-button variant="outline">Cancel</app-button>
+            <app-button>Validate</app-button>
+          </app-inline>
+        </app-stack>
+
+        <app-stack variant="tight">
+          <p>Inline with full width second button</p>
+
+          <app-inline>
+            <app-button variant="outline">Cancel</app-button>
+            <app-button [fullWidth]="true">Validate</app-button>
+          </app-inline>
+        </app-stack>
+
+        <app-stack variant="tight">
+          <p>Inline with both full width buttons</p>
+
+          <app-inline>
+            <app-button variant="outline" [fullWidth]="true">Cancel</app-button>
+            <app-button [fullWidth]="true">Validate</app-button>
+          </app-inline>
+        </app-stack>
+
+        <h2 class="text-2xl text-center font-bold">Inline component</h2>
+
+        <app-stack variant="tight">
+          <p>Combination Row (justify-between) & Inline</p>
+
+          <app-row>
+            <app-button color="secondary">Button 1</app-button>
+            <app-inline>
+              <app-button variant="outline">Cancel</app-button>
+              <app-button>Validate</app-button>
+            </app-inline>
+          </app-row>
+        </app-stack>
+
+        <app-stack variant="tight">
+          <p>Combination Row (justify-end) & Inline</p>
+
+          <app-row justify="end">
+            <app-inline>
+              <app-button variant="outline">Cancel</app-button>
+              <app-button>Validate</app-button>
+            </app-inline>
+          </app-row>
+        </app-stack>
+
+        <h2 class="text-2xl text-center font-bold">Form Grid</h2>
+
+        <app-stack variant="tight">
+          <p>Items start</p>
+          <div class="bg-neutral-50">
+            <app-form-grid>
+              <span class="bg-rose-100">Element 1</span>
+              <span class="bg-green-100">Value 1</span>
+              <span class="bg-rose-100">Element 2 wider than others</span>
+              <span class="bg-green-100">Value 2</span>
+              <span class="bg-rose-100">Element 3 medium</span>
+              <span class="bg-green-100">Value 3</span>
+            </app-form-grid>
+          </div>
+        </app-stack>
+
+        <app-stack variant="tight">
+          <p>Items end</p>
+          <div class="bg-neutral-50">
+            <app-form-grid justifyItems="end">
+              <span class="bg-rose-100">Element 1</span>
+              <span class="bg-green-100">Value 1</span>
+              <span class="bg-rose-100">Element 2 wider than others</span>
+              <span class="bg-green-100">Value 2</span>
+              <span class="bg-rose-100">Element medium</span>
+              <span class="bg-green-100">Value 3</span>
+            </app-form-grid>
+          </div>
+        </app-stack>
+
+        <app-stack variant="tight">
+          <p>Col 1: start ; Col 2: end</p>
+          <div class="bg-neutral-50">
+            <app-form-grid>
+              <span class="bg-rose-100 justify-self-start">Element 1</span>
+              <span class="bg-green-100 justify-self-end">Value 1</span>
+              <span class="bg-rose-100 justify-self-start">
+                Element 2 wider than others
+              </span>
+              <span class="bg-green-100 justify-self-end">Value 2</span>
+              <span class="bg-rose-100 justify-self-start">Element medium</span>
+              <span class="bg-green-100 justify-self-end">Value 3</span>
+            </app-form-grid>
+          </div>
+        </app-stack>
+
+        <app-stack variant="tight">
+          <p>
+            Col 1: start ; Col 2: end (with cells [1, 1] & [3, 2] full width)
+          </p>
+          <div class="bg-neutral-50">
+            <app-form-grid>
+              <span class="bg-rose-100 justify-self-start w-full"
+                >Element 1</span
+              >
+              <span class="bg-green-100 justify-self-end">Value 1</span>
+              <span class="bg-rose-100 justify-self-start">
+                Element 2 wider than others
+              </span>
+              <span class="bg-green-100 justify-self-end">Value 2</span>
+              <span class="bg-rose-100 justify-self-start">Element medium</span>
+              <span class="bg-green-100 justify-self-end w-full">Value 3</span>
+            </app-form-grid>
+          </div>
+        </app-stack>
+      </app-stack>
+    </app-section>
+  </app-page-layout>
+</div>
