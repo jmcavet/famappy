@@ -1,71 +1,26 @@
-.form-grid {
-  @apply space-y-8 max-w-[860px] mx-auto;
-}
-
-.section {
-  @apply grid grid-cols-[auto_auto] items-start gap-x-2 sm:gap-x-4 gap-y-8 px-2 py-4 rounded-lg;
-}
-
-.property-flexible {
-  @apply gap-2 col-span-2 sm:col-span-1 -mb-4 sm:-mb-0;
-}
-
-.section-items {
-  @apply flex-wrap gap-2;
-}
-
-.section-items-flexible {
-  @apply flex-wrap sm:justify-end gap-2 col-span-2 sm:col-span-1;
-}
-
-.recipe-categories {
-  @apply space-y-4 px-2 py-4 rounded-lg;
-}
-
 input[type="text"],
 input[type="url"] {
-  @apply shadow appearance-none border rounded px-4 py-2 text-neutral-700 dark:bg-neutral-800 dark:text-white dark:border-neutral-700 leading-tight focus:outline-none;
-}
-
-.btn-tag {
-  @apply bg-transparent text-primary-600 border border-primary-600 px-4 py-2 rounded-md cursor-pointer hover:bg-primary-100 dark:hover:bg-primary-900 dark:hover:text-primary-400;
-}
-
-.btn-tag.active {
-  @apply bg-primary-600 text-white dark:bg-primary-500;
-}
-
-.btn-cuisine {
-  /*Add 'scroll-mt-16 so that when scrolling down to the cuisine button, it does take the header height into account*/
-  @apply bg-transparent text-primary-600 border border-primary-600 dark:text-white dark:border-white px-4 py-2 rounded-md scroll-mt-16;
-}
-
-.btn-cuisine.none {
-  @apply bg-transparent text-primary-600 border-none scroll-mt-16;
-}
-
-small {
-  color: red;
+  @apply h-11 w-full rounded-lg inset-x-md surface-1 border border-neutral-300 dark:border-neutral-700 dark:placeholder:text-neutral-500 leading-tight outline-none 
+  focus:border-primary-500 dark:focus:border-primary-400
+  focus:ring-2 focus:ring-primary-500/20 dark:focus:ring-primary-400/20;
 }
 
 input.ng-invalid.ng-touched {
-  border: 1px solid red;
+  @apply border border-danger dark:border-danger-dark;
+}
+
+small {
+  @apply text-danger dark:text-danger-dark;
+}
+
+textarea {
+  @apply h-20 w-full rounded-lg inset-md surface-1 border border-neutral-300 dark:border-neutral-700 dark:placeholder:text-neutral-500 leading-tight outline-none 
+  focus:border-primary-500 dark:focus:border-primary-400
+  focus:ring-2 focus:ring-primary-500/20 dark:focus:ring-primary-400/20;
 }
 
 .validator {
   @apply col-span-2 text-end;
-}
-
-.image-name {
-  @apply text-sm;
-}
-
-.section-source-comment {
-  @apply flex flex-col items-start gap-x-4 gap-y-2 md:flex-row md:gap-y-4;
-}
-
-.input-wrapper {
-  @apply w-full relative;
 }
 
 .unit {

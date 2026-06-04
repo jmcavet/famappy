@@ -1,34 +1,46 @@
 @if (pageLoading()) {
-  <app-loading />
+  <app-stack align="center">
+    <app-loading />
+  </app-stack>
 } @else {
-  <div class="h-full layout-hcf">
-    <app-tabs>
-      <app-tab tabTitle="definition" [active]="true">
-        <app-tab-definition [buttonType]="buttonSaveOrUpdate()" />
-      </app-tab>
-      <app-tab tabTitle="ingredients">
-        <app-tab-ingredients />
-      </app-tab>
-      <app-tab tabTitle="instructions">
-        <app-tab-instructions />
-      </app-tab>
-    </app-tabs>
+  <div class="layout-stack h-dvh">
+    <app-page-layout insetY="none">
+      <app-section inset="none" [surface]="0" [shadow]="false">
+        <app-stack variant="section">
+          <app-tabs [surface]="0" insetX="none" insetX="md" [fixedTop]="true">
+            <app-tab tabTitle="definition" [active]="true">
+              <app-tab-definition [buttonType]="buttonSaveOrUpdate()" />
+            </app-tab>
+            <app-tab tabTitle="ingredients">
+              <app-tab-ingredients />
+            </app-tab>
+            <app-tab tabTitle="instructions">
+              <app-tab-instructions />
+            </app-tab>
+          </app-tabs>
+        </app-stack>
+      </app-section>
+    </app-page-layout>
 
-    <div class="page-full-width page-x-padding py-2">
-      <div class="w-full">
+    <app-section>
+      <app-inline>
+        <app-button variant="outline" [fullWidth]="true"> Cancel</app-button>
+
         <app-button
           [fullWidth]="true"
           (clicked)="onAddOrUpdateRecipe()"
           [disabled]="!formIsValid()"
           >{{ buttonSaveOrUpdate() }}</app-button
         >
-      </div>
-    </div>
+      </app-inline>
+    </app-section>
   </div>
 }
 
 @if (uploadProgress() > 0 && uploadProgress() < 100) {
-  <app-image-upload-loader
-    [progress]="uploadProgress()"
-  ></app-image-upload-loader>
+  <app-stack align="center">
+    <app-image-upload-loader
+      [progress]="uploadProgress()"
+    ></app-image-upload-loader>
+  </app-stack>
 }

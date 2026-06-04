@@ -8,6 +8,7 @@ import { Component, computed, input } from '@angular/core';
   styles: [':host { display: grid; }'],
 })
 export class GridComponent {
+  template = input<'equal' | 'auto-fill'>('equal');
   cols = input<1 | 2 | 3 | 4>(2);
   colsMd = input<1 | 2 | 3 | 4 | null>(null);
   colsLg = input<1 | 2 | 3 | 4 | null>(null);
@@ -35,7 +36,11 @@ export class GridComponent {
 
     return [
       'grid',
-      `grid-cols-${this.cols()}`,
+      this.template() === 'auto-fill'
+        ? // ? '[grid-template-columns:auto_1fr]'
+          // `[grid-template-columns: minmax(40px, max-content) 1fr]`
+          `[grid-template-columns: minmax(40px, 80px) 1fr]`
+        : `grid-cols-${this.cols()}`,
       md ? this.colsMdMap[md] : null,
       lg ? this.colsLgMap[lg] : null,
       `space-${this.gap()}`,

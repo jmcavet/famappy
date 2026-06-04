@@ -3,6 +3,7 @@ import {
   computed,
   ContentChildren,
   inject,
+  input,
   QueryList,
   signal,
 } from '@angular/core';
@@ -19,6 +20,23 @@ import { GlobalStateService } from '../../../../services/global.service';
 })
 export class TabsComponent {
   @ContentChildren(TabComponent) tabs: QueryList<TabComponent> | undefined;
+
+  insetX = input<'none' | 'xs' | 'sm' | 'md' | 'lg'>('sm');
+  insetY = input<'none' | 'xs' | 'sm' | 'md' | 'lg'>('sm');
+
+  surface = input<0 | 1 | 2 | 3>(1);
+  fixedTop = input<boolean>(false);
+
+  hostClasses = computed(() => {
+    return [
+      `surface-${this.surface()}`,
+      `inset-x-${this.insetX()}`,
+      `inset-y-${this.insetY()}`,
+      `${this.fixedTop() ? 'sticky top-0 z-10' : ''}`,
+    ]
+      .filter(Boolean)
+      .join(' ');
+  });
 
   /** Services */
   private globalService = inject(GlobalStateService);

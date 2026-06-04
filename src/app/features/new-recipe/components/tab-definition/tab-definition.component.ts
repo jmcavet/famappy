@@ -13,6 +13,13 @@ import { ChipComponent } from '../../../../shared/ui/chip/chip.component';
 import { TabDefinitionFacade } from './tab-definition.facade';
 import { ButtonComponent } from '../../../../shared/ui/button/button.component';
 import { LoadingComponent } from '../../../../shared/layout/overlays/loading/loading.component';
+import { StackComponent } from '../../../../shared/layout/primitives/stack.component';
+import { SectionComponent } from '../../../../shared/layout/primitives/section.component';
+import { RowComponent } from '../../../../shared/layout/primitives/row.component';
+import { InlineComponent } from '../../../../shared/layout/primitives/inline.component';
+import { ServingsControlComponent } from '../../../../shared/ui/servings-control/servings-control.component';
+import { GridComponent } from '../../../../shared/layout/primitives/grid.component';
+import { FormGridComponent } from '../../../../shared/layout/primitives/form-grid.component';
 
 export interface TabDefinitionContext {
   buttonType: Signal<string>;
@@ -27,6 +34,12 @@ export interface TabDefinitionContext {
     ButtonComponent,
     ChipComponent,
     LoadingComponent,
+    StackComponent,
+    SectionComponent,
+    FormGridComponent,
+    RowComponent,
+    InlineComponent,
+    ServingsControlComponent,
   ],
   providers: [TabDefinitionFacade],
   templateUrl: './tab-definition.component.html',
@@ -45,7 +58,7 @@ export class TabDefinitionComponent {
   readonly dbRecipeCategories = this.facade.dbRecipeCategories;
 
   form = this.facade.form;
-  readonly messageServings = this.facade.messageServings;
+  readonly servings = this.facade.servings;
   readonly price = this.facade.price;
   readonly frequency = this.facade.frequency;
   readonly difficulty = this.facade.difficulty;
@@ -78,16 +91,12 @@ export class TabDefinitionComponent {
     this.facade.onTitleChange(value);
   }
 
+  onServingsChange(value: number) {
+    this.facade.changeServings(value);
+  }
+
   openAddRecipeCategoryInputModal(event: MouseEvent) {
     this.facade.openAddRecipeCategoryInputModal(event);
-  }
-
-  decreaseServings() {
-    this.facade.decreaseServings();
-  }
-
-  increaseServings() {
-    this.facade.increaseServings();
   }
 
   setDifficulty(difficultySelected: Difficulty) {
