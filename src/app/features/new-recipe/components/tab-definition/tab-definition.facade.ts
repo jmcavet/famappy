@@ -151,10 +151,8 @@ export class TabDefinitionFacade {
     return this.titleIsUnique() ? '' : 'Title already exists in database.';
   });
 
-  readonly messageServings = computed(() => {
-    return `${this.recipeService.recipeState().servings} ${
-      this.recipeService.recipeState().servings === 1 ? 'person' : 'people'
-    }`;
+  readonly servings = computed(() => {
+    return this.recipeService.recipeState().servings;
   });
 
   /* ================================
@@ -246,6 +244,10 @@ export class TabDefinitionFacade {
     });
   }
 
+  changeServings(servings: number) {
+    this.recipeService.changeServings(servings);
+  }
+
   scrollBackToCuisineButton() {
     // Once the page is viewed, scroll back to the cuisine button.
     const idCuisine = sessionStorage.getItem('scrollTargetCuisine');
@@ -294,14 +296,6 @@ export class TabDefinitionFacade {
       (item) => item.title === value,
     );
     this.titleIsUnique.set(existingRecipeTitles === undefined);
-  }
-
-  public decreaseServings() {
-    this.recipeService.decreaseServings();
-  }
-
-  public increaseServings() {
-    this.recipeService.increaseServings();
   }
 
   public setDifficulty(difficultySelected: Difficulty) {
