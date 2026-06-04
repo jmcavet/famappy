@@ -1,27 +1,13 @@
-.form {
-  @apply space-y-12 max-w-[860px] mx-auto;
-}
-
 input[type="text"] {
-  @apply shadow appearance-none rounded py-2 px-2 leading-tight focus:outline-none;
+  @apply w-20 h-11 rounded-lg inset-x-md surface-1 border border-neutral-300 dark:border-neutral-700 dark:placeholder:text-neutral-500 leading-tight outline-none 
+  focus:border-primary-500 dark:focus:border-primary-400
+  focus:ring-2 focus:ring-primary-500/20 dark:focus:ring-primary-400/20;
 }
 
 input.ng-invalid.ng-touched {
-  border: 1px solid red;
-}
-
-.unit {
-  @apply bg-transparent text-primary-600 border border-primary-600 px-4 py-2 rounded-md;
-}
-
-.unit.active {
-  @apply bg-primary-600 text-white dark:bg-primary-500 rounded-md px-4 py-1;
-}
-
-.section-1 {
-  @apply p-2 rounded-lg;
+  @apply border border-danger dark:border-danger-dark;
 }
 
 .measure-error {
-  @apply text-center text-sm text-red-500 dark:text-red-500 px-4 py-2 rounded;
+  @apply bg-danger-50 text-sm text-danger dark:text-danger px-4 py-2 rounded;
 }

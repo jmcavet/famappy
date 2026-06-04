@@ -5,6 +5,11 @@ import { CapitalizePipe } from '../../../../shared/pipes/capitalize.pipe';
 import { TabIngredientsFacade } from './tab-ingredients.facade';
 import { ButtonComponent } from '../../../../shared/ui/button/button.component';
 import { ChipComponent } from '../../../../shared/ui/chip/chip.component';
+import { SectionComponent } from '../../../../shared/layout/primitives/section.component';
+import { StackComponent } from '../../../../shared/layout/primitives/stack.component';
+import { RowComponent } from '../../../../shared/layout/primitives/row.component';
+import { InlineComponent } from '../../../../shared/layout/primitives/inline.component';
+import { FormGridComponent } from '../../../../shared/layout/primitives/form-grid.component';
 
 @Component({
   selector: 'app-tab-ingredients',
@@ -15,6 +20,11 @@ import { ChipComponent } from '../../../../shared/ui/chip/chip.component';
     NgClass,
     ButtonComponent,
     ChipComponent,
+    SectionComponent,
+    StackComponent,
+    FormGridComponent,
+    RowComponent,
+    InlineComponent,
   ],
   providers: [TabIngredientsFacade],
   templateUrl: './tab-ingredients.component.html',
