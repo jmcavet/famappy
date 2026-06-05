@@ -27,12 +27,20 @@ export class MealCategoryFacade {
    * Domain-derived state
    * ================================ */
   readonly dbMealCategories = this.mealCategoryDomainFacade.dbMealCategories;
+  readonly mealCategoriesLoading =
+    this.mealCategoryDomainFacade.mealCategoriesLoading;
 
   /* ================================
    * Computed signals
    * ================================ */
   readonly mealCategoryId = computed(
     () => this.recipeService.recipeState().mealCategoryId,
+  );
+
+  readonly pageIsLoading = computed(() => this.mealCategoriesLoading());
+
+  readonly dbMealCategoriesSorted = computed(() =>
+    this.dbMealCategories().sort((a, b) => a.name.localeCompare(b.name)),
   );
 
   /* ================================
