@@ -12,7 +12,7 @@
     @apply rounded-xl shadow-lg;
   }
   .modal {
-    @apply rounded-2xl;
+    @apply rounded-b-2xl sm:rounded-2xl shadow-xl;
   }
   .drawer {
     @apply rounded-t-2xl;

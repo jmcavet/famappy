@@ -2,10 +2,19 @@ import { Component, ElementRef, inject, Input, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ButtonComponent } from '../../../../ui/button/button.component';
 import { ModalService } from '../modal.service';
+import { RowComponent } from '../../../primitives/row.component';
+import { StackComponent } from '../../../primitives/stack.component';
+import { SectionComponent } from '../../../primitives/section.component';
 
 @Component({
   selector: 'app-modal-input',
-  imports: [ButtonComponent, FormsModule],
+  imports: [
+    ButtonComponent,
+    FormsModule,
+    SectionComponent,
+    StackComponent,
+    RowComponent,
+  ],
   templateUrl: './modal-input.component.html',
   styleUrl: './modal-input.component.css',
 })
