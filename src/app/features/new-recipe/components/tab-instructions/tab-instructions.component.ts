@@ -1,5 +1,11 @@
 import { NgFor, NgIf } from '@angular/common';
-import { Component, ElementRef, inject, ViewChild } from '@angular/core';
+import {
+  Component,
+  computed,
+  ElementRef,
+  inject,
+  ViewChild,
+} from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TabInstructionsFacade } from './tab-instructions.facade';
 import { ButtonComponent } from '../../../../shared/ui/button/button.component';
@@ -9,6 +15,9 @@ import { RowComponent } from '../../../../shared/layout/primitives/row.component
 import { InlineComponent } from '../../../../shared/layout/primitives/inline.component';
 import { SectionComponent } from '../../../../shared/layout/primitives/section.component';
 import { FormGridComponent } from '../../../../shared/layout/primitives/form-grid.component';
+import { ContextMenuService } from 'primeng/api';
+import { ModalService } from '../../../../shared/layout/overlays/modal/modal.service';
+import { ModalInputComponent } from '../../../../shared/layout/overlays/modal/modal-input/modal-input.component';
 
 @Component({
   selector: 'app-tab-instructions',
@@ -29,6 +38,7 @@ import { FormGridComponent } from '../../../../shared/layout/primitives/form-gri
 })
 export class TabInstructionsComponent {
   private facade = inject(TabInstructionsFacade);
+  private modalService = inject(ModalService);
 
   recipeInstructions = this.facade.recipeInstructions;
   editInstructionIndex = this.facade.editInstructionIndex;
@@ -69,5 +79,31 @@ export class TabInstructionsComponent {
 
   onDeleteInstruction(index: number) {
     this.facade.deleteInstruction(index);
+  }
+
+  existingItems = computed(() =>
+    this.recipeInstructions().map((instr) => {
+      return {
+        name: instr,
+      };
+    }),
+  );
+
+  openUpdateInstructionModal(instructionIndex: number) {
+    this.modalService.open(
+      ModalInputComponent,
+      {
+        title: 'Update instruction',
+        btnConfirmText: 'Apply',
+        btnConfirmColor: 'primary',
+        existingItems: this.existingItems(),
+        inputValue: this.recipeInstructions()[instructionIndex],
+      },
+      {
+        onConfirm: (instructionUpdated: string) => {
+          this.facade.updateInstruction(instructionIndex, instructionUpdated);
+        },
+      },
+    );
   }
 }
