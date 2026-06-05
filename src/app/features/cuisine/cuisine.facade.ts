@@ -34,6 +34,9 @@ export class CuisineFacade {
     () => this.recipeService.recipeState().cuisineId,
   );
 
+  readonly dbCuisinesSorted = computed(() =>
+    this.dbCuisines().sort((a, b) => a.name.localeCompare(b.name)),
+  );
   readonly pageIsLoading = computed(() => this.cuisinesLoading());
 
   /* ================================

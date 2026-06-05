@@ -33,6 +33,7 @@ export class CuisineComponent {
 
   /** Declaration of signals communicating with firestore */
   readonly dbCuisines = this.facade.dbCuisines;
+  readonly dbCuisinesSorted = this.facade.dbCuisinesSorted;
   readonly cuisineId = this.facade.cuisineId;
   readonly pageIsLoading = this.facade.pageIsLoading;
 

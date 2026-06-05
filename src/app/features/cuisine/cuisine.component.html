@@ -14,7 +14,7 @@
     <app-page-layout>
       <app-section>
         <app-stack variant="compact">
-          @for (cuisine of dbCuisines(); track $index) {
+          @for (cuisine of dbCuisinesSorted(); track $index) {
             <div
               class="w-full rounded inset-inline-md surface-2 surface-interactive"
               (click)="selectCuisine(cuisine.id)"
