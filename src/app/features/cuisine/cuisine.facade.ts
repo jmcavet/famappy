@@ -30,13 +30,11 @@ export class CuisineFacade {
   /* ================================
    * Computed signals
    * ================================ */
-  readonly canShowPage = computed(() => {
-    return this.cuisinesLoading();
-  });
-
   readonly cuisineId = computed(
     () => this.recipeService.recipeState().cuisineId,
   );
+
+  readonly pageIsLoading = computed(() => this.cuisinesLoading());
 
   /* ================================
    * Methods

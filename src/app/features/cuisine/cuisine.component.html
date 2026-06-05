@@ -1,16 +1,48 @@
-<ul>
-  @for (cuisine of dbCuisines(); track $index) {
-    <li (click)="selectCuisine(cuisine.id)">
-      {{ cuisine.name | capitalize }}
-      @if (cuisineId() === cuisine.name) {
-        <i
-          class="fa-solid fa-check fa-xl text-primary-600 dark:text-primary-500"
-        ></i>
-      }
-    </li>
-  }
-</ul>
+@if (pageIsLoading()) {
+  <app-stack align="center">
+    <app-loading />
+  </app-stack>
+} @else {
+  <div class="layout-stack h-dvh">
+    <app-header-shell
+      ><div class="inset-md">
+        <app-row justify="center">
+          <h1 class="text-headline font-roboto text-center">Select Cuisine</h1>
+        </app-row>
+      </div></app-header-shell
+    >
+    <app-page-layout>
+      <app-section>
+        <app-stack variant="compact">
+          @for (cuisine of dbCuisines(); track $index) {
+            <div
+              class="w-full rounded inset-inline-md surface-2 surface-interactive"
+              (click)="selectCuisine(cuisine.id)"
+            >
+              <app-row>
+                <span>{{ cuisine.name | capitalize }}</span>
 
-<app-floating-button
-  (clicked)="openAddCuisineInputModal($event)"
-></app-floating-button>
+                @if (cuisineId() === cuisine.id) {
+                  <i
+                    class="fa-solid fa-check fa-xl text-primary dark:text-primary-dark"
+                  ></i>
+                }
+              </app-row>
+            </div>
+          }
+        </app-stack>
+      </app-section>
+    </app-page-layout>
+
+    <div class="inset-md">
+      <app-button
+        [fullWidth]="true"
+        (clicked)="openAddCuisineInputModal($event)"
+      >
+        <app-inline>
+          <i class="fa-solid fa-plus text-xl"></i><span>Add new cuisine</span>
+        </app-inline>
+      </app-button>
+    </div>
+  </div>
+}
