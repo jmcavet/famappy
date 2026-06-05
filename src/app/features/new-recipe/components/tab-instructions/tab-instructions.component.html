@@ -42,30 +42,6 @@
           let i = $index
         ) {
           <app-row>
-            <!-- @if (editInstructionIndex() !== i) {
-              <div
-                class="border-l-2 inset-x-md border-l-primary-300 dark:border-l-primary-700"
-              >
-                <app-stack>
-                  <span
-                    class="text-neutral-500 dark:text-neutral-400 font-bold text-[12px]"
-                  >
-                    STEP {{ i + 1 }}
-                  </span>
-                  @for (item of instruction.split("\n"); track $index) {
-                    <span class="dark:text-white">{{ item }}</span>
-                  }
-                </app-stack>
-              </div>
-            } @else {
-              <textarea
-                [value]="recipeInstructions()[i]"
-                #editInput
-                class="tag-input w-full"
-                (keydown)="onEditInstructionTextAreaKeyDown(i, $event)"
-                rows="2"
-              ></textarea>
-            } -->
             <div
               class="border-l-2 inset-x-md border-l-primary-300 dark:border-l-primary-700"
             >
@@ -82,24 +58,6 @@
             </div>
 
             <app-inline>
-              <!-- <app-button
-                size="sm"
-                [color]="editInstructionIndex() === i ? 'success' : 'primary'"
-                variant="ghost"
-                (clicked)="
-                  editInstructionIndex() === i
-                    ? onUpdateInstruction(i)
-                    : onFocusInstruction(i)
-                "
-                ><i
-                  [class]="
-                    editInstructionIndex() === i
-                      ? 'fa-solid fa-check text-xl'
-                      : 'fa-regular fa-pen-to-square text-xl'
-                  "
-                ></i>
-              </app-button> -->
-
               <app-button
                 size="sm"
                 variant="ghost"
