@@ -1,37 +1,41 @@
-<div class="modal-container surface-3">
-  <h2 class="header">{{ title }}</h2>
+<app-section [surface]="3">
+  <app-stack variant="page">
+    <h2 class="text-title text-center">{{ title }}</h2>
 
-  <input
-    #autoFocusInput
-    type="text"
-    id="name"
-    name="name"
-    required
-    placeholder="Name"
-    autocomplete="off"
-    [(ngModel)]="inputValue"
-    (ngModelChange)="onInputChange($event)"
-    (keydown.enter)="onConfirm()"
-  />
-  @if (invalidMessage) {
-    <p class="invalid">{{ invalidMessage }}</p>
-  }
+    <app-stack>
+      <input
+        #autoFocusInput
+        type="text"
+        id="name"
+        name="name"
+        required
+        placeholder="Name"
+        autocomplete="off"
+        [(ngModel)]="inputValue"
+        (ngModelChange)="onInputChange($event)"
+        (keydown.enter)="onConfirm()"
+      />
+      @if (invalidMessage) {
+        <span class="invalid">{{ invalidMessage }}</span>
+      }
+    </app-stack>
 
-  <div class="flex items-center justify-between mt-6">
-    <app-button
-      btnStyle="text-based"
-      color="primary"
-      size="lg"
-      (clicked)="onCancel()"
-      >Cancel</app-button
-    >
+    <app-row>
+      <app-button
+        btnStyle="text-based"
+        color="primary"
+        size="md"
+        (clicked)="onCancel()"
+        >Cancel</app-button
+      >
 
-    <app-button
-      [color]="btnConfirmColor"
-      size="md"
-      (clicked)="onConfirm()"
-      [disabled]="invalidMessage !== undefined || inputValue.length === 0"
-      >{{ btnConfirmText }}</app-button
-    >
-  </div>
-</div>
+      <app-button
+        [color]="btnConfirmColor"
+        size="md"
+        (clicked)="onConfirm()"
+        [disabled]="invalidMessage !== undefined || inputValue.length === 0"
+        >{{ btnConfirmText }}</app-button
+      >
+    </app-row>
+  </app-stack>
+</app-section>

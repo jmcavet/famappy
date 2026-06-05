@@ -1,28 +1,17 @@
-label {
-  @apply text-gray-600 dark:text-gray-300;
-}
-
-input[type="text"],
 textarea {
-  @apply shadow appearance-none border rounded py-2 px-4 text-gray-700 dark:bg-gray-800 dark:text-white dark:border-gray-700 leading-tight focus:outline-none;
-}
-
-input.ng-invalid.ng-touched {
-  border: 1px solid red;
+  @apply h-20 w-full rounded-lg inset-md surface-1 border border-neutral-300 dark:border-neutral-700 dark:placeholder:text-neutral-500 leading-tight outline-none 
+  focus:border-primary-500 dark:focus:border-primary-400
+  focus:ring-2 focus:ring-primary-500/20 dark:focus:ring-primary-400/20;
 }
 
 .error {
   @apply text-danger dark:text-danger-dark text-sm;
 }
 
-.btn-add {
-  @apply border border-primary-600 text-primary-600 dark:bg-primary-500 rounded w-10 h-10;
-}
-
 .tag-input {
-  @apply inline-block bg-green-100 p-2 mr-2 border border-gray-300 rounded cursor-pointer;
+  @apply inline-block bg-green-100 p-2 mr-2 border border-neutral-300 rounded cursor-pointer;
 }
 
 .tag-input[readonly] {
-  @apply bg-gray-200;
+  @apply bg-neutral-200;
 }
