@@ -30,13 +30,14 @@ export class CuisineFacade {
   /* ================================
    * Computed signals
    * ================================ */
-  readonly canShowPage = computed(() => {
-    return this.cuisinesLoading();
-  });
-
   readonly cuisineId = computed(
     () => this.recipeService.recipeState().cuisineId,
   );
+
+  readonly dbCuisinesSorted = computed(() =>
+    this.dbCuisines().sort((a, b) => a.name.localeCompare(b.name)),
+  );
+  readonly pageIsLoading = computed(() => this.cuisinesLoading());
 
   /* ================================
    * Methods
