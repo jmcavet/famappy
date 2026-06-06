@@ -4,6 +4,8 @@ import { PickerModule } from '@ctrl/ngx-emoji-mart';
 import { ButtonComponent } from '../../../../shared/ui/button/button.component';
 import { IngredientAdderFacade } from './ingredient-adder.facade';
 import { LoadingComponent } from '../../../../shared/layout/overlays/loading/loading.component';
+import { InlineComponent } from '../../../../shared/layout/primitives/inline.component';
+import { StackComponent } from '../../../../shared/layout/primitives/stack.component';
 
 export interface IngredientAdderContext {
   existingIngredientNames: Signal<any>;
@@ -17,6 +19,8 @@ export interface IngredientAdderContext {
     LoadingComponent,
     ButtonComponent,
     PickerModule,
+    StackComponent,
+    InlineComponent,
   ],
   providers: [IngredientAdderFacade],
   templateUrl: './ingredient-adder.component.html',
@@ -34,7 +38,7 @@ export class IngredientAdderComponent {
   readonly form = this.facade.form;
   readonly ingredientCategorySelected = this.facade.ingredientCategorySelected;
   readonly ingredientsAreSaving = this.facade.ingredientsSaving;
-  readonly pageIsLoading = this.facade.pageIsLoading;
+  readonly ingredientBeingSaved = this.facade.ingredientBeingSaved;
   readonly nameAlreadyExists = this.facade.nameAlreadyExists;
   readonly buttonIsDisabled = this.facade.buttonIsDisabled;
 
