@@ -18,7 +18,7 @@ import { SectionComponent } from '../../../../shared/layout/primitives/section.c
 import { RowComponent } from '../../../../shared/layout/primitives/row.component';
 import { InlineComponent } from '../../../../shared/layout/primitives/inline.component';
 import { ServingsControlComponent } from '../../../../shared/ui/servings-control/servings-control.component';
-import { GridComponent } from '../../../../shared/layout/primitives/grid.component';
+import { GridResponsiveComponent } from '../../../../shared/layout/primitives/grid-responsive.component';
 import { FormGridComponent } from '../../../../shared/layout/primitives/form-grid.component';
 
 export interface TabDefinitionContext {

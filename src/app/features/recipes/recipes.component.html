@@ -55,14 +55,14 @@
         [dbIngredientCategories]="dbIngredientCategories()"
     /></app-header-shell>
     <app-page-layout maxSize="lg">
-      <app-grid [colsMd]="3" [colsLg]="4" gap="sm">
+      <app-grid-responsive [colsMd]="3" [colsLg]="4" gap="sm">
         @for (recipe of recipesFiltered(); track $index) {
           <app-recipe-card
             [recipeState]="recipe"
             (click)="clickOnRecipeCard(recipe)"
           ></app-recipe-card>
         }
-      </app-grid>
+      </app-grid-responsive>
     </app-page-layout>
     <app-footer />
   </div>
