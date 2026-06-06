@@ -4,46 +4,42 @@ import { Component, computed, input } from '@angular/core';
   selector: 'app-grid',
   standalone: true,
   template: `<ng-content />`,
-  host: { '[class]': 'hostClasses()' },
+  host: {
+    '[class]': 'hostClasses()',
+    '[style.grid-template-columns]': 'gridTemplateColumns()',
+  },
   styles: [':host { display: grid; }'],
 })
 export class GridComponent {
-  template = input<'equal' | 'auto-fill'>('equal');
-  cols = input<1 | 2 | 3 | 4>(2);
-  colsMd = input<1 | 2 | 3 | 4 | null>(null);
-  colsLg = input<1 | 2 | 3 | 4 | null>(null);
-  gap = input<'none' | 'xs' | 'sm' | 'md' | 'lg' | 'xl'>('md');
-  align = input<'start' | 'center' | 'end' | 'stretch'>('stretch');
-  justify = input<'start' | 'center' | 'end' | 'stretch'>('stretch');
+  gapX = input<'none' | 'xs' | 'sm' | 'md' | 'lg' | 'xl'>('md');
+  gapY = input<'none' | 'xs' | 'sm' | 'md' | 'lg' | 'xl'>('md');
+  align = input<'start' | 'center' | 'end' | 'stretch'>('center'); // Cells centered vertically
+  justify = input<'start' | 'center' | 'end' | 'stretch'>('start'); // Cells at the left (start) horizontally
 
-  private readonly colsMdMap: Record<number, string> = {
-    1: 'md:grid-cols-1',
-    2: 'md:grid-cols-2',
-    3: 'md:grid-cols-3',
-    4: 'md:grid-cols-4',
+  col1 = input<'max' | '1'>('1');
+  col2 = input<'max' | '1'>('1');
+  col3 = input<'max' | '1' | null>(null);
+
+  private readonly trackMap = {
+    max: 'max-content',
+    1: '1fr',
   };
 
-  private readonly colsLgMap: Record<number, string> = {
-    1: 'lg:grid-cols-1',
-    2: 'lg:grid-cols-2',
-    3: 'lg:grid-cols-3',
-    4: 'lg:grid-cols-4',
-  };
+  gridTemplateColumns = computed(() => {
+    const cols = [this.trackMap[this.col1()], this.trackMap[this.col2()]];
+
+    if (this.col3()) {
+      cols.push(this.trackMap[this.col3()!]);
+    }
+
+    return cols.join(' ');
+  });
 
   hostClasses = computed(() => {
-    const md = this.colsMd();
-    const lg = this.colsLg();
-
     return [
       'grid',
-      this.template() === 'auto-fill'
-        ? // ? '[grid-template-columns:auto_1fr]'
-          // `[grid-template-columns: minmax(40px, max-content) 1fr]`
-          `[grid-template-columns: minmax(40px, 80px) 1fr]`
-        : `grid-cols-${this.cols()}`,
-      md ? this.colsMdMap[md] : null,
-      lg ? this.colsLgMap[lg] : null,
-      `space-${this.gap()}`,
+      `gap-x-${this.gapX()}`,
+      `gap-y-${this.gapY()}`,
       `items-${this.align()}`,
       `justify-items-${this.justify()}`,
     ]
