@@ -1,26 +1,28 @@
-<div class="flex-start flex-wrap gap-2 my-2">
+<app-stack>
   <app-button
     size="sm"
     color="secondary"
     routerLink="/manage-ingredient-categories"
+    [fullWidth]="true"
   >
-    @if (linkText().length > 0) {
-      <i class="fa-solid fa-plus mr-2 text-xl"></i>
-      {{ linkText() }}
-    } @else {
+    <app-inline>
       <i class="fa-solid fa-plus text-xl"></i>
-    }
+      <span>Add a category</span>
+    </app-inline>
   </app-button>
-  @for (cat of ingredientCategoriesSorted(); track $index) {
-    <app-chip
-      [selected]="ingredientCategorySelected()?.name === cat.name"
-      (toggle)="
-        selectIngredientType(
-          cat,
-          ingredientCategorySelected()?.name === cat.name
-        )
-      "
-      >{{ cat.name }}</app-chip
-    >
-  }
-</div>
+
+  <app-inline gap="sm" [wrap]="true">
+    @for (cat of ingredientCategoriesSorted(); track $index) {
+      <app-chip
+        [selected]="ingredientCategorySelected()?.name === cat.name"
+        (toggle)="
+          selectIngredientType(
+            cat,
+            ingredientCategorySelected()?.name === cat.name
+          )
+        "
+        >{{ cat.name }}</app-chip
+      >
+    }
+  </app-inline>
+</app-stack>
