@@ -10,10 +10,11 @@ import { IsAcending, SortKey } from '../../../../models/ingredient.model';
 import { IngredientCategoryBackendService } from '../../../../services/backend/ingredient-category.service';
 import { IngredientType } from '../../../../models/ingredient-type.model';
 import { SegmentedControlComponent } from '../../../../shared/ui/segmented-control/segmented-control.component';
+import { RowComponent } from '../../../../shared/layout/primitives/row.component';
 
 @Component({
   selector: 'app-ingredient-filter',
-  imports: [SegmentedControlComponent],
+  imports: [SegmentedControlComponent, RowComponent],
   templateUrl: './ingredient-filter.component.html',
   styleUrl: './ingredient-filter.component.css',
 })

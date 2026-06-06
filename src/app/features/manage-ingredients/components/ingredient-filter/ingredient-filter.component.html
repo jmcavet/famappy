@@ -1,8 +1,8 @@
-<div class="flex-end gap-2 my-2">
+<app-row justify="end">
   <app-segmented-control
     [options]="ingredientCategorySelected() ? optionsReduced : options"
     [selectedInput]="optionSelected()"
     (selectionChange)="selectFilter($event)"
   >
   </app-segmented-control>
-</div>
+</app-row>
