@@ -47,7 +47,7 @@ export class IngredientAdderFacade {
    * Local derived state
    * ================================ */
   /** Public signals */
-  readonly pageIsLoading = this.ingredientsSaving;
+  readonly ingredientBeingSaved = this.ingredientsSaving;
 
   readonly nameAlreadyExists = computed(() => {
     return this._ctx.existingIngredientNames().includes(this.nameValue());

@@ -37,21 +37,6 @@ export class IngredientCategoriesSelectionFacade {
     this.dbIngredientCategories().sort((a, b) => a.name.localeCompare(b.name)),
   );
 
-  readonly linkText = computed(() => {
-    const ingredientCategoriesNew = this.dbIngredientCategories().map(
-      (item) => ({
-        name: item.name,
-        id: item.id,
-      }),
-    );
-    const linkText =
-      ingredientCategoriesNew.length === 0
-        ? 'Start by adding a new category'
-        : '';
-
-    return linkText;
-  });
-
   /* ================================
    * PUBLIC API
    * ================================ */

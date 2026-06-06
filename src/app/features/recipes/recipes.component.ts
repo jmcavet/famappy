@@ -38,7 +38,7 @@ import { StackComponent } from '../../shared/layout/primitives/stack.component';
 import { InlineComponent } from '../../shared/layout/primitives/inline.component';
 import { HeaderShellComponent } from '../../shared/layout/shell/header-shell.component';
 import { PageLayoutComponent } from '../../shared/layout/primitives/page-layout.component';
-import { GridComponent } from '../../shared/layout/primitives/grid.component';
+import { GridResponsiveComponent } from '../../shared/layout/primitives/grid-responsive.component';
 import { FooterComponent } from '../../shared/layout/shell/footer/footer.component';
 import { LoadingComponent } from '../../shared/layout/overlays/loading/loading.component';
 import { FloatingButtonComponent } from '../../shared/layout/shell/floating-button/floating-button.component';
@@ -59,7 +59,7 @@ export interface RecipeWithDate extends RecipeWithId {
     RouterLink,
     LoadingComponent,
     ButtonComponent,
-    GridComponent,
+    GridResponsiveComponent,
     FloatingButtonComponent,
     SectionComponent,
     ContainerComponent,

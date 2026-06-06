@@ -1,33 +1,40 @@
 <form [formGroup]="form">
-  <div class="flex gap-2">
-    <input
-      type="text"
-      id="name"
-      name="name"
-      formControlName="name"
-      autocomplete="off"
-      placeholder="Add a new ingredient"
-      class="flex-grow"
-      (keydown)="onIngredientEnterPress($event)"
-    />
+  <app-stack>
+    <app-inline>
+      <input
+        type="text"
+        id="name"
+        name="name"
+        formControlName="name"
+        placeholder="Add a new ingredient"
+        autocomplete="off"
+        (keydown)="onIngredientEnterPress($event)"
+      />
 
-    <app-button (clicked)="addIngredient()" [disabled]="buttonIsDisabled()"
-      ><i class="fa fa-plus"></i
-    ></app-button>
-  </div>
+      <app-button (clicked)="addIngredient()" [disabled]="buttonIsDisabled()"
+        ><i class="fa fa-plus"></i
+      ></app-button>
+    </app-inline>
 
-  @if (form.get("name")?.invalid && form.get("name")?.errors?.["maxlength"]) {
-    <div class="validator mx-2">
-      <small>Ingredient must be no greater than 40 characters long.</small>
-    </div>
-  }
-  @if (nameAlreadyExists()) {
-    <small>This ingredient already exists in the database.</small>
-  }
+    @if (!ingredientCategorySelected() && form.get("name")?.value) {
+      <small class="info">Select a category first</small>
+    }
+
+    @if (form.get("name")?.invalid && form.get("name")?.errors?.["maxlength"]) {
+      <small class="danger"
+        >Ingredient must be no greater than 40 characters long.</small
+      >
+    }
+    @if (nameAlreadyExists()) {
+      <small class="danger"
+        >This ingredient already exists in the database.</small
+      >
+    }
+  </app-stack>
 </form>
 
-<div class="flex flex-col items-center">
-  @if (pageIsLoading()) {
+@if (ingredientBeingSaved()) {
+  <app-stack align="center">
     <app-loading />
-  }
-</div>
+  </app-stack>
+}
