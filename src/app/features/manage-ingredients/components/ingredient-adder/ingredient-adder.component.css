@@ -5,5 +5,13 @@ input[type="text"] {
 }
 
 small {
-  @apply text-danger dark:text-danger-dark;
+  @apply inset-inline-sm rounded;
+}
+
+.danger {
+  @apply bg-danger-50 text-danger dark:bg-danger-900 dark:text-danger-400;
+}
+
+.info {
+  @apply bg-orange-50 text-orange-500 dark:bg-orange-950 dark:text-orange-400;
 }

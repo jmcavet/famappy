@@ -16,11 +16,19 @@
       ></app-button>
     </app-inline>
 
+    @if (!ingredientCategorySelected() && form.get("name")?.value) {
+      <small class="info">Select a category first</small>
+    }
+
     @if (form.get("name")?.invalid && form.get("name")?.errors?.["maxlength"]) {
-      <small>Ingredient must be no greater than 40 characters long.</small>
+      <small class="danger"
+        >Ingredient must be no greater than 40 characters long.</small
+      >
     }
     @if (nameAlreadyExists()) {
-      <small>This ingredient already exists in the database.</small>
+      <small class="danger"
+        >This ingredient already exists in the database.</small
+      >
     }
   </app-stack>
 </form>
