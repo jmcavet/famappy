@@ -4,7 +4,6 @@ import { IngredientDomainFacade } from '../../domain-facades/ingredient.facade';
 import { IngredientCategoryDomainFacade } from '../../domain-facades/ingredientCategory.facade';
 import {
   IngredientWithIdAndDate,
-  IngredientWithTypeName,
   IsAcending,
   SortKey,
 } from '../../models/ingredient.model';
@@ -71,12 +70,6 @@ export class ManageIngredientsFacade {
     );
   });
 
-  showMessageNoCategories = computed(
-    () =>
-      this.dbIngredientCategories().length === 0 &&
-      !this.ingredientCategoriesLoading(),
-  );
-
   /** Compute the ingredient names available, in order to avoid creating duplicates */
   existingIngredientNames = computed(() =>
     this.dbIngredients().map((i) => i.name),
@@ -90,7 +83,6 @@ export class ManageIngredientsFacade {
     const categorySelected =
       this.ingredientCategoryDomainFacade.ingredientCategorySelected();
     const filter = this.filterSelected();
-    console.log('filter: ', filter);
     const ascending = this.isAscending();
 
     if (!ingredients.length || !categories.length) return [];
@@ -145,32 +137,6 @@ export class ManageIngredientsFacade {
     });
   }
 
-  editIngredient(index: number, ingredient: IngredientWithTypeName): void {
-    /** Focus on the ingredient input field when the edit button is clicked.
-     * Edit button clicked: first, save the ingredient type name. If only the name is changed,
-     * the right type name will be saved in memory and later provided as property for the updated ingredient.
-     */
-    this.categoryNameTyped.set(ingredient.categoryName);
-
-    this.editIngredientIndex.set(index);
-  }
-
-  validateUpdate(ingredient: IngredientWithIdAndDate) {
-    this.updateIngredientName(ingredient);
-    this.resetEditFunctionality();
-  }
-
-  editPressEnterIngredient(
-    event: KeyboardEvent,
-    ingredient: IngredientWithIdAndDate,
-  ) {
-    if (event.key === 'Enter') {
-      event.preventDefault();
-      this.updateIngredientName(ingredient);
-      this.resetEditFunctionality();
-    }
-  }
-
   deleteModal(event: MouseEvent, ingredientId: string) {
     event.stopPropagation();
 
@@ -185,6 +151,29 @@ export class ManageIngredientsFacade {
       {
         onConfirm: () => this.deleteIngredient(ingredientId),
       },
+    );
+  }
+
+  async updateIngredient(ingredient: IngredientWithIdAndDate) {
+    /** Find the id of the ingredient category of the selected ingredient */
+    const updatedIngredientCategorySearched =
+      this.dbIngredientCategories().find(
+        (category) => category.id === ingredient.categoryId,
+      );
+
+    const updatedIngredientCategoryId = updatedIngredientCategorySearched
+      ? updatedIngredientCategorySearched.id
+      : '';
+
+    const propertiesToUpdate = {
+      categoryId: updatedIngredientCategoryId,
+      name: ingredient.name,
+    };
+
+    this.ingredientDomainFacade.updateIngredient(
+      ingredient.id,
+      propertiesToUpdate,
+      this.recipeService.mustPreserveState,
     );
   }
 
@@ -205,36 +194,6 @@ export class ManageIngredientsFacade {
         '',
       )
       .trim();
-  }
-
-  private resetEditFunctionality() {
-    // Reset the editIngredientIndex to null so that the edit-related template is no more visible
-    this.editIngredientIndex.set(null);
-  }
-
-  private async updateIngredientName(ingredient: IngredientWithIdAndDate) {
-    /** Find the id of the ingredient category that has been selected from the
-     * drop down menu in the edit mode.
-     */
-    const updatedIngredientCategorySearched =
-      this.dbIngredientCategories().find(
-        (category) => category.name === this.categoryNameTyped(),
-      );
-
-    const updatedIngredientCategoryId = updatedIngredientCategorySearched
-      ? updatedIngredientCategorySearched.id
-      : '';
-
-    const propertiesToUpdate = {
-      categoryId: updatedIngredientCategoryId,
-      name: ingredient.name,
-    };
-
-    this.ingredientDomainFacade.updateIngredient(
-      ingredient.id,
-      propertiesToUpdate,
-      this.recipeService.mustPreserveState,
-    );
   }
 
   private modalDeleteMessage(ingredientId: string) {

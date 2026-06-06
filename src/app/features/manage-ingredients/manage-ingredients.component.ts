@@ -1,4 +1,10 @@
-import { Component, ElementRef, inject, ViewChild } from '@angular/core';
+import {
+  Component,
+  computed,
+  ElementRef,
+  inject,
+  ViewChild,
+} from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import {
   IngredientWithIdAndDate,
@@ -11,16 +17,31 @@ import { IngredientFilterComponent } from './components/ingredient-filter/ingred
 import { ButtonComponent } from '../../shared/ui/button/button.component';
 import { ManageIngredientsFacade } from './manage-ingredients.facade';
 import { LoadingComponent } from '../../shared/layout/overlays/loading/loading.component';
+import { HeaderShellComponent } from '../../shared/layout/shell/header-shell.component';
+import { PageLayoutComponent } from '../../shared/layout/primitives/page-layout.component';
+import { SectionComponent } from '../../shared/layout/primitives/section.component';
+import { StackComponent } from '../../shared/layout/primitives/stack.component';
+import { InlineComponent } from '../../shared/layout/primitives/inline.component';
+import { ModalService } from '../../shared/layout/overlays/modal/modal.service';
+import { ModalInputComponent } from '../../shared/layout/overlays/modal/modal-input/modal-input.component';
+import { RowComponent } from '../../shared/layout/primitives/row.component';
+import { GridComponent } from '../../shared/layout/primitives/grid.component';
 
 @Component({
   selector: 'app-manage-ingredients',
   imports: [
     FormsModule,
-    LoadingComponent,
     IngredientAdderComponent,
     IngredientCategoriesSelectionComponent,
     IngredientFilterComponent,
+    HeaderShellComponent,
+    PageLayoutComponent,
+    SectionComponent,
+    StackComponent,
+    GridComponent,
+    InlineComponent,
     ButtonComponent,
+    LoadingComponent,
   ],
   providers: [ManageIngredientsFacade],
   templateUrl: './manage-ingredients.component.html',
@@ -28,6 +49,7 @@ import { LoadingComponent } from '../../shared/layout/overlays/loading/loading.c
 })
 export class ManageIngredientsComponent {
   private facade = inject(ManageIngredientsFacade);
+  private modalService = inject(ModalService);
 
   /** Local signals */
   readonly editIngredientIndex = this.facade.editIngredientIndex;
@@ -39,11 +61,8 @@ export class ManageIngredientsComponent {
   readonly pageIsLoading = this.facade.pageIsLoading;
 
   /** Local-derived state */
-  readonly showMessageNoCategories = this.facade.showMessageNoCategories;
   readonly existingIngredientNames = this.facade.existingIngredientNames;
   readonly ingredientsFiltered = this.facade.ingredientsFiltered;
-
-  @ViewChild('editInput') editInputRef!: ElementRef<HTMLInputElement>;
 
   onFilterSelected(filter: SortKey) {
     this.facade.onFilterSelected(filter);
@@ -53,24 +72,23 @@ export class ManageIngredientsComponent {
     this.facade.changeCategory(event);
   }
 
-  editIngredient(index: number, ingredient: IngredientWithTypeName): void {
-    this.facade.editIngredient(index, ingredient);
-
-    setTimeout(() => {
-      // Focus after Angular has rendered the input
-      this.editInputRef.nativeElement.focus();
-    });
-  }
-
-  onEditPressEnterIngredient(
-    event: KeyboardEvent,
-    ingredient: IngredientWithIdAndDate,
-  ) {
-    this.facade.editPressEnterIngredient(event, ingredient);
-  }
-
-  onValidateUpdate(ingredient: IngredientWithIdAndDate) {
-    this.facade.validateUpdate(ingredient);
+  openUpdateModal(ingredient: any) {
+    this.modalService.open(
+      ModalInputComponent,
+      {
+        title: 'Update ingredient',
+        btnConfirmText: 'Apply',
+        btnConfirmColor: 'primary',
+        existingItems: this.ingredientsFiltered(),
+        inputValue: ingredient.name,
+      },
+      {
+        onConfirm: (newName: string) => {
+          const updatedIngredient = { ...ingredient, name: newName };
+          this.facade.updateIngredient(updatedIngredient);
+        },
+      },
+    );
   }
 
   openDeleteModal(event: MouseEvent, ingredientId: string) {
