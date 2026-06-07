@@ -2,12 +2,16 @@ import { computed, inject, Injectable, signal } from '@angular/core';
 import { IngredientCategoryDomainFacade } from '../../../../domain-facades/ingredientCategory.facade';
 import { IngredientType } from '../../../../models/ingredient-type.model';
 import { IngredientCategoryBackendService } from '../../../../services/backend/ingredient-category.service';
+import { ModalService } from '../../../../shared/layout/overlays/modal/modal.service';
+import { ModalInputComponent } from '../../../../shared/layout/overlays/modal/modal-input/modal-input.component';
 
 @Injectable()
 export class IngredientCategoriesSelectionFacade {
   /* ================================
    * Dependencies
    * ================================ */
+  private modalService = inject(ModalService);
+
   /** Framework dependencies */
 
   /** Domain access (business state & actions) */
@@ -50,6 +54,36 @@ export class IngredientCategoriesSelectionFacade {
 
     this.ingredientCategoryService.setSelectedIngredientCategory(
       this.ingredientCategorySelected(),
+    );
+  }
+
+  openAddModal(event: MouseEvent) {
+    event.stopPropagation();
+
+    this.modalService.open(
+      ModalInputComponent,
+      {
+        title: 'Enter new ingredient category',
+        btnConfirmText: 'Apply',
+        btnConfirmColor: 'primary',
+        existingItems: this.dbIngredientCategories(),
+      },
+      {
+        onConfirm: (name: string) => {
+          (async () => {
+            await this.addIngredientCategory(name);
+          })();
+        },
+      },
+    );
+  }
+
+  /* ================================
+   * PRIVATE HELPERS
+   * ================================ */
+  private async addIngredientCategory(ingredientCategoryName: string) {
+    this.ingredientCategoryDomainFacade.saveRecipeCategory(
+      ingredientCategoryName,
     );
   }
 }

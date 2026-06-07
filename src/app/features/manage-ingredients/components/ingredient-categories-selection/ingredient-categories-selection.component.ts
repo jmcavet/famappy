@@ -36,4 +36,8 @@ export class IngredientCategoriesSelectionComponent {
       atLeastOneUnitSelected,
     );
   }
+
+  openAddModal(event: MouseEvent) {
+    this.facade.openAddModal(event);
+  }
 }
