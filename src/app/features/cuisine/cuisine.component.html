@@ -35,14 +35,23 @@
     </app-page-layout>
 
     <div class="inset-md">
-      <app-button
-        [fullWidth]="true"
-        (clicked)="openAddCuisineInputModal($event)"
-      >
-        <app-inline>
-          <i class="fa-solid fa-plus text-xl"></i><span>Add new cuisine</span>
-        </app-inline>
-      </app-button>
+      <app-inline>
+        <app-button
+          variant="outline"
+          [fullWidth]="false"
+          (clicked)="selectCuisine(cuisineId())"
+        >
+          Cancel
+        </app-button>
+        <app-button
+          [fullWidth]="true"
+          (clicked)="openAddCuisineInputModal($event)"
+        >
+          <app-inline>
+            <i class="fa-solid fa-plus text-xl"></i><span>Add cuisine</span>
+          </app-inline>
+        </app-button>
+      </app-inline>
     </div>
   </div>
 }
