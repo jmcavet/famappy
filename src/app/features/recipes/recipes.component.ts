@@ -31,11 +31,7 @@ import { IngredientCategoryBackendService } from '../../services/backend/ingredi
 import { MealType } from '../meals/state/mealCart.model';
 import { MealBackendService } from '../../services/backend/meal.service';
 import { Location } from '@angular/common';
-import { ButtonComponent } from '../../shared/ui/button/button.component';
-import { SectionComponent } from '../../shared/layout/primitives/section.component';
-import { ContainerComponent } from '../../shared/layout/primitives/container.component';
 import { StackComponent } from '../../shared/layout/primitives/stack.component';
-import { InlineComponent } from '../../shared/layout/primitives/inline.component';
 import { HeaderShellComponent } from '../../shared/layout/shell/header-shell.component';
 import { PageLayoutComponent } from '../../shared/layout/primitives/page-layout.component';
 import { GridResponsiveComponent } from '../../shared/layout/primitives/grid-responsive.component';
@@ -58,13 +54,9 @@ export interface RecipeWithDate extends RecipeWithId {
     RecipeSearchComponent,
     RouterLink,
     LoadingComponent,
-    ButtonComponent,
     GridResponsiveComponent,
     FloatingButtonComponent,
-    SectionComponent,
-    ContainerComponent,
     StackComponent,
-    InlineComponent,
   ],
   templateUrl: './recipes.component.html',
   styleUrl: './recipes.component.css',
