@@ -1,29 +1,35 @@
 @if (dataIsLoading()) {
-  <app-loading />
+  <app-stack align="center">
+    <app-loading />
+  </app-stack>
 } @else {
-  <div class="space-y-4 lg:max-w-[1000px] mx-auto">
-    <header class="sticky-top page-full-width">
-      <app-calendar />
-    </header>
+  <div class="layout-stack h-dvh">
+    <app-header-shell><app-calendar /></app-header-shell>
+    <app-page-layout maxSize="lg">
+      <app-row justify="end">
+        <app-button routerLink="/meals/definition"
+          ><app-inline>
+            <i class="fa-solid fa-add"></i>
+            <i class="fa-solid fa-shopping-cart fa-xl"></i> </app-inline
+        ></app-button>
+      </app-row>
 
-    <div class="flex items-center justify-end">
-      <app-button routerLink="/meals/definition"
-        ><i class="fa-solid fa-add"></i>
-        <i class="fa-solid fa-shopping-cart fa-xl"></i
-      ></app-button>
-    </div>
-    <section class="flex flex-col gap-20 sm:gap-24">
       @for (
         dailyMealPlan of dailyMealPlans();
         track dailyMealPlan.weekDay.dayName;
         let i = $index
       ) {
-        <app-meal-day-card
-          [dailyMealPlan]="dailyMealPlan"
-          id="day-{{ i }}"
-          class="scroll-mt-20"
-        />
+        <app-section>
+          <app-stack>
+            <app-meal-day-card
+              [dailyMealPlan]="dailyMealPlan"
+              id="day-{{ i }}"
+              class="scroll-mt-20"
+            />
+          </app-stack>
+        </app-section>
       }
-    </section>
+    </app-page-layout>
+    <app-footer />
   </div>
 }
