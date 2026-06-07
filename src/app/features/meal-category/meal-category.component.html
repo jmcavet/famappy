@@ -37,12 +37,21 @@
     </app-page-layout>
 
     <div class="inset-md">
-      <app-button [fullWidth]="true" (clicked)="openInputModal($event)">
-        <app-inline>
-          <i class="fa-solid fa-plus text-xl"></i
-          ><span>Add new meal category</span>
-        </app-inline>
-      </app-button>
+      <app-inline>
+        <app-button
+          variant="outline"
+          [fullWidth]="false"
+          (clicked)="selectMealCategory(mealCategoryId())"
+        >
+          Cancel
+        </app-button>
+        <app-button [fullWidth]="true" (clicked)="openInputModal($event)">
+          <app-inline>
+            <i class="fa-solid fa-plus text-xl"></i
+            ><span>Add meal category</span>
+          </app-inline>
+        </app-button>
+      </app-inline>
     </div>
   </div>
 }
