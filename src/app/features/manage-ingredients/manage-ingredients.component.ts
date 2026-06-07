@@ -26,6 +26,7 @@ import { ModalService } from '../../shared/layout/overlays/modal/modal.service';
 import { ModalInputComponent } from '../../shared/layout/overlays/modal/modal-input/modal-input.component';
 import { RowComponent } from '../../shared/layout/primitives/row.component';
 import { GridComponent } from '../../shared/layout/primitives/grid.component';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-manage-ingredients',
@@ -39,6 +40,7 @@ import { GridComponent } from '../../shared/layout/primitives/grid.component';
     SectionComponent,
     StackComponent,
     GridComponent,
+    RowComponent,
     InlineComponent,
     ButtonComponent,
     LoadingComponent,
@@ -50,6 +52,7 @@ import { GridComponent } from '../../shared/layout/primitives/grid.component';
 export class ManageIngredientsComponent {
   private facade = inject(ManageIngredientsFacade);
   private modalService = inject(ModalService);
+  private location = inject(Location);
 
   /** Local signals */
   readonly editIngredientIndex = this.facade.editIngredientIndex;
@@ -63,6 +66,10 @@ export class ManageIngredientsComponent {
   /** Local-derived state */
   readonly existingIngredientNames = this.facade.existingIngredientNames;
   readonly ingredientsFiltered = this.facade.ingredientsFiltered;
+
+  goBack() {
+    this.location.back();
+  }
 
   onFilterSelected(filter: SortKey) {
     this.facade.onFilterSelected(filter);

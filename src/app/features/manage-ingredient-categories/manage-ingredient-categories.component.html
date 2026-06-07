@@ -1,40 +1,54 @@
 @if (pageIsLoading()) {
-  <div class="flex flex-col items-center">
+  <app-stack align="center">
     <app-loading />
-  </div>
+  </app-stack>
 } @else {
-  <div class="lg:max-w-[1000px] mx-auto stack-md">
-    <header
-      class="sticky-top page-full-width surface-nav text-title text-center py-8"
-    >
-      Manage ingredient categories
-    </header>
+  <div class="layout-stack h-dvh">
+    <app-header-shell
+      ><div class="inset-md">
+        <app-stack>
+          <app-row>
+            <div class="relative w-full">
+              <div class="absolute">
+                <app-button variant="ghost" size="sm" (clicked)="goBack()"
+                  ><i class="fa-solid fa-arrow-left-long text-xl"></i
+                ></app-button>
+              </div>
+              <h1 class="text-headline font-roboto text-center">
+                Manage ingredient categories
+              </h1>
+            </div>
+          </app-row>
+        </app-stack>
+      </div>
+    </app-header-shell>
 
-    <div class="flex flex-col gap-6">
-      @for (ingredientCategory of dbIngredientCategories(); track $index) {
-        <div class="surface-1 flex-between p-2 rounded-md">
-          <div>{{ ingredientCategory.name }}</div>
+    <app-page-layout>
+      <app-section>
+        <app-stack variant="section">
+          @for (ingredientCategory of dbIngredientCategories(); track $index) {
+            <app-row>
+              <span>{{ ingredientCategory.name }}</span>
+              <app-inline gap="sm">
+                <app-button
+                  variant="ghost"
+                  size="sm"
+                  (clicked)="openUpdateModal($event, ingredientCategory)"
+                  ><i class="fa-regular fa-pen-to-square text-xl"></i
+                ></app-button>
 
-          <div class="flex-between gap-0">
-            <app-button
-              variant="ghost"
-              size="sm"
-              (clicked)="openUpdateModal($event, ingredientCategory)"
-              ><i class="fa-regular fa-pen-to-square text-xl"></i
-            ></app-button>
-
-            <app-button
-              variant="ghost"
-              size="sm"
-              color="danger"
-              (clicked)="openDeleteModal($event, ingredientCategory.id)"
-              ><i class="fa-regular fa-trash-can text-xl"></i
-            ></app-button>
-          </div>
-        </div>
-      }
-    </div>
+                <app-button
+                  variant="ghost"
+                  size="sm"
+                  color="danger"
+                  (clicked)="openDeleteModal($event, ingredientCategory.id)"
+                  ><i class="fa-regular fa-trash-can text-xl"></i
+                ></app-button>
+              </app-inline>
+            </app-row>
+          }
+        </app-stack>
+      </app-section>
+    </app-page-layout>
   </div>
-
-  <app-floating-button (clicked)="openAddModal($event)"></app-floating-button>
 }

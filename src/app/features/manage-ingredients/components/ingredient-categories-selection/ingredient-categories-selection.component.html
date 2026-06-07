@@ -1,15 +1,26 @@
 <app-stack>
-  <app-button
-    size="sm"
-    color="secondary"
-    routerLink="/manage-ingredient-categories"
-    [fullWidth]="true"
-  >
-    <app-inline>
-      <i class="fa-solid fa-plus text-xl"></i>
-      <span>Add a category</span>
-    </app-inline>
-  </app-button>
+  <app-inline>
+    @if (ingredientCategoriesSorted().length > 0) {
+      <app-button
+        size="sm"
+        variant="outline"
+        routerLink="/manage-ingredient-categories"
+        [fullWidth]="true"
+      >
+        <app-inline>
+          <i class="fa-regular fa-pen-to-square text-xl"></i>
+          <span>Edit categories</span>
+        </app-inline>
+      </app-button>
+    }
+
+    <app-button size="sm" (clicked)="openAddModal($event)" [fullWidth]="true">
+      <app-inline>
+        <i class="fa-solid fa-plus text-xl"></i>
+        <span>Add a category</span>
+      </app-inline>
+    </app-button>
+  </app-inline>
 
   <app-inline gap="sm" [wrap]="true">
     @for (cat of ingredientCategoriesSorted(); track $index) {
