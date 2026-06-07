@@ -7,9 +7,18 @@
     <app-header-shell
       ><div class="inset-md">
         <app-stack>
-          <h1 class="text-headline font-roboto text-center">
-            Manage Ingredients
-          </h1>
+          <app-row>
+            <div class="relative w-full">
+              <div class="absolute">
+                <app-button variant="ghost" size="sm" (clicked)="goBack()"
+                  ><i class="fa-solid fa-arrow-left-long text-xl"></i
+                ></app-button>
+              </div>
+              <h1 class="text-headline font-roboto text-center">
+                Manage Ingredients
+              </h1>
+            </div>
+          </app-row>
 
           <app-ingredient-categories-selection-page />
 
