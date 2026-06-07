@@ -51,27 +51,6 @@ export class ManageIngredientCategoriesFacade {
   /* ================================
    * PUBLIC API
    * ================================ */
-  openAddModal(event: MouseEvent) {
-    event.stopPropagation();
-
-    this.modalService.open(
-      ModalInputComponent,
-      {
-        title: 'Enter new ingredient category',
-        btnConfirmText: 'Apply',
-        btnConfirmColor: 'primary',
-        existingItems: this.dbIngredientCategories(),
-      },
-      {
-        onConfirm: (name: string) => {
-          (async () => {
-            await this.addIngredientCategory(name);
-          })();
-        },
-      },
-    );
-  }
-
   openUpdateModal(event: MouseEvent, ingredientCategory: any) {
     event.stopPropagation();
 
@@ -117,12 +96,6 @@ export class ManageIngredientCategoriesFacade {
   /* ================================
    * PRIVATE HELPERS
    * ================================ */
-  private async addIngredientCategory(ingredientCategoryName: string) {
-    this.ingredientCategoryDomainFacade.saveRecipeCategory(
-      ingredientCategoryName,
-    );
-  }
-
   private async updateIngredientCategory(
     ingredientCategoryIdToUpdate: string,
     newIngredientCategoryName: string,
