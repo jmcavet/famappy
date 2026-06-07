@@ -9,10 +9,22 @@ import { CapitalizePipe } from '../../../../shared/pipes/capitalize.pipe';
 import { CalendarPipe } from '../../../../shared/pipes/calendar';
 import { CalendarDay, CalendarFacade } from './calendar.facade';
 import { LoadingComponent } from '../../../../shared/layout/overlays/loading/loading.component';
+import { SectionComponent } from '../../../../shared/layout/primitives/section.component';
+import { StackComponent } from '../../../../shared/layout/primitives/stack.component';
+import { RowComponent } from '../../../../shared/layout/primitives/row.component';
+import { InlineComponent } from '../../../../shared/layout/primitives/inline.component';
 
 @Component({
   selector: 'app-calendar',
-  imports: [CalendarPipe, CapitalizePipe, LoadingComponent],
+  imports: [
+    CalendarPipe,
+    CapitalizePipe,
+    LoadingComponent,
+    SectionComponent,
+    StackComponent,
+    RowComponent,
+    InlineComponent,
+  ],
   templateUrl: './calendar.component.html',
   styleUrl: './calendar.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
