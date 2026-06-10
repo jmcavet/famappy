@@ -6,6 +6,8 @@ import { MealWithId } from '../../state/mealCart.model';
 import { MealDayCardFacade } from './meal-day-card.facade';
 import { CalendarDay } from '../calendar/calendar.facade';
 import { MealManualRecipeItemComponent } from '../meal-manual-recipe-item/meal-manual-recipe-item.component';
+import { SectionComponent } from '../../../../shared/layout/primitives/section.component';
+import { StackComponent } from '../../../../shared/layout/primitives/stack.component';
 
 @Component({
   selector: 'app-meal-day-card',
@@ -14,6 +16,8 @@ import { MealManualRecipeItemComponent } from '../meal-manual-recipe-item/meal-m
     MealTypeHeaderComponent,
     MealRecipeItemComponent,
     MealManualRecipeItemComponent,
+    SectionComponent,
+    StackComponent,
   ],
   providers: [MealDayCardFacade],
   templateUrl: './meal-day-card.component.html',
