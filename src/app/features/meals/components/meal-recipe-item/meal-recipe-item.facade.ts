@@ -54,19 +54,21 @@ export class MealRecipeItemFacade {
     const recipe = this._ctx.recipe();
     if (!recipe) return 0;
 
-    return Number(recipe.preparationTime) + Number(recipe.cookingTime);
+    return (
+      Number(recipe.recipe.preparationTime) + Number(recipe.recipe.cookingTime)
+    );
   });
 
   readonly recipeTitle = computed(() => {
-    return this._ctx.recipe()?.title;
+    return this._ctx.recipe()?.recipe.title;
   });
 
   readonly thumbnailUrl = computed(() => {
-    return this._ctx.recipe()?.thumbnailUrl;
+    return this._ctx.recipe()?.recipe.thumbnailUrl;
   });
 
   readonly mealCategoryName = computed(() => {
-    return this._ctx.recipe()?.mealCategoryName;
+    return this._ctx.recipe()?.recipe.mealCategoryName;
   });
 
   /* ================================
