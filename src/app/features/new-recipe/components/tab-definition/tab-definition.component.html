@@ -37,7 +37,7 @@
             accept="image/*"
             id="image-upload"
             (change)="onFileSelected($event)"
-            class="hidden"
+            class="hidden inset-x-md surface-1"
           />
 
           <label
@@ -89,6 +89,7 @@
             name="preparationTime"
             formControlName="preparationTime"
             autocomplete="off"
+            class="inset-x-md surface-1"
           />
           <span class="unit">min</span>
         </div>
@@ -105,6 +106,7 @@
             name="cookingTime"
             formControlName="cookingTime"
             autocomplete="off"
+            class="inset-x-md surface-1"
           />
           <span class="unit">min</span>
         </div>
@@ -282,6 +284,7 @@
           formControlName="source"
           autocomplete="off"
           placeholder="Website URL"
+          class="inset-x-md surface-1"
         />
         @if (form.get("source")?.touched && form.get("source")?.invalid) {
           <div class="invisible"></div>
@@ -299,6 +302,7 @@
           placeholder="e.g. From Jamie Oliver's book..."
           autocomplete="off"
           rows="2"
+          class="inset-md surface-1"
         ></textarea>
       </app-form-grid>
     </app-section>

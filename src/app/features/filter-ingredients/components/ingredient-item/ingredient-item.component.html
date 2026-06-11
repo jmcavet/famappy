@@ -1,6 +1,9 @@
 <button
   (click)="selectItem()"
-  [ngClass]="['item-container', isSelected() ? 'selected' : '']"
+  [ngClass]="[
+    'item-container inset-inline-md surface-2 surface-interactive',
+    isSelected() ? 'selected' : '',
+  ]"
 >
   <app-row>
     <span class="text-neutral-400 dark:text-neutral-400 italic">

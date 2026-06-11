@@ -1,11 +1,11 @@
 input[type="text"] {
-  @apply h-11 w-full rounded-2xl inset-x-md surface-1 border border-neutral-300 dark:border-neutral-700 dark:placeholder:text-neutral-500 leading-tight outline-none 
+  @apply h-11 w-full rounded-2xl border border-neutral-300 dark:border-neutral-700 dark:placeholder:text-neutral-500 leading-tight outline-none 
   focus:border-primary-500 dark:focus:border-primary-400
   focus:ring-2 focus:ring-primary-500/20 dark:focus:ring-primary-400/20;
 }
 
 small {
-  @apply inset-inline-sm rounded;
+  @apply rounded;
 }
 
 .danger {

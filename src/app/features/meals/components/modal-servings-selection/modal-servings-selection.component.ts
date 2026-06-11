@@ -10,10 +10,13 @@ import {
 } from '@angular/core';
 import { MealFacade } from '../../meals.facade';
 import { MealWithId } from '../../state/mealCart.model';
+import { ButtonComponent } from '../../../../shared/ui/button/button.component';
+import { InlineComponent } from '../../../../shared/layout/primitives/inline.component';
+import { RowComponent } from '../../../../shared/layout/primitives/row.component';
 
 @Component({
   selector: 'app-modal-servings-selection',
-  imports: [],
+  imports: [InlineComponent, ButtonComponent, RowComponent],
   templateUrl: './modal-servings-selection.component.html',
   styleUrl: './modal-servings-selection.component.css',
 })

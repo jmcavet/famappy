@@ -1,5 +1,5 @@
 .item-container {
-  @apply w-full rounded border-2 border-transparent inset-inline-md surface-2 surface-interactive;
+  @apply w-full rounded border-2 border-transparent;
 }
 
 .selected {

@@ -1,39 +1,27 @@
 <div class="relative inline-block">
-  <button
-    type="button"
-    class="servings"
-    [class.dinner]="mealType === 'dinner'"
-    (click)="toggle()"
-  >
-    {{ servings()() }}
-  </button>
+  <app-button variant="outline" shape="pill" size="sm" (click)="toggle()">{{
+    servings()()
+  }}</app-button>
 
   @if (isOpen()) {
-  <div class="popover-container">
-    <div class="people">
-      <button (click)="decreaseServings()">
-        <i class="fa-solid fa-minus"></i>
-      </button>
-      <p>{{ servingsUi() }}</p>
-
-      <button (click)="increaseServings()">
-        <i class="fa-solid fa-plus"></i>
-      </button>
+    <div class="popover-container">
+      <div class="people">
+        <app-row>
+          <app-button variant="ghost" size="md" (clicked)="decreaseServings()"
+            ><i class="fa-solid fa-minus"></i
+          ></app-button>
+          <span>{{ servingsUi() }}</span>
+          <app-button variant="ghost" size="md" (clicked)="increaseServings()"
+            ><i class="fa-solid fa-plus"></i
+          ></app-button>
+        </app-row>
+      </div>
+      <app-inline>
+        <app-button variant="outline" size="sm" (clicked)="close()"
+          >Cancel</app-button
+        >
+        <app-button size="sm" (clicked)="validate()">Validate</app-button>
+      </app-inline>
     </div>
-    <div class="flex items-center justify-between">
-      <button
-        class="border border-neutral-500 text-neutral-400 px-2 py-1 rounded-xl"
-        (click)="close()"
-      >
-        Cancel
-      </button>
-      <button
-        class="bg-primary text-neutral-50 rounded-xl px-2 py-1"
-        (click)="validate()"
-      >
-        Validate
-      </button>
-    </div>
-  </div>
   }
 </div>

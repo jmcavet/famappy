@@ -1,5 +1,5 @@
 .day-container {
-  @apply flex flex-col items-center justify-stretch gap-1 inset-inline-xs sm:px-8 rounded-lg hover:bg-neutral-200 dark:hover:bg-neutral-700 cursor-pointer;
+  @apply flex flex-col items-center justify-stretch gap-1 sm:px-8 rounded-lg hover:bg-neutral-200 dark:hover:bg-neutral-700 cursor-pointer;
 }
 
 .day-container.active {
