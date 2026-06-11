@@ -4,7 +4,7 @@
   vary from button to button. */
   .btn {
     @apply layout-row--center font-medium leading-none tracking-wide cursor-pointer
-           transition-all duration-150
+          //  transition-all duration-150
            active:scale-[0.98];
   }
 
@@ -108,6 +108,28 @@
     --btn-text-ghost: theme("colors.danger.dark");
     --btn-text-hover: theme("colors.danger.dark / 85%");
     --btn-hover-light: theme("colors.success.900");
+  }
+
+  .btn--lunch {
+    --btn-bg: theme("colors.lunch.light.bg");
+    --btn-bg-hover: theme("colors.lunch.light.bg / 85%");
+    --btn-border: theme("colors.lunch.light.bg");
+    --btn-text: theme("colors.lunch.light.text");
+    --btn-text-outline: theme("colors.lunch.light.bg");
+    --btn-text-ghost: theme("colors.lunch.light.bg");
+    --btn-text-hover: theme("colors.lunch.light.bg / 85%");
+    --btn-hover-light: theme("colors.primary.50");
+  }
+
+  .dark .btn--lunch {
+    --btn-bg: theme("colors.primary.dark");
+    --btn-bg-hover: theme("colors.primary.dark / 85%");
+    --btn-border: theme("colors.primary.dark");
+    --btn-text: theme("colors.primary.50");
+    --btn-text-outline: theme("colors.primary.50");
+    --btn-text-ghost: theme("colors.primary.dark");
+    --btn-text-hover: theme("colors.primary.dark / 85%");
+    --btn-hover-light: theme("colors.primary.950");
   }
 
   .btn--filled {

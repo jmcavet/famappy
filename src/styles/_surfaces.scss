@@ -34,7 +34,7 @@ Use shadows only for elevation:
 
   /* Nested containers */
   .surface-2 {
-    @apply bg-neutral-50 text-neutral-900 
+    @apply bg-neutral-50 text-neutral-900
            dark:bg-neutral-800 dark:text-neutral-100
            border border-neutral-100 dark:border-neutral-700;
   }

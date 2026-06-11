@@ -8,7 +8,10 @@ export type ButtonColor =
   | 'secondary'
   | 'success'
   | 'danger'
-  | 'neutral';
+  | 'neutral'
+  | 'lunch'
+  | 'dinner';
+
 type ButtonSize = 'xs' | 'sm' | 'md' | 'lg';
 
 @Component({
