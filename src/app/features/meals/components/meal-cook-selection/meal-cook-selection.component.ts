@@ -47,6 +47,7 @@ export class MealCookSelectionComponent {
       selectedDay: this.selectedDay(),
       mealType: this.mealType,
       dailyMealPerMealType: this.dailyMealPerMealType(),
+      cookName: this.cookName(),
     });
   }
 }
