@@ -78,14 +78,12 @@ module.exports = {
           dark: "#f97316", // dark-mode secondary
         },
         lunch: {
-          light: "hsl(146 100 96)",
-          // dark: "hsl(146 43 21)",
-          dark: "hsl(38 92 50)",
+          light: { bg: "hsl(29, 99%, 61%)", text: "hsl(29, 99%, 91%)" },
+          dark: { bg: "hsl(142, 55%, 82%)", text: "hsl(142, 72%, 20%)" },
         },
         dinner: {
-          light: "hsl(298 81 94)",
-          // dark: "hsl(298 26 22)",
-          dark: "hsl(218 20 18)",
+          light: { bg: "hsl(142, 55%, 82%)", text: "hsl(142, 72%, 20%)" },
+          dark: { bg: "hsl(142, 55%, 82%)", text: "hsl(142, 72%, 20%)" },
         },
         success: {
           50: "hsl(142 76% 97%)",
