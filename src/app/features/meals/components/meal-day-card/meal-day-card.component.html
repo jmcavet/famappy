@@ -1,9 +1,9 @@
-<app-stack>
+<app-stack variant="section">
   <app-meal-day-header [dailyMealPlan]="dailyMealPlan()" />
 
-  <div class="border-l-4 border-l-amber-500">
+  <div class="border-l-2 border-l-amber-500">
     <app-section [surface]="2" [shadow]="false">
-      <app-stack variant="compact">
+      <app-stack variant="default">
         <app-meal-type-header
           mealType="lunch"
           [showAssignButton]="false"
@@ -36,9 +36,9 @@
     </app-section>
   </div>
 
-  <div class="border-l-4 border-l-cyan-500">
+  <div class="border-l-2 border-l-cyan-500">
     <app-section [surface]="2" [shadow]="false">
-      <app-stack variant="compact">
+      <app-stack variant="default">
         <app-meal-type-header
           mealType="dinner"
           [showAssignButton]="false"
