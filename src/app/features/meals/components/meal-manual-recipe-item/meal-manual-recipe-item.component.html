@@ -1,14 +1,17 @@
-<button (click)="viewMeal()" class="w-full">
-  <app-row>
-    <app-inline>
-      <i class="fa-solid fa-bolt-lightning"></i>
-      <span>{{ mealName() }}</span>
-    </app-inline>
+<div class="flex items-center gap-4">
+  <a
+    (click)="viewMeal()"
+    class="min-w-0 flex flex-1 items-center gap-2 cursor-pointer"
+  >
+    <i class="fa-solid fa-bolt-lightning shrink-0"></i>
+    <span class="min-w-0 flex-1 truncate">{{ mealName() }}</span>
+  </a>
 
+  <div class="shrink-0">
     <app-button variant="ghost" (clicked)="openDeleteModal()">
       <i
         class="fa-solid fa-trash-arrow-up fa-md text-red-500 dark:text-red-700"
       ></i>
     </app-button>
-  </app-row>
-</button>
+  </div>
+</div>

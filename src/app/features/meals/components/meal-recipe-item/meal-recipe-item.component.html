@@ -1,52 +1,37 @@
-<button (click)="viewRecipe()" class="w-full">
-  <app-row>
-    <app-inline gap="sm">
-      @if (showImage()) {
-        @if (thumbnailUrl()) {
-          <img
-            [src]="thumbnailUrl()"
-            alt="{{ recipe()?.title }}"
-            loading="lazy"
-            class="w-14 h-14 object-cover"
-          />
-        } @else {
-          <app-stack align="center">
-            <i
-              class="w-14 h-14 bg-gradient-to-r from-neutral-200 to-neutral-300 dark:from-neutral-700 dark:to-neutral-600 text-lg font-bold fa-solid fa-utensils"
-            ></i>
-          </app-stack>
-        }
-      } @else {
-        <i class="fa-solid fa-cart-shopping"></i>
-      }
+<div class="flex items-center gap-4">
+  <a
+    (click)="viewRecipe()"
+    class="min-w-0 flex flex-1 items-center gap-2 cursor-pointer"
+  >
+    <i class="fa-solid fa-utensils shrink-0"></i>
 
-      <span class="text-left">
-        {{ recipeTitle() }}
+    <span class="min-w-0 flex-1 truncate">
+      {{ recipeTitle() }}
+    </span>
+
+    <div class="hidden sm:block">
+      <span class="shrink-0 color-text-muted">
+        <app-inline gap="xs">
+          <i class="fa-regular fa-clock"></i>
+          <span class="text-xs">
+            {{ totalTime() | mintohour }}
+          </span>
+        </app-inline>
       </span>
-    </app-inline>
+    </div>
 
-    <app-inline gap="sm">
-      <div class="text-neutral-600 dark:text-neutral-400">
-        <app-stack variant="tight" align="end">
-          <app-tag size="xs" variant="filled" color="neutral">
-            <span class="color-text-muted">{{
-              mealCategoryName()
-            }}</span></app-tag
-          >
-          <app-inline gap="xs">
-            <i class="fa-regular fa-clock"></i>
-            <span class="text-xs">
-              {{ totalTime() | mintohour }}
-            </span>
-          </app-inline>
-        </app-stack>
-      </div>
+    <div class="shrink-0 color-text-muted">
+      <app-tag size="xs" variant="filled" color="neutral">
+        <span class="color-text-muted">{{ mealCategoryName() }}</span></app-tag
+      >
+    </div>
+  </a>
 
-      <app-button variant="ghost" (clicked)="openDeleteModal($event)">
-        <i
-          class="fa-solid fa-trash-arrow-up fa-md text-red-500 dark:text-red-700"
-        ></i>
-      </app-button>
-    </app-inline>
-  </app-row>
-</button>
+  <div class="shrink-0">
+    <app-button variant="ghost" (clicked)="openDeleteModal($event)">
+      <i
+        class="fa-solid fa-trash-arrow-up fa-md text-red-500 dark:text-red-700"
+      ></i>
+    </app-button>
+  </div>
+</div>
