@@ -1,17 +1,30 @@
 <div class="relative inline-block">
-  <app-button variant="outline" shape="pill" size="sm" (click)="toggle()">{{
-    servings()()
-  }}</app-button>
+  <app-button
+    variant="outline"
+    shape="pill"
+    color="classic"
+    size="sm"
+    (click)="toggle()"
+    >{{ servings()() }}</app-button
+  >
 
   @if (isOpen()) {
     <div class="popover-container">
       <div class="people">
         <app-row>
-          <app-button variant="ghost" size="md" (clicked)="decreaseServings()"
+          <app-button
+            variant="ghost"
+            color="classic"
+            size="md"
+            (clicked)="decreaseServings()"
             ><i class="fa-solid fa-minus"></i
           ></app-button>
           <span>{{ servingsUi() }}</span>
-          <app-button variant="ghost" size="md" (clicked)="increaseServings()"
+          <app-button
+            variant="ghost"
+            color="classic"
+            size="md"
+            (clicked)="increaseServings()"
             ><i class="fa-solid fa-plus"></i
           ></app-button>
         </app-row>
