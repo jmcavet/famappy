@@ -110,6 +110,28 @@
     --btn-hover-light: theme("colors.success.900");
   }
 
+  .btn--classic {
+    --btn-bg: theme("colors.neutral.950");
+    --btn-bg-hover: theme("colors.neutral.950 / 85%");
+    --btn-border: theme("colors.neutral.950");
+    --btn-text: theme("colors.neutral.50");
+    --btn-text-outline: theme("colors.neutral.950");
+    --btn-text-ghost: theme("colors.neutral.950");
+    --btn-text-hover: theme("colors.neutral.950 / 85%");
+    --btn-hover-light: theme("colors.neutral.950");
+  }
+
+  .dark .btn--classic {
+    --btn-bg: theme("colors.neutral.50");
+    --btn-bg-hover: theme("colors.neutral.50 / 85%");
+    --btn-border: theme("colors.neutral.50");
+    --btn-text: theme("colors.neutral.50");
+    --btn-text-outline: theme("colors.neutral.50");
+    --btn-text-ghost: theme("colors.neutral.50");
+    --btn-text-hover: theme("colors.neutral.50 / 85%");
+    --btn-hover-light: theme("colors.neutral.50");
+  }
+
   .btn--lunch {
     --btn-bg: theme("colors.lunch.light.bg");
     --btn-bg-hover: theme("colors.lunch.light.bg / 85%");
@@ -122,13 +144,35 @@
   }
 
   .dark .btn--lunch {
-    --btn-bg: theme("colors.primary.dark");
-    --btn-bg-hover: theme("colors.primary.dark / 85%");
-    --btn-border: theme("colors.primary.dark");
-    --btn-text: theme("colors.primary.50");
-    --btn-text-outline: theme("colors.primary.50");
-    --btn-text-ghost: theme("colors.primary.dark");
-    --btn-text-hover: theme("colors.primary.dark / 85%");
+    --btn-bg: theme("colors.lunch.dark.bg");
+    --btn-bg-hover: theme("colors.lunch.dark.bg / 85%");
+    --btn-border: theme("colors.lunch.dark.bg");
+    --btn-text: theme("colors.lunch.dark.text");
+    --btn-text-outline: theme("colors.lunch.dark.bg");
+    --btn-text-ghost: theme("colors.lunch.dark.bg");
+    --btn-text-hover: theme("colors.lunch.dark.bg / 85%");
+    --btn-hover-light: theme("colors.primary.950");
+  }
+
+  .btn--dinner {
+    --btn-bg: theme("colors.dinner.light.bg");
+    --btn-bg-hover: theme("colors.dinner.light.bg / 85%");
+    --btn-border: theme("colors.dinner.light.bg");
+    --btn-text: theme("colors.dinner.light.text");
+    --btn-text-outline: theme("colors.dinner.light.bg");
+    --btn-text-ghost: theme("colors.dinner.light.bg");
+    --btn-text-hover: theme("colors.dinner.light.bg / 85%");
+    --btn-hover-light: theme("colors.primary.50");
+  }
+
+  .dark .btn--dinner {
+    --btn-bg: theme("colors.dinner.dark.bg");
+    --btn-bg-hover: theme("colors.dinner.dark.bg / 85%");
+    --btn-border: theme("colors.dinner.dark.bg");
+    --btn-text: theme("colors.dinner.dark.text");
+    --btn-text-outline: theme("colors.dinner.dark.bg");
+    --btn-text-ghost: theme("colors.dinner.dark.bg");
+    --btn-text-hover: theme("colors.dinner.dark.bg / 85%");
     --btn-hover-light: theme("colors.primary.950");
   }
 

@@ -8,6 +8,7 @@ export type ButtonColor =
   | 'secondary'
   | 'success'
   | 'danger'
+  | 'classic'
   | 'neutral'
   | 'lunch'
   | 'dinner';

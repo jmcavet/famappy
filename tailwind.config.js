@@ -79,11 +79,11 @@ module.exports = {
         },
         lunch: {
           light: { bg: "hsl(29, 99%, 61%)", text: "hsl(29, 99%, 91%)" },
-          dark: { bg: "hsl(142, 55%, 82%)", text: "hsl(142, 72%, 20%)" },
+          dark: { bg: "hsl(29, 99%, 71%)", text: "hsl(29, 99%, 91%)" },
         },
         dinner: {
-          light: { bg: "hsl(142, 55%, 82%)", text: "hsl(142, 72%, 20%)" },
-          dark: { bg: "hsl(142, 55%, 82%)", text: "hsl(142, 72%, 20%)" },
+          light: { bg: "hsl(189, 94%, 43%)", text: "hsl(189, 94%, 83%)" },
+          dark: { bg: "hsl(189, 94%, 53%)", text: "hsl(189, 94%, 83%)" },
         },
         success: {
           50: "hsl(142 76% 97%)",
