@@ -102,7 +102,7 @@ export class MealRecipeItemFacade {
   public viewRecipe() {
     // Navigate to the recipe selected
     if (this._ctx.canViewRecipe()) {
-      this.router.navigate(['/recipes/', this._ctx.recipe().id]);
+      this.router.navigate(['/recipes/', this._ctx.recipe().recipe.id]);
     }
   }
 
