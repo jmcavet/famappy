@@ -3,7 +3,7 @@
 
   <div class="border-l-2 border-l-amber-500">
     <app-section [surface]="2" [shadow]="false">
-      <app-stack variant="default">
+      <app-stack variant="section">
         <app-meal-type-header
           mealType="lunch"
           [showAssignButton]="false"
@@ -17,7 +17,7 @@
           <div class="h-1 w-full surface-1"></div>
         }
 
-        <app-stack>
+        <app-stack variant="section">
           @for (recipe of dailyMealPlan().recipes; track $index) {
             @if (recipe.recipe !== null && recipe.mealType === "lunch") {
               <app-meal-recipe-item
@@ -38,7 +38,7 @@
 
   <div class="border-l-2 border-l-cyan-500">
     <app-section [surface]="2" [shadow]="false">
-      <app-stack variant="default">
+      <app-stack variant="section">
         <app-meal-type-header
           mealType="dinner"
           [showAssignButton]="false"
