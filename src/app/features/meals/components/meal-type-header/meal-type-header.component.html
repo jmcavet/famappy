@@ -1,10 +1,10 @@
 @if (membersAreLoaded()) {
-  <div class="summary-header surface-2">
-    <div class="flex items-center justify-between gap-2">
-      <p class="meal-type" [class.dinner]="mealType === 'dinner'">
+  <app-row>
+    <app-inline>
+      <span class="meal-type" [class.dinner]="mealType === 'dinner'">
         {{ mealType | capitalize }}
-      </p>
-      <span class="ml-2"
+      </span>
+      <span
         ><app-meal-adding-options
           [dailyMealPlan]="dailyMealPlan()!"
           [mealType]="mealType"
@@ -17,32 +17,32 @@
           ></i>
         </button>
       }
-    </div>
+    </app-inline>
 
     @if (showServingIncrements) {
-      <div class="people-container">
+      <app-inline>
         <i class="fa-solid fa-user"></i>
 
-        <div class="people">
-          <button (click)="decreaseServings()">
-            <i class="fa-solid fa-minus"></i>
-          </button>
-          <p>{{ uiServings() }}</p>
-          <button (click)="increaseServings()">
-            <i class="fa-solid fa-plus"></i>
-          </button>
-        </div>
-      </div>
+        <app-inline>
+          <app-button variant="ghost" size="md" (clicked)="decreaseServings()"
+            ><i class="fa-solid fa-minus"></i
+          ></app-button>
+          <span>{{ uiServings() }}</span>
+          <app-button variant="ghost" size="md" (clicked)="increaseServings()"
+            ><i class="fa-solid fa-plus"></i
+          ></app-button>
+        </app-inline>
+      </app-inline>
     } @else {
       @if (dailyMealPerMealType().length) {
-        <div class="people-container">
+        <app-inline>
           <i class="fa-solid fa-user"></i>
           <app-modal-servings-selection
             [dailyMealPerMealType]="dailyMealPerMealType()"
             [servings]="servings()"
             [mealType]="mealType"
           />
-        </div>
+        </app-inline>
       }
     }
 
@@ -52,5 +52,5 @@
       mealType="{{ mealType }}"
       [cookName]="uiCookName()"
     />
-  </div>
+  </app-row>
 }

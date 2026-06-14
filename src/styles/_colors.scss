@@ -8,6 +8,10 @@
     @apply text-neutral-950 dark:text-neutral-50;
   }
 
+  .color-text-slightly-muted {
+    @apply text-neutral-700 dark:text-neutral-300;
+  }
+
   .color-text-muted {
     @apply text-neutral-600 dark:text-neutral-400;
   }

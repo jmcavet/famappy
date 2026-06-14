@@ -1,13 +1,17 @@
 @if (dataIsLoading()) {
-  <div class="flex-col-center">
+  <app-stack align="center">
     <app-loading />
-  </div>
+  </app-stack>
 } @else {
-  <div class="menu-container">
-    @for (parent of parents(); track parent.id) {
-      <button class="btn-parent" (click)="assignCook(parent)">
-        {{ parent.name }}
-      </button>
-    }
+  <div class="absolute -left-8 top-6">
+    <app-section>
+      <app-stack>
+        @for (parent of parents(); track parent.id; let i = $index) {
+          <app-button variant="ghost" size="lg" (clicked)="assignCook(parent)">
+            {{ parent.name }}
+          </app-button>
+        }
+      </app-stack>
+    </app-section>
   </div>
 }

@@ -142,7 +142,6 @@ export class RecipeComponent {
       ? recipeFromHistory
       : this.dbRecipes().find((recipe) => recipe.id === this.recipeId());
 
-    console.log('RECIPE: ', recipe);
     return recipe;
   });
 

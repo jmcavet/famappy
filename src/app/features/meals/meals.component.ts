@@ -12,6 +12,7 @@ import { StackComponent } from '../../shared/layout/primitives/stack.component';
 import { InlineComponent } from '../../shared/layout/primitives/inline.component';
 import { FooterComponent } from '../../shared/layout/shell/footer/footer.component';
 import { RowComponent } from '../../shared/layout/primitives/row.component';
+import { CardComponent } from '../../shared/ui/card/card.component';
 
 @Component({
   selector: 'app-meals',
@@ -28,6 +29,7 @@ import { RowComponent } from '../../shared/layout/primitives/row.component';
     InlineComponent,
     ButtonComponent,
     FooterComponent,
+    CardComponent,
   ],
   templateUrl: './meals.component.html',
   styleUrl: './meals.component.css',

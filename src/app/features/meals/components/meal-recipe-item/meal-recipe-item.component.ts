@@ -1,6 +1,9 @@
 import { Component, inject, input, Signal } from '@angular/core';
 import { MinToHourPipe } from '../../../../shared/pipes/mintohour.pipe';
 import { MealRecipeItemFacade } from './meal-recipe-item.facade';
+import { InlineComponent } from '../../../../shared/layout/primitives/inline.component';
+import { ButtonComponent } from '../../../../shared/ui/button/button.component';
+import { TagComponent } from '../../../../shared/ui/tag/tag.component';
 
 export interface MealRecipeContext {
   recipe: Signal<any>;
@@ -10,7 +13,7 @@ export interface MealRecipeContext {
 
 @Component({
   selector: 'app-meal-recipe-item',
-  imports: [MinToHourPipe],
+  imports: [MinToHourPipe, InlineComponent, ButtonComponent, TagComponent],
   providers: [MealRecipeItemFacade],
   templateUrl: './meal-recipe-item.component.html',
   styleUrl: './meal-recipe-item.component.css',

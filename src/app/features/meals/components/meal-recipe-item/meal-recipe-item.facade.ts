@@ -54,19 +54,21 @@ export class MealRecipeItemFacade {
     const recipe = this._ctx.recipe();
     if (!recipe) return 0;
 
-    return Number(recipe.preparationTime) + Number(recipe.cookingTime);
+    return (
+      Number(recipe.recipe.preparationTime) + Number(recipe.recipe.cookingTime)
+    );
   });
 
   readonly recipeTitle = computed(() => {
-    return this._ctx.recipe()?.title;
+    return this._ctx.recipe()?.recipe.title;
   });
 
   readonly thumbnailUrl = computed(() => {
-    return this._ctx.recipe()?.thumbnailUrl;
+    return this._ctx.recipe()?.recipe.thumbnailUrl;
   });
 
   readonly mealCategoryName = computed(() => {
-    return this._ctx.recipe()?.mealCategoryName;
+    return this._ctx.recipe()?.recipe.mealCategoryName;
   });
 
   /* ================================
@@ -100,7 +102,7 @@ export class MealRecipeItemFacade {
   public viewRecipe() {
     // Navigate to the recipe selected
     if (this._ctx.canViewRecipe()) {
-      this.router.navigate(['/recipes/', this._ctx.recipe().id]);
+      this.router.navigate(['/recipes/', this._ctx.recipe().recipe.id]);
     }
   }
 

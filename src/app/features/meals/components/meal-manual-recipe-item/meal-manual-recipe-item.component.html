@@ -1,16 +1,17 @@
-<div
-  class="px-2 py-2 w-full flex-between cursor-pointer dark:bg-neutral-700/20 hover:bg-neutral-50/60 dark:hover:bg-neutral-700/60"
-  (click)="viewMeal()"
->
-  <div class="flex-between gap-2 sm:gap-4">
-    <!-- <i class="fa-solid fa-pen-nib fa-md"></i> -->
-    <i class="fa-solid fa-bolt-lightning"></i>
-    <p>{{ mealName() }}</p>
-  </div>
+<div class="flex items-center gap-4">
+  <a
+    (click)="viewMeal()"
+    class="min-w-0 flex flex-1 items-center gap-2 cursor-pointer"
+  >
+    <i class="fa-solid fa-bolt-lightning shrink-0"></i>
+    <span class="min-w-0 flex-1 truncate">{{ mealName() }}</span>
+  </a>
 
-  <button (click)="openDeleteModal()">
-    <i
-      class="fa-solid fa-trash-arrow-up fa-md text-red-500 dark:text-red-700"
-    ></i>
-  </button>
+  <div class="shrink-0">
+    <app-button variant="ghost" (clicked)="openDeleteModal()">
+      <i
+        class="fa-solid fa-trash-arrow-up fa-md text-red-500 dark:text-red-700"
+      ></i>
+    </app-button>
+  </div>
 </div>

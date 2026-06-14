@@ -7,6 +7,9 @@ import { ModalServingsSelectionComponent } from '../modal-servings-selection/mod
 import { MealTypeHeaderFacade } from './meals-type-header.facade';
 import { MealAddingOptionsComponent } from '../meal-adding-options/meal-adding-options.component';
 import { CalendarDay } from '../calendar/calendar.facade';
+import { RowComponent } from '../../../../shared/layout/primitives/row.component';
+import { InlineComponent } from '../../../../shared/layout/primitives/inline.component';
+import { ButtonComponent } from '../../../../shared/ui/button/button.component';
 
 @Component({
   selector: 'app-meal-type-header',
@@ -15,6 +18,9 @@ import { CalendarDay } from '../calendar/calendar.facade';
     CapitalizePipe,
     ModalServingsSelectionComponent,
     MealAddingOptionsComponent,
+    RowComponent,
+    InlineComponent,
+    ButtonComponent,
   ],
   providers: [MealTypeHeaderFacade],
   templateUrl: './meal-type-header.component.html',

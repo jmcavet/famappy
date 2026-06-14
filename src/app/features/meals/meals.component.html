@@ -19,7 +19,7 @@
         track dailyMealPlan.weekDay.dayName;
         let i = $index
       ) {
-        <app-section>
+        <app-card>
           <app-stack>
             <app-meal-day-card
               [dailyMealPlan]="dailyMealPlan"
@@ -27,7 +27,7 @@
               class="scroll-mt-20"
             />
           </app-stack>
-        </app-section>
+        </app-card>
       }
     </app-page-layout>
     <app-footer />

@@ -8,6 +8,7 @@
         formControlName="name"
         placeholder="Add a new ingredient"
         autocomplete="off"
+        class="inset-x-md surface-1"
         (keydown)="onIngredientEnterPress($event)"
       />
 
@@ -17,16 +18,16 @@
     </app-inline>
 
     @if (!ingredientCategorySelected() && form.get("name")?.value) {
-      <small class="info">Select a category first</small>
+      <small class="info inset-inline-sm">Select a category first</small>
     }
 
     @if (form.get("name")?.invalid && form.get("name")?.errors?.["maxlength"]) {
-      <small class="danger"
+      <small class="danger inset-inline-sm"
         >Ingredient must be no greater than 40 characters long.</small
       >
     }
     @if (nameAlreadyExists()) {
-      <small class="danger"
+      <small class="danger inset-inline-sm"
         >This ingredient already exists in the database.</small
       >
     }
