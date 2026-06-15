@@ -66,6 +66,28 @@
     --btn-hover-light: theme("colors.secondary.900");
   }
 
+  .btn--neutral {
+    --btn-bg: theme("colors.neutral.500");
+    --btn-bg-hover: theme("colors.neutral.500 / 85%");
+    --btn-border: theme("colors.neutral.500");
+    --btn-text: theme("colors.neutral.50");
+    --btn-text-outline: theme("colors.neutral.900");
+    --btn-text-ghost: theme("colors.neutral.500");
+    --btn-text-hover: theme("colors.neutral.500 / 85%");
+    --btn-hover-light: theme("colors.neutral.50");
+  }
+
+  .dark .btn--neutral {
+    --btn-bg: theme("colors.neutral.400");
+    --btn-bg-hover: theme("colors.neutral.400 / 85%");
+    --btn-border: theme("colors.neutral.400");
+    --btn-text: theme("colors.neutral.50");
+    --btn-text-outline: theme("colors.neutral.50");
+    --btn-text-ghost: theme("colors.neutral.400");
+    --btn-text-hover: theme("colors.neutral.400 / 85%");
+    --btn-hover-light: theme("colors.neutral.900");
+  }
+
   .btn--success {
     --btn-bg: theme("colors.success.DEFAULT");
     --btn-bg-hover: theme("colors.success.DEFAULT / 85%");

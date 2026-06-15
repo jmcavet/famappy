@@ -9,7 +9,11 @@ export interface MealDocInBackend {
   mealType: MealType;
   servings: number;
   cookId: string | null;
-  manualRecipe: { name: string; ingredients: string[] } | null;
+  manualRecipe: {
+    name: string;
+    ingredients: string[];
+    instructions: string[];
+  } | null;
 }
 
 // Used to add the document ID of the firestore object in order to eventually later on remove the Recipe by id
@@ -23,7 +27,11 @@ export interface Meal {
   mealType: MealType;
   servings: number;
   cookId: string | null;
-  manualRecipe: { name: string; ingredients: string[] } | null;
+  manualRecipe: {
+    name: string;
+    ingredients: string[];
+    instructions: string[];
+  } | null;
 }
 
 export interface MealWithId extends Meal {

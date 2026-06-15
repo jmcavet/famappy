@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { ToastService } from '../../../../services/toast.service';
 import { MealDomainFacade } from '../../../../domain-facades/meal.facade';
 import { ModalService } from '../../../../shared/layout/overlays/modal/modal.service';
+import { ManualEntryViewComponent } from '../manual-entry-view/manual-entry-view.component';
 
 /** This UI facade may inject domain facades. However, domain facades must NEVER inject UI facades!! */
 @Injectable({ providedIn: 'root' })
@@ -51,16 +52,20 @@ export class MealManualRecipeItemFacade {
 
   /** Public UI methods */
   public viewMeal() {
-    // Navigate to the recipe selected
-    // if (this.canViewRecipe()) {
-    //   this.router.navigate(['/recipes/', this.recipe().id]);
-    // }
-    console.log('View meal..: ', this._meal());
+    const { name, ingredients, instructions } = this._meal().manualRecipe;
+    this._modalService.open(ManualEntryViewComponent, {
+      name,
+      ingredients,
+      instructions,
+    });
+  }
+
+  onConfirm() {
+    this._modalService.confirm();
   }
 
   public async removeManualMealFromStore() {
     const mealId = this._meal().id;
-    console.log('mealId: ', mealId);
     try {
       await this.mealDomainFacade.deleteMealById(mealId);
       this.toast.show('Meal removed from database', 'success');

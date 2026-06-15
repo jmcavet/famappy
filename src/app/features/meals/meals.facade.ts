@@ -104,7 +104,7 @@ export class MealFacade {
         servings: meal.servings,
         cookId: meal.cookId ?? null,
         recipe: { ...recipe, mealCategoryName },
-        manualRecipe: meal.manualRecipe,
+        manualRecipe: null,
       };
     });
 

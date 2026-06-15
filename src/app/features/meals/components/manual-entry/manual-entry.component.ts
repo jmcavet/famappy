@@ -5,10 +5,21 @@ import { CalendarDay } from '../calendar/calendar.facade';
 import { MealType, MealWithId } from '../../state/mealCart.model';
 import { ButtonComponent } from '../../../../shared/ui/button/button.component';
 import { ModalService } from '../../../../shared/layout/overlays/modal/modal.service';
+import { SectionComponent } from '../../../../shared/layout/primitives/section.component';
+import { StackComponent } from '../../../../shared/layout/primitives/stack.component';
+import { RowComponent } from '../../../../shared/layout/primitives/row.component';
+import { InlineComponent } from '../../../../shared/layout/primitives/inline.component';
 
 @Component({
   selector: 'app-manual-entry',
-  imports: [FormsModule, ButtonComponent],
+  imports: [
+    FormsModule,
+    SectionComponent,
+    StackComponent,
+    RowComponent,
+    InlineComponent,
+    ButtonComponent,
+  ],
   templateUrl: './manual-entry.component.html',
   styleUrl: './manual-entry.component.css',
 })
@@ -34,6 +45,9 @@ export class ManualEntryComponent {
   suggestedIngredients = this.facade.suggestedIngredients;
   dbIngredientsNames = this.facade.dbIngredientsNames;
   ingredientFromDb = this.facade.ingredientFromDb;
+
+  instructions = this.facade.instructions;
+  instruction = this.facade.instruction;
   createAnother = this.facade.createAnother;
 
   constructor() {
@@ -60,6 +74,14 @@ export class ManualEntryComponent {
 
   removeIngredient(index: number) {
     this.facade.removeIngredient(index);
+  }
+
+  addInstruction() {
+    this.facade.addInstruction();
+  }
+
+  removeInstruction(index: number) {
+    this.facade.removeInstruction(index);
   }
 
   cancel() {

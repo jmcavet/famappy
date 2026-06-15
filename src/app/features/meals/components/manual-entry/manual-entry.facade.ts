@@ -78,6 +78,8 @@ export class ManualEntryFacade {
   public ingredientSearched = signal('');
   public suggestedIngredients = signal<string[]>([]);
   public ingredientFromDb = signal<boolean>(false);
+  public instructions = signal<string[]>([]);
+  public instruction = signal('');
   public createAnother = signal(false);
 
   private wasModalPreviouslyOpen = false;
@@ -100,11 +102,10 @@ export class ManualEntryFacade {
     }
 
     const ingredientsFound = this.dbIngredientsNames().filter(
-      (ingredientName) =>
-        ingredientName.toLowerCase().includes(value.toLowerCase()),
+      (ingredientName) => {
+        return ingredientName.toLowerCase().includes(value.toLowerCase());
+      },
     );
-
-    if (ingredientsFound.length === 0) return;
 
     this.suggestedIngredients.update(() => ingredientsFound);
   }
@@ -136,6 +137,16 @@ export class ManualEntryFacade {
 
   public removeIngredient(index: number) {
     this.ingredients.update((arr) => arr.filter((el, i) => i !== index));
+  }
+
+  public addInstruction() {
+    this.instructions.update((previous) => [...previous, this.instruction()]);
+
+    this.instruction.update(() => '');
+  }
+
+  public removeInstruction(index: number) {
+    this.instructions.update((arr) => arr.filter((el, i) => i !== index));
   }
 
   public async onConfirm() {
@@ -175,6 +186,7 @@ export class ManualEntryFacade {
         manualRecipe: {
           name: this.mealDescription(),
           ingredients: this.ingredients().map((ing) => ing.name),
+          instructions: this.instructions(),
         },
       };
       const mealIds = await this.mealBackendService.saveMealsIntoStore([
