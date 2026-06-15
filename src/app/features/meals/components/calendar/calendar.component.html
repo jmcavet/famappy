@@ -43,12 +43,13 @@
                       [class.firstCook]="parentNames().indexOf(cook) === 0"
                       [class.secondCook]="parentNames().indexOf(cook) === 1"
                     >
-                      @if (cook && cook.length > 0) {
-                        <!-- Display only the first letter of the cook -->
+                      <!-- @if (cook && cook.length > 0) {
                         {{ cook[0] }}
                       } @else {
                         ?
-                      }
+                      } -->
+                      <!-- Display only the first letter of the cook -->
+                      {{ cook && cook.length > 0 ? cook[0] : "?" }}
                     </span>
                   }
                 </app-inline>
