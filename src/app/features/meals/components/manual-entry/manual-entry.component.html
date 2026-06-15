@@ -7,7 +7,7 @@
         </app-row>
       </header>
 
-      <section class="w-full">
+      <app-section [surface]="2" [shadow]="false">
         <app-stack variant="compact">
           <h2 class="field-label">Meal name</h2>
           <input
@@ -23,12 +23,12 @@
             class="inset-x-md surface-1"
           />
         </app-stack>
-      </section>
+      </app-section>
 
-      <section class="w-full">
+      <app-section [surface]="2" [shadow]="false">
         <app-stack variant="compact">
           <h2 class="field-label">Ingredients</h2>
-          <app-inline>
+          <app-inline gap="sm">
             <input
               type="text"
               id="ingredient"
@@ -51,22 +51,17 @@
             >
           </app-inline>
 
-          <app-stack>
-            @for (suggestedIngredient of suggestedIngredients(); track $index) {
-              <div class="inset-x-md">
-                <app-button
-                  variant="ghost"
-                  color="neutral"
-                  (clicked)="selectSuggestedIngredient(suggestedIngredient)"
-                  >{{ suggestedIngredient }}</app-button
-                >
-              </div>
-            }
-          </app-stack>
-        </app-stack>
-      </section>
-      <section class="w-full flex-1 overflow-y-auto">
-        <app-stack>
+          @for (suggestedIngredient of suggestedIngredients(); track $index) {
+            <div class="inset-x-md">
+              <app-button
+                variant="ghost"
+                color="neutral"
+                (clicked)="selectSuggestedIngredient(suggestedIngredient)"
+                >{{ suggestedIngredient }}</app-button
+              >
+            </div>
+          }
+
           @for (ingredient of ingredients(); track $index) {
             <div class="w-full surface-2 inset-inline-sm">
               <app-inline>
@@ -85,7 +80,51 @@
             </div>
           }
         </app-stack>
-      </section>
+      </app-section>
+
+      <app-section [surface]="2" [shadow]="false">
+        <app-stack variant="compact">
+          <h2 class="field-label">Instructions</h2>
+          <app-inline gap="sm">
+            <input
+              type="text"
+              id="instruction"
+              name="instruction"
+              required
+              placeholder="Search/enter an instruction"
+              autocomplete="off"
+              [value]="instruction()"
+              (input)="instruction.set($any($event.target).value)"
+              (keydown.enter)="instruction() ? addInstruction() : null"
+              class="inset-x-md surface-1 w-full"
+            />
+            <app-button
+              (clicked)="addInstruction()"
+              [disabled]="instruction().length === 0"
+              ><app-inline gap="sm"
+                ><i class="fa-regular fa-plus fa-xl"></i
+                ><span>Add</span></app-inline
+              ></app-button
+            >
+          </app-inline>
+
+          @for (instruction of instructions(); track $index) {
+            <div class="w-full surface-2 inset-inline-sm">
+              <app-inline>
+                <span class="flex-1">{{ instruction }}</span>
+
+                <app-button
+                  variant="ghost"
+                  size="sm"
+                  color="danger"
+                  (clicked)="removeInstruction($index)"
+                  ><i class="fa-regular fa-trash-can text-xl"></i
+                ></app-button>
+              </app-inline>
+            </div>
+          }
+        </app-stack>
+      </app-section>
 
       <footer class="w-full">
         <app-inline>

@@ -45,6 +45,9 @@ export class ManualEntryComponent {
   suggestedIngredients = this.facade.suggestedIngredients;
   dbIngredientsNames = this.facade.dbIngredientsNames;
   ingredientFromDb = this.facade.ingredientFromDb;
+
+  instructions = this.facade.instructions;
+  instruction = this.facade.instruction;
   createAnother = this.facade.createAnother;
 
   constructor() {
@@ -71,6 +74,14 @@ export class ManualEntryComponent {
 
   removeIngredient(index: number) {
     this.facade.removeIngredient(index);
+  }
+
+  addInstruction() {
+    this.facade.addInstruction();
+  }
+
+  removeInstruction(index: number) {
+    this.facade.removeInstruction(index);
   }
 
   cancel() {

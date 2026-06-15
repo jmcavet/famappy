@@ -78,6 +78,8 @@ export class ManualEntryFacade {
   public ingredientSearched = signal('');
   public suggestedIngredients = signal<string[]>([]);
   public ingredientFromDb = signal<boolean>(false);
+  public instructions = signal<string[]>([]);
+  public instruction = signal('');
   public createAnother = signal(false);
 
   private wasModalPreviouslyOpen = false;
@@ -135,6 +137,16 @@ export class ManualEntryFacade {
 
   public removeIngredient(index: number) {
     this.ingredients.update((arr) => arr.filter((el, i) => i !== index));
+  }
+
+  public addInstruction() {
+    this.instructions.update((previous) => [...previous, this.instruction()]);
+
+    this.instruction.update(() => '');
+  }
+
+  public removeInstruction(index: number) {
+    this.instructions.update((arr) => arr.filter((el, i) => i !== index));
   }
 
   public async onConfirm() {
