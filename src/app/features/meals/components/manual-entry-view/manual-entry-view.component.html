@@ -4,17 +4,39 @@
       {{ name() }}
     </h1>
 
-    <app-stack variant="section">
-      <label class="text-title">List of ingredients</label>
+    <app-section [surface]="2" [shadow]="false">
+      <app-stack variant="section">
+        <label class="text-title">Ingredients</label>
 
-      <app-row>
-        <app-inline [wrap]="true">
-          @for (ing of ingredients(); track ing) {
-            <app-tag variant="outline" color="neutral">{{ ing }}</app-tag>
-          }
-        </app-inline>
-      </app-row>
-    </app-stack>
+        <app-row>
+          <app-inline [wrap]="true">
+            @for (ingredient of ingredients(); track ingredient) {
+              <app-tag variant="outline" color="neutral">{{
+                ingredient
+              }}</app-tag>
+            }
+          </app-inline>
+        </app-row>
+      </app-stack>
+    </app-section>
+
+    <app-section [surface]="2" [shadow]="false">
+      <app-stack variant="section">
+        <label class="text-title">Instructions</label>
+
+        <app-row>
+          <app-stack>
+            @for (
+              intstruction of instructions();
+              track intstruction;
+              let i = $index
+            ) {
+              <span>Step {{ i + 1 }}: {{ intstruction }}</span>
+            }
+          </app-stack>
+        </app-row>
+      </app-stack>
+    </app-section>
 
     <app-row>
       <app-button [fullWidth]="true" (clicked)="onClose()">Close</app-button>

@@ -52,10 +52,11 @@ export class MealManualRecipeItemFacade {
 
   /** Public UI methods */
   public viewMeal() {
-    const { name, ingredients } = this._meal().manualRecipe;
+    const { name, ingredients, instructions } = this._meal().manualRecipe;
     this._modalService.open(ManualEntryViewComponent, {
       name,
       ingredients,
+      instructions,
     });
   }
 

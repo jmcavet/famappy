@@ -23,6 +23,7 @@ import { ModalService } from '../../../../shared/layout/overlays/modal/modal.ser
 export class ManualEntryViewComponent {
   name = input.required<string>();
   ingredients = input.required<string[]>();
+  instructions = input.required<string[]>();
 
   private modalService = inject(ModalService);
 

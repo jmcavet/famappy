@@ -1,5 +1,5 @@
-<div class="surface-3 max-h-[90dvh]">
-  <app-section>
+<div class="max-h-[90dvh]">
+  <app-section [surface]="3">
     <app-stack variant="section">
       <header class="w-full">
         <app-row justify="center">
@@ -20,7 +20,7 @@
             autocomplete="off"
             [value]="mealDescription()"
             (input)="mealDescription.set($any($event.target).value)"
-            class="inset-x-md surface-1"
+            class="inset-x-md surface-2"
           />
         </app-stack>
       </app-section>
@@ -39,7 +39,7 @@
               [value]="ingredientSearched()"
               (input)="ingredientSearched.set($any($event.target).value)"
               (keydown.enter)="ingredientSearched() ? addIngredient() : null"
-              class="inset-x-md surface-1 w-full"
+              class="inset-x-md surface-2 w-full"
             />
             <app-button
               (clicked)="addIngredient()"
@@ -96,7 +96,7 @@
               [value]="instruction()"
               (input)="instruction.set($any($event.target).value)"
               (keydown.enter)="instruction() ? addInstruction() : null"
-              class="inset-x-md surface-1 w-full"
+              class="inset-x-md surface-2 w-full"
             />
             <app-button
               (clicked)="addInstruction()"

@@ -186,6 +186,7 @@ export class ManualEntryFacade {
         manualRecipe: {
           name: this.mealDescription(),
           ingredients: this.ingredients().map((ing) => ing.name),
+          instructions: this.instructions(),
         },
       };
       const mealIds = await this.mealBackendService.saveMealsIntoStore([

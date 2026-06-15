@@ -23,7 +23,11 @@ export interface Meal {
   mealType: MealType;
   servings: number;
   cookId: string | null;
-  manualRecipe: { name: string; ingredients: string[] } | null;
+  manualRecipe: {
+    name: string;
+    ingredients: string[];
+    instructions: string[];
+  } | null;
 }
 
 export interface MealWithId extends Meal {
