@@ -100,11 +100,10 @@ export class ManualEntryFacade {
     }
 
     const ingredientsFound = this.dbIngredientsNames().filter(
-      (ingredientName) =>
-        ingredientName.toLowerCase().includes(value.toLowerCase()),
+      (ingredientName) => {
+        return ingredientName.toLowerCase().includes(value.toLowerCase());
+      },
     );
-
-    if (ingredientsFound.length === 0) return;
 
     this.suggestedIngredients.update(() => ingredientsFound);
   }
