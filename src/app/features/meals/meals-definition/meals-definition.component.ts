@@ -9,6 +9,12 @@ import { ButtonComponent } from '../../../shared/ui/button/button.component';
 import { ChipComponent } from '../../../shared/ui/chip/chip.component';
 import { SelectComponent } from '../../../shared/ui/select/select.component';
 import { LoadingComponent } from '../../../shared/layout/overlays/loading/loading.component';
+import { StackComponent } from '../../../shared/layout/primitives/stack.component';
+import { RowComponent } from '../../../shared/layout/primitives/row.component';
+import { InlineComponent } from '../../../shared/layout/primitives/inline.component';
+import { SectionComponent } from '../../../shared/layout/primitives/section.component';
+import { PageLayoutComponent } from '../../../shared/layout/primitives/page-layout.component';
+import { HeaderShellComponent } from '../../../shared/layout/shell/header-shell.component';
 
 @Component({
   selector: 'app-meals-definition',
@@ -17,6 +23,12 @@ import { LoadingComponent } from '../../../shared/layout/overlays/loading/loadin
     LoadingComponent,
     RouterLink,
     StepperComponent,
+    HeaderShellComponent,
+    PageLayoutComponent,
+    StackComponent,
+    RowComponent,
+    InlineComponent,
+    SectionComponent,
     ButtonComponent,
     ChipComponent,
     SelectComponent,
