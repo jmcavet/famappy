@@ -1,46 +1,53 @@
 <div class="h-full layout-hcf">
-  <header class="page-full-width">
-    <app-stepper [navStep]="2" />
-  </header>
+  <app-header-shell
+    ><div class="inset-md">
+      <app-stepper [navStep]="2" /></div
+  ></app-header-shell>
 
-  <div class="section-scroll space-y-6 py-4">
-    @if (dataIsLoading()) {
-      <div class="flex-col-center">
-        <app-loading />
-      </div>
-    } @else {
-      <section class="surface-1">
-        <h2 class="question font-roboto text-title ui-text-default">
-          How many meals do you want to plan?
-        </h2>
-
-        <app-select
-          [options]="nbMeals"
-          [control]="mealNbSelected"
-          [responsive]="true"
-        ></app-select>
-      </section>
-
-      <section class="surface-1">
-        <h2 class="question font-roboto text-title ui-text-default">
-          Which categories are you interested in?
-        </h2>
-
-        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
-          @for (cat of filteredCategories(); track cat.id) {
-            <app-chip
-              [fullWidth]="true"
-              [selected]="selectedCategoriesIds().includes(cat.id)"
-              (toggle)="toggleSelection(cat)"
-              >{{ cat.name }}</app-chip
-            >
-          }
+  <app-page-layout>
+    <app-stack variant="page">
+      @if (dataIsLoading()) {
+        <div class="flex-col-center">
+          <app-loading />
         </div>
-      </section>
-    }
-  </div>
+      } @else {
+        <app-section inset="lg">
+          <app-stack variant="section">
+            <h2 class="font-roboto text-title">
+              How many meals do you want to plan?
+            </h2>
 
-  <div class="page-full-width page-x-padding py-2">
+            <app-select
+              [options]="nbMeals"
+              [control]="mealNbSelected"
+              [responsive]="true"
+            ></app-select>
+          </app-stack>
+        </app-section>
+
+        <app-section inset="lg">
+          <app-stack variant="section">
+            <h2 class="font-roboto text-title">
+              Which categories are you interested in?
+            </h2>
+
+            <app-inline [wrap]="true">
+              @for (cat of filteredCategories(); track cat.id) {
+                <app-chip
+                  [fullWidth]="true"
+                  [selected]="selectedCategoriesIds().includes(cat.id)"
+                  (toggle)="toggleSelection(cat)"
+                  >{{ cat.name }}</app-chip
+                >
+              }
+            </app-inline>
+          </app-stack>
+        </app-section>
+      }
+    </app-stack>
+  </app-page-layout>
+
+  <app-page-layout>
     <app-button
       [fullWidth]="true"
       [disabled]="proceedButtonIsDisabled()"
@@ -49,5 +56,5 @@
     >
       Proceed
     </app-button>
-  </div>
+  </app-page-layout>
 </div>
