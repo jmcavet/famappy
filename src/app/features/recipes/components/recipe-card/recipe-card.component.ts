@@ -26,8 +26,11 @@ import { StackComponent } from '../../../../shared/layout/primitives/stack.compo
   styleUrl: './recipe-card.component.css',
 })
 export class RecipeCardComponent {
-  @Input() recipeState?: RecipeState;
+  // @Input() recipeState?: RecipeState;
+  recipeState = input<RecipeState>();
+
   activated = input<boolean>(false);
+  cardSurface = input<'0' | '1' | '2' | '3'>('1');
 
   private cuisineService = inject(CuisineBackendService);
   private mealCategoryService = inject(MealCategoryBackendService);
@@ -49,7 +52,7 @@ export class RecipeCardComponent {
 
   mealCategoryName = computed(() => {
     const mealCategories = this.mealCategoryService.mealCategories();
-    const mealCategoryId = this.recipeState?.mealCategoryId;
+    const mealCategoryId = this.recipeState()?.mealCategoryId;
 
     const mealCategoryName = mealCategories.find(
       (c) => c.id === mealCategoryId,
@@ -60,16 +63,16 @@ export class RecipeCardComponent {
 
   get totalTime() {
     const totalTime =
-      Number(this.recipeState?.preparationTime ?? 0) +
-      Number(this.recipeState?.cookingTime ?? 0);
+      Number(this.recipeState()?.preparationTime ?? 0) +
+      Number(this.recipeState()?.cookingTime ?? 0);
 
     return totalTime;
   }
 
   difficultyMessage = computed(() => {
-    if (this.recipeState?.difficulty === 'easy') {
+    if (this.recipeState()?.difficulty === 'easy') {
       return 'easy';
-    } else if (this.recipeState?.difficulty === 'medium') {
+    } else if (this.recipeState()?.difficulty === 'medium') {
       return 'medium';
     } else {
       return 'hard';
@@ -78,9 +81,9 @@ export class RecipeCardComponent {
 
   difficultyClass = computed(() => {
     const difficulty =
-      this.recipeState?.difficulty === 'easy'
+      this.recipeState()?.difficulty === 'easy'
         ? 'high'
-        : this.recipeState?.difficulty === 'medium'
+        : this.recipeState()?.difficulty === 'medium'
           ? 'medium'
           : 'low';
 
@@ -88,9 +91,9 @@ export class RecipeCardComponent {
   });
 
   difficultyScale = computed(() =>
-    this.recipeState?.difficulty === 'easy'
+    this.recipeState()?.difficulty === 'easy'
       ? 'scaleHigh'
-      : this.recipeState?.difficulty === 'medium'
+      : this.recipeState()?.difficulty === 'medium'
         ? 'scaleMedium'
         : 'scaleLow',
   );
