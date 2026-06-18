@@ -12,6 +12,13 @@ import { ChipComponent } from '../../../shared/ui/chip/chip.component';
 import { ButtonComponent } from '../../../shared/ui/button/button.component';
 import { ToggleBtnWithIconComponent } from '../../../shared/ui/toggle-btn-with-icon/toggle-btn-with-icon.component';
 import { LoadingComponent } from '../../../shared/layout/overlays/loading/loading.component';
+import { HeaderShellComponent } from '../../../shared/layout/shell/header-shell.component';
+import { PageLayoutComponent } from '../../../shared/layout/primitives/page-layout.component';
+import { StackComponent } from '../../../shared/layout/primitives/stack.component';
+import { InlineComponent } from '../../../shared/layout/primitives/inline.component';
+import { SectionComponent } from '../../../shared/layout/primitives/section.component';
+import { RowComponent } from '../../../shared/layout/primitives/row.component';
+import { ContainerComponent } from '../../../shared/layout/primitives/container.component';
 
 @Component({
   selector: 'app-meals-filter',
@@ -20,7 +27,14 @@ import { LoadingComponent } from '../../../shared/layout/overlays/loading/loadin
     CapitalizePipe,
     RouterLink,
     StepperComponent,
+    HeaderShellComponent,
+    PageLayoutComponent,
+    StackComponent,
+    RowComponent,
+    InlineComponent,
+    SectionComponent,
     ChipComponent,
+    ContainerComponent,
     ButtonComponent,
     ToggleBtnWithIconComponent,
   ],
