@@ -1,16 +1,8 @@
-section {
-  @apply w-full space-y-3 p-3 sm:p-6 rounded-xl;
+.recipe-item {
+  @apply w-full cursor-pointer rounded-lg transform transition-all duration-200;
 }
 
-.cards-container {
-  @apply grid grid-cols-2 gap-1 sm:grid-cols-3 sm:gap-3 lg:grid-cols-4 lg:gap-6;
-}
-
-.list-item {
-  @apply w-full cursor-pointer px-2 py-1 p-2 rounded-lg relative transform transition-all duration-200;
-}
-
-.list-item.active {
+.recipe-item.active {
   @apply bg-primary-100/70 text-primary-800
            dark:bg-primary-400/30 dark:text-primary-50;
 }

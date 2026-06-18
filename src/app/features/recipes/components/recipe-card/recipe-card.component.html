@@ -1,12 +1,17 @@
-<app-card inset="sm" [interactive]="true" [activated]="activated()">
+<app-card
+  inset="sm"
+  [interactive]="true"
+  [activated]="activated()"
+  [surface]="cardSurface()"
+>
   <app-stack variant="section">
     <app-stack>
       <header class="-margin-sm mb-0">
-        @if (recipeState?.thumbnailUrl) {
+        @if (recipeState()?.thumbnailUrl) {
           <figure class="rounded-lg rounded-b-none overflow-hidden relative">
             <img
-              [src]="recipeState?.thumbnailUrl"
-              [alt]="recipeState?.title"
+              [src]="recipeState()?.thumbnailUrl"
+              [alt]="recipeState()?.title"
               loading="lazy"
               class="card-image"
             />
@@ -41,7 +46,7 @@
       </header>
 
       <h2 class="text-card-title color-text-strong">
-        {{ recipeState?.title }}
+        {{ recipeState()?.title }}
       </h2>
     </app-stack>
     <footer>
