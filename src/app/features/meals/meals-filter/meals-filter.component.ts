@@ -18,7 +18,6 @@ import { StackComponent } from '../../../shared/layout/primitives/stack.componen
 import { InlineComponent } from '../../../shared/layout/primitives/inline.component';
 import { SectionComponent } from '../../../shared/layout/primitives/section.component';
 import { RowComponent } from '../../../shared/layout/primitives/row.component';
-import { ContainerComponent } from '../../../shared/layout/primitives/container.component';
 
 @Component({
   selector: 'app-meals-filter',
@@ -34,7 +33,6 @@ import { ContainerComponent } from '../../../shared/layout/primitives/container.
     InlineComponent,
     SectionComponent,
     ChipComponent,
-    ContainerComponent,
     ButtonComponent,
     ToggleBtnWithIconComponent,
   ],
