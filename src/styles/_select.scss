@@ -23,21 +23,21 @@
   .select {
     @apply w-full px-3 py-1.5 rounded-xl
            bg-white border border-neutral-300
-           text-sm text-neutral-900
+          text-neutral-900
            focus:outline-none focus:ring-2 focus:ring-primary-400 focus:border-primary-400
            dark:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-50
            dark:focus:ring-primary-500;
   }
 
   .select-sm {
-    @apply px-3 py-0.5 min-h-7;
+    @apply inset-inline-sm min-h-7;
   }
 
   .select-md {
-    @apply px-4 py-1 min-h-8;
+    @apply inset-inline-md min-h-8;
   }
 
   .select-lg {
-    @apply px-4 py-2.5 min-h-10;
+    @apply inset-inline-lg min-h-10;
   }
 }

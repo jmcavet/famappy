@@ -19,7 +19,7 @@ export class CardComponent {
       `surface-${this.surface()}`,
       this.interactive() ? 'surface-interactive' : '',
       this.activated()
-        ? 'bg-primary-50 border border-primary-500 dark:bg-primary-950/30 dark:border-primary-400'
+        ? 'bg-primary-50 border-2 border-primary-500 dark:bg-primary-950/30 dark:border-primary-400'
         : '',
       `inset-${this.inset()}`,
     ].join(' ');
