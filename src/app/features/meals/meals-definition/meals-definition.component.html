@@ -5,49 +5,47 @@
   ></app-header-shell>
 
   <app-page-layout>
-    <app-stack variant="page">
-      @if (dataIsLoading()) {
-        <div class="flex-col-center">
-          <app-loading />
-        </div>
-      } @else {
-        <app-section inset="lg">
-          <app-stack variant="section">
-            <h2 class="font-roboto text-title">
-              How many meals do you want to plan?
-            </h2>
+    @if (dataIsLoading()) {
+      <app-stack align="center">
+        <app-loading />
+      </app-stack>
+    } @else {
+      <app-section inset="lg">
+        <app-stack variant="section">
+          <h2 class="font-roboto text-title">
+            How many meals do you want to plan?
+          </h2>
 
-            <app-select
-              [options]="nbMeals"
-              [control]="mealNbSelected"
-              [responsive]="true"
-            ></app-select>
-          </app-stack>
-        </app-section>
+          <app-select
+            [options]="nbMeals"
+            [control]="mealNbSelected"
+            [responsive]="true"
+          ></app-select>
+        </app-stack>
+      </app-section>
 
-        <app-section inset="lg">
-          <app-stack variant="section">
-            <h2 class="font-roboto text-title">
-              Which categories are you interested in?
-            </h2>
+      <app-section inset="lg">
+        <app-stack variant="section">
+          <h2 class="font-roboto text-title">
+            Which categories are you interested in?
+          </h2>
 
-            <app-inline [wrap]="true">
-              @for (cat of filteredCategories(); track cat.id) {
-                <app-chip
-                  [fullWidth]="true"
-                  [selected]="selectedCategoriesIds().includes(cat.id)"
-                  (toggle)="toggleSelection(cat)"
-                  >{{ cat.name }}</app-chip
-                >
-              }
-            </app-inline>
-          </app-stack>
-        </app-section>
-      }
-    </app-stack>
+          <app-inline [wrap]="true">
+            @for (cat of filteredCategories(); track cat.id) {
+              <app-chip
+                [fullWidth]="true"
+                [selected]="selectedCategoriesIds().includes(cat.id)"
+                (toggle)="toggleSelection(cat)"
+                >{{ cat.name }}</app-chip
+              >
+            }
+          </app-inline>
+        </app-stack>
+      </app-section>
+    }
   </app-page-layout>
 
-  <app-page-layout>
+  <app-section [surface]="0">
     <app-button
       [fullWidth]="true"
       [disabled]="proceedButtonIsDisabled()"
@@ -56,5 +54,5 @@
     >
       Proceed
     </app-button>
-  </app-page-layout>
+  </app-section>
 </div>

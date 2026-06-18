@@ -1,115 +1,126 @@
 <div class="h-full layout-hcf">
-  <header class="page-full-width">
-    <app-stepper [navStep]="2" />
-  </header>
+  <app-header-shell
+    ><div class="inset-md">
+      <app-stepper [navStep]="2" /></div
+  ></app-header-shell>
 
-  <div class="section-scroll space-y-6 py-4">
+  <app-page-layout>
     @if (dataIsLoading()) {
-      <div class="flex-col-center">
+      <app-stack align="center">
         <app-loading />
-      </div>
+      </app-stack>
     } @else {
-      <section class="surface-1">
-        <div class="flex-between">
-          <div class="options-header flex-start">
+      <app-section inset="lg">
+        <app-stack variant="section">
+          <app-inline>
             <i class="fa-solid fa-flag"></i>
             <span>Cuisine</span>
-          </div>
-        </div>
+          </app-inline>
 
-        <div class="options-container">
-          @for (cuisine of cuisineOptions(); track $index) {
-            <app-chip
-              [selected]="cuisinesSelected().includes(cuisine)"
-              (click)="selectCuisine(cuisine)"
-              >{{ cuisine.name | capitalize }}</app-chip
-            >
-          }
-        </div>
-      </section>
+          <app-inline [wrap]="true">
+            @for (cuisine of cuisineOptions(); track $index) {
+              <app-chip
+                [selected]="cuisinesSelected().includes(cuisine)"
+                (click)="selectCuisine(cuisine)"
+                >{{ cuisine.name | capitalize }}</app-chip
+              >
+            }
+          </app-inline>
+        </app-stack>
+      </app-section>
 
-      <section class="surface-1">
-        <div class="options-header flex-start">
-          <i class="fa-solid fa-snowflake"></i>
-          <span>Season</span>
-        </div>
-        <div class="options-container">
-          @for (seasonOption of seasonOptions(); track $index) {
-            <app-chip
-              [selected]="seasonsSelected().includes(seasonOption)"
-              (click)="selectSeason(seasonOption)"
-              >{{ seasonOption | capitalize }}</app-chip
-            >
-          }
-        </div>
-      </section>
+      <app-section inset="lg">
+        <app-stack variant="section">
+          <app-inline>
+            <i class="fa-solid fa-snowflake"></i>
+            <span>Season</span>
+          </app-inline>
+          <app-inline [wrap]="true">
+            @for (seasonOption of seasonOptions(); track $index) {
+              <app-chip
+                [selected]="seasonsSelected().includes(seasonOption)"
+                (click)="selectSeason(seasonOption)"
+                >{{ seasonOption | capitalize }}</app-chip
+              >
+            }
+          </app-inline>
+        </app-stack>
+      </app-section>
 
-      <section class="surface-1">
-        <div class="options-header flex-start">
-          <i class="fa-solid fa-person-hiking"></i>
-          <span>Difficulty</span>
-        </div>
-        <div class="options-container">
-          @for (difficultyOption of difficultyOptions(); track $index) {
-            <app-chip
-              [selected]="difficultiesSelected().includes(difficultyOption)"
-              (click)="selectDifficulty(difficultyOption)"
-              >{{ difficultyOption | capitalize }}</app-chip
-            >
-          }
-        </div>
-      </section>
+      <app-section inset="lg">
+        <app-stack variant="section">
+          <app-inline>
+            <i class="fa-solid fa-person-hiking"></i>
+            <span>Difficulty</span>
+          </app-inline>
+          <app-inline [wrap]="true">
+            @for (difficultyOption of difficultyOptions(); track $index) {
+              <app-chip
+                [selected]="difficultiesSelected().includes(difficultyOption)"
+                (click)="selectDifficulty(difficultyOption)"
+                >{{ difficultyOption | capitalize }}</app-chip
+              >
+            }
+          </app-inline>
+        </app-stack>
+      </app-section>
 
-      <section class="surface-1">
-        <div class="options-header flex-start">
-          <i class="fa-solid fa-calendar-days"></i>
-          <span>Frequency</span>
-        </div>
-        <div class="options-container">
-          @for (frequencyOption of frequencyOptions(); track $index) {
-            <app-chip
-              [selected]="frequenciesSelected().includes(frequencyOption)"
-              (click)="selectFrequency(frequencyOption)"
-              >{{ frequencyOption | capitalize }}</app-chip
-            >
-          }
-        </div>
-      </section>
+      <app-section inset="lg">
+        <app-stack variant="section">
+          <app-inline>
+            <i class="fa-solid fa-calendar-days"></i>
+            <span>Frequency</span>
+          </app-inline>
 
-      <section class="surface-1">
-        <div class="flex-between">
-          <div class="options-header flex-start">
-            <i class="fa-solid fa-tag"></i>
-            <span>Recipe Category</span>
-          </div>
+          <app-inline [wrap]="true">
+            @for (frequencyOption of frequencyOptions(); track $index) {
+              <app-chip
+                [selected]="frequenciesSelected().includes(frequencyOption)"
+                (click)="selectFrequency(frequencyOption)"
+                >{{ frequencyOption | capitalize }}</app-chip
+              >
+            }
+          </app-inline>
+        </app-stack>
+      </app-section>
 
-          <app-toggle-btn-with-icon
-            size="sm"
-            [options]="['fa-solid fa-link-slash', 'fa-solid fa-link']"
-            color="secondary"
-            [selectedInput]="recipeCategoryMode()"
-            (selectionChange)="toggleRecipeCategoryMode($event)"
-          ></app-toggle-btn-with-icon>
-        </div>
-        <div class="options-container">
-          @for (recipeCategory of recipeCategoryOptions(); track $index) {
-            <app-chip
-              [selected]="selectedCategoryIds().has(recipeCategory.id)"
-              (click)="toggleRecipeCategory(recipeCategory)"
-              >{{ recipeCategory.name | capitalize }}</app-chip
-            >
-          }
-        </div>
-      </section>
+      <app-section inset="lg">
+        <app-stack variant="section">
+          <app-row>
+            <app-inline>
+              <i class="fa-solid fa-tag"></i>
+              <span>Recipe Category</span>
+            </app-inline>
+
+            <app-toggle-btn-with-icon
+              size="sm"
+              [options]="['fa-solid fa-link-slash', 'fa-solid fa-link']"
+              color="secondary"
+              [selectedInput]="recipeCategoryMode()"
+              (selectionChange)="toggleRecipeCategoryMode($event)"
+            ></app-toggle-btn-with-icon>
+          </app-row>
+
+          <app-inline [wrap]="true">
+            @for (recipeCategory of recipeCategoryOptions(); track $index) {
+              <app-chip
+                [selected]="selectedCategoryIds().has(recipeCategory.id)"
+                (click)="toggleRecipeCategory(recipeCategory)"
+                >{{ recipeCategory.name | capitalize }}</app-chip
+              >
+            }
+          </app-inline>
+        </app-stack>
+      </app-section>
     }
-  </div>
+  </app-page-layout>
 
-  <div class="page-full-width page-x-padding py-2">
+  <app-section [surface]="0">
     <app-button
+      [fullWidth]="true"
       [disabled]="nbRecipesFiltered() === 0"
       routerLink="/meals/selection"
-      [fullWidth]="true"
       >Validate {{ nbRecipesFiltered() }} Recipes</app-button
     >
-  </div>
+  </app-section>
 </div>
