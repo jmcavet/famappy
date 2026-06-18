@@ -14,6 +14,13 @@ import { SegmentedControlComponent } from '../../../shared/ui/segmented-control/
 import { SelectionViewMode } from '../state/mealSelection.model';
 import { ButtonComponent } from '../../../shared/ui/button/button.component';
 import { FloatingButtonComponent } from '../../../shared/layout/shell/floating-button/floating-button.component';
+import { HeaderShellComponent } from '../../../shared/layout/shell/header-shell.component';
+import { PageLayoutComponent } from '../../../shared/layout/primitives/page-layout.component';
+import { StackComponent } from '../../../shared/layout/primitives/stack.component';
+import { RowComponent } from '../../../shared/layout/primitives/row.component';
+import { InlineComponent } from '../../../shared/layout/primitives/inline.component';
+import { SectionComponent } from '../../../shared/layout/primitives/section.component';
+import { GridResponsiveComponent } from '../../../shared/layout/primitives/grid-responsive.component';
 
 @Component({
   selector: 'app-meals-selection',
@@ -24,6 +31,13 @@ import { FloatingButtonComponent } from '../../../shared/layout/shell/floating-b
     CapitalizePipe,
     StepperComponent,
     SelectComponent,
+    HeaderShellComponent,
+    PageLayoutComponent,
+    StackComponent,
+    GridResponsiveComponent,
+    RowComponent,
+    InlineComponent,
+    SectionComponent,
     ButtonComponent,
     ChipComponent,
     SegmentedControlComponent,

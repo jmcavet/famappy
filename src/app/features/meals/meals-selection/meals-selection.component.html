@@ -1,29 +1,14 @@
-<!-- <div class="h-full layout-hcf"> -->
-<div class="h-full flex flex-col">
-  <div>
-    <!-- <header class="page-full-width"> -->
-    <header class="page-full-width shrink-0">
-      <app-stepper [navStep]="3" />
-    </header>
-
-    <div class="space-y-2">
-      <section class="surface-1 mt-2">
-        <div class="flex-between mb-2">
-          <h2 class="text-title ui-text-default font-roboto">
-            Selection method
-          </h2>
-
-          <app-segmented-control
-            [fullWidth]="false"
-            size="sm"
-            [options]="['Card', 'List']"
-            color="secondary"
-            [selectedInput]="viewMode()"
-            (selectionChange)="toggleView($event)"
-          >
-          </app-segmented-control>
-        </div>
-
+<div class="h-full layout-hcf">
+  <app-header-shell
+    ><div class="inset-md">
+      <app-stepper [navStep]="3" /></div
+  ></app-header-shell>
+  <app-page-layout maxSize="lg">
+    <app-section inset="lg">
+      <app-stack variant="section">
+        <app-row>
+          <h2 class="font-roboto text-title">Selection method</h2>
+        </app-row>
         <div
           class="overflow-x-auto overflow-y-hidden flex gap-4 snap-x snap-mandatory scroll-smooth"
         >
@@ -37,46 +22,52 @@
           </app-segmented-control>
         </div>
 
-        <div class="flex items-center justify-start gap-4 mb-4">
+        <app-inline>
           <app-select
             [options]="recipeMethods"
             [control]="methodControl"
             [responsive]="true"
           ></app-select>
 
-          <div
-            class="flex-center shrink-0 whitespace-nowrap gap-2 rounded-lg border border-neutral-300 dark:bg-neutral-800 dark:border-neutral-700 px-2 py-1"
-          >
-            <button (click)="decreaseRatio()">
-              <i class="fa-solid fa-minus"></i>
-            </button>
-            <div class="px-2">
-              Sample *<span>{{ mealRatio() }}</span>
-            </div>
-            <button (click)="increaseRatio()">
-              <i class="fa-solid fa-plus"></i>
-            </button>
+          <div class="surface-2 rounded-xl inset-sm">
+            <app-inline gap="lg">
+              <button>
+                <i class="fa-solid fa-minus" (click)="decreaseRatio()"></i>
+              </button>
+              <app-inline gap="sm">
+                <span class="whitespace-nowrap"> {{ mealRatio() }}</span>
+                <i class="fa-solid fa-calculator"></i>
+              </app-inline>
+              <button>
+                <i class="fa-solid fa-plus" (click)="increaseRatio()"></i>
+              </button>
+            </app-inline>
           </div>
-          <div class="flex items-center justify-start gap-1">
-            <p class="text-2xl">{{ recipesFilteredByCategory().length }}</p>
-            <i class="fa-solid fa-utensils"></i>
-          </div>
-        </div>
-      </section>
 
-      <section class="surface-1">
-        <div class="flex-between" (click)="toggleShowIngredientCategories()">
-          <h2 class="text-title ui-text-default font-roboto">
-            Ingredient Categories
-          </h2>
-          @if (showIngredientCategories()) {
-            <i class="fa-solid fa-caret-up fa-xl"></i>
-          } @else {
-            <i class="fa-solid fa-caret-down fa-xl"></i>
-          }
+          <app-inline gap="sm">
+            <span class="text-title">{{
+              recipesFilteredByCategory().length
+            }}</span>
+            <span>meals</span>
+          </app-inline>
+        </app-inline>
+      </app-stack>
+    </app-section>
+
+    <app-section>
+      <app-stack variant="section">
+        <div (click)="toggleShowIngredientCategories()">
+          <app-row>
+            <h2 class="text-title font-roboto">Ingredient Categories</h2>
+            @if (showIngredientCategories()) {
+              <i class="fa-solid fa-caret-up fa-xl"></i>
+            } @else {
+              <i class="fa-solid fa-caret-down fa-xl"></i>
+            }
+          </app-row>
         </div>
         @if (showIngredientCategories()) {
-          <div class="flex flex-wrap items-center justify-start gap-2 mb-6">
+          <app-inline [wrap]="true">
             @for (
               ingredientCategory of ingredientCategoriesByMealCategory();
               track $index
@@ -91,62 +82,75 @@
                 >{{ ingredientCategory.name | capitalize }}</app-chip
               >
             }
-          </div>
+          </app-inline>
         }
-      </section>
-    </div>
-  </div>
+      </app-stack>
+    </app-section>
 
-  <div class="flex-1 min-h-0 overflow-y-auto space-y-6 py-4">
-    <section class="surface-1">
-      @if (viewMode() === "Card") {
-        <div class="cards-container">
-          @for (recipe of recipesFilteredByCategory(); track $index) {
-            <app-recipe-card
-              [recipeState]="recipe"
-              (click)="toggleRecipe(recipe)"
-              [activated]="selectedRecipes().includes(recipe)"
-            ></app-recipe-card>
-          }
-        </div>
-      } @else {
-        <div class="flex flex-col items-start justify-items gap-2 mb-2">
-          @for (recipe of recipesFilteredByCategory(); track $index) {
-            <div
-              class="list-item flex-between surface-2"
-              [class.active]="selectedRecipes().includes(recipe)"
-              (click)="toggleRecipe(recipe)"
-            >
-              <div class="flex-between">
-                <div class="flex-start">
-                  @if (selectedRecipes().includes(recipe)) {
-                    <span class="mr-2"><i class="fa-solid fa-check"></i></span>
-                  }
-                  <p>{{ recipe.title }}</p>
-                </div>
+    <app-section>
+      <app-stack variant="section">
+        <app-row justify="end">
+          <app-segmented-control
+            [fullWidth]="false"
+            size="sm"
+            [options]="['Card', 'List']"
+            [selectedInput]="viewMode()"
+            (selectionChange)="toggleView($event)"
+          >
+          </app-segmented-control>
+        </app-row>
+        @if (viewMode() === "Card") {
+          <app-grid-responsive [colsMd]="3" [colsLg]="4" gap="sm">
+            @for (recipe of recipesFilteredByCategory(); track $index) {
+              <app-recipe-card
+                [recipeState]="recipe"
+                (click)="toggleRecipe(recipe)"
+                [activated]="selectedRecipes().includes(recipe)"
+                cardSurface="2"
+              ></app-recipe-card>
+            }
+          </app-grid-responsive>
+        } @else {
+          <app-stack>
+            @for (recipe of recipesFilteredByCategory(); track $index) {
+              <div
+                class="recipe-item inset-inline-sm surface-2 surface-interactive"
+                [class.active]="selectedRecipes().includes(recipe)"
+                (click)="toggleRecipe(recipe)"
+              >
+                <app-row>
+                  <app-inline>
+                    @if (selectedRecipes().includes(recipe)) {
+                      <i class="fa-solid fa-check"></i>
+                    }
+                    <span>{{ recipe.title }}</span>
+                  </app-inline>
+
+                  <span class="color-text-muted text-meta">
+                    {{ getCuisineName(recipe.cuisineId) }}
+                  </span>
+                </app-row>
               </div>
+            }
+          </app-stack>
+        }
+      </app-stack>
+    </app-section>
+  </app-page-layout>
 
-              <p class="text-neutral-600 dark:text-neutral-400 text-sm">
-                {{ getCuisineName(recipe.cuisineId) }}
-              </p>
-            </div>
-          }
-        </div>
-      }
-    </section>
-  </div>
-
-  <!-- <div class="page-full-width page-x-padding py-2"> -->
-  <div class="shrink-0 page-full-width page-x-padding py-2">
+  <app-section [surface]="0">
     <app-button
       [fullWidth]="true"
       [disabled]="cartItems().length === 0"
       routerLink="/meals/cart"
       >{{ btnValidateCartText() }}</app-button
     >
-  </div>
-</div>
+  </app-section>
 
-@if (selectedRecipes().length > 0) {
-  <app-floating-button (clicked)="addRecipesToCart()"></app-floating-button>
-}
+  @if (selectedRecipes().length > 0) {
+    <app-floating-button
+      (clicked)="addRecipesToCart()"
+      color="secondary"
+    ></app-floating-button>
+  }
+</div>
