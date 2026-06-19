@@ -1,4 +1,12 @@
-import { Component, inject, input, Input, Signal } from '@angular/core';
+import {
+  Component,
+  computed,
+  inject,
+  input,
+  Input,
+  signal,
+  Signal,
+} from '@angular/core';
 import { RecipeWithId } from '../../../recipes/components/recipe-card/recipe.model';
 import { CapitalizePipe } from '../../../../shared/pipes/capitalize.pipe';
 import { MealCookSelectionComponent } from '../meal-cook-selection/meal-cook-selection.component';
@@ -10,6 +18,8 @@ import { CalendarDay } from '../calendar/calendar.facade';
 import { RowComponent } from '../../../../shared/layout/primitives/row.component';
 import { InlineComponent } from '../../../../shared/layout/primitives/inline.component';
 import { ButtonComponent } from '../../../../shared/ui/button/button.component';
+import { ServingsControlComponent } from '../../../../shared/ui/servings-control/servings-control.component';
+import { MealCartStateService } from '../../state/mealCart.service';
 
 @Component({
   selector: 'app-meal-type-header',
@@ -20,6 +30,7 @@ import { ButtonComponent } from '../../../../shared/ui/button/button.component';
     MealAddingOptionsComponent,
     RowComponent,
     InlineComponent,
+    ServingsControlComponent,
     ButtonComponent,
   ],
   providers: [MealTypeHeaderFacade],
@@ -28,11 +39,11 @@ import { ButtonComponent } from '../../../../shared/ui/button/button.component';
 })
 export class MealTypeHeaderComponent {
   /** Inputs */
-  @Input() showAssignButton: boolean = true;
+  @Input() showMealAddingOptions: boolean = true;
+  @Input() showAssignButton: boolean = false;
   @Input() showServingIncrements: boolean = true;
   @Input({ required: true }) mealType: MealType = 'lunch';
 
-  @Input() selectedRecipes: RecipeWithId[] = [];
   dailyMealPerMealType = input.required<MealWithId[]>();
   servings = input.required<Signal<number>>();
   dailyMealPlan = input<{
@@ -42,6 +53,7 @@ export class MealTypeHeaderComponent {
 
   /** UI Facade */
   private facade = inject(MealTypeHeaderFacade);
+  private cartService = inject(MealCartStateService);
 
   ngOnInit(): void {
     this.facade.connect(this.mealType, this.dailyMealPerMealType);
@@ -52,6 +64,10 @@ export class MealTypeHeaderComponent {
   readonly membersAreLoaded = this.facade.membersAreLoaded;
   readonly uiServings = this.facade.uiServings;
   readonly uiCookName = this.facade.uiCookName;
+
+  canAssignRecipes = computed(
+    () => this.cartService.state().selectedRecipes.length > 0,
+  );
 
   /** Public UI methods (click events, etc.) */
   assignMeal() {
