@@ -15,7 +15,7 @@ export class RecipeDomainFacade {
   readonly recipesUpdating = this.recipeBackendService.updating;
 
   public getRecipeById(id: string): RecipeWithId | undefined {
-    return this.dbRecipes().find((r) => (r.id = id));
+    return this.dbRecipes().find((r) => r.id === id);
   }
 
   public async resetRecipesProperties(
