@@ -4,10 +4,8 @@ import {
   inject,
   input,
   Input,
-  signal,
   Signal,
 } from '@angular/core';
-import { RecipeWithId } from '../../../recipes/components/recipe-card/recipe.model';
 import { CapitalizePipe } from '../../../../shared/pipes/capitalize.pipe';
 import { MealCookSelectionComponent } from '../meal-cook-selection/meal-cook-selection.component';
 import { MealType, MealWithId } from '../../state/mealCart.model';
@@ -74,11 +72,7 @@ export class MealTypeHeaderComponent {
     this.facade.allocateRecipesToWeekDay();
   }
 
-  decreaseServings() {
-    this.facade.decreaseServings();
-  }
-
-  increaseServings() {
-    this.facade.increaseServings();
+  onServingsChange(value: number) {
+    this.facade.changeServings(value);
   }
 }

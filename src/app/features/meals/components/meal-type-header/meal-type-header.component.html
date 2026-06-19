@@ -25,22 +25,12 @@
     </app-inline>
 
     @if (showServingIncrements) {
-      <app-inline>
-        <app-button variant="ghost" size="md" (clicked)="decreaseServings()"
-          ><i class="fa-solid fa-minus"></i
-        ></app-button>
-        <app-inline gap="sm">
-          <span>{{ uiServings() }}</span>
-          <i class="fa-solid fa-user"></i>
-        </app-inline>
-        <app-button variant="ghost" size="md" (clicked)="increaseServings()"
-          ><i class="fa-solid fa-plus"></i
-        ></app-button>
-        <!-- <app-servings-control
+      <div class="w-1/2">
+        <app-servings-control
           [servings]="uiServings()"
           (servingsChange)="onServingsChange($event)"
-        /> -->
-      </app-inline>
+        />
+      </div>
     } @else {
       @if (dailyMealPerMealType().length) {
         <app-inline>

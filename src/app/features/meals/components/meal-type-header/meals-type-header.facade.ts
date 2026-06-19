@@ -3,6 +3,7 @@ import {
   effect,
   inject,
   Injectable,
+  linkedSignal,
   Signal,
   signal,
 } from '@angular/core';
@@ -95,7 +96,7 @@ export class MealTypeHeaderFacade {
     () => this.cartService.state().selectedDay,
   );
 
-  readonly uiServings = computed(() => {
+  readonly uiServings = linkedSignal(() => {
     return (
       this.cartService.getMealServings(this.mealType) ??
       this.dayServings().find((d) => d.dayName === this.selectedDay().dayName)
@@ -177,15 +178,7 @@ export class MealTypeHeaderFacade {
     this.cartService.resetSelectedRecipes();
   }
 
-  decreaseServings() {
-    this.cartService.decreaseServings(this.mealType);
+  changeServings(value: number) {
+    this.uiServings.set(value);
   }
-
-  increaseServings() {
-    this.cartService.increaseServings(this.mealType);
-  }
-
-  // changeServings(value: number) {
-  //   this.uiServings.set(value);
-  // }
 }
