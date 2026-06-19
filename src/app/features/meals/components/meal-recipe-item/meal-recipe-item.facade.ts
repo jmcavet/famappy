@@ -88,8 +88,6 @@ export class MealRecipeItemFacade {
         btnConfirmColor: 'danger',
       },
       {
-        // onConfirm: () => this.facade.removeManualMealFromStore(),
-        // TODO: for the 'onConfirm' method, use the one that remove the manual meal from store
         onConfirm: () => {
           this.removeMealFromSummary();
           this.removeMealFromStore();
@@ -106,31 +104,21 @@ export class MealRecipeItemFacade {
     }
   }
 
-  /** Private methods */
-  private async removeMealFromStore() {
-    const recipeId = this._ctx.recipe().id;
-
-    try {
-      await this.mealDomainFacade.deleteMealByRecipeId(recipeId);
-
-      this.toast.show('Meal removed from database', 'success');
-    } catch (error) {
-      this.toast.show('Meal could not be removed from database', 'error');
-    }
-  }
-
-  private removeMealFromSummary() {
-    const currentRecipeId = this._ctx.recipe().id;
+  public removeMealFromSummary() {
+    const currentRecipeId = this._ctx.recipe().recipe.id;
+    console.log('currentRecipeId: ', currentRecipeId);
 
     const recipeSelected =
       this.recipeDomainFacade.getRecipeById(currentRecipeId);
 
+    console.log('recipeSelected: ', recipeSelected);
     if (!recipeSelected) return;
 
     this.addRecipesToCart([recipeSelected]);
     this.removeRecipeFromWeekDay(recipeSelected);
   }
 
+  /** Private methods */
   private addRecipesToCart(recipes: RecipeWithId[]) {
     this.cartState.addRecipesToCart(recipes);
 
@@ -140,5 +128,17 @@ export class MealRecipeItemFacade {
 
   private removeRecipeFromWeekDay(recipe: RecipeWithId) {
     this.cartState.removeRecipeFromWeekDay(recipe);
+  }
+
+  private async removeMealFromStore() {
+    const recipeId = this._ctx.recipe().recipe.id;
+
+    try {
+      await this.mealDomainFacade.deleteMealByRecipeId(recipeId);
+
+      this.toast.show('Meal removed from database', 'success');
+    } catch (error) {
+      this.toast.show('Meal could not be removed from database', 'error');
+    }
   }
 }
