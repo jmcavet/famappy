@@ -33,34 +33,24 @@ export class SummaryMealSectionFacade {
   /** Methods */
   readonly mealsWithCategoryName = computed(() => {
     // Meals that have been assigned to the selected day
-    console.log('AAA this.selectedDay(): ', this.selectedDay());
     const { dayName, dayOfMonth } = this.selectedDay();
 
-    console.log('finalCart: ', this.finalCart());
     const weekDayMeals = this.finalCart().filter((p) => {
-      console.log('p.weekDay: ', p.weekDay);
-      console.log('this.selectedDay(): ', this.selectedDay());
-      console.log('A=B: ', p.weekDay === this.selectedDay());
       return (
         p.weekDay.dayName === dayName && p.weekDay.dayOfMonth === dayOfMonth
       );
     });
-
-    console.log('weekDayMeals: ', weekDayMeals);
 
     const mealCategories = this._dbMealCategories();
 
     const mealCategoryIds = weekDayMeals.map(
       (meal) => meal.recipe?.mealCategoryId,
     );
-    console.log('mealCategoryIds: ', mealCategoryIds);
 
     // Meal Categories that correspond to the meals assigned to the selected day
     const WeekDayMealCategories = mealCategories.filter((cat) =>
       mealCategoryIds.includes(cat.id),
     );
-
-    console.log('WeekDayMealCategories: ', WeekDayMealCategories);
 
     const mealsWithCategoryName = weekDayMeals.map((meal) => {
       const mealCategoryId = meal.recipe?.mealCategoryId;
@@ -71,8 +61,6 @@ export class SummaryMealSectionFacade {
 
       return { ...meal, recipe: updatedRecipe };
     });
-
-    console.log('mealsWithCategoryName: ', mealsWithCategoryName);
 
     return mealsWithCategoryName;
   });
