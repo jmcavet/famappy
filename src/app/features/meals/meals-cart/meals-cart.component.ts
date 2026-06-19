@@ -9,15 +9,25 @@ import { MemberDomainFacade } from '../../../domain-facades/member.facade';
 import { MealCategoryDomainFacade } from '../../../domain-facades/mealCategory.facade';
 import { StepperComponent } from './components/stepper/stepper.component';
 import { ButtonComponent } from '../../../shared/ui/button/button.component';
+import { HeaderShellComponent } from '../../../shared/layout/shell/header-shell.component';
+import { PageLayoutComponent } from '../../../shared/layout/primitives/page-layout.component';
+import { StackComponent } from '../../../shared/layout/primitives/stack.component';
+import { RowComponent } from '../../../shared/layout/primitives/row.component';
+import { SectionComponent } from '../../../shared/layout/primitives/section.component';
 
 @Component({
   selector: 'app-meals-cart',
   imports: [
     CalendarComponent,
     MealRecipeItemComponent,
-    SummaryMealSectionComponent,
     RouterLink,
     StepperComponent,
+    HeaderShellComponent,
+    PageLayoutComponent,
+    StackComponent,
+    RowComponent,
+    SectionComponent,
+    SummaryMealSectionComponent,
     ButtonComponent,
   ],
   templateUrl: './meals-cart.component.html',
