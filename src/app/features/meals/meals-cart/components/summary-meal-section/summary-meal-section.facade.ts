@@ -33,9 +33,14 @@ export class SummaryMealSectionFacade {
   /** Methods */
   readonly mealsWithCategoryName = computed(() => {
     // Meals that have been assigned to the selected day
-    const weekDayMeals = this.finalCart().filter(
-      (p) => p.weekDay === this.selectedDay(),
-    );
+    const { dayName, dayOfMonth } = this.selectedDay();
+
+    const weekDayMeals = this.finalCart().filter((p) => {
+      return (
+        p.weekDay.dayName === dayName && p.weekDay.dayOfMonth === dayOfMonth
+      );
+    });
+
     const mealCategories = this._dbMealCategories();
 
     const mealCategoryIds = weekDayMeals.map(
@@ -47,18 +52,16 @@ export class SummaryMealSectionFacade {
       mealCategoryIds.includes(cat.id),
     );
 
-    const gege = weekDayMeals.map((meal) => {
+    const mealsWithCategoryName = weekDayMeals.map((meal) => {
       const mealCategoryId = meal.recipe?.mealCategoryId;
       const mealCategoryName = WeekDayMealCategories.find(
         (t) => t.id === mealCategoryId,
       )?.name;
       const updatedRecipe = { ...meal.recipe, mealCategoryName };
 
-      const testPreparationTime = meal.recipe?.preparationTime;
-      console.log('TYPE OF PREPARATION TIME: ', typeof testPreparationTime);
       return { ...meal, recipe: updatedRecipe };
     });
 
-    return gege;
+    return mealsWithCategoryName;
   });
 }

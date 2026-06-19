@@ -4,35 +4,33 @@
       <span class="meal-type" [class.dinner]="mealType === 'dinner'">
         {{ mealType | capitalize }}
       </span>
-      <span
-        ><app-meal-adding-options
-          [dailyMealPlan]="dailyMealPlan()!"
-          [mealType]="mealType"
-      /></span>
+      @if (showMealAddingOptions) {
+        <span
+          ><app-meal-adding-options
+            [dailyMealPlan]="dailyMealPlan()!"
+            [mealType]="mealType"
+        /></span>
+      }
+
       @if (showAssignButton) {
-        <button (click)="assignMeal()">
-          <i
-            class="fa-solid fa-plus fa-2xl text-neutral-300 dark:text-neutral-600 cursor-not-allowed"
-            [class.active]="selectedRecipes.length > 0"
-          ></i>
-        </button>
+        <app-button
+          variant="ghost"
+          color="classic"
+          (clicked)="assignMeal()"
+          [disabled]="!canAssignRecipes()"
+        >
+          <i class="fa-regular fa-plus fa-2xl"></i>
+        </app-button>
       }
     </app-inline>
 
     @if (showServingIncrements) {
-      <app-inline>
-        <i class="fa-solid fa-user"></i>
-
-        <app-inline>
-          <app-button variant="ghost" size="md" (clicked)="decreaseServings()"
-            ><i class="fa-solid fa-minus"></i
-          ></app-button>
-          <span>{{ uiServings() }}</span>
-          <app-button variant="ghost" size="md" (clicked)="increaseServings()"
-            ><i class="fa-solid fa-plus"></i
-          ></app-button>
-        </app-inline>
-      </app-inline>
+      <div class="w-1/2">
+        <app-servings-control
+          [servings]="uiServings()"
+          (servingsChange)="onServingsChange($event)"
+        />
+      </div>
     } @else {
       @if (dailyMealPerMealType().length) {
         <app-inline>

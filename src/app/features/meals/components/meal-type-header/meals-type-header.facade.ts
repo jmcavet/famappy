@@ -3,6 +3,7 @@ import {
   effect,
   inject,
   Injectable,
+  linkedSignal,
   Signal,
   signal,
 } from '@angular/core';
@@ -95,7 +96,7 @@ export class MealTypeHeaderFacade {
     () => this.cartService.state().selectedDay,
   );
 
-  readonly uiServings = computed(() => {
+  readonly uiServings = linkedSignal(() => {
     return (
       this.cartService.getMealServings(this.mealType) ??
       this.dayServings().find((d) => d.dayName === this.selectedDay().dayName)
@@ -147,18 +148,11 @@ export class MealTypeHeaderFacade {
     );
   }
 
-  private removeRecipes() {
-    // Remove the recipes selected within the cart page from the cart
-    this.cartService.removeRecipesFromCart();
-
-    this.cartService.resetSelectedRecipes();
-  }
-
   /** Public UI methods */
   public allocateRecipesToWeekDay() {
     const { dayName, dayOfMonth, monthName, year } = this.selectedDay();
 
-    const toto = this.dbMeals().filter((meal) => {
+    const mealsFromSameDay = this.dbMeals().filter((meal) => {
       return (
         meal.weekDay.dayName === dayName &&
         meal.weekDay.dayOfMonth === dayOfMonth &&
@@ -171,17 +165,20 @@ export class MealTypeHeaderFacade {
     this.cartService.allocateRecipesToWeekDay(
       this.mealType,
       this.uiServings(),
-      toto[0]?.cookId ?? null,
+      mealsFromSameDay[0]?.cookId ?? null,
     );
 
     this.removeRecipes();
   }
 
-  decreaseServings() {
-    this.cartService.decreaseServings(this.mealType);
+  private removeRecipes() {
+    // Remove the recipes selected within the cart page from the cart
+    this.cartService.removeRecipesFromCart();
+
+    this.cartService.resetSelectedRecipes();
   }
 
-  increaseServings() {
-    this.cartService.increaseServings(this.mealType);
+  changeServings(value: number) {
+    this.uiServings.set(value);
   }
 }

@@ -1,7 +1,6 @@
 import { Injectable, signal } from '@angular/core';
 import { Meal, MealCartState, MealType } from './mealCart.model';
 import { RecipeWithId } from '../../recipes/components/recipe-card/recipe.model';
-import { MemberWithId } from '../../members/components/member/member.model';
 
 @Injectable({
   providedIn: 'root',
@@ -10,7 +9,12 @@ export class MealCartStateService {
   initialState: MealCartState = {
     cart: [],
     finalCart: [],
-    selectedDay: { dayName: '', dayOfMonth: 1, monthName: '', year: 2026 },
+    selectedDay: {
+      dayName: '',
+      dayOfMonth: 1,
+      monthName: '',
+      year: 2026,
+    },
     selectedRecipes: [],
   };
 
@@ -57,8 +61,6 @@ export class MealCartStateService {
     cookId: string | null,
   ) {
     const { selectedDay, selectedRecipes, finalCart } = this.state();
-
-    console.log('ABC: cookId: ', cookId);
 
     const newMeals: Meal[] = selectedRecipes.map((recipe) => ({
       weekDay: selectedDay,

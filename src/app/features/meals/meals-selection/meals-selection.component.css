@@ -1,5 +1,5 @@
 .recipe-item {
-  @apply w-full cursor-pointer rounded-lg transform transition-all duration-200;
+  @apply w-full rounded-lg transform transition-all duration-200;
 }
 
 .recipe-item.active {

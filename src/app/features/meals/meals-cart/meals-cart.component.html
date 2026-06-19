@@ -1,120 +1,62 @@
-<!-- <main
-  class="layout-hcf gap-y-6 sm:gap-y-8 gap-x-4 grid-cols-4 sm:grid-cols-12 mx-auto lg:max-w-[1000px]"
->
-  <header
-    class="sticky top-0 z-10 col-span-4 sm:col-span-12 bg-white text-neutral-700 border-b border-b-neutral-200 dark:bg-neutral-800 dark:text-primary-100 dark:border-none rounded-b-2xl"
-  >
-    <div class="mb-6">
+<div class="h-full layout-hcf">
+  <app-header-shell
+    ><div class="inset-md">
       <app-stepper [navStep]="4" />
-    </div>
-    <app-calendar />
-  </header>
+      <app-calendar /></div
+  ></app-header-shell>
 
-  @if (cart().length > 0) {
-    <section>
-      @for (mealCategory of mealCategoriesSelected(); track $index) {
-        @if (cartMealCategoryIds().includes(mealCategory.id)) {
-          <div>
-            <h2
-              class="text-xl text-center text-neutral-900 dark:text-neutral-50"
-            >
-              {{ mealCategory.name }}
-            </h2>
-            <p class="w-full h-1 bg-gray-200 dark:bg-gray-700 my-2"></p>
+  <app-page-layout maxSize="lg">
+    <app-stack variant="page">
+      @if (cart().length > 0) {
+        @for (mealCategory of mealCategoriesSelected(); track $index) {
+          <app-section inset="lg">
+            @if (cartMealCategoryIds().includes(mealCategory.id)) {
+              <app-stack variant="section">
+                <app-row justify="center">
+                  <h2 class="font-roboto text-title">
+                    {{ mealCategory.name }}
+                  </h2>
+                </app-row>
 
-            <div class="flex flex-col justify-between gap-2 my-2">
-              @for (meal of cartWithMealCategoryNames(); track $index) {
-                @if (meal.recipe.mealCategoryId === mealCategory.id) {
-                  <div
-                    class="card"
-                    [class.active]="selectedRecipes().includes(meal.recipe)"
-                    (click)="toggleRecipe(meal.recipe)"
-                  >
-                    <app-meal-recipe-item
-                      [recipe]="meal"
-                      [canViewRecipe]="false"
-                      [canDeleteMeal]="false"
-                    />
-                  </div>
-                }
-              }
-            </div>
-          </div>
+                <app-stack>
+                  @for (meal of cartWithMealCategoryNames(); track $index) {
+                    @if (meal.recipe.mealCategoryId === mealCategory.id) {
+                      <div
+                        class="recipe-item inset-inline-sm surface-2 surface-interactive"
+                        [class.active]="selectedRecipes().includes(meal.recipe)"
+                        (click)="toggleRecipe(meal.recipe)"
+                      >
+                        <app-meal-recipe-item
+                          [recipe]="meal"
+                          [canViewRecipe]="false"
+                          [canDeleteMeal]="false"
+                        />
+                      </div>
+                    }
+                  }
+                </app-stack>
+              </app-stack>
+            }
+          </app-section>
         }
       }
-    </section>
-  }
 
-  <section>
-    <app-summary-meal-section mealType="lunch" [servings]="lunchServings" />
-    <app-summary-meal-section mealType="dinner" [servings]="dinnerServings" />
-  </section>
+      <app-section>
+        <app-stack variant="section">
+          <app-summary-meal-section
+            mealType="lunch"
+            [servings]="lunchServings"
+          />
+          <app-summary-meal-section
+            mealType="dinner"
+            [servings]="dinnerServings"
+          />
+        </app-stack>
+      </app-section>
+    </app-stack>
+  </app-page-layout>
 
-  <div class="btn-validate-container">
-    <button
-      class="btn-validate"
-      routerLink="/meals"
-      (click)="validateAssignment()"
-      [disabled]="finalCart().length === 0"
-      [class.disabled]="finalCart().length === 0"
-    >
-      Validate
-    </button>
-  </div>
-</main> -->
-
-<div class="h-full layout-hcf">
-  <header class="page-full-width">
-    <app-stepper [navStep]="4" />
-  </header>
-
-  <div class="page-full-width">
-    <app-calendar />
-  </div>
-
-  <div class="section-scroll space-y-6 py-4">
-    @if (cart().length > 0) {
-      <section class="surface-1">
-        @for (mealCategory of mealCategoriesSelected(); track $index) {
-          @if (cartMealCategoryIds().includes(mealCategory.id)) {
-            <div>
-              <h2
-                class="text-xl text-center text-neutral-900 dark:text-neutral-50"
-              >
-                {{ mealCategory.name }}
-              </h2>
-              <p class="w-full h-1 bg-gray-200 dark:bg-gray-700 my-2"></p>
-
-              <div class="flex flex-col justify-between gap-2 my-2">
-                @for (meal of cartWithMealCategoryNames(); track $index) {
-                  @if (meal.recipe.mealCategoryId === mealCategory.id) {
-                    <div
-                      class="card"
-                      [class.active]="selectedRecipes().includes(meal.recipe)"
-                      (click)="toggleRecipe(meal.recipe)"
-                    >
-                      <app-meal-recipe-item
-                        [recipe]="meal"
-                        [canViewRecipe]="false"
-                        [canDeleteMeal]="false"
-                      />
-                    </div>
-                  }
-                }
-              </div>
-            </div>
-          }
-        }
-      </section>
-    }
-
-    <section class="surface-1">
-      <app-summary-meal-section mealType="lunch" [servings]="lunchServings" />
-      <app-summary-meal-section mealType="dinner" [servings]="dinnerServings" />
-    </section>
-  </div>
-
-  <div class="page-full-width page-x-padding py-2">
+  <app-section [surface]="0">
     <app-button
       [disabled]="finalCart().length === 0"
       routerLink="/meals"
@@ -122,5 +64,5 @@
       (clicked)="validateAssignment()"
       >Validate</app-button
     >
-  </div>
+  </app-section>
 </div>

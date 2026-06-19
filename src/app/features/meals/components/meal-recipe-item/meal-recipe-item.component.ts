@@ -44,8 +44,12 @@ export class MealRecipeItemComponent {
     this.facade.connect(this.ctx);
   }
 
-  openDeleteModal(event: MouseEvent) {
-    this.facade.openDeleteModal(event);
+  onRemoveMeal(event: MouseEvent) {
+    if (this.canDeleteMeal()) {
+      this.facade.openDeleteModal(event);
+    } else {
+      this.facade.removeMealFromSummary();
+    }
   }
 
   viewRecipe() {
