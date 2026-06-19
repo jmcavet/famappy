@@ -4,10 +4,17 @@ import { MealRecipeItemComponent } from '../../../components/meal-recipe-item/me
 import { SummaryMealSectionFacade } from './summary-meal-section.facade';
 import { MealCategoryDomainFacade } from '../../../../../domain-facades/mealCategory.facade';
 import { MealType } from '../../../state/mealCart.model';
+import { SectionComponent } from '../../../../../shared/layout/primitives/section.component';
+import { StackComponent } from '../../../../../shared/layout/primitives/stack.component';
 
 @Component({
   selector: 'app-summary-meal-section',
-  imports: [MealRecipeItemComponent, MealTypeHeaderComponent],
+  imports: [
+    MealRecipeItemComponent,
+    MealTypeHeaderComponent,
+    SectionComponent,
+    StackComponent,
+  ],
   templateUrl: './summary-meal-section.component.html',
   styleUrl: './summary-meal-section.component.css',
 })
