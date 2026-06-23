@@ -30,14 +30,15 @@ export class ManageCuisinesFacade {
   readonly cuisinesSaving = this.cuisineDomainFacade.cuisinesSaving;
   readonly cuisinesUpdating = this.cuisineDomainFacade.cuisinesUpdating;
   readonly cuisinesDeleting = this.cuisineDomainFacade.cuisinesDeleting;
-  readonly dbCuisines = this.cuisineDomainFacade.dbCuisines;
   readonly recipesUpdating = this.recipeDomainFacade.recipesUpdating;
   readonly dbRecipes = this.recipeDomainFacade.dbRecipes;
+
+  private dbCuisines = this.cuisineDomainFacade.dbCuisines;
 
   /* ================================
    * Computed signals
    * ================================ */
-  readonly canShowPage = computed(() => {
+  readonly pageIsLoading = computed(() => {
     return (
       this.cuisinesLoading() ||
       this.cuisinesSaving() ||
@@ -46,6 +47,10 @@ export class ManageCuisinesFacade {
       this.recipesUpdating()
     );
   });
+
+  readonly dbCuisinesSorted = computed(() =>
+    this.dbCuisines().sort((a, b) => a.name.localeCompare(b.name)),
+  );
 
   /* ================================
    * Methods

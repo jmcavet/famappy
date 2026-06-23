@@ -33,7 +33,7 @@ export class ManageMealCategoriesComponent {
   private facade = inject(ManageMealCategoryFacade);
 
   /** Declaration of signals communicating with firestore */
-  readonly dbMealCategories = this.facade.dbMealCategories;
+  readonly dbMealCategoriesSorted = this.facade.dbMealCategoriesSorted;
   readonly pageIsLoading = this.facade.pageIsLoading;
 
   openAddMealCategoryInputModal(event: MouseEvent) {
