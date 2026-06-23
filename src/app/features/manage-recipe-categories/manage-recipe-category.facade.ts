@@ -44,7 +44,7 @@ export class ManageRecipeCategoryFacade {
   /* ================================
    * Computed signals
    * ================================ */
-  readonly canShowPage = computed(() => {
+  readonly pageIsLoading = computed(() => {
     return (
       this.recipeCategoriesLoading() ||
       this.recipeCategoriesSaving() ||
@@ -78,10 +78,7 @@ export class ManageRecipeCategoryFacade {
     );
   }
 
-  public openUpdateRecipeCategoryInputModal(
-    event: MouseEvent,
-    recipeCategory: any,
-  ) {
+  public openUpdateModal(event: MouseEvent, recipeCategory: any) {
     event.stopPropagation();
 
     this.modalService.open(

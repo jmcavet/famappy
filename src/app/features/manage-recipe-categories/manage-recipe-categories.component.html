@@ -1,41 +1,63 @@
-<div class="items-container">
-  <ul>
-    @for (recipeCategory of dbRecipeCategories(); track $index) {
-      <li>
-        <span>{{ recipeCategory.name | capitalize }}</span>
-        <div class="buttons-container">
-          <button type="button">
-            <button
-              type="button"
-              (click)="
-                openUpdateRecipeCategoryInputModal($event, recipeCategory)
-              "
-            >
-              <i
-                class="fa-regular fa-pen-to-square text-primary-600 dark:text-primary-500 text-xl"
-              ></i>
-            </button>
-          </button>
-          <button
-            type="button"
-            (click)="openDeleteModal($event, recipeCategory.id)"
-          >
-            <i
-              class="fa-regular fa-trash-can text-danger-600 dark:text-danger-500 text-xl"
-            ></i>
-          </button>
-        </div>
-      </li>
-    }
-  </ul>
-</div>
-
-<app-floating-button
-  (clicked)="openAddRecipeCategoryInputModal($event)"
-></app-floating-button>
-
-<div class="flex flex-col items-center">
-  @if (canShowPage()) {
+@if (pageIsLoading()) {
+  <app-stack align="center">
     <app-loading />
-  }
-</div>
+  </app-stack>
+} @else {
+  <div class="layout-stack h-dvh">
+    <app-header-shell
+      ><div class="inset-md">
+        <app-stack>
+          <app-row>
+            <div class="relative w-full">
+              <div class="absolute">
+                <app-button variant="ghost" size="sm" (clicked)="goBack()"
+                  ><i class="fa-solid fa-arrow-left-long text-xl"></i
+                ></app-button>
+              </div>
+              <h1 class="text-headline font-roboto text-center">
+                Manage recipe categories
+              </h1>
+            </div>
+          </app-row>
+        </app-stack>
+      </div>
+    </app-header-shell>
+
+    <app-page-layout>
+      <app-section>
+        <app-stack variant="section">
+          @for (recipeCategory of dbRecipeCategories(); track $index) {
+            <app-row>
+              <span>{{ recipeCategory.name | capitalize }}</span>
+              <app-inline gap="sm">
+                <app-button
+                  variant="ghost"
+                  size="sm"
+                  (clicked)="openUpdateModal($event, recipeCategory)"
+                  ><i class="fa-regular fa-pen-to-square text-xl"></i
+                ></app-button>
+
+                <app-button
+                  variant="ghost"
+                  size="sm"
+                  color="danger"
+                  (clicked)="openDeleteModal($event, recipeCategory.id)"
+                  ><i class="fa-regular fa-trash-can text-xl"></i
+                ></app-button>
+              </app-inline>
+            </app-row>
+          }
+        </app-stack>
+      </app-section>
+    </app-page-layout>
+
+    <app-section [surface]="0">
+      <app-button
+        [fullWidth]="true"
+        (clicked)="openAddRecipeCategoryInputModal($event)"
+      >
+        Add new category
+      </app-button>
+    </app-section>
+  </div>
+}
