@@ -1,36 +1,63 @@
-<div class="items-container">
-  <ul>
-    @for (cuisine of dbCuisines(); track $index) {
-      <li>
-        <span>{{ cuisine.name | capitalize }}</span>
-        <div class="buttons-container">
-          <button type="button">
-            <button
-              type="button"
-              (click)="openUpdateCuisineInputModal($event, cuisine)"
-            >
-              <i
-                class="fa-regular fa-pen-to-square text-primary-600 dark:text-primary-500 text-xl"
-              ></i>
-            </button>
-          </button>
-          <button (click)="openDeleteModal($event, cuisine.id)">
-            <i
-              class="fa-solid fa-trash-arrow-up fa-md text-red-500 dark:text-red-700"
-            ></i>
-          </button>
-        </div>
-      </li>
-    }
-  </ul>
-</div>
-
-<app-floating-button
-  (clicked)="openAddCuisineInputModal($event)"
-></app-floating-button>
-
-<div class="flex flex-col items-center">
-  @if (canShowPage()) {
+@if (pageIsLoading()) {
+  <app-stack align="center">
     <app-loading />
-  }
-</div>
+  </app-stack>
+} @else {
+  <div class="layout-stack h-dvh">
+    <app-header-shell
+      ><div class="inset-md">
+        <app-stack>
+          <app-row>
+            <div class="relative w-full">
+              <div class="absolute">
+                <app-button variant="ghost" size="sm" (clicked)="goBack()"
+                  ><i class="fa-solid fa-arrow-left-long text-xl"></i
+                ></app-button>
+              </div>
+              <h1 class="text-headline font-roboto text-center">
+                Manage cuisines
+              </h1>
+            </div>
+          </app-row>
+        </app-stack>
+      </div>
+    </app-header-shell>
+
+    <app-page-layout>
+      <app-section>
+        <app-stack variant="section">
+          @for (cuisine of dbCuisinesSorted(); track $index) {
+            <app-row>
+              <span>{{ cuisine.name | capitalize }}</span>
+              <app-inline>
+                <app-button
+                  variant="ghost"
+                  size="sm"
+                  (clicked)="openUpdateCuisineInputModal($event, cuisine)"
+                  ><i class="fa-regular fa-pen-to-square text-xl"></i
+                ></app-button>
+
+                <app-button
+                  variant="ghost"
+                  size="sm"
+                  color="danger"
+                  (clicked)="openDeleteModal($event, cuisine.id)"
+                  ><i class="fa-regular fa-trash-can text-xl"></i
+                ></app-button>
+              </app-inline>
+            </app-row>
+          }
+        </app-stack>
+      </app-section>
+    </app-page-layout>
+
+    <app-section [surface]="0">
+      <app-button
+        [fullWidth]="true"
+        (clicked)="openAddCuisineInputModal($event)"
+      >
+        Add new cuisine
+      </app-button>
+    </app-section>
+  </div>
+}
