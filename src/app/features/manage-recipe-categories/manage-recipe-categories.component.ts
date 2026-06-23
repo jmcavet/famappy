@@ -2,7 +2,6 @@ import { Component, inject } from '@angular/core';
 import { CapitalizePipe } from '../../shared/pipes/capitalize.pipe';
 import { ManageRecipeCategoryFacade } from './manage-recipe-category.facade';
 import { LoadingComponent } from '../../shared/layout/overlays/loading/loading.component';
-import { FloatingButtonComponent } from '../../shared/layout/shell/floating-button/floating-button.component';
 import { HeaderShellComponent } from '../../shared/layout/shell/header-shell.component';
 import { PageLayoutComponent } from '../../shared/layout/primitives/page-layout.component';
 import { SectionComponent } from '../../shared/layout/primitives/section.component';
@@ -17,7 +16,6 @@ import { Location } from '@angular/common';
   imports: [
     CapitalizePipe,
     LoadingComponent,
-    FloatingButtonComponent,
     HeaderShellComponent,
     PageLayoutComponent,
     SectionComponent,
