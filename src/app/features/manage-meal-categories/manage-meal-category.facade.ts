@@ -44,7 +44,7 @@ export class ManageMealCategoryFacade {
     () => this.recipeService.recipeState().mealCategoryId,
   );
 
-  readonly canShowPage = computed(() => {
+  readonly pageIsLoading = computed(() => {
     return (
       this.mealCategoriesLoading() ||
       this.mealCategoriesSaving() ||
