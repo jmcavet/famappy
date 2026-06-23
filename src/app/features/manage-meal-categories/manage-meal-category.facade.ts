@@ -24,7 +24,6 @@ export class ManageMealCategoryFacade {
   /* ================================
    * Domain-derived state
    * ================================ */
-  readonly dbMealCategories = this.mealCategoryDomainFacade.dbMealCategories;
   readonly mealCategoriesLoading =
     this.mealCategoryDomainFacade.mealCategoriesLoading;
   readonly mealCategoriesSaving =
@@ -34,14 +33,19 @@ export class ManageMealCategoryFacade {
   readonly mealCategoriesDeleting =
     this.mealCategoryDomainFacade.mealCategoriesDeleting;
   readonly recipeUpdating = this.recipeDomainFacade.recipesUpdating;
-
   readonly dbRecipes = this.recipeDomainFacade.dbRecipes;
+
+  private dbMealCategories = this.mealCategoryDomainFacade.dbMealCategories;
 
   /* ================================
    * Computed signals
    * ================================ */
   readonly mealCategoryId = computed(
     () => this.recipeService.recipeState().mealCategoryId,
+  );
+
+  readonly dbMealCategoriesSorted = computed(() =>
+    this.dbMealCategories().sort((a, b) => a.name.localeCompare(b.name)),
   );
 
   readonly pageIsLoading = computed(() => {
