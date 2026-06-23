@@ -26,10 +26,10 @@
     <app-page-layout>
       <app-section>
         <app-stack variant="section">
-          @for (recipeCategory of dbRecipeCategories(); track $index) {
+          @for (recipeCategory of dbRecipeCategoriesSorted(); track $index) {
             <app-row>
               <span>{{ recipeCategory.name | capitalize }}</span>
-              <app-inline gap="sm">
+              <app-inline>
                 <app-button
                   variant="ghost"
                   size="sm"

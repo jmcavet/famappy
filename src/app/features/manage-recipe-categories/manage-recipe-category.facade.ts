@@ -28,10 +28,6 @@ export class ManageRecipeCategoryFacade {
   /* ================================
    * Domain-derived state
    * ================================ */
-  readonly dbRecipes = this.recipeDomainFacade.dbRecipes;
-
-  readonly dbRecipeCategories =
-    this.recipeCategoryDomainFacade.dbRecipeCategories;
   readonly recipeCategoriesLoading =
     this.recipeCategoryDomainFacade.recipeCategoriesLoading;
   readonly recipeCategoriesSaving =
@@ -40,6 +36,10 @@ export class ManageRecipeCategoryFacade {
     this.recipeCategoryDomainFacade.recipeCategoriesDeleting;
   readonly recipeCategoriesUpdating =
     this.recipeCategoryDomainFacade.recipeCategoriesUpdating;
+
+  private dbRecipes = this.recipeDomainFacade.dbRecipes;
+  private dbRecipeCategories =
+    this.recipeCategoryDomainFacade.dbRecipeCategories;
 
   /* ================================
    * Computed signals
@@ -52,6 +52,10 @@ export class ManageRecipeCategoryFacade {
       this.recipeCategoriesUpdating()
     );
   });
+
+  readonly dbRecipeCategoriesSorted = computed(() =>
+    this.dbRecipeCategories().sort((a, b) => a.name.localeCompare(b.name)),
+  );
 
   /* ================================
    * Methods

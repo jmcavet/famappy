@@ -34,8 +34,7 @@ export class ManageRecipeCategoriesComponent {
   private facade = inject(ManageRecipeCategoryFacade);
 
   /** Declaration of signals communicating with firestore */
-  readonly dbRecipes = this.facade.dbRecipes;
-  readonly dbRecipeCategories = this.facade.dbRecipeCategories;
+  readonly dbRecipeCategoriesSorted = this.facade.dbRecipeCategoriesSorted;
   readonly pageIsLoading = this.facade.pageIsLoading;
 
   openAddRecipeCategoryInputModal(event: MouseEvent) {
