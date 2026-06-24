@@ -18,6 +18,7 @@ import { filterIngredientsRoutes } from './features/filter-ingredients/filter-in
 import { mealsRoutes } from './features/meals/meals.routes';
 import { settingsRoutes } from './features/settings/settings.routes';
 import { layouteRoutes } from './features/layout/layout.routes';
+import { shoppingRoutes } from './features/shopping/shopping.routes';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -37,6 +38,7 @@ export const routes: Routes = [
   ...filterIngredientsRoutes,
   ...recipesRoutes,
   ...mealsRoutes,
+  ...shoppingRoutes,
   ...settingsRoutes,
   ...layouteRoutes,
   ...notFoundRoutes, // At the end!
