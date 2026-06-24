@@ -6,13 +6,23 @@
   <div class="layout-stack h-dvh">
     <app-header-shell><app-calendar /></app-header-shell>
     <app-page-layout maxSize="lg">
-      <app-row justify="end">
-        <app-button routerLink="/meals/definition"
-          ><app-inline>
-            <i class="fa-solid fa-add"></i>
-            <i class="fa-solid fa-shopping-cart fa-xl"></i> </app-inline
-        ></app-button>
-      </app-row>
+      <div class="w-full">
+        <app-inline>
+          <app-button [fullWidth]="true" routerLink="/meals/definition"
+            ><app-inline gap="sm">
+              <i class="fa-regular fa-calendar-days"></i>
+              <span>Plan meals</span>
+            </app-inline></app-button
+          >
+
+          <app-button [fullWidth]="true" routerLink="/shopping/meals-selection"
+            ><app-inline gap="sm">
+              <i class="fa-solid fa-shopping-cart"></i>
+              <span>Export list</span></app-inline
+            ></app-button
+          >
+        </app-inline>
+      </div>
 
       @for (
         dailyMealPlan of dailyMealPlans();
