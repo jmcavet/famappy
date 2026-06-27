@@ -14,7 +14,6 @@ import { getWeekDays } from '../../../shared/utils/calendar';
 import { CapitalizePipe } from '../../../shared/pipes/capitalize.pipe';
 import { MealFacade } from '../../meals/meals.facade';
 import { NgClass } from '@angular/common';
-import { CloseScrollStrategy } from '@angular/cdk/overlay';
 
 @Component({
   selector: 'app-shopping-meals-selection',
