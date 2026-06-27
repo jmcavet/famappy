@@ -14,6 +14,7 @@ import { getWeekDays } from '../../../shared/utils/calendar';
 import { CapitalizePipe } from '../../../shared/pipes/capitalize.pipe';
 import { MealFacade } from '../../meals/meals.facade';
 import { NgClass } from '@angular/common';
+import { CloseScrollStrategy } from '@angular/cdk/overlay';
 
 @Component({
   selector: 'app-shopping-meals-selection',
@@ -45,6 +46,28 @@ export class ShoppingMealsSelectionComponent {
   weekDays = getWeekDays();
 
   readonly selectedMeals = signal<{ dayName: string; mealType: string }[]>([]);
+
+  public selectAll() {
+    this.weekDays.forEach((day) => {
+      const lunchIsPlanned = this.mealPlannedForDay(day.dayName, 'lunch');
+      const dinnerIsPlanned = this.mealPlannedForDay(day.dayName, 'dinner');
+
+      const dayName = day.dayName;
+
+      if (lunchIsPlanned) {
+        this.selectedMeals.update((previous) => [
+          ...previous,
+          { dayName, mealType: 'lunch' },
+        ]);
+      }
+      if (dinnerIsPlanned) {
+        this.selectedMeals.update((previous) => [
+          ...previous,
+          { dayName, mealType: 'dinner' },
+        ]);
+      }
+    });
+  }
 
   public toggleSelection(dayName: string, mealType: string) {
     const isSelected = this.isSelected(dayName, mealType);

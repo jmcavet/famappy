@@ -14,7 +14,9 @@
         <app-stack variant="section">
           <h2 class="font-roboto text-title">Choose meals to export</h2>
 
-          <app-button variant="ghost">Select all</app-button>
+          <app-button variant="ghost" (clicked)="selectAll()"
+            >Select all</app-button
+          >
 
           <app-grid col1="max" col2="1" col3="1" gapX="xl" gapY="lg">
             @for (day of weekDays; track $index; let i = $index) {
