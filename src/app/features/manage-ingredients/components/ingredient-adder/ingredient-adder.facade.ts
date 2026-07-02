@@ -2,15 +2,15 @@ import { computed, inject, Injectable, signal } from '@angular/core';
 import { IngredientCategoryBackendService } from '../../../../services/backend/ingredient-category.service';
 import { IngredientDomainFacade } from '../../../../domain-facades/ingredient.facade';
 import { IngredientAdderContext } from './ingredient-adder.component';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ModalService } from '../../../../shared/layout/overlays/modal/modal.service';
+import { ModalAddIngredientComponent } from '../../../../shared/layout/overlays/modal/modal-add-ingredient/modal-add-ingredient.component';
 
 @Injectable()
 export class IngredientAdderFacade {
   /* ================================
    * Dependencies
    * ================================ */
-  /** Framework dependencies */
-  private formBuilder = inject(FormBuilder);
+  private modalService = inject(ModalService);
 
   /** Domain access (business state & actions) */
   private ingredientDomainFacade = inject(IngredientDomainFacade);
@@ -37,11 +37,6 @@ export class IngredientAdderFacade {
    * Local state
    * ================================ */
   /** Private signals */
-  private nameValue = signal<string>('');
-
-  readonly form: FormGroup = this.formBuilder.group({
-    name: ['', [Validators.required, Validators.maxLength(40)]],
-  });
 
   /* ================================
    * Local derived state
@@ -49,46 +44,41 @@ export class IngredientAdderFacade {
   /** Public signals */
   readonly ingredientBeingSaved = this.ingredientsSaving;
 
-  readonly nameAlreadyExists = computed(() => {
-    return this._ctx.existingIngredientNames().includes(this.nameValue());
-  });
-
   readonly buttonIsDisabled = computed(() => {
-    return (
-      !this.nameValue() ||
-      this.nameAlreadyExists() ||
-      !this.ingredientCategorySelected()
-    );
+    return !this.ingredientCategorySelected();
   });
 
   /* ================================
    * PUBLIC API
    * ================================ */
-  subscribeForm() {
-    this.form.get('name')?.valueChanges.subscribe((value) => {
-      this.nameValue.set(value);
-    });
+  openAddModal(event: MouseEvent) {
+    event.stopPropagation();
+    this.modalService.open(
+      ModalAddIngredientComponent,
+      {
+        title: 'Enter a new ingredient',
+        btnConfirmText: 'Create',
+        btnConfirmColor: 'primary',
+        existingItems: this._ctx.existingIngredientNames(),
+      },
+      {
+        onConfirm: ({ name, measure, unit }) => {
+          (async () => {
+            await this.addIngredient(name, measure, unit);
+          })();
+        },
+      },
+    );
   }
 
-  ingredientEnterPress(event: KeyboardEvent) {
-    if (event.key === 'Enter') {
-      event.preventDefault();
-      this.addIngredient();
-    }
-  }
-
-  async addIngredient() {
-    if (!this.ingredientCategorySelected()) {
-      return;
-    }
-
+  async addIngredient(name: string, measure: number, unit: string) {
     const propertiesToSave = {
       categoryId: this.ingredientCategorySelected()?.id,
-      name: this.nameValue(),
+      name,
+      measure,
+      unit,
     };
 
     this.ingredientDomainFacade.saveIngredient(propertiesToSave);
-
-    this.form.get('name')?.reset();
   }
 }
