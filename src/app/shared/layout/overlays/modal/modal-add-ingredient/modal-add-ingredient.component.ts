@@ -50,6 +50,9 @@ export class ModalAddIngredientComponent {
   }
 
   ngOnInit(): void {
+    // Initialize the unit as null (& measure = 1)
+    this.selectUnit(null);
+
     if (this.name().length === 0) return;
 
     this.invalidMessage = 'This name already exists in the database!';

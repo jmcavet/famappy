@@ -23,7 +23,6 @@
 
       <app-stack variant="compact">
         <p class="color-text-muted">Select a unit</p>
-        <span>unit: {{ unit() }}</span>
         <app-inline>
           <app-chip [selected]="unit() === null" (toggle)="selectUnit(null)"
             ><i class="fa-solid fa-ban"></i
