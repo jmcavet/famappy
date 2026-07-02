@@ -23,8 +23,9 @@
 
       <app-stack variant="compact">
         <p class="color-text-muted">Select a unit</p>
+        <span>unit: {{ unit() }}</span>
         <app-inline>
-          <app-chip [selected]="unit() === 'none'" (toggle)="selectUnit('none')"
+          <app-chip [selected]="unit() === null" (toggle)="selectUnit(null)"
             ><i class="fa-solid fa-ban"></i
           ></app-chip>
           <app-chip [selected]="unit() === 'cl'" (toggle)="selectUnit('cl')"
@@ -55,8 +56,8 @@
           autocomplete="off"
           [(ngModel)]="measure"
           (keydown.enter)="onConfirm()"
-          [disabled]="unit() === 'none'"
-          [class.disabled]="unit() === 'none'"
+          [disabled]="unit() === null"
+          [class.disabled]="unit() === null"
         />
       </app-stack>
     </app-stack>

@@ -39,7 +39,7 @@ export class ModalAddIngredientComponent {
 
   name = signal<string>('');
   measure = signal<number | null>(null);
-  unit = signal<string>('none');
+  unit = signal<string | null>(null);
 
   private modalService = inject(ModalService);
 
@@ -61,13 +61,13 @@ export class ModalAddIngredientComponent {
       : undefined;
   }
 
-  selectUnit(unit: string) {
+  selectUnit(unit: string | null) {
     this.unit.set(unit);
 
-    if (unit === 'none') {
-      this.measure.update((old) => 1);
+    if (unit === null) {
+      this.measure.set(1);
     } else {
-      this.measure.update((old) => null);
+      this.measure.set(null);
     }
   }
 
