@@ -1,18 +1,16 @@
-<app-section [surface]="0">
-  <app-stack>
-    <app-button
-      size="sm"
-      (clicked)="openAddModal($event)"
-      [fullWidth]="true"
-      [disabled]="buttonIsDisabled()"
-    >
-      <app-inline>
-        <i class="fa-solid fa-plus text-xl"></i>
-        <span>Add a new ingredient</span>
-      </app-inline>
-    </app-button>
-  </app-stack>
-</app-section>
+<app-stack>
+  <app-button
+    size="sm"
+    (clicked)="openAddModal($event)"
+    [fullWidth]="true"
+    [disabled]="buttonIsDisabled()"
+  >
+    <app-inline>
+      <i class="fa-solid fa-plus text-xl"></i>
+      <span>Add a new ingredient</span>
+    </app-inline>
+  </app-button>
+</app-stack>
 
 @if (ingredientBeingSaved()) {
   <app-stack align="center">
