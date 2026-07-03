@@ -9,9 +9,11 @@
           </app-inline>
 
           <app-button
-            [variant]="ingredientName() === 'none' ? 'ghost' : 'outline'"
+            [variant]="ingredientName() === '' ? 'ghost' : 'outline'"
             (clicked)="navigateToIngredientsPage()"
-            >{{ ingredientName() | capitalize }}</app-button
+            >{{
+              ingredientName() === "" ? "none" : (ingredientName() | capitalize)
+            }}</app-button
           >
         </app-row>
 
@@ -22,28 +24,21 @@
               <span class="text-lg">Quantity</span></app-inline
             >
 
-            <div class="justify-self-start sm:justify-self-end">
-              <app-inline [wrap]="true">
-                <input
-                  type="text"
-                  id="measure"
-                  name="measure"
-                  value="measure"
-                  formControlName="measure"
-                  autocomplete="off"
-                  class="inset-x-md surface-1"
-                />
-                <app-inline gap="sm">
-                  @for (unitElement of UNITS; track unitElement) {
-                    <app-chip
-                      [selected]="unit() === unitElement"
-                      (toggle)="selectUnit(unitElement)"
-                      >{{ unitElement }}</app-chip
-                    >
-                  }
-                </app-inline>
-              </app-inline>
-            </div>
+            <app-inline>
+              <input
+                type="number"
+                id="measure"
+                formControlName="measure"
+                class="inset-x-md surface-1"
+                autocomplete="off"
+                min="0"
+                step="any"
+              />
+
+              @if (ingredient()?.unit !== null) {
+                <span> {{ ingredient()?.unit }}</span>
+              }
+            </app-inline>
           </app-form-grid>
 
           @if (form.get("measure")?.hasError("notANumber")) {

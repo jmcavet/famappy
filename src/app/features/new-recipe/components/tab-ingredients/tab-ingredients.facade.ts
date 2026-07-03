@@ -1,10 +1,14 @@
 import {
   computed,
+  DestroyRef,
+  effect,
   inject,
   Injectable,
   linkedSignal,
   signal,
 } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+
 import { RecipeStateService } from '../../../../services/state/recipe.service';
 
 import { Router } from '@angular/router';
@@ -21,6 +25,10 @@ export class TabIngredientsFacade {
   private router = inject(Router);
   private formBuilder = inject(FormBuilder);
 
+  readonly form: FormGroup = this.formBuilder.group({
+    measure: [1, [Validators.required, numberValidator]],
+  });
+
   /** Domain access (business state & actions) */
   private ingredientDomainFacade = inject(IngredientDomainFacade);
 
@@ -36,14 +44,8 @@ export class TabIngredientsFacade {
    * Local state
    * ================================ */
   /** Signals rendered on UI */
-  readonly unit = signal<string>('');
 
   /** Internal signals */
-  private readonly measure = signal<number>(1);
-
-  readonly form: FormGroup = this.formBuilder.group({
-    measure: [1, [Validators.required, numberValidator]],
-  });
 
   /* ================================
    * Local derived state
@@ -58,40 +60,54 @@ export class TabIngredientsFacade {
     () => this.recipeService.recipeState().ingredients ?? [],
   );
 
+  readonly measure = linkedSignal(() => {
+    return this.ingredient()?.measure ?? 1;
+  });
+
+  readonly ingredient = computed(() => {
+    return this.dbIngredients().find((i) => i.id === this.ingredientId());
+  });
+
   readonly ingredientName = linkedSignal(() => {
     const ingredient = this.dbIngredients().find(
       (i) => i.id === this.ingredientId(),
     );
-    return ingredient?.name ?? 'none';
+    return ingredient?.name ?? '';
   });
 
   readonly buttonIsDisabled = computed(() => {
-    return this.ingredientName() === 'none' || !this.measure();
+    return this.ingredientName() === '' || !this.measure();
   });
+
+  constructor(private destroyRef: DestroyRef) {
+    this.form
+      .get('measure')
+      ?.valueChanges.pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((value) => this.measure.set(value));
+
+    // sync signal → form when ingredient() changes
+    effect(() => {
+      const value = this.measure();
+      this.form.get('measure')?.setValue(value, { emitEvent: false });
+    });
+  }
 
   /* ================================
    * PUBLIC API
    * ================================ */
-  /** Subscribe to the 'measure' input field value changes */
-  initializeForm() {
-    this.form.get('measure')?.valueChanges.subscribe((value) => {
-      this.measure.set(value ?? 1);
-    });
-  }
-
-  selectUnit(unit: string) {
-    this.unit.update((current) => (current === unit ? '' : unit));
+  changeMeasure(value: number) {
+    this.measure.set(value);
   }
 
   addIngredientToRecipe() {
     this.recipeService.addIngredientToRecipe(
       this.ingredientName(),
       this.measure(),
-      this.unit(),
+      this.ingredient()?.unit ?? '',
     );
 
     // Reset the ingredient selected
-    this.ingredientName.set('none');
+    this.ingredientName.set('');
   }
 
   deleteIngredient(index: number) {
