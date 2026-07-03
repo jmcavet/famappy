@@ -58,8 +58,9 @@
         </app-button>
         <app-button
           [fullWidth]="true"
-          routerLink="/shopping/step2"
+          routerLink="/shopping/ingredients-selection"
           [disabled]="selectedMeals().length === 0"
+          (clicked)="validateMeals()"
         >
           {{ vaidateButtonText() }}
         </app-button>

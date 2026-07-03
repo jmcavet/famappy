@@ -1,0 +1,26 @@
+<div class="surface-2 rounded-2xl inset-sm">
+  <app-row>
+    <app-button
+      [disabled]="disabled()"
+      variant="outline"
+      color="neutral"
+      size="sm"
+      (clicked)="decrease()"
+    >
+      <i class="fa-solid fa-minus"></i>
+    </app-button>
+    <app-inline gap="sm">
+      <span>{{ measure() }}</span>
+      <span>{{ unit() }}</span>
+    </app-inline>
+    <app-button
+      [disabled]="disabled()"
+      variant="outline"
+      color="neutral"
+      size="sm"
+      (clicked)="increase()"
+    >
+      <i class="fa-solid fa-plus"></i>
+    </app-button>
+  </app-row>
+</div>

@@ -1,1 +1,97 @@
-<p>shopping-ingredients-selection works!</p>
+<div class="h-full layout-hcf">
+  <app-header-shell
+    ><div class="inset-md">
+      <app-stepper [navStep]="1" /></div
+  ></app-header-shell>
+
+  <app-page-layout>
+    @if (dataIsLoading()) {
+      <app-stack align="center">
+        <app-loading />
+      </app-stack>
+    } @else {
+      <app-section inset="lg">
+        <app-stack variant="section">
+          <h2 class="font-roboto text-title">Choose ingredients to export</h2>
+
+          <div
+            class="overflow-x-auto overflow-y-hidden flex gap-4 snap-x snap-mandatory scroll-smooth"
+          >
+            <app-segmented-control
+              [fullWidth]="false"
+              size="sm"
+              [options]="ingredientCategoriesSelected()"
+              [selectedInput]="ingredientCategoryNameSelected()"
+              (selectionChange)="toggleIngredientCategory($event)"
+            >
+            </app-segmented-control>
+          </div>
+        </app-stack>
+      </app-section>
+
+      <app-section>
+        <app-stack variant="section">
+          <app-grid col1="max" col2="1" col3="max" gapX="md" gapY="lg">
+            @for (
+              ing of ingredientsSelectedSorted();
+              track $index;
+              let i = $index
+            ) {
+              <span
+                [ngClass]="
+                  ingredientsDisabled().includes(ing.id)
+                    ? 'color-text-muted line-through'
+                    : ''
+                "
+                >{{ ing.name }}</span
+              >
+              <div
+                class="w-full"
+                [ngClass]="
+                  ingredientsDisabled().includes(ing.id) ? 'opacity-30' : ''
+                "
+              >
+                <app-measure-control
+                  [measure]="measureFor(ing.id)"
+                  [unit]="ing.unit"
+                  (measureChange)="onMeasuresChange(ing.id, $event)"
+                  [disabled]="ingredientsDisabled().includes(ing.id)"
+                />
+              </div>
+              <app-button
+                variant="ghost"
+                size="sm"
+                [color]="
+                  ingredientsDisabled().includes(ing.id) ? 'primary' : 'danger'
+                "
+                (clicked)="disableIngredient($event, ing.id)"
+              >
+                @if (ingredientsDisabled().includes(ing.id)) {
+                  <i class="fa-solid fa-arrow-rotate-left text-xl"></i>
+                } @else {
+                  <i class="fa-regular fa-trash-can text-xl"></i>
+                }
+              </app-button>
+            }
+          </app-grid>
+        </app-stack>
+      </app-section>
+    }
+  </app-page-layout>
+
+  <app-section [surface]="0">
+    <div class="w-full">
+      <app-inline>
+        <app-button variant="outline" [fullWidth]="true" routerLink="/meals">
+          Cancel
+        </app-button>
+        <app-button
+          [fullWidth]="true"
+          routerLink="/shopping/ingredients-selection"
+        >
+          Export X ingredients
+        </app-button>
+      </app-inline>
+    </div>
+  </app-section>
+</div>
