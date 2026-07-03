@@ -86,8 +86,6 @@ export class ShoppingMealsSelectionComponent {
         { dayName, mealType },
       ]);
     }
-
-    console.log('this.selectedMeals(): ', this.selectedMeals());
   }
 
   isSelected(dayName: string, mealType: string): boolean {
