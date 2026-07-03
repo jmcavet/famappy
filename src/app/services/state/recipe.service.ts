@@ -31,7 +31,7 @@ export class RecipeStateService {
     source: '',
     comment: '',
     ingredients: [],
-    ingredient: 'none',
+    ingredient: '',
     ingredientId: 'none',
     selectedTabTitle: 'definition',
     instructions: [],

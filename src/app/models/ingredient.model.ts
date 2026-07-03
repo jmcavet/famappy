@@ -21,6 +21,8 @@ export interface IngredientDocInBackend {
   name: string;
   dateCreated: string;
   categoryId: string;
+  measure: number;
+  unit: string;
 }
 
 export interface IngredientCategoryDocInBackend {
