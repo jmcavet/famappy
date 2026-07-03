@@ -104,28 +104,11 @@ export class ShoppingIngredientsSelectionFacade {
     );
   });
 
-  // readonly measureFor = (ingredientId: string) => {
-  //   const fromState = this.measures().find(
-  //     (m) => m.id === ingredientId,
-  //   )?.measure;
-
-  //   if (fromState !== undefined) {
-  //     return fromState;
-  //   }
-
-  //   // Fallback to the value from the database
-  //   const fromDb =
-  //     this.ingredientsSelectedSorted().find((ing) => ing.id === ingredientId)
-  //       ?.measure ?? 0;
-
-  //   return fromDb;
-  // };
-
   /* ════════════════════════════════
    * Domain Projections (business logic)
    * ════════════════════════════════ */
   readonly recipesSelected = computed(() => {
-    const tutu = this.dbRecipes().filter((recipe) => {
+    const recipesSelected = this.dbRecipes().filter((recipe) => {
       const recipeIds = this.shoppingMealsSelected().map(
         (meal) => meal.recipe.recipe?.id,
       );
@@ -133,7 +116,7 @@ export class ShoppingIngredientsSelectionFacade {
       return recipeIds.includes(recipe.id);
     });
 
-    return tutu;
+    return recipesSelected;
   });
 
   readonly ingredientsSelectedSorted = computed(() => {
