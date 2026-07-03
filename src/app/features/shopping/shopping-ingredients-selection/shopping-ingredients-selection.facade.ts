@@ -64,6 +64,10 @@ export class ShoppingIngredientsSelectionFacade {
     // Initialise the ingredient measures from DB once, only if state is empty
     effect(() => {
       const ingredients = this.ingredientsSelectedSorted();
+      // console.log('ingredients: ', ingredients);
+
+      // const ingredients = this.ingredientsTEST();
+      console.log('ingredients: ', ingredients);
 
       if (ingredients.length > 0 && this.measures().length === 0) {
         this.shoppingService.initialiseMeasures(
@@ -117,6 +121,24 @@ export class ShoppingIngredientsSelectionFacade {
     });
 
     return recipesSelected;
+  });
+
+  readonly ingredientsTEST = computed(() => {
+    // For each recipe/meal selected, get its unique list of ingredients (some recipes may have common ingredients)
+    const ingredientsFromRecipesSelection = this.recipesSelected().flatMap(
+      (recipe: RecipeWithId) => recipe.ingredients,
+    );
+    const uniqueIngredientsFromRecipesSelection = [
+      ...new Set(ingredientsFromRecipesSelection),
+    ];
+
+    const unique = [
+      ...new Map(
+        uniqueIngredientsFromRecipesSelection.map((item) => [item.id, item]),
+      ).values(),
+    ];
+
+    return unique;
   });
 
   readonly ingredientsSelectedSorted = computed(() => {
@@ -246,6 +268,14 @@ export class ShoppingIngredientsSelectionFacade {
       this.ingredientsDisabled.update((previous) =>
         previous.filter((id) => id !== ingredientId),
       );
+
+      // Reset the measure to its original value
+      const originalIngredientMeasure = this.ingredientsSelectedSorted().find(
+        (ing) => ing.id === ingredientId,
+      )?.measure;
+      if (originalIngredientMeasure) {
+        this.changeMeasure(ingredientId, originalIngredientMeasure);
+      }
     } else {
       this.ingredientsDisabled.update((previous) => [
         ...previous,

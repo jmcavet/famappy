@@ -62,7 +62,7 @@ export class ShoppingIngredientsSelectionComponent {
     this.facade.changeMeasure(ingredientId, value);
   }
 
-  disableIngredient(event: MouseEvent, ingredientId: string) {
+  disableIngredient(ingredientId: string) {
     this.facade.disableIngredient(ingredientId);
   }
 }
