@@ -14,6 +14,8 @@ import { getWeekDays } from '../../../shared/utils/calendar';
 import { CapitalizePipe } from '../../../shared/pipes/capitalize.pipe';
 import { MealFacade } from '../../meals/meals.facade';
 import { NgClass } from '@angular/common';
+import { ShoppingIngredientsSelectionFacade } from '../shopping-ingredients-selection/shopping-ingredients-selection.facade';
+import { ShoppingStateService } from '../../meals/state/shopping.service';
 
 @Component({
   selector: 'app-shopping-meals-selection',
@@ -37,6 +39,8 @@ import { NgClass } from '@angular/common';
 })
 export class ShoppingMealsSelectionComponent {
   private mealFacade = inject(MealFacade);
+
+  private shoppingService = inject(ShoppingStateService);
 
   readonly dailyMealPlans = computed(() => this.mealFacade.dailyMealPlans());
 
@@ -82,6 +86,8 @@ export class ShoppingMealsSelectionComponent {
         { dayName, mealType },
       ]);
     }
+
+    console.log('this.selectedMeals(): ', this.selectedMeals());
   }
 
   isSelected(dayName: string, mealType: string): boolean {
@@ -106,5 +112,30 @@ export class ShoppingMealsSelectionComponent {
     if (nbMeals === 1) return `Validate 1 meal`;
     if (nbMeals > 1) return `Validate ${nbMeals} meals`;
     else return 'Validate';
+  });
+
+  validateMeals() {
+    this.shoppingService.saveMealsForShoppingList(
+      this.filteredMealPlans() ?? [],
+    );
+  }
+
+  filteredMealPlans = computed(() => {
+    const selected = this.selectedMeals();
+
+    return this.dailyMealPlans()?.flatMap((plan) =>
+      plan.recipes
+        .filter((recipe) =>
+          selected.some(
+            (meal) =>
+              meal.dayName === plan.weekDay.dayName &&
+              meal.mealType === recipe.mealType,
+          ),
+        )
+        .map((recipe) => ({
+          weekDay: plan.weekDay,
+          recipe,
+        })),
+    );
   });
 }

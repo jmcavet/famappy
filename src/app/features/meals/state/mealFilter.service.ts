@@ -107,8 +107,6 @@ export class MealFilterStateService {
     }
 
     this.updateProperty('recipeCategoryIds', recipeCategoryIdsUpdated);
-
-    console.log('AAA: ', this.state().recipesFiltered);
   }
 
   computeRecipesFiltered(dbRecipes: RecipeWithId[], position: number = 0) {

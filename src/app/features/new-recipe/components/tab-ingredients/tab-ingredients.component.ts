@@ -1,10 +1,8 @@
 import { Component, inject } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { NgClass } from '@angular/common';
 import { CapitalizePipe } from '../../../../shared/pipes/capitalize.pipe';
 import { TabIngredientsFacade } from './tab-ingredients.facade';
 import { ButtonComponent } from '../../../../shared/ui/button/button.component';
-import { ChipComponent } from '../../../../shared/ui/chip/chip.component';
 import { SectionComponent } from '../../../../shared/layout/primitives/section.component';
 import { StackComponent } from '../../../../shared/layout/primitives/stack.component';
 import { RowComponent } from '../../../../shared/layout/primitives/row.component';
@@ -17,9 +15,7 @@ import { FormGridComponent } from '../../../../shared/layout/primitives/form-gri
     FormsModule,
     ReactiveFormsModule,
     CapitalizePipe,
-    NgClass,
     ButtonComponent,
-    ChipComponent,
     SectionComponent,
     StackComponent,
     FormGridComponent,
@@ -33,21 +29,12 @@ import { FormGridComponent } from '../../../../shared/layout/primitives/form-gri
 export class TabIngredientsComponent {
   private facade = inject(TabIngredientsFacade);
 
-  readonly UNITS: string[] = ['cl', 'l', 'g', 'Kg'];
-
   readonly form = this.facade.form;
+  readonly ingredient = this.facade.ingredient;
   readonly ingredientName = this.facade.ingredientName;
-  readonly unit = this.facade.unit;
+  readonly measure = this.facade.measure;
   readonly recipeIngredients = this.facade.recipeIngredients;
   readonly buttonIsDisabled = this.facade.buttonIsDisabled;
-
-  ngOnInit(): void {
-    this.facade.initializeForm();
-  }
-
-  selectUnit(unit: string) {
-    this.facade.selectUnit(unit);
-  }
 
   addIngredientToRecipe() {
     this.facade.addIngredientToRecipe();
@@ -59,5 +46,9 @@ export class TabIngredientsComponent {
 
   navigateToIngredientsPage() {
     this.facade.navigateToIngredientsPage();
+  }
+
+  onMeasureChange(value: number) {
+    this.facade.changeMeasure(value);
   }
 }

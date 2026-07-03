@@ -1,38 +1,16 @@
-<form [formGroup]="form">
-  <app-stack>
+<app-stack>
+  <app-button
+    size="sm"
+    (clicked)="openAddModal($event)"
+    [fullWidth]="true"
+    [disabled]="buttonIsDisabled()"
+  >
     <app-inline>
-      <input
-        type="text"
-        id="name"
-        name="name"
-        formControlName="name"
-        placeholder="Add a new ingredient"
-        autocomplete="off"
-        class="inset-x-md surface-1"
-        (keydown)="onIngredientEnterPress($event)"
-      />
-
-      <app-button (clicked)="addIngredient()" [disabled]="buttonIsDisabled()"
-        ><i class="fa fa-plus"></i
-      ></app-button>
+      <i class="fa-solid fa-plus text-xl"></i>
+      <span>Add a new ingredient</span>
     </app-inline>
-
-    @if (!ingredientCategorySelected() && form.get("name")?.value) {
-      <small class="info inset-inline-sm">Select a category first</small>
-    }
-
-    @if (form.get("name")?.invalid && form.get("name")?.errors?.["maxlength"]) {
-      <small class="danger inset-inline-sm"
-        >Ingredient must be no greater than 40 characters long.</small
-      >
-    }
-    @if (nameAlreadyExists()) {
-      <small class="danger inset-inline-sm"
-        >This ingredient already exists in the database.</small
-      >
-    }
-  </app-stack>
-</form>
+  </app-button>
+</app-stack>
 
 @if (ingredientBeingSaved()) {
   <app-stack align="center">
