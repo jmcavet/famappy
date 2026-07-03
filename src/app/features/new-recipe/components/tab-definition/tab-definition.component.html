@@ -11,6 +11,7 @@
             (input)="onTitleChange($any($event.target).value)"
             placeholder="Title"
             autocomplete="off"
+            class="inset-x-md surface-1"
           />
 
           @if (form.get("title")?.touched && form.get("title")?.invalid) {
