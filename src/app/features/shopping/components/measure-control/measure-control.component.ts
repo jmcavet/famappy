@@ -12,19 +12,16 @@ import { ButtonComponent } from '../../../../shared/ui/button/button.component';
 export class MeasureControlComponent {
   measure = input<number>(1);
   unit = input<string>('Kg');
-  measureChange = output<number>();
+  measureChange = output<'decr' | 'incr'>();
   disabled = input<boolean>(false);
 
   decrease() {
-    if (this.measure() > 1) {
-      this.measureChange.emit(this.measure() - 1);
+    if (this.measure() > 0) {
+      this.measureChange.emit('decr');
     }
   }
 
   increase() {
-    this.measureChange.emit(this.measure() + 1);
-
-    console.log('measure: ', this.measure());
-    console.log('unit: ', this.unit());
+    this.measureChange.emit('incr');
   }
 }

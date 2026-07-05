@@ -35,6 +35,7 @@ export class ShoppingIngredientsSelectionFacade {
   readonly selectedRecipes = signal<RecipeWithId[]>([]);
   readonly showIngredientCategories = signal<boolean>(false);
   readonly ingredientsDisabled = signal<string[]>([]);
+  readonly initialMeasures = signal<{ id: string; measure: number }[]>([]);
 
   /** Private signals */
 
@@ -63,16 +64,17 @@ export class ShoppingIngredientsSelectionFacade {
 
     // Initialise the ingredient measures from DB once, only if state is empty
     effect(() => {
-      const ingredients = this.ingredientsSelectedSorted();
-      // console.log('ingredients: ', ingredients);
-
-      // const ingredients = this.ingredientsTEST();
-      console.log('ingredients: ', ingredients);
+      const ingredients = this.allIngredientsFiltered();
 
       if (ingredients.length > 0 && this.measures().length === 0) {
-        this.shoppingService.initialiseMeasures(
-          ingredients.map((ing) => ({ id: ing.id, measure: ing.measure })),
-        );
+        const measures = ingredients.map((ing) => ({
+          id: ing.id,
+          measure: ing.measure,
+        }));
+
+        this.shoppingService.initialiseMeasures(measures);
+
+        this.initialMeasures.set(measures);
       }
     });
   }
@@ -92,6 +94,10 @@ export class ShoppingIngredientsSelectionFacade {
   readonly measures = computed(() => {
     return this.shoppingService.state().measures;
   });
+
+  readonly nbMeasuresToExport = computed(
+    () => this.measures().filter((measure) => measure.measure > 0).length,
+  );
 
   readonly units = computed(() => {
     return this.shoppingService.state().units;
@@ -123,7 +129,7 @@ export class ShoppingIngredientsSelectionFacade {
     return recipesSelected;
   });
 
-  readonly ingredientsTEST = computed(() => {
+  readonly allIngredientsFiltered = computed(() => {
     // For each recipe/meal selected, get its unique list of ingredients (some recipes may have common ingredients)
     const ingredientsFromRecipesSelection = this.recipesSelected().flatMap(
       (recipe: RecipeWithId) => recipe.ingredients,
@@ -259,8 +265,34 @@ export class ShoppingIngredientsSelectionFacade {
   /* ════════════════════════════════
    * Public API (UI actions)
    * ════════════════════════════════ */
-  changeMeasure(ingredientId: string, measure: number) {
-    this.shoppingService.changeMeasure(ingredientId, measure);
+  changeMeasure(ingredientId: string, value: 'decr' | 'incr') {
+    const currMeasure =
+      this.measures().find((m) => m.id === ingredientId)?.measure ?? 0;
+
+    const ingredient = this.ingredients().find(
+      (ing) => ing.id === ingredientId,
+    );
+
+    const ingredientUnit = ingredient?.unit ?? null;
+    const refMeasure = ingredient?.measure ?? 0;
+
+    let newMeasure;
+    if (ingredientUnit === null) {
+      // For measures without unit
+      newMeasure = value === 'decr' ? currMeasure - 1 : currMeasure + 1;
+    } else {
+      if (value === 'decr' && currMeasure !== 0) {
+        newMeasure = Math.max(
+          0,
+          Math.ceil(currMeasure / refMeasure) * refMeasure - refMeasure,
+        );
+      } else {
+        newMeasure =
+          Math.floor(currMeasure / refMeasure) * refMeasure + refMeasure;
+      }
+    }
+
+    this.shoppingService.changeMeasure(ingredientId, newMeasure);
   }
 
   disableIngredient(ingredientId: string) {
@@ -270,13 +302,16 @@ export class ShoppingIngredientsSelectionFacade {
       );
 
       // Reset the measure to its original value
-      const originalIngredientMeasure = this.ingredientsSelectedSorted().find(
-        (ing) => ing.id === ingredientId,
+      const originalMeasure = this.initialMeasures().find(
+        (measure) => measure.id === ingredientId,
       )?.measure;
-      if (originalIngredientMeasure) {
-        this.changeMeasure(ingredientId, originalIngredientMeasure);
+
+      if (originalMeasure) {
+        this.shoppingService.changeMeasure(ingredientId, originalMeasure);
       }
     } else {
+      this.shoppingService.changeMeasure(ingredientId, 0);
+
       this.ingredientsDisabled.update((previous) => [
         ...previous,
         ingredientId,
