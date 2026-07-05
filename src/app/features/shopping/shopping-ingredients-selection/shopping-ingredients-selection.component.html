@@ -88,8 +88,10 @@
         <app-button
           [fullWidth]="true"
           routerLink="/shopping/ingredients-selection"
+          [disabled]="nbMeasuresToExport() === 0"
+          routerLink="/shopping/ingredients-selection"
         >
-          Export X ingredients
+          Export {{ nbMeasuresToExport() }} ingredients
         </app-button>
       </app-inline>
     </div>

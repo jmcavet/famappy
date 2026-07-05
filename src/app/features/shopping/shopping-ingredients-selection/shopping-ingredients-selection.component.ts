@@ -49,6 +49,7 @@ export class ShoppingIngredientsSelectionComponent {
   readonly measures = this.facade.measures;
   readonly units = this.facade.units;
   readonly ingredientsDisabled = this.facade.ingredientsDisabled;
+  readonly nbMeasuresToExport = this.facade.nbMeasuresToExport;
 
   measureFor(ingredientId: string) {
     return this.facade.measureFor(ingredientId);
@@ -58,7 +59,7 @@ export class ShoppingIngredientsSelectionComponent {
     this.facade.toggleIngredientCategory(ingredientCategoryName);
   }
 
-  onMeasuresChange(ingredientId: string, value: number) {
+  onMeasuresChange(ingredientId: string, value: 'decr' | 'incr') {
     this.facade.changeMeasure(ingredientId, value);
   }
 
