@@ -64,7 +64,7 @@
                 [color]="
                   ingredientsDisabled().includes(ing.id) ? 'primary' : 'danger'
                 "
-                (clicked)="disableIngredient($event, ing.id)"
+                (clicked)="disableIngredient(ing.id)"
               >
                 @if (ingredientsDisabled().includes(ing.id)) {
                   <i class="fa-solid fa-arrow-rotate-left text-xl"></i>
@@ -88,8 +88,10 @@
         <app-button
           [fullWidth]="true"
           routerLink="/shopping/ingredients-selection"
+          [disabled]="nbMeasuresToExport() === 0"
+          routerLink="/shopping/ingredients-selection"
         >
-          Export X ingredients
+          Export {{ nbMeasuresToExport() }} ingredients
         </app-button>
       </app-inline>
     </div>

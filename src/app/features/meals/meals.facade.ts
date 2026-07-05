@@ -128,7 +128,6 @@ export class MealFacade {
       ),
     }));
 
-    console.log('dailyMealPlans: ', dailyMealPlans);
     return dailyMealPlans;
   });
   /*
