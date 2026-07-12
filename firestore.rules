@@ -48,6 +48,9 @@ service cloud.firestore {
         'ingredient-categories',
         'cuisines',
         'recipe-categories',
+        'shopping-lists',
+        'shopping-categories',
+        'shopping-category-items'
       ];
     }
   }
