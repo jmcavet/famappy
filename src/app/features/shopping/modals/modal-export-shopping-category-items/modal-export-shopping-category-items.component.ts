@@ -1,12 +1,10 @@
 import {
   Component,
   computed,
-  ElementRef,
   inject,
   input,
   linkedSignal,
   signal,
-  ViewChild,
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ButtonComponent } from '../../../../shared/ui/button/button.component';
@@ -15,7 +13,6 @@ import { StackComponent } from '../../../../shared/layout/primitives/stack.compo
 import { RowComponent } from '../../../../shared/layout/primitives/row.component';
 import { InlineComponent } from '../../../../shared/layout/primitives/inline.component';
 import { ModalService } from '../../../../shared/layout/overlays/modal/modal.service';
-import { filter } from 'rxjs';
 import { NgClass } from '@angular/common';
 
 @Component({
@@ -38,12 +35,11 @@ export class ModalExportShoppingCategoryItemsComponent {
   existingItems =
     input.required<{ id: string; name: string; selected: boolean }[]>();
 
-  // Initialise with items that are already selected
-  readonly selectedItemsTest = linkedSignal<string[]>(() =>
-    this.existingItems()
+  readonly itemsAlreadyDisplayedOnPage = linkedSignal<string[]>(() => {
+    return this.existingItems()
       .filter((item) => item.selected)
-      .map((item) => item.name),
-  );
+      .map((item) => item.name);
+  });
 
   readonly selectedItems = signal<string[]>([]);
 

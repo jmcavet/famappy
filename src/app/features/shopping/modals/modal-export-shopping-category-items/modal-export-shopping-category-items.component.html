@@ -12,9 +12,11 @@
           <button
             class="category-item inset-inline-sm surface-2 surface-interactive"
             [class.active]="selectedItems().includes(item.name)"
-            [disabled]="selectedItemsTest().includes(item.name)"
+            [disabled]="itemsAlreadyDisplayedOnPage().includes(item.name)"
             [ngClass]="
-              selectedItemsTest().includes(item.name) ? 'btn--disabled' : ''
+              itemsAlreadyDisplayedOnPage().includes(item.name)
+                ? 'btn--disabled'
+                : ''
             "
             (click)="toggleCategoryItem(item.name)"
           >
