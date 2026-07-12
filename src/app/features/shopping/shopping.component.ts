@@ -13,6 +13,7 @@ import { GridComponent } from '../../shared/layout/primitives/grid.component';
 import { ChipComponent } from '../../shared/ui/chip/chip.component';
 import { SegmentedControlComponent } from '../../shared/ui/segmented-control/segmented-control.component';
 import { SelectTestComponent } from '../../shared/ui/select-test/select.component';
+import { TagComponent } from '../../shared/ui/tag/tag.component';
 
 @Component({
   selector: 'app-shopping',
@@ -27,7 +28,7 @@ import { SelectTestComponent } from '../../shared/ui/select-test/select.componen
     SegmentedControlComponent,
     ButtonComponent,
     ChipComponent,
-    SelectComponent,
+    TagComponent,
     SelectTestComponent,
     LoadingComponent,
   ],
@@ -40,8 +41,9 @@ export class ShoppingComponent {
   dataIsLoading = this.shoppingFacade.dataIsLoading;
 
   readonly shoppingLists = this.shoppingFacade.shoppingLists;
-  readonly shoppingListsTest = this.shoppingFacade.shoppingListsTest;
-  readonly shoppingListsSorted = this.shoppingFacade.shoppingListsSorted;
+
+  readonly getShoppingCategoryById = (categoryId: string | null) =>
+    this.shoppingFacade.getShoppingCategoryById(categoryId);
 
   readonly shoppingListsNames = this.shoppingFacade.shoppingListsNames;
   readonly shoppingListNameSelected =

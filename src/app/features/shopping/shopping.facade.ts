@@ -15,20 +15,22 @@ import { ShoppingCategoryItemsDomainFacade } from '../../domain-facades/shopping
 export class ShoppingFacade {
   constructor() {
     effect(() => {
-      // Save the first available shopping list as the one selected
-      this.shoppingService.saveShoppingListSelection(
-        this.shoppingListsNames()[0],
-      );
+      // Save the first available shopping list as the one selected (if not yet saved in state)
+      if (!this.shoppingListNameSelected()) {
+        this.shoppingService.saveShoppingListSelection(
+          this.shoppingListsNames()[0],
+        );
+      }
 
       // Save the first method ('Quick entry') as the one selected
-      this.shoppingService.saveMethodSelection(this.methods[0]);
+      if (!this.methodSelected())
+        this.shoppingService.saveMethodSelection(this.methods[0]);
 
-      this.shoppingService.saveShoppingCategorySelection(
-        this.shoppingCategoriesNames()[0],
-      );
-      // // Select the first available ingredient category
-      // const { id, name } = this.ingredientCategoriesSorted()[0];
-      // this.ingredientCategorySelected.set({ id, name });
+      if (!this.shoppingCategoryNameSelected()) {
+        this.shoppingService.saveShoppingCategorySelection(
+          this.shoppingCategoriesNames()[0],
+        );
+      }
     });
   }
 
@@ -59,6 +61,7 @@ export class ShoppingFacade {
   public ingredientCategorySelected = signal<IngredientType | undefined>(
     undefined,
   );
+  public shoppingCategoryItemsSelected = signal<string[]>([]);
 
   /* ════════════════════════════════
    * Domain Data Access (proxies)
@@ -88,29 +91,29 @@ export class ShoppingFacade {
     return this.shoppingLists().map((list) => list.name);
   });
 
-  readonly shoppingListsTest = computed(() => {
-    const shoppingList = this.shoppingLists().map((shoppingList) => {
-      const titi = shoppingList.ingredients.map((ing) => {
-        const ingredientSearched = this.ingredients().find(
-          (ingr) => ingr.id === ing.id,
-        );
-        const ingredientName = ingredientSearched?.name;
-        return {
-          name: ingredientName,
-          measure: ing.measure,
-          unit: ingredientSearched?.unit,
-        };
-      });
+  // readonly shoppingListsTest = computed(() => {
+  //   const shoppingList = this.shoppingLists().map((shoppingList) => {
+  //     const titi = shoppingList.ingredients.map((ing) => {
+  //       const ingredientSearched = this.ingredients().find(
+  //         (ingr) => ingr.id === ing.id,
+  //       );
+  //       const ingredientName = ingredientSearched?.name;
+  //       return {
+  //         name: ingredientName,
+  //         measure: ing.measure,
+  //         unit: ingredientSearched?.unit,
+  //       };
+  //     });
 
-      return {
-        id: shoppingList.id,
-        name: shoppingList.name,
-        ingredients: titi,
-      };
-    });
+  //     return {
+  //       id: shoppingList.id,
+  //       name: shoppingList.name,
+  //       ingredients: titi,
+  //     };
+  //   });
 
-    return shoppingList;
-  });
+  //   return shoppingList;
+  // });
 
   readonly ingredientCategoriesSorted = computed(() => {
     const availableIngredientCategories = this.ingredientCategories().filter(
@@ -132,73 +135,74 @@ export class ShoppingFacade {
     return [...new Set(availableIngredientCategoryIds)];
   });
 
-  // readonly shoppingListIngredients = computed(() => {
-  //   const ingredients = this.shoppingListSelected()?.ingredients;
-
-  //   console.log('ingredients: ', ingredients);
-  //   const selectedIngredients = this.ingredients().filter((ing) =>
-  //     ingredients?.map((ingr) => ingr.id).includes(ing.id),
-  //   );
-
-  //   console.log(
-  //     'AAAAA: shoppingCategoryItemsSelected: ',
-  //     this.shoppingCategoryItemsSelected(),
-  //   );
-
-  //   console.log(
-  //     'ZZZZ: ',
-  //     selectedIngredients.filter((ing) =>
-  //       this.ingredientCategorySelected()
-  //         ? ing.categoryId === this.ingredientCategorySelected()?.id
-  //         : ing,
-  //     ),
-  //   );
-
-  //   return selectedIngredients.filter((ing) =>
-  //     this.ingredientCategorySelected()
-  //       ? ing.categoryId === this.ingredientCategorySelected()?.id
-  //       : ing,
-  //   );
-  // });
+  readonly shoppingListSelected = computed(() => {
+    return this.shoppingLists().find(
+      (list) => list.name === this.shoppingListNameSelected(),
+    );
+  });
 
   readonly shoppingListIngredients = computed(() => {
+    // Shopping ingredients
     const ingredients = this.shoppingListSelected()?.ingredients;
 
     const selectedIngredients = this.ingredients().filter((ing) =>
       ingredients?.map((ingr) => ingr.id).includes(ing.id),
     );
 
-    const gege = selectedIngredients.filter((ing) =>
+    const ingredientsPerCategorySelected = selectedIngredients.filter((ing) =>
       this.ingredientCategorySelected()
         ? ing.categoryId === this.ingredientCategorySelected()?.id
         : ing,
     );
 
-    const fromObjects = gege.map((ing) => ({
-      id: ing.id,
+    const ingredientsIdName = ingredientsPerCategorySelected.map((ing) => ({
+      ingredientId: ing.id,
+      itemId: null,
+      shoppingCategoryId: null,
       name: ing.name,
     }));
 
-    console.log('fromObjects: ', fromObjects);
-
+    // Shopping category items
     const itemsIds = this.shoppingListSelected()?.items ?? [];
 
     const items = this.shoppingCategoryItems().filter((item) =>
       itemsIds.includes(item.id),
     );
-    const fromStrings = items.map((item) => ({
-      id: null,
+    const itemsIdName = items.map((item) => ({
+      ingredientId: null,
+      itemId: item.id,
+      shoppingCategoryId: item.shoppingCategoryId,
       name: item.name,
     }));
 
-    console.log('fromStrings: ', fromStrings);
+    console.log('AAA: [...ingredientsIdName, ...itemsIdName]: ', [
+      ...ingredientsIdName,
+      ...itemsIdName,
+    ]);
 
-    return [...fromObjects, ...fromStrings];
+    return [...ingredientsIdName, ...itemsIdName];
   });
 
   readonly shoppingCategoriesNames = computed(() => {
     return this.shoppingCategories().map((list) => list.name);
   });
+
+  readonly itemsPerSelectedCategory = computed(() => {
+    const shoppingCategory = this.shoppingCategories().find(
+      (cat) => cat.name === this.shoppingCategoryNameSelected(),
+    );
+    const shoppingCategoryId = shoppingCategory?.id;
+
+    const shoppingCategoryItems = this.shoppingCategoryItems().filter(
+      (item) => item.shoppingCategoryId === shoppingCategoryId,
+    );
+
+    return shoppingCategoryItems;
+  });
+
+  readonly itemsNamesPerSelectedCategory = computed(() =>
+    this.itemsPerSelectedCategory().map((item) => item.name),
+  );
 
   /* ════════════════════════════════
    * State Projections (expose internal state)
@@ -207,19 +211,13 @@ export class ShoppingFacade {
     return this.shoppingService.state().shoppingListNameSelected;
   });
 
-  readonly shoppingListSelected = computed(() => {
-    return this.shoppingLists().find(
-      (list) => list.name === this.shoppingListNameSelected(),
-    );
+  readonly shoppingCategoryNameSelected = computed(() => {
+    return this.shoppingService.state().shoppingCategoryNameSelected;
   });
 
   public methodSelected = computed(
     () => this.shoppingService.state().methodSelected,
   );
-
-  readonly shoppingCategoryNameSelected = computed(() => {
-    return this.shoppingService.state().shoppingCategoryNameSelected;
-  });
 
   /* ════════════════════════════════
    * View Model (UI logic / presentation state)
@@ -232,17 +230,6 @@ export class ShoppingFacade {
     );
   });
 
-  readonly shoppingListsSorted = computed(() => {
-    const sorted = this.shoppingListsTest().map((shoppingList) => ({
-      ...shoppingList,
-      ingredients: [...shoppingList.ingredients].sort((a, b) =>
-        (a.name ?? '').localeCompare(b.name ?? ''),
-      ),
-    }));
-
-    return sorted;
-  });
-
   /* ════════════════════════════════
    * Public API (UI actions)
    * ════════════════════════════════ */
@@ -250,6 +237,10 @@ export class ShoppingFacade {
 
   public toggleMethod(method: string) {
     this.shoppingService.saveMethodSelection(method);
+  }
+
+  public getShoppingCategoryById(categoryId: string | null) {
+    return this.shoppingCategories().find((cat) => cat.id === categoryId);
   }
 
   public openAddShoppingListInputModal(event: MouseEvent) {
@@ -294,33 +285,10 @@ export class ShoppingFacade {
     );
   }
 
-  itemsPerSelectedCategory = computed(() => {
-    const shoppingCategory = this.shoppingCategories().find(
-      (cat) => cat.name === this.shoppingCategoryNameSelected(),
-    );
-    const shoppingCategoryId = shoppingCategory?.id;
-
-    const shoppingCategoryItems = this.shoppingCategoryItems().filter(
-      (item) => item.shoppingCategoryId === shoppingCategoryId,
-    );
-
-    return shoppingCategoryItems;
-  });
-
-  itemsNamesPerSelectedCategory = computed(() =>
-    this.itemsPerSelectedCategory().map((item) => item.name),
-  );
-
   public openExportShoppingCategoryItemsModal(event: MouseEvent) {
     event.stopPropagation();
 
     const itemsIdsDisplayedOnPage = this.shoppingListSelected()?.items;
-
-    const titi = this.itemsPerSelectedCategory().filter((item) => {
-      return itemsIdsDisplayedOnPage?.includes(item.id);
-    });
-
-    console.log('titi: ', titi);
 
     const existingItems = this.itemsPerSelectedCategory().map((item) => {
       return {
@@ -340,7 +308,7 @@ export class ShoppingFacade {
       {
         onConfirm: ({ items }) => {
           (async () => {
-            await this.exportShoppingcategoryItems(items);
+            await this.exportShoppingCategoryItems(items);
           })();
         },
       },
@@ -354,10 +322,6 @@ export class ShoppingFacade {
     this.ingredientCategorySelected.set(
       atLeastOneUnitSelected ? undefined : ingredientTypeElement,
     );
-
-    // this.shoppingService.setSelectedIngredientCategory(
-    //   this.ingredientCategorySelected(),
-    // );
   }
 
   public updateShoppingListSelection(shoppingListName: string | null) {
@@ -422,14 +386,10 @@ export class ShoppingFacade {
     this.shoppingService.saveShoppingCategorySelection(name);
   }
 
-  shoppingCategoryItemsSelected = signal<string[]>([]);
-
-  private async exportShoppingcategoryItems(itemsNames: string[]) {
+  private async exportShoppingCategoryItems(itemsNames: string[]) {
     const shoppingListIdSelected = this.shoppingLists().find(
       (list) => list.name === this.shoppingListNameSelected(),
     );
-
-    const mustPreserveState = signal<boolean>(false);
 
     if (!shoppingListIdSelected?.id) return;
 
@@ -454,12 +414,12 @@ export class ShoppingFacade {
       ...shoppingCategoryItemsIdsSelected,
     ];
 
+    const mustPreserveState = signal<boolean>(false);
+
     this.shoppingListDomainFacade.updateShoppingListCategories(
       shoppingListIdSelected?.id,
       currentItemsIdsUpdated,
       mustPreserveState,
     );
-
-    // this.shoppingCategoryItemsSelected.set(items);
   }
 }

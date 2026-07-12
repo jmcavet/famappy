@@ -115,17 +115,25 @@
           <app-stack variant="section">
             <app-grid col1="max" col2="1" col3="max" gapX="md">
               @for (ing of shoppingListIngredients(); track $index) {
-                @if (ing.id) {
+                @if (ing.ingredientId) {
                   <div class="color-text-muted">
                     <app-inline gap="xs">
-                      <span>{{ ingredientMeasure(ing.id) }}</span>
-                      <span>{{ ingredientUnit(ing.id) }}</span>
+                      <span>{{ ingredientMeasure(ing.ingredientId) }}</span>
+                      <span>{{ ingredientUnit(ing.ingredientId) }}</span>
                     </app-inline>
                   </div>
-                  <span>{{ ingredientName(ing.id) }}</span>
+                  <span>{{ ingredientName(ing.ingredientId) }}</span>
                 } @else {
                   <span></span>
-                  <span>{{ ing.name }}</span>
+                  <app-inline>
+                    <span>{{ ing.name }}</span>
+                    <app-tag size="xs" variant="outline" color="neutral">{{
+                      getShoppingCategoryById(ing.shoppingCategoryId)?.name
+                    }}</app-tag>
+                    <!-- <span class="color-text-muted text-sm">{{
+                      getShoppingCategoryById(ing.shoppingCategoryId)?.name
+                    }}</span> -->
+                  </app-inline>
                 }
                 <app-button variant="ghost" size="sm" color="danger"
                   ><i class="fa-regular fa-trash-can text-xl"></i
