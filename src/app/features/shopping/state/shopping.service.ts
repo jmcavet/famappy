@@ -1,6 +1,6 @@
 import { Injectable, signal } from '@angular/core';
-import { RecipeCategoryDocInBackend } from '../../../models/cuisine.model';
-import { ShoppingState } from './shopping.model';
+import { ShoppingState } from '../../meals/state/shopping.model';
+import { IngredientType } from '../../../models/ingredient-type.model';
 
 @Injectable({
   providedIn: 'root',
@@ -47,6 +47,18 @@ export class ShoppingStateService {
         ],
       };
     });
+  }
+
+  saveShoppingListSelection(shoppingListName: string) {
+    this.updateProperty('shoppingListNameSelected', shoppingListName);
+  }
+
+  saveMethodSelection(method: string) {
+    this.updateProperty('methodSelected', method);
+  }
+
+  saveShoppingCategorySelection(listName: string) {
+    this.updateProperty('shoppingCategoryNameSelected', listName);
   }
 
   /**

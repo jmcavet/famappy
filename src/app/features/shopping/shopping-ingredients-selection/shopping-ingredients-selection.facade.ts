@@ -67,11 +67,13 @@ export class ShoppingIngredientsSelectionFacade {
       const ingredients = this.allIngredientsFiltered();
 
       if (ingredients.length > 0 && this.measures().length === 0) {
+        console.log('ingredients: ', ingredients);
         const measures = ingredients.map((ing) => ({
           id: ing.id,
           measure: ing.measure,
         }));
 
+        console.log('INIT OF MEASURES: ', measures);
         this.shoppingService.initialiseMeasures(measures);
 
         this.initialMeasures.set(measures);
@@ -266,6 +268,7 @@ export class ShoppingIngredientsSelectionFacade {
    * Public API (UI actions)
    * ════════════════════════════════ */
   changeMeasure(ingredientId: string, value: 'decr' | 'incr') {
+    console.log('CURRENT MEASURES: ', this.measures());
     const currMeasure =
       this.measures().find((m) => m.id === ingredientId)?.measure ?? 0;
 
@@ -344,6 +347,10 @@ export class ShoppingIngredientsSelectionFacade {
 
     return fromDb;
   };
+
+  logMessageTest() {
+    console.log('this.shoppingService.state(): ', this.shoppingService.state());
+  }
 
   /* ════════════════════════════════
    * Private Helpers

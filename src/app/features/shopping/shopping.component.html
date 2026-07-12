@@ -1,1 +1,141 @@
-<p>shopping works!</p>
+@if (dataIsLoading()) {
+  <app-stack align="center">
+    <app-loading />
+  </app-stack>
+} @else {
+  <div class="layout-stack h-dvh">
+    <app-header-shell
+      ><app-section inset="lg">
+        <app-stack variant="section">
+          <app-grid col1="max" col2="1" col3="max" gapX="sm" gapY="md">
+            <app-button
+              shape="pill"
+              variant="ghost"
+              (clicked)="openAddShoppingListInputModal($event)"
+              ><div class="h-6 w-6">
+                <i class="fa-solid fa-plus fa-xl"></i></div
+            ></app-button>
+            <div class="w-full">
+              <app-select-test
+                [options]="shoppingListsNames()"
+                [value]="shoppingListNameSelected()"
+                (valueChange)="updateShoppingListSelection($event)"
+              ></app-select-test>
+            </div>
+            <app-button variant="outline" size="sm"
+              ><div class="h-6 w-6">
+                <i class="fa-solid fa-pen-to-square fa-lg"></i></div
+            ></app-button>
+          </app-grid>
+
+          <app-segmented-control
+            [fullWidth]="true"
+            size="sm"
+            [options]="this.methods"
+            [selectedInput]="methodSelected()"
+            (selectionChange)="toggleMethod($event)"
+          >
+          </app-segmented-control>
+
+          @if (methodSelected() === this.methods[0]) {
+            <app-grid col1="1" col2="max" gapX="md" gapY="md">
+              <div class="w-full">
+                <input
+                  type="text"
+                  id="itemDescription"
+                  name="itemDescription"
+                  required
+                  placeholder="Provide an item"
+                  autocomplete="off"
+                  [value]="itemDescription()"
+                  (input)="itemDescription.set($any($event.target).value)"
+                  class="inset-x-md surface-2"
+                />
+              </div>
+              <app-button shape="pill" color="secondary"
+                ><div class="h-6 w-6">
+                  <i class="fa-solid fa-plus fa-lg"></i></div
+              ></app-button>
+            </app-grid>
+          }
+          @if (methodSelected() === this.methods[1]) {}
+          @if (methodSelected() === this.methods[2]) {
+            <app-grid col1="max" col2="1" col3="max" gapX="sm" gapY="md">
+              <app-button
+                shape="pill"
+                color="secondary"
+                variant="ghost"
+                (clicked)="openAddShoppingCategoryInputModal($event)"
+                ><div class="h-6 w-6">
+                  <i class="fa-solid fa-plus fa-xl"></i></div
+              ></app-button>
+              <div class="w-full">
+                <app-select-test
+                  [options]="shoppingCategoriesNames()"
+                  [value]="shoppingCategoryNameSelected()"
+                  (valueChange)="updateShoppingCategoryNameSelection($event)"
+                ></app-select-test>
+              </div>
+              <app-inline gap="sm">
+                <app-button variant="outline" color="secondary" size="sm"
+                  ><div class="h-6 w-6">
+                    <i class="fa-solid fa-pen-to-square fa-lg"></i></div
+                ></app-button>
+
+                <app-button
+                  color="secondary"
+                  size="sm"
+                  (clicked)="openExportShoppingCategoryItemsModal($event)"
+                  ><div class="h-6 w-6">
+                    <i class="fa-solid fa-database fa-lg"></i></div
+                ></app-button>
+              </app-inline>
+            </app-grid>
+          }
+        </app-stack> </app-section
+    ></app-header-shell>
+    <app-page-layout maxSize="lg">
+      <app-section inset="lg">
+        <app-stack variant="section">
+          <app-inline gap="sm" [wrap]="true">
+            @for (cat of ingredientCategoriesSorted(); track $index) {
+              <app-chip
+                [selected]="ingredientCategorySelected()?.name === cat.name"
+                (toggle)="
+                  selectIngredientType(
+                    cat,
+                    ingredientCategorySelected()?.name === cat.name
+                  )
+                "
+                >{{ cat.name }}</app-chip
+              >
+            }
+          </app-inline>
+
+          <app-stack variant="section">
+            <app-grid col1="max" col2="1" col3="max" gapX="md">
+              @for (ing of shoppingListIngredients(); track $index) {
+                @if (ing.id) {
+                  <div class="color-text-muted">
+                    <app-inline gap="xs">
+                      <span>{{ ingredientMeasure(ing.id) }}</span>
+                      <span>{{ ingredientUnit(ing.id) }}</span>
+                    </app-inline>
+                  </div>
+                  <span>{{ ingredientName(ing.id) }}</span>
+                } @else {
+                  <span></span>
+                  <span>{{ ing.name }}</span>
+                }
+                <app-button variant="ghost" size="sm" color="danger"
+                  ><i class="fa-regular fa-trash-can text-xl"></i
+                ></app-button>
+              }
+            </app-grid>
+          </app-stack>
+        </app-stack>
+      </app-section>
+    </app-page-layout>
+    <app-footer />
+  </div>
+}

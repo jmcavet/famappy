@@ -1,0 +1,82 @@
+<app-section [surface]="3">
+  <app-stack variant="page">
+    <h2 class="text-title text-center">{{ title() }}</h2>
+
+    <app-stack variant="section">
+      <app-stack>
+        <span class="field-label">Add category</span>
+        <input
+          type="text"
+          id="name"
+          name="name"
+          required
+          placeholder="Name"
+          class="inset-x-md surface-1"
+          autocomplete="off"
+          [(ngModel)]="category"
+          (ngModelChange)="onCategoryChange($event)"
+        />
+        @if (invalidMessage) {
+          <span class="invalid">{{ invalidMessage }}</span>
+        }
+      </app-stack>
+
+      <app-stack>
+        <span class="field-label">Add item</span>
+        <app-grid col1="1" col2="max" gapX="sm" gapY="md">
+          <input
+            type="text"
+            id="name"
+            name="name"
+            placeholder="Item"
+            class="inset-x-md surface-1"
+            autocomplete="off"
+            [(ngModel)]="itemInput"
+            (ngModelChange)="onCategoryChange($event)"
+            (keydown.enter)="itemInput().length > 0 ? addItem() : null"
+          />
+          <app-button
+            variant="ghost"
+            (clicked)="addItem()"
+            [disabled]="itemInput().length === 0"
+            ><div class="h-6 w-6">
+              <i class="fa-solid fa-plus fa-xl"></i></div
+          ></app-button>
+        </app-grid>
+
+        @for (item of items(); track $index) {
+          <app-row>
+            <span>{{ item }}</span>
+            <app-inline>
+              <app-button variant="ghost" size="sm"
+                ><i class="fa-regular fa-pen-to-square text-xl"></i
+              ></app-button>
+
+              <app-button variant="ghost" size="sm" color="danger"
+                ><i class="fa-regular fa-trash-can text-xl"></i
+              ></app-button>
+            </app-inline>
+          </app-row>
+        }
+      </app-stack>
+    </app-stack>
+
+    <app-row>
+      <app-button
+        variant="outline"
+        color="neutral"
+        size="md"
+        (clicked)="onCancel()"
+        >Cancel</app-button
+      >
+
+      <app-button
+        [color]="btnConfirmColor()"
+        size="md"
+        (clicked)="onConfirm()"
+        [disabled]="invalidMessage !== undefined || category().length === 0"
+        >{{ btnConfirmText() }}</app-button
+      >
+    </app-row>
+  </app-stack>
+</app-section>

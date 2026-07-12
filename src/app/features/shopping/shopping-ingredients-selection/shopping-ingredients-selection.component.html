@@ -87,9 +87,9 @@
         </app-button>
         <app-button
           [fullWidth]="true"
-          routerLink="/shopping/ingredients-selection"
+          routerLink="/shopping/shopping-list-definition"
+          (clicked)="logMessageTest()"
           [disabled]="nbMeasuresToExport() === 0"
-          routerLink="/shopping/ingredients-selection"
         >
           Export {{ nbMeasuresToExport() }} ingredients
         </app-button>
