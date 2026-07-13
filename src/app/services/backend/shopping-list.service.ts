@@ -9,6 +9,7 @@ import { FirebaseService } from './firebase.service';
 import { FirestoreService } from './generic.service';
 import { AuthService } from './auth.service';
 import { ShoppingListDocInBackend } from '../../models/shopping-list.model';
+import { ShoppingListElement } from '../../features/shopping/shopping.facade';
 
 @Injectable({ providedIn: 'root' })
 export class ShoppingListBackendService {
@@ -156,4 +157,32 @@ export class ShoppingListBackendService {
   //     console.error('Error deleting ingredient: ', error);
   //   }
   // }
+
+  /**
+   * Delete an shopping list ingredient/item from the store. It removes it either from the 'ingredients' or 'items' array of ids.
+   *
+   * @param itemIdToDelete - The id of the ingredient/item to delete
+   */
+  async deleteShoppingListElementfromStore(
+    shoppingListId: string,
+    elementType: string,
+    elementToRemove: string | { id: string | null; measure: number | null },
+  ) {
+    this._deleting.set(true);
+
+    try {
+      await this.firestoreService.removeItemFromArrayProperty(
+        'shopping-lists',
+        shoppingListId,
+        elementType,
+        elementToRemove,
+        () => {
+          // This callback runs once Firestore returns
+          this._deleting.set(false);
+        },
+      );
+    } catch (error) {
+      console.error('Error removing item from shopping list document: ', error);
+    }
+  }
 }

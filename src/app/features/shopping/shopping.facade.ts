@@ -11,6 +11,13 @@ import { ModalInputShoppingCategoryComponent } from './modal-input-shopping-cate
 import { ModalExportShoppingCategoryItemsComponent } from './modals/modal-export-shopping-category-items/modal-export-shopping-category-items.component';
 import { ShoppingCategoryItemsDomainFacade } from '../../domain-facades/shopping-category-items.facade';
 
+export interface ShoppingListElement {
+  ingredientId: string | null;
+  itemId: string | null;
+  shoppingCategoryId: string | null;
+  name: string;
+  measure: number | null;
+}
 @Injectable({ providedIn: 'root' })
 export class ShoppingFacade {
   constructor() {
@@ -91,30 +98,6 @@ export class ShoppingFacade {
     return this.shoppingLists().map((list) => list.name);
   });
 
-  // readonly shoppingListsTest = computed(() => {
-  //   const shoppingList = this.shoppingLists().map((shoppingList) => {
-  //     const titi = shoppingList.ingredients.map((ing) => {
-  //       const ingredientSearched = this.ingredients().find(
-  //         (ingr) => ingr.id === ing.id,
-  //       );
-  //       const ingredientName = ingredientSearched?.name;
-  //       return {
-  //         name: ingredientName,
-  //         measure: ing.measure,
-  //         unit: ingredientSearched?.unit,
-  //       };
-  //     });
-
-  //     return {
-  //       id: shoppingList.id,
-  //       name: shoppingList.name,
-  //       ingredients: titi,
-  //     };
-  //   });
-
-  //   return shoppingList;
-  // });
-
   readonly ingredientCategoriesSorted = computed(() => {
     const availableIngredientCategories = this.ingredientCategories().filter(
       (cat) => this.availableIngredientCategoryIds()?.includes(cat.id),
@@ -155,12 +138,14 @@ export class ShoppingFacade {
         : ing,
     );
 
-    const ingredientsIdName = ingredientsPerCategorySelected.map((ing) => ({
-      ingredientId: ing.id,
-      itemId: null,
-      shoppingCategoryId: null,
-      name: ing.name,
-    }));
+    const ingredientsIdName: ShoppingListElement[] =
+      ingredientsPerCategorySelected.map((ing) => ({
+        ingredientId: ing.id,
+        itemId: null,
+        shoppingCategoryId: null,
+        name: ing.name,
+        measure: this.getIngredientMeasure(ing.id) ?? 0,
+      }));
 
     // Shopping category items
     const itemsIds = this.shoppingListSelected()?.items ?? [];
@@ -173,13 +158,12 @@ export class ShoppingFacade {
       itemId: item.id,
       shoppingCategoryId: item.shoppingCategoryId,
       name: item.name,
+      measure: null,
     }));
-
-    console.log('AAA: [...ingredientsIdName, ...itemsIdName]: ', [
+    console.log('[...ingredientsIdName, ...itemsIdName]: ', [
       ...ingredientsIdName,
       ...itemsIdName,
     ]);
-
     return [...ingredientsIdName, ...itemsIdName];
   });
 
@@ -313,6 +297,23 @@ export class ShoppingFacade {
         },
       },
     );
+  }
+
+  public async deleteElement(element: ShoppingListElement) {
+    const { itemId, ingredientId, measure } = element;
+
+    const shoppingListId = this.shoppingListSelected()?.id;
+    const elementType = itemId ? 'items' : 'ingredients';
+
+    const _element = itemId ? itemId : { id: ingredientId, measure };
+
+    if (shoppingListId && element) {
+      this.shoppingListDomainFacade.deleteShoppingListElement(
+        shoppingListId,
+        elementType,
+        _element,
+      );
+    }
   }
 
   public selectIngredientType(

@@ -7,8 +7,7 @@ import { ButtonComponent } from '../../shared/ui/button/button.component';
 import { HeaderShellComponent } from '../../shared/layout/shell/header-shell.component';
 import { FooterComponent } from '../../shared/layout/shell/footer/footer.component';
 import { SectionComponent } from '../../shared/layout/primitives/section.component';
-import { SelectComponent } from '../../shared/ui/select/select.component';
-import { ShoppingFacade } from './shopping.facade';
+import { ShoppingFacade, ShoppingListElement } from './shopping.facade';
 import { GridComponent } from '../../shared/layout/primitives/grid.component';
 import { ChipComponent } from '../../shared/ui/chip/chip.component';
 import { SegmentedControlComponent } from '../../shared/ui/segmented-control/segmented-control.component';
@@ -79,6 +78,9 @@ export class ShoppingComponent {
 
   readonly ingredientCategoriesSorted =
     this.shoppingFacade.ingredientCategoriesSorted;
+
+  readonly deleteElement = (element: ShoppingListElement) =>
+    this.shoppingFacade.deleteElement(element);
 
   openAddShoppingListInputModal(event: MouseEvent) {
     this.shoppingFacade.openAddShoppingListInputModal(event);

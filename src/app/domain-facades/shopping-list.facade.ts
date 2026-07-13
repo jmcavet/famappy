@@ -7,6 +7,7 @@ import {
 } from '@angular/core';
 import { ShoppingListBackendService } from '../services/backend/shopping-list.service';
 import { ShoppingListDocInBackend } from '../models/shopping-list.model';
+import { ShoppingListElement } from '../features/shopping/shopping.facade';
 
 @Injectable({ providedIn: 'root' })
 export class ShoppingListDomainFacade {
@@ -44,4 +45,16 @@ export class ShoppingListDomainFacade {
   // deleteIngredient(ingredientId: string) {
   //   this.shoppingListBackendService.deleteIngredientfromStore(ingredientId);
   // }
+
+  deleteShoppingListElement(
+    shoppingListId: string,
+    elementType: string,
+    elementToRemove: string | { id: string | null; measure: number | null },
+  ) {
+    this.shoppingListBackendService.deleteShoppingListElementfromStore(
+      shoppingListId,
+      elementType,
+      elementToRemove,
+    );
+  }
 }

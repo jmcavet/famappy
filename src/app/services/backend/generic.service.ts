@@ -20,6 +20,7 @@ import {
   getDocs,
   getDoc,
   writeBatch,
+  arrayRemove,
 } from 'firebase/firestore';
 
 import { BehaviorSubject } from 'rxjs';
@@ -31,6 +32,7 @@ import {
 } from '../../features/recipes/components/recipe-card/recipe.model';
 import { deleteObject, ref } from 'firebase/storage';
 import { CloseScrollStrategy } from '@angular/cdk/overlay';
+import { ShoppingListElement } from '../../features/shopping/shopping.facade';
 
 @Injectable({
   providedIn: 'root',
@@ -256,6 +258,32 @@ export class FirestoreService {
       throw new Error(
         `Failed to delete document from collection ${collectionName}`,
       );
+    }
+  }
+
+  async removeItemFromArrayProperty(
+    collectionName: string,
+    documentId: string,
+    elementType: string,
+    elementToRemove: string | { id: string | null; measure: number | null },
+    onDataLoaded?: () => void,
+  ): Promise<void> {
+    try {
+      const user = this.authService.user();
+
+      if (!user?.uid) throw new Error('Not authenticated');
+
+      const docRef = doc(this.firebaseService.db, collectionName, documentId);
+
+      await updateDoc(docRef, {
+        [elementType]: arrayRemove(elementToRemove),
+        userId: user.uid,
+      });
+
+      // Notify once Firestore responds
+      if (onDataLoaded) onDataLoaded();
+    } catch (e) {
+      console.error('Error removing item from array:', e);
     }
   }
 

@@ -118,7 +118,7 @@
                 @if (ing.ingredientId) {
                   <div class="color-text-muted">
                     <app-inline gap="xs">
-                      <span>{{ ingredientMeasure(ing.ingredientId) }}</span>
+                      <span>{{ ing.measure }}</span>
                       <span>{{ ingredientUnit(ing.ingredientId) }}</span>
                     </app-inline>
                   </div>
@@ -130,12 +130,13 @@
                     <app-tag size="xs" variant="outline" color="neutral">{{
                       getShoppingCategoryById(ing.shoppingCategoryId)?.name
                     }}</app-tag>
-                    <!-- <span class="color-text-muted text-sm">{{
-                      getShoppingCategoryById(ing.shoppingCategoryId)?.name
-                    }}</span> -->
                   </app-inline>
                 }
-                <app-button variant="ghost" size="sm" color="danger"
+                <app-button
+                  variant="ghost"
+                  size="sm"
+                  color="danger"
+                  (clicked)="deleteElement(ing)"
                   ><i class="fa-regular fa-trash-can text-xl"></i
                 ></app-button>
               }
