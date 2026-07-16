@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, effect } from '@angular/core';
 import { StackComponent } from '../../shared/layout/primitives/stack.component';
 import { LoadingComponent } from '../../shared/layout/overlays/loading/loading.component';
 import { PageLayoutComponent } from '../../shared/layout/primitives/page-layout.component';
@@ -36,6 +36,15 @@ import { TagComponent } from '../../shared/ui/tag/tag.component';
 })
 export class ShoppingComponent {
   private shoppingFacade = inject(ShoppingFacade);
+
+  constructor() {
+    effect(() => {
+      console.log(
+        'shoppingListNameSelected in shopping:',
+        this.shoppingListNameSelected(),
+      );
+    });
+  }
 
   dataIsLoading = this.shoppingFacade.dataIsLoading;
 
@@ -88,6 +97,10 @@ export class ShoppingComponent {
 
   openAddShoppingCategoryInputModal(event: MouseEvent) {
     this.shoppingFacade.openAddShoppingCategoryInputModal(event);
+  }
+
+  openUpdateShoppingCategoryModal(event: MouseEvent) {
+    this.shoppingFacade.openUpdateShoppingCategoryModal(event);
   }
 
   openExportShoppingCategoryItemsModal(event: MouseEvent) {

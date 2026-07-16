@@ -77,6 +77,9 @@ export class ShoppingFacade {
   readonly shoppingLists = this.shoppingListDomainFacade.dbShoppingLists;
   readonly shoppingListsLoading =
     this.shoppingListDomainFacade.shoppingListsLoading;
+  readonly shoppingListsNames =
+    this.shoppingListDomainFacade.dbShoppingListsNames;
+
   readonly ingredients = this.ingredientDomainFacade.dbIngredients;
   readonly ingredientsLoading = this.ingredientDomainFacade.ingredientsLoading;
 
@@ -94,10 +97,6 @@ export class ShoppingFacade {
   /* ════════════════════════════════
    * Domain Projections (business logic)
    * ════════════════════════════════ */
-  readonly shoppingListsNames = computed(() => {
-    return this.shoppingLists().map((list) => list.name);
-  });
-
   readonly ingredientCategoriesSorted = computed(() => {
     const availableIngredientCategories = this.ingredientCategories().filter(
       (cat) => this.availableIngredientCategoryIds()?.includes(cat.id),
@@ -217,7 +216,7 @@ export class ShoppingFacade {
   /* ════════════════════════════════
    * Public API (UI actions)
    * ════════════════════════════════ */
-  methods = ['Quick entry', 'Ingredients', 'Other'];
+  methods = ['Quick entry', 'Ingredients', 'Categories'];
 
   public toggleMethod(method: string) {
     this.shoppingService.saveMethodSelection(method);
@@ -263,6 +262,39 @@ export class ShoppingFacade {
         onConfirm: ({ category, items }) => {
           (async () => {
             await this.addShoppingcategory(category, items);
+          })();
+        },
+      },
+    );
+  }
+
+  public openUpdateShoppingCategoryModal(event: MouseEvent) {
+    event.stopPropagation();
+
+    const itemsIdsDisplayedOnPage = this.shoppingListSelected()?.items;
+
+    const existingItems = this.itemsPerSelectedCategory().map((item) => {
+      return {
+        id: item.id,
+        name: item.name,
+        selected: itemsIdsDisplayedOnPage?.includes(item.id),
+      };
+    });
+
+    this.modalService.open(
+      // TODO: create a new modal for updating a shopping category
+      // ModalUpdateShoppingCategoryComponent,
+      ModalExportShoppingCategoryItemsComponent,
+      {
+        title: 'Update shopping category',
+        category: this.shoppingCategoryNameSelected(),
+        existingItems,
+      },
+      {
+        onConfirm: ({ items }) => {
+          (async () => {
+            // await this.exportShoppingCategoryItems(items);
+            console.log('CONFIRMING...');
           })();
         },
       },
