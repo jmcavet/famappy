@@ -1,9 +1,10 @@
-import { inject, Injectable, Signal, signal } from '@angular/core';
-import { Router } from '@angular/router';
+import { inject, Injectable, Signal } from '@angular/core';
 import { ToastService } from '../../../../services/toast.service';
 import { MealDomainFacade } from '../../../../domain-facades/meal.facade';
 import { ModalService } from '../../../../shared/layout/overlays/modal/modal.service';
 import { ManualEntryViewComponent } from '../manual-entry-view/manual-entry-view.component';
+import { ModalConfirmComponent } from '../../../../shared/layout/overlays/modal/modal-confirm/modal-confirm.component';
+import { MealWithId } from '../../state/mealCart.model';
 
 /** This UI facade may inject domain facades. However, domain facades must NEVER inject UI facades!! */
 @Injectable({ providedIn: 'root' })
@@ -11,8 +12,7 @@ export class MealManualRecipeItemFacade {
   /* ================================
    * Dependencies (injected)
    * ================================ */
-  private router = inject(Router);
-  private toast = inject(ToastService);
+  private toastService = inject(ToastService);
 
   /** Domain access (business state & actions) */
   private mealDomainFacade = inject(MealDomainFacade);
@@ -28,8 +28,8 @@ export class MealManualRecipeItemFacade {
   /* ================================
    * Component inputs (UI context)
    * ================================ */
-  private _meal!: Signal<any>;
-  private _modalService!: ModalService;
+  private _meal!: Signal<MealWithId>;
+  private modalService!: ModalService;
 
   /* ================================
    * Domain-derived state
@@ -37,9 +37,9 @@ export class MealManualRecipeItemFacade {
   // Here: none! Could be dbMeals or dbRecipes signals for instance
 
   /** Called by the component */
-  connect(meal: Signal<any>, modalService: ModalService) {
+  connect(meal: Signal<MealWithId>, modalService: ModalService) {
     this._meal = meal;
-    this._modalService = modalService;
+    this.modalService = modalService;
   }
 
   /* ================================
@@ -52,28 +52,59 @@ export class MealManualRecipeItemFacade {
 
   /** Public UI methods */
   public viewMeal() {
-    const { name, ingredients, instructions } = this._meal().manualRecipe;
-    this._modalService.open(ManualEntryViewComponent, {
-      name,
-      ingredients,
-      instructions,
-    });
+    const meal = this._meal();
+
+    if (meal.manualRecipe) {
+      const { name, ingredients, instructions } = meal.manualRecipe;
+
+      this.modalService.open(ManualEntryViewComponent, {
+        name,
+        ingredients,
+        instructions,
+      });
+    }
   }
 
   onConfirm() {
-    this._modalService.confirm();
+    this.modalService.confirm();
   }
 
-  public async removeManualMealFromStore() {
-    const mealId = this._meal().id;
+  public openDeleteModal(event: MouseEvent) {
+    event.stopPropagation();
+
+    this.modalService.open(
+      ModalConfirmComponent,
+      {
+        title: 'Delete confirmation',
+        message: 'Do you really want to remove this meal ?',
+        btnConfirmText: 'Delete',
+        btnConfirmColor: 'danger',
+      },
+      {
+        onConfirm: () => {
+          // this.removeMealFromSummary();
+          this.removeManualMealFromStore();
+        },
+        onCancel: () => console.log('Cancel: exit modal...'), // OPTIONAL
+      },
+    );
+  }
+
+  private async removeManualMealFromStore() {
+    const meal = this._meal();
+
+    const mealId = meal.id;
     try {
       await this.mealDomainFacade.deleteMealById(mealId);
-      this.toast.show('Meal removed from database', 'success');
+      this.toastService.show('Manual meal removed from database', 'success');
     } catch (error) {
-      this.toast.show('Meal could not be removed from database', 'error');
+      this.toastService.show(
+        'Manual meal could not be removed from database',
+        'error',
+      );
     } finally {
       console.log('FINALLY remove manual meal from store');
-      this._modalService.cancel();
+      this.modalService.cancel();
     }
   }
 }

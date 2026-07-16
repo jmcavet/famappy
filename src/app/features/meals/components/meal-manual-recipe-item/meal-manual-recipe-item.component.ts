@@ -8,7 +8,7 @@ import { RowComponent } from '../../../../shared/layout/primitives/row.component
 
 @Component({
   selector: 'app-meal-manual-recipe-item',
-  imports: [ButtonComponent, RowComponent, InlineComponent],
+  imports: [ButtonComponent],
   templateUrl: './meal-manual-recipe-item.component.html',
   styleUrl: './meal-manual-recipe-item.component.css',
   providers: [MealManualRecipeItemFacade],
@@ -34,21 +34,7 @@ export class MealManualRecipeItemComponent {
     this.facade.viewMeal();
   }
 
-  openDeleteModal() {
-    this.modalService.open(
-      ModalConfirmComponent,
-      {
-        title: 'Delete confirmation',
-        message: 'Do you really want to remove this meal ?',
-        btnConfirmText: 'Delete',
-        btnConfirmColor: 'danger',
-      },
-      {
-        // onConfirm: () => this.facade.removeManualMealFromStore(),
-        onConfirm: () => console.log('onConfirm triggered'),
-        onClose: () => console.log('onClose tiggered'),
-        // onCancel: () => console.log('onCancel triggered'),
-      },
-    );
+  onRemoveManualMeal(event: MouseEvent) {
+    this.facade.openDeleteModal(event);
   }
 }
