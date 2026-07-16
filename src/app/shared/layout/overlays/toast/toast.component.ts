@@ -7,18 +7,7 @@ import { Component, Input, OnInit } from '@angular/core';
   templateUrl: './toast.component.html',
   styleUrl: './toast.component.css',
 })
-export class ToastComponent implements OnInit {
+export class ToastComponent {
   @Input() message: string = '';
   @Input() type: 'success' | 'error' | 'warning' | 'info' = 'info';
-
-  ngOnInit(): void {
-    setTimeout(() => {
-      this.dismiss();
-    }, 3000); // Auto-dismiss after 3s
-  }
-
-  dismiss() {
-    const element = document.getElementById(this.message);
-    element?.remove();
-  }
 }
