@@ -1,4 +1,4 @@
-import { Component, HostBinding, input, output } from '@angular/core';
+import { Component, effect, HostBinding, input, output } from '@angular/core';
 
 type SelectColor = 'primary' | 'secondary' | 'neutral';
 

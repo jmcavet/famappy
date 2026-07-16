@@ -4,9 +4,9 @@
       {{ label() }}
     </label>
   }
-  <select [class]="classesSelect" [value]="value()" (change)="onChange($event)">
+  <select [class]="classesSelect" (change)="onChange($event)">
     @for (option of options(); track $index) {
-      <option [value]="option">
+      <option [value]="option" [selected]="option === value()">
         {{ option }}
       </option>
     }
