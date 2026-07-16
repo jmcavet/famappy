@@ -44,3 +44,17 @@ export function getWeekDays() {
 
   return weekDays;
 }
+
+export function currentDate() {
+  const today = new Date();
+
+  const d = new Date(today);
+  d.setDate(today.getDate());
+
+  const dayName = dayNames[d.getDay()];
+  const dayOfMonth = d.getDate();
+  const monthName = months[d.getMonth()];
+  const year = d.getFullYear();
+
+  return dayName + '-' + dayOfMonth + '-' + monthName;
+}
