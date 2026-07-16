@@ -106,12 +106,10 @@ export class MealRecipeItemFacade {
 
   public removeMealFromSummary() {
     const currentRecipeId = this._ctx.recipe().recipe.id;
-    console.log('currentRecipeId: ', currentRecipeId);
 
     const recipeSelected =
       this.recipeDomainFacade.getRecipeById(currentRecipeId);
 
-    console.log('recipeSelected: ', recipeSelected);
     if (!recipeSelected) return;
 
     this.addRecipesToCart([recipeSelected]);
