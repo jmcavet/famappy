@@ -19,7 +19,7 @@
             </div>
             <app-button variant="ghost" size="sm"
               ><div class="h-6 w-6">
-                <i class="fa-solid fa-pen-to-square fa-lg"></i></div
+                <i class="fa-solid fa-pen-to-square fa-xl"></i></div
             ></app-button>
           </app-grid>
 
@@ -93,6 +93,7 @@
           }
         </app-stack> </app-section
     ></app-header-shell>
+
     <app-page-layout maxSize="lg">
       <app-section inset="lg">
         <app-stack variant="section">
@@ -111,7 +112,7 @@
             }
           </app-inline>
 
-          <app-stack variant="section">
+          <!-- <app-stack variant="section">
             <app-grid col1="max" col2="1" col3="max" gapX="md">
               @for (ing of shoppingListIngredients(); track $index) {
                 @if (ing.ingredientId) {
@@ -138,6 +139,44 @@
                   (clicked)="deleteElement(ing)"
                   ><i class="fa-regular fa-trash-can text-xl"></i
                 ></app-button>
+              }
+            </app-grid>
+          </app-stack> -->
+
+          <app-stack variant="section">
+            <app-grid col1="max" col2="1" col3="max" gapX="md">
+              @for (ing of shoppingListIngredients(); track $index) {
+                @if (ing.ingredientId) {
+                  <app-inline>
+                    <i class="fa-solid fa-carrot"></i>
+                    <span>{{ ingredientName(ing.ingredientId) }}</span>
+                  </app-inline>
+                  <div class="color-text-muted">
+                    <app-inline gap="xs">
+                      <span>{{ ing.measure }}</span>
+                      <span>{{ ingredientUnit(ing.ingredientId) }}</span>
+                    </app-inline>
+                  </div>
+                } @else {
+                  <app-inline>
+                    <i class="fa-solid fa-store"></i>
+                    <span>{{ ing.name }}</span>
+                  </app-inline>
+                  <span></span>
+                }
+                <app-inline>
+                  <app-button variant="ghost" size="sm"
+                    ><div class="h-6 w-6">
+                      <i class="fa-solid fa-pen-to-square fa-xl"></i></div
+                  ></app-button>
+                  <app-button
+                    variant="ghost"
+                    size="sm"
+                    color="danger"
+                    (clicked)="deleteElement(ing)"
+                    ><i class="fa-regular fa-trash-can text-xl"></i
+                  ></app-button>
+                </app-inline>
               }
             </app-grid>
           </app-stack>
