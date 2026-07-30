@@ -1,6 +1,13 @@
-import { computed, inject, Injectable, Signal } from '@angular/core';
+import {
+  computed,
+  inject,
+  Injectable,
+  Signal,
+  WritableSignal,
+} from '@angular/core';
 import { ShoppingCategoryItemDocInBackend } from '../models/shopping-category-item.model';
 import { ShoppingCategoryItemBackendService } from '../services/backend/shopping-category-item.service';
+import { ShoppingCategoryItem } from '../features/shopping/shopping.facade';
 
 @Injectable({ providedIn: 'root' })
 export class ShoppingCategoryItemsDomainFacade {
@@ -28,6 +35,22 @@ export class ShoppingCategoryItemsDomainFacade {
   saveShoppingCategoryItem(propertiesToSave: object) {
     this.shoppingCategoryItemsBackendService.saveShoppingCategoryItemIntoStore(
       propertiesToSave,
+    );
+  }
+
+  deleteShoppingCategoryItem(itemId: string) {
+    this.shoppingCategoryItemsBackendService.deleteShoppingCategoryItemfromStore(
+      itemId,
+    );
+  }
+
+  updateShoppingCategoryItems(
+    items: ShoppingCategoryItem[],
+    mustPreserveState: WritableSignal<boolean>,
+  ) {
+    this.shoppingCategoryItemsBackendService.updateShoppingCategoryItemsInStore(
+      items,
+      mustPreserveState,
     );
   }
 }

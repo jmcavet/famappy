@@ -10,6 +10,7 @@ import { ShoppingCategoryDomainFacade } from '../../domain-facades/shopping-cate
 import { ModalInputShoppingCategoryComponent } from './modal-input-shopping-category/modal-input-shopping-category.component';
 import { ModalExportShoppingCategoryItemsComponent } from './modals/modal-export-shopping-category-items/modal-export-shopping-category-items.component';
 import { ShoppingCategoryItemsDomainFacade } from '../../domain-facades/shopping-category-items.facade';
+import { ModalUpdateShoppingCategoryItemsComponent } from './modals/modal-update-shopping-category-items/modal-update-shopping-category-items.component';
 
 export interface ShoppingListElement {
   ingredientId: string | null;
@@ -17,6 +18,11 @@ export interface ShoppingListElement {
   shoppingCategoryId: string | null;
   name: string;
   measure: number | null;
+}
+
+export interface ShoppingCategoryItem {
+  id: string;
+  name: string;
 }
 @Injectable({ providedIn: 'root' })
 export class ShoppingFacade {
@@ -93,6 +99,8 @@ export class ShoppingFacade {
 
   readonly shoppingCategoryItems =
     this.shoppingCategoryItemsDomainFacade.dbShoppingCategoryItems;
+  readonly shoppingCategoryItemsLoading =
+    this.shoppingCategoryItemsDomainFacade.shoppingCategoryItemsLoading;
 
   /* ════════════════════════════════
    * Domain Projections (business logic)
@@ -187,11 +195,23 @@ export class ShoppingFacade {
     this.itemsPerSelectedCategory().map((item) => item.name),
   );
 
+  readonly shoppingCategoryItemsTEST = computed(() => {
+    return this.shoppingCategoryItems().filter(
+      (item) => item.shoppingCategoryId === this.shoppingCategoryIdSelected(),
+    );
+  });
+
   /* ════════════════════════════════
    * State Projections (expose internal state)
    * ════════════════════════════════ */
   readonly shoppingListNameSelected = computed(() => {
     return this.shoppingService.state().shoppingListNameSelected;
+  });
+
+  readonly shoppingCategoryIdSelected = computed(() => {
+    return this.shoppingCategories().find(
+      (cat) => cat.name === this.shoppingCategoryNameSelected(),
+    )?.id;
   });
 
   readonly shoppingCategoryNameSelected = computed(() => {
@@ -268,6 +288,39 @@ export class ShoppingFacade {
     );
   }
 
+  public openAddShoppingCategoryItemInputModal(event: MouseEvent) {
+    event.stopPropagation();
+    this.modalService.open(
+      ModalInputComponent,
+      {
+        title: 'Add new shopping category item',
+        btnConfirmText: 'Apply',
+        btnConfirmColor: 'primary',
+        existingItems: this.shoppingCategoryItemsTEST(),
+      },
+      {
+        onConfirm: (name: string) => {
+          (async () => {
+            await this.addShoppingCategoryItem(
+              this.shoppingCategoryIdSelected(),
+              name,
+            );
+          })();
+        },
+      },
+    );
+  }
+
+  addShoppingCategoryItem(
+    shoppingCategoryId: string | undefined,
+    name: string,
+  ) {
+    this.shoppingCategoryItemsDomainFacade.saveShoppingCategoryItem({
+      shoppingCategoryId,
+      name,
+    });
+  }
+
   public openUpdateShoppingCategoryModal(event: MouseEvent) {
     event.stopPropagation();
 
@@ -282,9 +335,7 @@ export class ShoppingFacade {
     });
 
     this.modalService.open(
-      // TODO: create a new modal for updating a shopping category
-      // ModalUpdateShoppingCategoryComponent,
-      ModalExportShoppingCategoryItemsComponent,
+      ModalUpdateShoppingCategoryItemsComponent,
       {
         title: 'Update shopping category',
         category: this.shoppingCategoryNameSelected(),
@@ -293,8 +344,7 @@ export class ShoppingFacade {
       {
         onConfirm: ({ items }) => {
           (async () => {
-            // await this.exportShoppingCategoryItems(items);
-            console.log('CONFIRMING...');
+            await this.updateShoppingCategoryItems(items);
           })();
         },
       },
@@ -452,6 +502,15 @@ export class ShoppingFacade {
     this.shoppingListDomainFacade.updateShoppingListCategories(
       shoppingListIdSelected?.id,
       currentItemsIdsUpdated,
+      mustPreserveState,
+    );
+  }
+
+  private async updateShoppingCategoryItems(items: ShoppingCategoryItem[]) {
+    const mustPreserveState = signal<boolean>(false);
+
+    this.shoppingCategoryItemsDomainFacade.updateShoppingCategoryItems(
+      items,
       mustPreserveState,
     );
   }

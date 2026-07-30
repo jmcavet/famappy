@@ -12,7 +12,6 @@ import { GridComponent } from '../../shared/layout/primitives/grid.component';
 import { ChipComponent } from '../../shared/ui/chip/chip.component';
 import { SegmentedControlComponent } from '../../shared/ui/segmented-control/segmented-control.component';
 import { SelectTestComponent } from '../../shared/ui/select-test/select.component';
-import { TagComponent } from '../../shared/ui/tag/tag.component';
 
 @Component({
   selector: 'app-shopping',
@@ -27,7 +26,6 @@ import { TagComponent } from '../../shared/ui/tag/tag.component';
     SegmentedControlComponent,
     ButtonComponent,
     ChipComponent,
-    TagComponent,
     SelectTestComponent,
     LoadingComponent,
   ],
@@ -97,6 +95,10 @@ export class ShoppingComponent {
 
   openAddShoppingCategoryInputModal(event: MouseEvent) {
     this.shoppingFacade.openAddShoppingCategoryInputModal(event);
+  }
+
+  openAddShoppingCategoryItemInputModal(event: MouseEvent) {
+    this.shoppingFacade.openAddShoppingCategoryItemInputModal(event);
   }
 
   openUpdateShoppingCategoryModal(event: MouseEvent) {

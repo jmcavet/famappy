@@ -9,6 +9,7 @@ import { FirebaseService } from './firebase.service';
 import { FirestoreService } from './generic.service';
 import { AuthService } from './auth.service';
 import { ShoppingCategoryItemDocInBackend } from '../../models/shopping-category-item.model';
+import { ShoppingCategoryItem } from '../../features/shopping/shopping.facade';
 
 @Injectable({ providedIn: 'root' })
 export class ShoppingCategoryItemBackendService {
@@ -76,6 +77,53 @@ export class ShoppingCategoryItemBackendService {
       console.log('New shopping category item document ID: ', docId);
     } catch (error) {
       console.error('Error saving shopping category item: ', error);
+    }
+  }
+
+  async updateShoppingCategoryItemsInStore(
+    itemsToUpdate: ShoppingCategoryItem[],
+    mustPreserveState: WritableSignal<boolean>,
+  ) {
+    this._updating.set(true);
+
+    try {
+      await this.firestoreService.updateDocumentsInFirestore(
+        'shopping-category-items',
+        itemsToUpdate.map((item) => ({
+          id: item.id,
+          properties: { name: item.name },
+        })),
+        () => {
+          // This callback runs once Firestore returns
+          this._updating.set(false);
+        },
+      );
+
+      mustPreserveState.set(true);
+    } catch (error) {
+      console.error('Error updating shopping category item: ', error);
+    }
+  }
+
+  /**
+   * Delete a shopping category item from the store.
+   *
+   * @param itemIdToDelete - The id of the item to delete
+   */
+  async deleteShoppingCategoryItemfromStore(itemIdToDelete: string) {
+    this._deleting.set(true);
+
+    try {
+      await this.firestoreService.removeDocumentFromFirestore(
+        'shopping-category-items',
+        itemIdToDelete,
+        () => {
+          // This callback runs once Firestore returns
+          this._deleting.set(false);
+        },
+      );
+    } catch (error) {
+      console.error('Error deleting item: ', error);
     }
   }
 }

@@ -6,7 +6,7 @@
   <div class="layout-stack h-dvh">
     <app-header-shell
       ><app-section inset="lg">
-        <app-stack variant="section">
+        <app-stack variant="default">
           <h1 class="text-headline text-center">Shopping List</h1>
 
           <app-grid col1="1" col2="max" gapX="sm" gapY="md">
@@ -58,7 +58,6 @@
             <app-grid col1="max" col2="1" col3="max" gapX="sm" gapY="md">
               <app-button
                 shape="pill"
-                color="secondary"
                 variant="ghost"
                 (clicked)="openAddShoppingCategoryInputModal($event)"
                 ><div class="h-6 w-6">
@@ -71,22 +70,31 @@
                   (valueChange)="updateShoppingCategoryNameSelection($event)"
                 ></app-select-test>
               </div>
-              <app-inline gap="sm">
+              <app-inline gap="md">
                 <app-button
-                  variant="outline"
+                  color="secondary"
+                  variant="ghost"
+                  (clicked)="openAddShoppingCategoryItemInputModal($event)"
+                  ><div class="h-6 w-6">
+                    <i class="fa-solid fa-plus fa-xl"></i></div
+                ></app-button>
+
+                <app-button
+                  variant="ghost"
                   color="secondary"
                   size="sm"
                   (clicked)="openUpdateShoppingCategoryModal($event)"
                   ><div class="h-6 w-6">
-                    <i class="fa-solid fa-pen-to-square fa-lg"></i></div
+                    <i class="fa-solid fa-pen-to-square fa-xl"></i></div
                 ></app-button>
 
                 <app-button
+                  variant="ghost"
                   color="secondary"
                   size="sm"
                   (clicked)="openExportShoppingCategoryItemsModal($event)"
                   ><div class="h-6 w-6">
-                    <i class="fa-solid fa-database fa-lg"></i></div
+                    <i class="fa-solid fa-store fa-xl"></i></div
                 ></app-button>
               </app-inline>
             </app-grid>

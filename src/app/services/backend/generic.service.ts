@@ -198,8 +198,32 @@ export class FirestoreService {
     if (onAllUpdatesComplete) onAllUpdatesComplete();
   }
 
+  async updateDocumentsInFirestore(
+    collectionName: string,
+    updates: { id: string; properties: object }[],
+    onDataLoaded?: () => void,
+  ): Promise<void> {
+    try {
+      const user = this.authService.user();
+      if (!user?.uid) throw new Error('Not authenticated');
+
+      const batch = writeBatch(this.firebaseService.db);
+
+      updates.forEach(({ id, properties }) => {
+        const docRef = doc(this.firebaseService.db, collectionName, id);
+        batch.update(docRef, { ...properties, userId: user.uid });
+      });
+
+      await batch.commit();
+
+      if (onDataLoaded) onDataLoaded();
+    } catch (e) {
+      console.error('Error updating multiple documents:', e);
+    }
+  }
+
   // TODO: refactor this method so that it becomes more generic...Seems difficult.
-  /** Reset multiple Firestore documents */
+  /** Remove multiple Firestore documents */
   async removeIdsFromCollectionPropertyInFirestore(
     collectionName: string,
     documentsToUpdate: RecipeWithId[],
