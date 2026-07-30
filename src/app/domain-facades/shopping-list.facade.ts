@@ -7,7 +7,6 @@ import {
 } from '@angular/core';
 import { ShoppingListBackendService } from '../services/backend/shopping-list.service';
 import { ShoppingListDocInBackend } from '../models/shopping-list.model';
-import { ShoppingListElement } from '../features/shopping/shopping.facade';
 
 @Injectable({ providedIn: 'root' })
 export class ShoppingListDomainFacade {
