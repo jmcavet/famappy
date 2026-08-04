@@ -43,13 +43,15 @@ export class ShoppingQuickItemsDomainFacade {
   //   );
   // }
 
-  // updateShoppingCategoryItems(
-  //   items: ShoppingCategoryItem[],
-  //   mustPreserveState: WritableSignal<boolean>,
-  // ) {
-  //   this.shoppingQuickItemsBackendService.updateShoppingCategoryItemsInStore(
-  //     items,
-  //     mustPreserveState,
-  //   );
-  // }
+  public async updateQuickItem(
+    quickItemIdToUpdate: string,
+    newQuickItemName: string,
+    mustPreserveState: WritableSignal<boolean>,
+  ) {
+    await this.shoppingQuickItemsBackendService.updateQuickItemInStore(
+      quickItemIdToUpdate,
+      newQuickItemName,
+      mustPreserveState,
+    );
+  }
 }

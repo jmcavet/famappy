@@ -124,4 +124,8 @@ export class ShoppingComponent {
   toggleMethod(method: string) {
     this.shoppingFacade.toggleMethod(method);
   }
+
+  openUpdateQuickItemsModal(event: MouseEvent, ing: ShoppingListElement) {
+    this.shoppingFacade.openUpdateQuickItemsModal(event, ing);
+  }
 }

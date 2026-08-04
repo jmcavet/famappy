@@ -152,7 +152,10 @@
                 }
                 <app-inline class="justify-self-end">
                   @if (ing.quickItemId) {
-                    <app-button variant="ghost" size="sm"
+                    <app-button
+                      variant="ghost"
+                      size="sm"
+                      (clicked)="openUpdateQuickItemsModal($event, ing)"
                       ><div class="h-6 w-6">
                         <i class="fa-solid fa-pen-to-square fa-xl"></i></div
                     ></app-button>

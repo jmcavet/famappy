@@ -78,30 +78,30 @@ export class ShoppingQuickItemBackendService {
     }
   }
 
-  // async updateShoppingCategoryItemsInStore(
-  //   itemsToUpdate: ShoppingCategoryItem[],
-  //   mustPreserveState: WritableSignal<boolean>,
-  // ) {
-  //   this._updating.set(true);
+  async updateQuickItemInStore(
+    quickItemIdToUpdate: string,
+    newQuickItemName: string,
+    mustPreserveState: WritableSignal<boolean>,
+  ) {
+    this._updating.set(true);
 
-  //   try {
-  //     await this.firestoreService.updateDocumentsInFirestore(
-  //       'shopping-category-items',
-  //       itemsToUpdate.map((item) => ({
-  //         id: item.id,
-  //         properties: { name: item.name },
-  //       })),
-  //       () => {
-  //         // This callback runs once Firestore returns
-  //         this._updating.set(false);
-  //       },
-  //     );
+    try {
+      await this.firestoreService.updateDocumentInFirestore(
+        'shopping-quick-items',
+        quickItemIdToUpdate,
+        { name: newQuickItemName },
+        () => {
+          // This callback runs once Firestore returns
+          this._updating.set(false);
+        },
+      );
 
-  //     mustPreserveState.set(true);
-  //   } catch (error) {
-  //     console.error('Error updating shopping category item: ', error);
-  //   }
-  // }
+      // .....
+      mustPreserveState.set(true);
+    } catch (error) {
+      console.error('Error updating shopping quick item: ', error);
+    }
+  }
 
   // /**
   //  * Delete a shopping category item from the store.

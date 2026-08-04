@@ -486,6 +486,47 @@ export class ShoppingFacade {
     return ingredients?.find((ing) => ing.id === ingredientId)?.measure;
   }
 
+  public openUpdateQuickItemsModal(
+    event: MouseEvent,
+    shoppingElement: ShoppingListElement,
+  ) {
+    event.stopPropagation();
+
+    const quickItemsIdsDisplayedOnPage = this.shoppingListIngredients()
+      .filter((el) => el.quickItemId)
+      .map((el) => el.quickItemId);
+
+    const quickItemsDisplayedOnPage = this.shoppingQuickItems().filter((item) =>
+      quickItemsIdsDisplayedOnPage.includes(item.id),
+    );
+
+    const existingItems = quickItemsDisplayedOnPage.map((item) => {
+      return {
+        id: item.id,
+        name: item.name,
+        selected: quickItemsIdsDisplayedOnPage?.includes(item.id),
+      };
+    });
+
+    this.modalService.open(
+      ModalInputComponent,
+      {
+        title: 'Update quick item',
+        btnConfirmText: 'Apply',
+        btnConfirmColor: 'primary',
+        existingItems,
+        inputValue: shoppingElement.name,
+      },
+      {
+        onConfirm: (name: string) => {
+          (async () => {
+            await this.updateQuickItem(shoppingElement.quickItemId!, name);
+          })();
+        },
+      },
+    );
+  }
+
   public getIngredientUnit(ingredientId: string) {
     return (
       this.ingredients().find((ing) => ing.id === ingredientId)?.unit ?? ''
@@ -564,6 +605,19 @@ export class ShoppingFacade {
 
     this.shoppingCategoryItemsDomainFacade.updateShoppingCategoryItems(
       items,
+      mustPreserveState,
+    );
+  }
+
+  private async updateQuickItem(
+    quickItemIdToUpdate: string,
+    newQuickItemName: string,
+  ) {
+    const mustPreserveState = signal<boolean>(false);
+
+    await this.shoppingQuickItemsDomainFacade.updateQuickItem(
+      quickItemIdToUpdate,
+      newQuickItemName,
       mustPreserveState,
     );
   }
