@@ -56,4 +56,8 @@ export class ShoppingListDomainFacade {
       elementToRemove,
     );
   }
+
+  deleteQuickItem(quickItemId: string) {
+    this.shoppingListBackendService.deleteQuickItemfromStore(quickItemId);
+  }
 }

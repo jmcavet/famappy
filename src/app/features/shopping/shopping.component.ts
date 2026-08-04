@@ -81,13 +81,17 @@ export class ShoppingComponent {
   readonly methods = this.shoppingFacade.methods;
   readonly methodSelected = this.shoppingFacade.methodSelected;
 
-  readonly itemDescription = this.shoppingFacade.itemDescription;
+  readonly quickEntryItem = this.shoppingFacade.quickEntryItem;
 
   readonly ingredientCategoriesSorted =
     this.shoppingFacade.ingredientCategoriesSorted;
 
   readonly deleteElement = (element: ShoppingListElement) =>
     this.shoppingFacade.deleteElement(element);
+
+  shoppingQuickItems = this.shoppingFacade.shoppingQuickItems;
+
+  addQuickEntryItem = () => this.shoppingFacade.addQuickEntryItem();
 
   openAddShoppingListInputModal(event: MouseEvent) {
     this.shoppingFacade.openAddShoppingListInputModal(event);

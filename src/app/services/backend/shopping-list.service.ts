@@ -185,4 +185,23 @@ export class ShoppingListBackendService {
       console.error('Error removing item from shopping list document: ', error);
     }
   }
+
+  async deleteQuickItemfromStore(quickItemId: string) {
+    this._deleting.set(true);
+
+    if (quickItemId) {
+      try {
+        await this.firestoreService.removeDocumentFromFirestore(
+          'shopping-quick-items',
+          quickItemId,
+          () => {
+            // This callback runs once Firestore returns
+            this._deleting.set(false);
+          },
+        );
+      } catch (error) {
+        console.error('Error removing quick item: ', error);
+      }
+    }
+  }
 }

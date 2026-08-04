@@ -37,17 +37,22 @@
               <div class="w-full">
                 <input
                   type="text"
-                  id="itemDescription"
-                  name="itemDescription"
+                  id="quickEntryItem"
+                  name="quickEntryItem"
                   required
                   placeholder="Provide an item"
                   autocomplete="off"
-                  [value]="itemDescription()"
-                  (input)="itemDescription.set($any($event.target).value)"
+                  [value]="quickEntryItem()"
+                  (input)="quickEntryItem.set($any($event.target).value)"
+                  (keydown.enter)="addQuickEntryItem()"
                   class="inset-x-md surface-2"
                 />
               </div>
-              <app-button shape="pill" color="secondary"
+              <app-button
+                shape="pill"
+                color="secondary"
+                [disabled]="!quickEntryItem()"
+                (clicked)="addQuickEntryItem()"
                 ><div class="h-6 w-6">
                   <i class="fa-solid fa-plus fa-lg"></i></div
               ></app-button>
@@ -120,37 +125,6 @@
             }
           </app-inline>
 
-          <!-- <app-stack variant="section">
-            <app-grid col1="max" col2="1" col3="max" gapX="md">
-              @for (ing of shoppingListIngredients(); track $index) {
-                @if (ing.ingredientId) {
-                  <div class="color-text-muted">
-                    <app-inline gap="xs">
-                      <span>{{ ing.measure }}</span>
-                      <span>{{ ingredientUnit(ing.ingredientId) }}</span>
-                    </app-inline>
-                  </div>
-                  <span>{{ ingredientName(ing.ingredientId) }}</span>
-                } @else {
-                  <span></span>
-                  <app-inline>
-                    <span>{{ ing.name }}</span>
-                    <app-tag size="xs" variant="outline" color="neutral">{{
-                      getShoppingCategoryById(ing.shoppingCategoryId)?.name
-                    }}</app-tag>
-                  </app-inline>
-                }
-                <app-button
-                  variant="ghost"
-                  size="sm"
-                  color="danger"
-                  (clicked)="deleteElement(ing)"
-                  ><i class="fa-regular fa-trash-can text-xl"></i
-                ></app-button>
-              }
-            </app-grid>
-          </app-stack> -->
-
           <app-stack variant="section">
             <app-grid col1="max" col2="1" col3="max" gapX="md">
               @for (ing of shoppingListIngredients(); track $index) {
@@ -167,16 +141,23 @@
                   </div>
                 } @else {
                   <app-inline>
-                    <i class="fa-solid fa-store"></i>
+                    @if (ing.quickItemId) {
+                      <i class="fa-solid fa-forward"></i>
+                    } @else {
+                      <i class="fa-solid fa-store"></i>
+                    }
                     <span>{{ ing.name }}</span>
                   </app-inline>
                   <span></span>
                 }
-                <app-inline>
-                  <app-button variant="ghost" size="sm"
-                    ><div class="h-6 w-6">
-                      <i class="fa-solid fa-pen-to-square fa-xl"></i></div
-                  ></app-button>
+                <app-inline class="justify-self-end">
+                  @if (ing.quickItemId) {
+                    <app-button variant="ghost" size="sm"
+                      ><div class="h-6 w-6">
+                        <i class="fa-solid fa-pen-to-square fa-xl"></i></div
+                    ></app-button>
+                  }
+
                   <app-button
                     variant="ghost"
                     size="sm"

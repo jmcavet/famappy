@@ -50,7 +50,8 @@ service cloud.firestore {
         'recipe-categories',
         'shopping-lists',
         'shopping-categories',
-        'shopping-category-items'
+        'shopping-category-items',
+        'shopping-quick-items',
       ];
     }
   }

@@ -11,6 +11,7 @@ import { ModalInputShoppingCategoryComponent } from './modal-input-shopping-cate
 import { ModalExportShoppingCategoryItemsComponent } from './modals/modal-export-shopping-category-items/modal-export-shopping-category-items.component';
 import { ShoppingCategoryItemsDomainFacade } from '../../domain-facades/shopping-category-items.facade';
 import { ModalUpdateShoppingCategoryItemsComponent } from './modals/modal-update-shopping-category-items/modal-update-shopping-category-items.component';
+import { ShoppingQuickItemsDomainFacade } from '../../domain-facades/shopping-quick-items.facade';
 
 export interface ShoppingListElement {
   ingredientId: string | null;
@@ -18,6 +19,7 @@ export interface ShoppingListElement {
   shoppingCategoryId: string | null;
   name: string;
   measure: number | null;
+  quickItemId: string | null;
 }
 
 export interface ShoppingCategoryItem {
@@ -61,6 +63,10 @@ export class ShoppingFacade {
   private ingredientCategoryDomainFacade = inject(
     IngredientCategoryDomainFacade,
   );
+  private shoppingQuickItemsDomainFacade = inject(
+    ShoppingQuickItemsDomainFacade,
+  );
+
   private modalService = inject(ModalService);
 
   // /** Transitional state (shared by several ui) */
@@ -70,7 +76,8 @@ export class ShoppingFacade {
    * Local UI state (owned by this facade)
    * ════════════════════════════════ */
   /** Public signals */
-  public itemDescription = signal('');
+  public quickEntryItem = signal('');
+
   public ingredientCategorySelected = signal<IngredientType | undefined>(
     undefined,
   );
@@ -101,6 +108,11 @@ export class ShoppingFacade {
     this.shoppingCategoryItemsDomainFacade.dbShoppingCategoryItems;
   readonly shoppingCategoryItemsLoading =
     this.shoppingCategoryItemsDomainFacade.shoppingCategoryItemsLoading;
+
+  readonly shoppingQuickItems =
+    this.shoppingQuickItemsDomainFacade.dbShoppingQuickItems;
+  readonly shoppingQuickItemsLoading =
+    this.shoppingQuickItemsDomainFacade.shoppingQuickItemsLoading;
 
   /* ════════════════════════════════
    * Domain Projections (business logic)
@@ -152,26 +164,44 @@ export class ShoppingFacade {
         shoppingCategoryId: null,
         name: ing.name,
         measure: this.getIngredientMeasure(ing.id) ?? 0,
+        quickItemId: null,
       }));
 
     // Shopping category items
-    const itemsIds = this.shoppingListSelected()?.items ?? [];
+    const itemsIds = this.shoppingListSelected()?.categoryItemIds ?? [];
 
-    const items = this.shoppingCategoryItems().filter((item) =>
+    const categoryItems = this.shoppingCategoryItems().filter((item) =>
       itemsIds.includes(item.id),
     );
-    const itemsIdName = items.map((item) => ({
+    const categoryItemsIdName = categoryItems.map((item) => ({
       ingredientId: null,
       itemId: item.id,
       shoppingCategoryId: item.shoppingCategoryId,
       name: item.name,
       measure: null,
+      quickItemId: null,
     }));
-    console.log('[...ingredientsIdName, ...itemsIdName]: ', [
-      ...ingredientsIdName,
-      ...itemsIdName,
-    ]);
-    return [...ingredientsIdName, ...itemsIdName];
+
+    // Quick items
+    const shoppingListId = this.shoppingListSelected()?.id;
+
+    const quickItems = this.shoppingQuickItems().filter(
+      (item) => item.shoppingListId === shoppingListId,
+    );
+
+    const quickItemsIdName = quickItems.map((item) => ({
+      ingredientId: null,
+      itemId: null,
+      shoppingCategoryId: null,
+      name: item.name,
+      measure: null,
+      quickItemId: item.id,
+    }));
+    // console.log(
+    //   [...ingredientsIdName, ...categoryItemsIdName, ...quickItemsIdName],
+    // );
+
+    return [...ingredientsIdName, ...categoryItemsIdName, ...quickItemsIdName];
   });
 
   readonly shoppingCategoriesNames = computed(() => {
@@ -237,6 +267,18 @@ export class ShoppingFacade {
    * Public API (UI actions)
    * ════════════════════════════════ */
   methods = ['Quick entry', 'Ingredients', 'Categories'];
+
+  public addQuickEntryItem() {
+    const shoppingListId = this.shoppingListSelected()?.id;
+
+    this.shoppingQuickItemsDomainFacade.saveShoppingQuickItem({
+      name: this.quickEntryItem(),
+      shoppingListId,
+    });
+
+    // Reset input field
+    this.quickEntryItem.set('');
+  }
 
   public toggleMethod(method: string) {
     this.shoppingService.saveMethodSelection(method);
@@ -324,7 +366,8 @@ export class ShoppingFacade {
   public openUpdateShoppingCategoryModal(event: MouseEvent) {
     event.stopPropagation();
 
-    const itemsIdsDisplayedOnPage = this.shoppingListSelected()?.items;
+    const itemsIdsDisplayedOnPage =
+      this.shoppingListSelected()?.categoryItemIds;
 
     const existingItems = this.itemsPerSelectedCategory().map((item) => {
       return {
@@ -354,7 +397,8 @@ export class ShoppingFacade {
   public openExportShoppingCategoryItemsModal(event: MouseEvent) {
     event.stopPropagation();
 
-    const itemsIdsDisplayedOnPage = this.shoppingListSelected()?.items;
+    const itemsIdsDisplayedOnPage =
+      this.shoppingListSelected()?.categoryItemIds;
 
     const existingItems = this.itemsPerSelectedCategory().map((item) => {
       return {
@@ -382,14 +426,23 @@ export class ShoppingFacade {
   }
 
   public async deleteElement(element: ShoppingListElement) {
-    const { itemId, ingredientId, measure } = element;
+    const { itemId, ingredientId, measure, quickItemId } = element;
+
+    console.log('ELEMENT to delete: ', element);
 
     const shoppingListId = this.shoppingListSelected()?.id;
-    const elementType = itemId ? 'items' : 'ingredients';
+    const elementType = itemId
+      ? 'items'
+      : quickItemId
+        ? 'quickItems'
+        : 'ingredients';
 
     const _element = itemId ? itemId : { id: ingredientId, measure };
+    console.log('_element: ', _element);
 
-    if (shoppingListId && element) {
+    if (quickItemId) {
+      this.shoppingListDomainFacade.deleteQuickItem(quickItemId);
+    } else if (shoppingListId && element) {
       this.shoppingListDomainFacade.deleteShoppingListElement(
         shoppingListId,
         elementType,
@@ -490,7 +543,7 @@ export class ShoppingFacade {
       (item) => item.id,
     );
 
-    const currentItemsIds = this.shoppingListSelected()?.items ?? [];
+    const currentItemsIds = this.shoppingListSelected()?.categoryItemIds ?? [];
 
     const currentItemsIdsUpdated = [
       ...currentItemsIds,

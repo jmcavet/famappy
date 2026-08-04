@@ -17,5 +17,5 @@ export interface ShoppingListDocInBackend {
   name: string;
   dateCreated: string;
   ingredients: { id: string; measure: number }[];
-  items: string[];
+  categoryItemIds: string[];
 }
