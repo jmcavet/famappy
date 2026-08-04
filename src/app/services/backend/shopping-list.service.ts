@@ -121,7 +121,7 @@ export class ShoppingListBackendService {
         'shopping-lists',
         shoppingListIdToUpdate,
         {
-          items: itemsIds,
+          categoryItemIds: itemsIds,
         },
         () => {
           // This callback runs once Firestore returns

@@ -197,11 +197,12 @@ export class ShoppingFacade {
       measure: null,
       quickItemId: item.id,
     }));
-    // console.log(
-    //   [...ingredientsIdName, ...categoryItemsIdName, ...quickItemsIdName],
-    // );
 
-    return [...ingredientsIdName, ...categoryItemsIdName, ...quickItemsIdName];
+    return [
+      ...ingredientsIdName,
+      ...categoryItemsIdName,
+      ...quickItemsIdName,
+    ].sort((a, b) => a.name.localeCompare(b.name));
   });
 
   readonly shoppingCategoriesNames = computed(() => {
@@ -563,14 +564,13 @@ export class ShoppingFacade {
   private async exportShoppingCategoryItems(itemsNames: string[]) {
     const shoppingListIdSelected = this.shoppingLists().find(
       (list) => list.name === this.shoppingListNameSelected(),
-    );
+    )?.id;
 
-    if (!shoppingListIdSelected?.id) return;
+    if (!shoppingListIdSelected) return;
 
     const shoppingCategorySelected = this.shoppingCategories().find(
       (cat) => cat.name === this.shoppingCategoryNameSelected(),
     );
-
     const shoppingCategoryItemsSelected = this.shoppingCategoryItems().filter(
       (item) =>
         itemsNames.includes(item.name) &&
@@ -591,7 +591,7 @@ export class ShoppingFacade {
     const mustPreserveState = signal<boolean>(false);
 
     this.shoppingListDomainFacade.updateShoppingListCategories(
-      shoppingListIdSelected?.id,
+      shoppingListIdSelected,
       currentItemsIdsUpdated,
       mustPreserveState,
     );
