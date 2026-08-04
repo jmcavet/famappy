@@ -428,17 +428,14 @@ export class ShoppingFacade {
   public async deleteElement(element: ShoppingListElement) {
     const { itemId, ingredientId, measure, quickItemId } = element;
 
-    console.log('ELEMENT to delete: ', element);
-
     const shoppingListId = this.shoppingListSelected()?.id;
     const elementType = itemId
-      ? 'items'
+      ? 'categoryItemIds'
       : quickItemId
         ? 'quickItems'
         : 'ingredients';
 
     const _element = itemId ? itemId : { id: ingredientId, measure };
-    console.log('_element: ', _element);
 
     if (quickItemId) {
       this.shoppingListDomainFacade.deleteQuickItem(quickItemId);

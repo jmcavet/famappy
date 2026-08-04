@@ -299,7 +299,12 @@ export class FirestoreService {
 
       const docRef = doc(this.firebaseService.db, collectionName, documentId);
 
-      await updateDoc(docRef, {
+      console.log('Removing from collection:', collectionName);
+      console.log('Document ID:', documentId);
+      console.log('Property:', elementType);
+      console.log('Element to remove:', JSON.stringify(elementToRemove));
+
+      const toto = await updateDoc(docRef, {
         [elementType]: arrayRemove(elementToRemove),
         userId: user.uid,
       });
