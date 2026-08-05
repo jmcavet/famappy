@@ -15,6 +15,7 @@ export class ChipComponent {
   @Input() size: 'xs' | 'sm' | 'md' | 'lg' = 'md';
   @Input() fullWidth: false | true = false;
   @Input() selected: false | true = false;
+  @Input() badgeCount: number = 0;
   @Input() disabled: false | true = false;
   @Input() interactive: false | true = true;
 
@@ -28,6 +29,7 @@ export class ChipComponent {
 
   get classes(): string {
     const classes = [
+      'relative',
       'chip',
       `chip-${this.size}`,
       this.fullWidth ? 'w-full' : '',
