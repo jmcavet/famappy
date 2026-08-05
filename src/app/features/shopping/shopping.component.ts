@@ -12,6 +12,7 @@ import { GridComponent } from '../../shared/layout/primitives/grid.component';
 import { ChipComponent } from '../../shared/ui/chip/chip.component';
 import { SegmentedControlComponent } from '../../shared/ui/segmented-control/segmented-control.component';
 import { SelectTestComponent } from '../../shared/ui/select-test/select.component';
+import { IngredientCategoryDocInBackend } from '../../models/ingredient.model';
 
 @Component({
   selector: 'app-shopping',
@@ -64,8 +65,7 @@ export class ShoppingComponent {
   readonly ingredientCategorySelected =
     this.shoppingFacade.ingredientCategorySelected;
 
-  readonly shoppingListIngredients =
-    this.shoppingFacade.shoppingListIngredients;
+  readonly shoppingListElements = this.shoppingFacade.shoppingListElements;
 
   readonly selectIngredientType = this.shoppingFacade.selectIngredientType;
 
@@ -88,6 +88,10 @@ export class ShoppingComponent {
 
   readonly deleteElement = (element: ShoppingListElement) =>
     this.shoppingFacade.deleteElement(element);
+
+  countIngredientsPerCategory(cat: IngredientCategoryDocInBackend) {
+    return this.shoppingFacade.countIngredientsPerCategory(cat);
+  }
 
   shoppingQuickItems = this.shoppingFacade.shoppingQuickItems;
 

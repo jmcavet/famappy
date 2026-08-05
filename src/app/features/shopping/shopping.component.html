@@ -114,6 +114,7 @@
             @for (cat of ingredientCategoriesSorted(); track $index) {
               <app-chip
                 [selected]="ingredientCategorySelected()?.name === cat.name"
+                [badgeCount]="countIngredientsPerCategory(cat)"
                 (toggle)="
                   selectIngredientType(
                     cat,
@@ -127,7 +128,7 @@
 
           <app-stack variant="section">
             <app-grid col1="max" col2="1" col3="max" gapX="md">
-              @for (ing of shoppingListIngredients(); track $index) {
+              @for (ing of shoppingListElements(); track $index) {
                 @if (ing.ingredientId) {
                   <app-inline>
                     <i class="fa-solid fa-carrot"></i>

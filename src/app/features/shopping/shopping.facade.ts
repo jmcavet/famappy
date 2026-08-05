@@ -12,6 +12,7 @@ import { ModalExportShoppingCategoryItemsComponent } from './modals/modal-export
 import { ShoppingCategoryItemsDomainFacade } from '../../domain-facades/shopping-category-items.facade';
 import { ModalUpdateShoppingCategoryItemsComponent } from './modals/modal-update-shopping-category-items/modal-update-shopping-category-items.component';
 import { ShoppingQuickItemsDomainFacade } from '../../domain-facades/shopping-quick-items.facade';
+import { IngredientCategoryDocInBackend } from '../../models/ingredient.model';
 
 export interface ShoppingListElement {
   ingredientId: string | null;
@@ -86,7 +87,6 @@ export class ShoppingFacade {
   /* ════════════════════════════════
    * Domain Data Access (proxies)
    * ════════════════════════════════ */
-  /** Private signals*/
   readonly shoppingLists = this.shoppingListDomainFacade.dbShoppingLists;
   readonly shoppingListsLoading =
     this.shoppingListDomainFacade.shoppingListsLoading;
@@ -143,7 +143,7 @@ export class ShoppingFacade {
     );
   });
 
-  readonly shoppingListIngredients = computed(() => {
+  readonly shoppingListElements = computed(() => {
     // Shopping ingredients
     const ingredients = this.shoppingListSelected()?.ingredients;
 
@@ -200,8 +200,8 @@ export class ShoppingFacade {
 
     return [
       ...ingredientsIdName,
-      ...categoryItemsIdName,
-      ...quickItemsIdName,
+      ...(this.ingredientCategorySelected() ? [] : categoryItemsIdName),
+      ...(this.ingredientCategorySelected() ? [] : quickItemsIdName),
     ].sort((a, b) => a.name.localeCompare(b.name));
   });
 
@@ -490,7 +490,7 @@ export class ShoppingFacade {
   ) {
     event.stopPropagation();
 
-    const quickItemsIdsDisplayedOnPage = this.shoppingListIngredients()
+    const quickItemsIdsDisplayedOnPage = this.shoppingListElements()
       .filter((el) => el.quickItemId)
       .map((el) => el.quickItemId);
 
@@ -529,6 +529,22 @@ export class ShoppingFacade {
     return (
       this.ingredients().find((ing) => ing.id === ingredientId)?.unit ?? ''
     );
+  }
+
+  public countIngredientsPerCategory(
+    ingredientCategory: IngredientCategoryDocInBackend,
+  ) {
+    const ingredients = this.shoppingListSelected()?.ingredients;
+
+    const selectedIngredients = this.ingredients().filter((ing) =>
+      ingredients?.map((ingr) => ingr.id).includes(ing.id),
+    );
+
+    const ingredientsPerCategorySelected = selectedIngredients.filter(
+      (ing) => ing.categoryId === ingredientCategory.id,
+    );
+
+    return ingredientsPerCategorySelected.length;
   }
 
   /* ════════════════════════════════
