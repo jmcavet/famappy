@@ -1,4 +1,11 @@
-import { computed, effect, inject, Injectable, signal } from '@angular/core';
+import {
+  computed,
+  effect,
+  inject,
+  Injectable,
+  linkedSignal,
+  signal,
+} from '@angular/core';
 import { ShoppingStateService } from './state/shopping.service';
 import { ShoppingListDomainFacade } from '../../domain-facades/shopping-list.facade';
 import { IngredientDomainFacade } from '../../domain-facades/ingredient.facade';
@@ -12,7 +19,12 @@ import { ModalExportShoppingCategoryItemsComponent } from './modals/modal-export
 import { ShoppingCategoryItemsDomainFacade } from '../../domain-facades/shopping-category-items.facade';
 import { ModalUpdateShoppingCategoryItemsComponent } from './modals/modal-update-shopping-category-items/modal-update-shopping-category-items.component';
 import { ShoppingQuickItemsDomainFacade } from '../../domain-facades/shopping-quick-items.facade';
-import { IngredientCategoryDocInBackend } from '../../models/ingredient.model';
+import {
+  IngredientCategoryDocInBackend,
+  SortKey,
+} from '../../models/ingredient.model';
+import { ModalConfirmComponent } from '../../shared/layout/overlays/modal/modal-confirm/modal-confirm.component';
+import { ShoppingListDocInBackend } from '../../models/shopping-list.model';
 
 export interface ShoppingListElement {
   ingredientId: string | null;
@@ -47,6 +59,14 @@ export class ShoppingFacade {
           this.shoppingCategoriesNames()[0],
         );
       }
+
+      // Initialize measures
+      const ingredients = this.ingredientsFound();
+      if (ingredients.length > 0 && this.measures().length === 0) {
+        this.measures.set(
+          ingredients.map((ing) => ({ id: ing.id, measure: ing.measure })),
+        );
+      }
     });
   }
 
@@ -77,12 +97,26 @@ export class ShoppingFacade {
    * Local UI state (owned by this facade)
    * ════════════════════════════════ */
   /** Public signals */
-  public quickEntryItem = signal('');
+  public quickEntryItem = signal<string>('');
+  public ingredientsFound = signal<
+    {
+      id: string;
+      name: string;
+      category: string;
+      measure: number;
+      unit: string;
+    }[]
+  >([]);
+  public searchIngredientsAdded = signal<
+    { id: string; name: string; category: string }[]
+  >([]);
 
   public ingredientCategorySelected = signal<IngredientType | undefined>(
     undefined,
   );
   public shoppingCategoryItemsSelected = signal<string[]>([]);
+
+  readonly measures = signal<{ id: string; measure: number }[]>([]);
 
   /* ════════════════════════════════
    * Domain Data Access (proxies)
@@ -198,10 +232,22 @@ export class ShoppingFacade {
       quickItemId: item.id,
     }));
 
+    // Searched ingredients added
+    const searchIngredientsIdName: ShoppingListElement[] =
+      this.searchIngredientsAdded().map((ing) => ({
+        ingredientId: ing.id,
+        itemId: null,
+        shoppingCategoryId: null,
+        name: ing.name,
+        measure: this.getIngredientMeasure(ing.id) ?? 0,
+        quickItemId: null,
+      }));
+
     return [
       ...ingredientsIdName,
       ...(this.ingredientCategorySelected() ? [] : categoryItemsIdName),
       ...(this.ingredientCategorySelected() ? [] : quickItemsIdName),
+      ...(this.ingredientCategorySelected() ? [] : searchIngredientsIdName),
     ].sort((a, b) => a.name.localeCompare(b.name));
   });
 
@@ -264,6 +310,8 @@ export class ShoppingFacade {
     );
   });
 
+  ingredientsNames = computed(() => this.ingredients().map((ing) => ing.name));
+
   /* ════════════════════════════════
    * Public API (UI actions)
    * ════════════════════════════════ */
@@ -279,6 +327,7 @@ export class ShoppingFacade {
 
     // Reset input field
     this.quickEntryItem.set('');
+    this.ingredientsFound.set([]);
   }
 
   public toggleMethod(method: string) {
@@ -287,6 +336,100 @@ export class ShoppingFacade {
 
   public getShoppingCategoryById(categoryId: string | null) {
     return this.shoppingCategories().find((cat) => cat.id === categoryId);
+  }
+
+  setInputItem(inputEntry: string) {
+    if (inputEntry.length > 2) {
+      const ingredientsFound = this.ingredients()
+        .filter((ing) =>
+          ing.name.toLowerCase().includes(inputEntry.toLowerCase()),
+        )
+        .map((ing) => {
+          const category =
+            this.ingredientCategories().find((cat) => cat.id === ing.categoryId)
+              ?.name ?? '';
+          return {
+            id: ing.id,
+            name: ing.name,
+            category,
+            measure: ing.measure,
+            unit: ing.unit,
+          };
+        });
+
+      this.ingredientsFound.set(
+        ingredientsFound.length ? ingredientsFound : [],
+      );
+    } else {
+      this.ingredientsFound.set([]);
+    }
+
+    // Sort ingredient alphabetically
+    this.ingredientsFound().sort((a, b) => a.name.localeCompare(b.name));
+
+    this.quickEntryItem.set(inputEntry);
+  }
+
+  public openUpdateShoppingListModal(
+    event: MouseEvent,
+    shoppingListName: string,
+  ) {
+    event.stopPropagation();
+
+    const existingItems = this.shoppingLists().map((list) => {
+      return {
+        id: list.id,
+        name: list.name,
+      };
+    });
+
+    const shoppingListId = this.shoppingLists().find(
+      (list) => list.name === shoppingListName,
+    )?.id;
+
+    this.modalService.open(
+      ModalInputComponent,
+      {
+        title: 'Update shopping list',
+        btnConfirmText: 'Apply',
+        btnConfirmColor: 'primary',
+        existingItems,
+        inputValue: shoppingListName,
+      },
+      {
+        onConfirm: (name: string) => {
+          (async () => {
+            await this.updateShoppingList(shoppingListId!, name);
+          })();
+        },
+      },
+    );
+  }
+
+  public openDeleteShoppingListModal(
+    event: MouseEvent,
+    shoppingListName: string,
+  ) {
+    event.stopPropagation();
+
+    const shoppingList = this.shoppingLists().find(
+      (list) => list.name === shoppingListName,
+    );
+
+    console.log('shoppingList: ', shoppingList);
+
+    this.modalService.open(
+      ModalConfirmComponent,
+      {
+        title: 'Delete confirmation',
+        message: `Do you really want to remove the '${shoppingListName}' list?`,
+        btnConfirmText: 'Delete',
+        btnConfirmColor: 'danger',
+      },
+      {
+        onConfirm: () => this.deleteShoppingList(shoppingList!),
+      },
+    );
   }
 
   public openAddShoppingListInputModal(event: MouseEvent) {
@@ -484,6 +627,72 @@ export class ShoppingFacade {
     return ingredients?.find((ing) => ing.id === ingredientId)?.measure;
   }
 
+  measureFor = (ingredientId: string): number => {
+    return (
+      this.measures().find((meas) => meas.id === ingredientId)?.measure ?? 0
+    );
+  };
+
+  public changeMeasure(
+    ingredientId: string,
+    ingredientUnit: string | null,
+    value: 'decr' | 'incr',
+  ) {
+    this.measures.update((current) =>
+      current.map((m) => {
+        if (m.id !== ingredientId) return m;
+
+        let newMeasure;
+        const refMeasure =
+          this.ingredients().find((ing) => ing.id === ingredientId)?.measure ??
+          0;
+
+        if (ingredientUnit === null) {
+          // For measures without unit
+          newMeasure = value === 'decr' ? m.measure - 1 : m.measure + 1;
+        } else {
+          if (value === 'decr' && m.measure !== 0) {
+            newMeasure = Math.max(
+              0,
+              Math.ceil(m.measure / refMeasure) * refMeasure - refMeasure,
+            );
+          } else {
+            newMeasure =
+              Math.floor(m.measure / refMeasure) * refMeasure + refMeasure;
+          }
+        }
+
+        return {
+          ...m,
+          measure: newMeasure,
+        };
+      }),
+    );
+  }
+
+  public selectIngredientSuggestion(ing: {
+    id: string;
+    name: string;
+    category: string;
+  }) {
+    // Reset found ingredients and quick entry item
+    this.quickEntryItem.set('');
+    this.ingredientsFound.set([]);
+
+    const shoppingListId = this.shoppingLists().find(
+      (list) => list.name === this.shoppingListNameSelected(),
+    )?.id;
+
+    const updatedMeasure = this.measures().find(
+      (m) => m.id === ing.id,
+    )?.measure;
+
+    this.updateIngredientsInShoppingList(shoppingListId!, {
+      id: ing.id,
+      measure: updatedMeasure,
+    });
+  }
+
   public openUpdateQuickItemsModal(
     event: MouseEvent,
     shoppingElement: ShoppingListElement,
@@ -633,5 +842,57 @@ export class ShoppingFacade {
       newQuickItemName,
       mustPreserveState,
     );
+  }
+
+  private async updateShoppingList(
+    shoppingListIdToUpdate: string,
+    newShoppingListName: string,
+  ) {
+    const mustPreserveState = signal<boolean>(false);
+
+    await this.shoppingListDomainFacade.updateShoppingList(
+      shoppingListIdToUpdate,
+      newShoppingListName,
+      mustPreserveState,
+    );
+
+    this.updateShoppingListSelection(newShoppingListName);
+  }
+
+  private async updateIngredientsInShoppingList(
+    shoppingListIdToUpdate: string,
+    newIngredient: { id: string; measure: number | undefined },
+  ) {
+    const mustPreserveState = signal<boolean>(false);
+
+    const currentIngredients = this.shoppingListSelected()?.ingredients ?? [];
+
+    const updatedIngredients = [...currentIngredients, newIngredient];
+
+    await this.shoppingListDomainFacade.uptdateIngredientsInShoppingList(
+      shoppingListIdToUpdate,
+      updatedIngredients,
+      mustPreserveState,
+    );
+  }
+
+  private async deleteShoppingList(
+    shoppingListElement: ShoppingListDocInBackend,
+  ) {
+    const shoppingListId = shoppingListElement.id;
+
+    // Delete shopping list from firestore
+    await this.shoppingListDomainFacade.deleteShoppingList(shoppingListId);
+
+    const correspondingShoppingQuickItemsIds = this.shoppingQuickItems()
+      .filter((item) => item.shoppingListId === shoppingListId)
+      .map((el) => el.id);
+
+    // If existing, delete list-related shopping quick items from firestore
+    if (correspondingShoppingQuickItemsIds.length > 0) {
+      await this.shoppingQuickItemsDomainFacade.deleteShoppingQuickItems(
+        correspondingShoppingQuickItemsIds,
+      );
+    }
   }
 }

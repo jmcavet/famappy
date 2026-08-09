@@ -29,6 +29,30 @@ export class ShoppingListDomainFacade {
     this.shoppingListBackendService.saveShoppingListIntoStore(propertiesToSave);
   }
 
+  updateShoppingList(
+    shoppingListId: string,
+    shoppingListName: string,
+    mustPreserveState: WritableSignal<boolean>,
+  ) {
+    this.shoppingListBackendService.updateShoppingListInStore(
+      shoppingListId,
+      { name: shoppingListName },
+      mustPreserveState,
+    );
+  }
+
+  uptdateIngredientsInShoppingList(
+    shoppingListId: string,
+    updatedIngredients: any,
+    mustPreserveState: WritableSignal<boolean>,
+  ) {
+    this.shoppingListBackendService.updateShoppingListInStore(
+      shoppingListId,
+      { ingredients: updatedIngredients },
+      mustPreserveState,
+    );
+  }
+
   updateShoppingListCategories(
     shoppingListId: string,
     itemsIds: string[],
@@ -54,6 +78,12 @@ export class ShoppingListDomainFacade {
       shoppingListId,
       elementType,
       elementToRemove,
+    );
+  }
+
+  public async deleteShoppingList(shoppingListIdToDelete: string) {
+    this.shoppingListBackendService.deleteShoppingListFromStore(
+      shoppingListIdToDelete,
     );
   }
 

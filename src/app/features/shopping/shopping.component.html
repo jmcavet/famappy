@@ -9,7 +9,7 @@
         <app-stack variant="default">
           <h1 class="text-headline text-center">Shopping List</h1>
 
-          <app-grid col1="1" col2="max" gapX="sm" gapY="md">
+          <app-grid col1="1" col2="max" gapX="md" gapY="md">
             <div class="w-full">
               <app-select-test
                 [options]="shoppingListsNames()"
@@ -17,10 +17,33 @@
                 (valueChange)="updateShoppingListSelection($event)"
               ></app-select-test>
             </div>
-            <app-button variant="ghost" size="sm"
-              ><div class="h-6 w-6">
-                <i class="fa-solid fa-pen-to-square fa-xl"></i></div
-            ></app-button>
+            <app-inline>
+              <app-button
+                variant="ghost"
+                size="sm"
+                (clicked)="
+                  openUpdateShoppingListModal(
+                    $event,
+                    shoppingListNameSelected()
+                  )
+                "
+                ><div class="h-6 w-6">
+                  <i class="fa-solid fa-pen-to-square fa-xl"></i></div
+              ></app-button>
+              <app-button
+                variant="ghost"
+                size="sm"
+                color="danger"
+                (clicked)="
+                  openDeleteShoppingListModal(
+                    $event,
+                    shoppingListNameSelected()
+                  )
+                "
+                ><div class="h-6 w-6">
+                  <i class="fa-regular fa-trash-can fa-xl"></i></div
+              ></app-button>
+            </app-inline>
           </app-grid>
 
           <app-segmented-control
@@ -40,10 +63,10 @@
                   id="quickEntryItem"
                   name="quickEntryItem"
                   required
-                  placeholder="Provide an item"
+                  placeholder="Enter an item or existing ingredient"
                   autocomplete="off"
                   [value]="quickEntryItem()"
-                  (input)="quickEntryItem.set($any($event.target).value)"
+                  (input)="setInputItem($any($event.target).value)"
                   (keydown.enter)="addQuickEntryItem()"
                   class="inset-x-md surface-2"
                 />
@@ -57,6 +80,43 @@
                   <i class="fa-solid fa-plus fa-lg"></i></div
               ></app-button>
             </app-grid>
+          }
+          @if (ingredientsFound()) {
+            <app-stack variant="compact">
+              @for (ing of ingredientsFound(); track $index) {
+                <div
+                  class="surface-2 surface-interactive inset-sm w-full rounded"
+                  (click)="selectIngredientSuggestion(ing)"
+                >
+                  <app-row>
+                    <span>
+                      @if (
+                        ing.name | highlightMatch: quickEntryItem();
+                        as parts
+                      ) {
+                        <span>{{ parts.prefix }}</span>
+                        <span
+                          class="font-bold text-lg text-primary-700 dark:text-primary-200"
+                          >{{ parts.match }}</span
+                        >
+                        <span>{{ parts.rest }}</span>
+                      }
+                    </span>
+                    <div class="w-48">
+                      <app-measure-control
+                        [measure]="measureFor(ing.id)"
+                        [unit]="ing.unit"
+                        [surface]="1"
+                        (measureChange)="
+                          onMeasuresChange(ing.id, ing.unit, $event)
+                        "
+                        (click)="$event.stopPropagation()"
+                      />
+                    </div>
+                  </app-row>
+                </div>
+              }
+            </app-stack>
           }
           @if (methodSelected() === this.methods[1]) {}
           @if (methodSelected() === this.methods[2]) {

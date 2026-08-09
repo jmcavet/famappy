@@ -13,6 +13,10 @@ import { ChipComponent } from '../../shared/ui/chip/chip.component';
 import { SegmentedControlComponent } from '../../shared/ui/segmented-control/segmented-control.component';
 import { SelectTestComponent } from '../../shared/ui/select-test/select.component';
 import { IngredientCategoryDocInBackend } from '../../models/ingredient.model';
+import { RowComponent } from '../../shared/layout/primitives/row.component';
+import { c } from '../../../../node_modules/@angular/cdk/a11y-module.d-DBHGyKoh';
+import { HighlightMatchPipe } from '../../shared/pipes/highlight-match.pipe';
+import { MeasureControlComponent } from './components/measure-control/measure-control.component';
 
 @Component({
   selector: 'app-shopping',
@@ -23,12 +27,15 @@ import { IngredientCategoryDocInBackend } from '../../models/ingredient.model';
     StackComponent,
     SectionComponent,
     InlineComponent,
+    RowComponent,
     FooterComponent,
     SegmentedControlComponent,
     ButtonComponent,
     ChipComponent,
     SelectTestComponent,
+    MeasureControlComponent,
     LoadingComponent,
+    HighlightMatchPipe,
   ],
   templateUrl: './shopping.component.html',
   styleUrl: './shopping.component.css',
@@ -82,6 +89,7 @@ export class ShoppingComponent {
   readonly methodSelected = this.shoppingFacade.methodSelected;
 
   readonly quickEntryItem = this.shoppingFacade.quickEntryItem;
+  readonly ingredientsFound = this.shoppingFacade.ingredientsFound;
 
   readonly ingredientCategoriesSorted =
     this.shoppingFacade.ingredientCategoriesSorted;
@@ -93,9 +101,41 @@ export class ShoppingComponent {
     return this.shoppingFacade.countIngredientsPerCategory(cat);
   }
 
+  selectIngredientSuggestion(ing: {
+    id: string;
+    name: string;
+    category: string;
+  }) {
+    this.shoppingFacade.selectIngredientSuggestion(ing);
+  }
+
   shoppingQuickItems = this.shoppingFacade.shoppingQuickItems;
 
+  setInputItem(item: string) {
+    this.shoppingFacade.setInputItem(item);
+  }
+
+  measureFor(ingredientId: string) {
+    return this.shoppingFacade.measureFor(ingredientId);
+  }
+
+  onMeasuresChange(
+    ingredientId: string,
+    ingredientUnit: string | null,
+    value: 'decr' | 'incr',
+  ) {
+    this.shoppingFacade.changeMeasure(ingredientId, ingredientUnit, value);
+  }
+
   addQuickEntryItem = () => this.shoppingFacade.addQuickEntryItem();
+
+  openUpdateShoppingListModal(event: MouseEvent, shoppingListName: string) {
+    this.shoppingFacade.openUpdateShoppingListModal(event, shoppingListName);
+  }
+
+  openDeleteShoppingListModal(event: MouseEvent, shoppingListName: string) {
+    this.shoppingFacade.openDeleteShoppingListModal(event, shoppingListName);
+  }
 
   openAddShoppingListInputModal(event: MouseEvent) {
     this.shoppingFacade.openAddShoppingListInputModal(event);

@@ -37,12 +37,6 @@ export class ShoppingQuickItemsDomainFacade {
     );
   }
 
-  // deleteShoppingCategoryItem(itemId: string) {
-  //   this.shoppingQuickItemsBackendService.deleteShoppingCategoryItemfromStore(
-  //     itemId,
-  //   );
-  // }
-
   public async updateQuickItem(
     quickItemIdToUpdate: string,
     newQuickItemName: string,
@@ -52,6 +46,12 @@ export class ShoppingQuickItemsDomainFacade {
       quickItemIdToUpdate,
       newQuickItemName,
       mustPreserveState,
+    );
+  }
+
+  public async deleteShoppingQuickItems(quickItemIdsToDelete: string[]) {
+    await this.shoppingQuickItemsBackendService.removeQuickItemsFromStore(
+      quickItemIdsToDelete,
     );
   }
 }

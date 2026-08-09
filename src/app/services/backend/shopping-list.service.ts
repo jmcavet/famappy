@@ -136,28 +136,6 @@ export class ShoppingListBackendService {
     }
   }
 
-  // /**
-  //  * Delete an ingredient from the store.
-  //  *
-  //  * @param ingredientIdToDelete - The id of the ingredient to delete
-  //  */
-  // async deleteIngredientfromStore(ingredientIdToDelete: string) {
-  //   this._deleting.set(true);
-
-  //   try {
-  //     await this.firestoreService.removeDocumentFromFirestore(
-  //       'ingredients',
-  //       ingredientIdToDelete,
-  //       () => {
-  //         // This callback runs once Firestore returns
-  //         this._deleting.set(false);
-  //       },
-  //     );
-  //   } catch (error) {
-  //     console.error('Error deleting ingredient: ', error);
-  //   }
-  // }
-
   /**
    * Delete an shopping list ingredient/item from the store. It removes it either from the 'ingredients' or 'items' array of ids.
    *
@@ -183,6 +161,23 @@ export class ShoppingListBackendService {
       );
     } catch (error) {
       console.error('Error removing item from shopping list document: ', error);
+    }
+  }
+
+  async deleteShoppingListFromStore(shoppingListId: string) {
+    this._deleting.set(true);
+
+    try {
+      await this.firestoreService.removeDocumentFromFirestore(
+        'shopping-lists',
+        shoppingListId,
+        () => {
+          // This callback runs once Firestore returns
+          this._deleting.set(false);
+        },
+      );
+    } catch (error) {
+      console.error('Error removing shopping list document: ', error);
     }
   }
 
