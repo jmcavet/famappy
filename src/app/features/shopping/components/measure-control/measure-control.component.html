@@ -1,5 +1,5 @@
-<div class="surface-2 rounded-2xl inset-sm">
-  <app-row>
+<div [class]="containerClasses()">
+  <app-row gap="sm">
     <app-button
       [disabled]="disabled()"
       variant="outline"
@@ -9,7 +9,7 @@
     >
       <i class="fa-solid fa-minus"></i>
     </app-button>
-    <app-inline gap="sm">
+    <app-inline gap="xs">
       <span>{{ measure() }}</span>
       <span>{{ unit() }}</span>
     </app-inline>
