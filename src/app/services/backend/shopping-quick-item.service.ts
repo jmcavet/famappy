@@ -103,6 +103,25 @@ export class ShoppingQuickItemBackendService {
     }
   }
 
+  async removeQuickItemsFromStore(quickItemIds: string[]) {
+    this._updating.set(true);
+
+    try {
+      await this.firestoreService.removeDocumentsFromFirestore(
+        'shopping-quick-items',
+        quickItemIds,
+        () => {
+          // This callback runs once Firestore returns
+          this._updating.set(false);
+        },
+      );
+
+      // .....
+    } catch (error) {
+      console.error('Error removing shopping quick items: ', error);
+    }
+  }
+
   // /**
   //  * Delete a shopping category item from the store.
   //  *

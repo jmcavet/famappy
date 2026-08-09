@@ -285,6 +285,30 @@ export class FirestoreService {
     }
   }
 
+  async removeDocumentsFromFirestore(
+    collectionName: string,
+    deletes: string[],
+    onDataLoaded?: () => void,
+  ): Promise<void> {
+    try {
+      const user = this.authService.user();
+      if (!user?.uid) throw new Error('Not authenticated');
+
+      const batch = writeBatch(this.firebaseService.db);
+
+      deletes.forEach((id) => {
+        const docRef = doc(this.firebaseService.db, collectionName, id);
+        batch.delete(docRef);
+      });
+
+      await batch.commit();
+
+      if (onDataLoaded) onDataLoaded();
+    } catch (e) {
+      console.error('Error removing multiple documents:', e);
+    }
+  }
+
   async removeItemFromArrayProperty(
     collectionName: string,
     documentId: string,
