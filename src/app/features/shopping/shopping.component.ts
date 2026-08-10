@@ -172,4 +172,11 @@ export class ShoppingComponent {
   openUpdateQuickItemsModal(event: MouseEvent, ing: ShoppingListElement) {
     this.shoppingFacade.openUpdateQuickItemsModal(event, ing);
   }
+
+  openUpdateIngredientMeasureModal(
+    event: MouseEvent,
+    ing: ShoppingListElement,
+  ) {
+    this.shoppingFacade.openUpdateIngredientMeasureModal(event, ing);
+  }
 }

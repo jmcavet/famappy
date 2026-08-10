@@ -41,7 +41,7 @@ export class ShoppingListDomainFacade {
     );
   }
 
-  uptdateIngredientsInShoppingList(
+  updateIngredientsInShoppingList(
     shoppingListId: string,
     updatedIngredients: any,
     mustPreserveState: WritableSignal<boolean>,

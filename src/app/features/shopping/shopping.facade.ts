@@ -25,6 +25,7 @@ import {
 } from '../../models/ingredient.model';
 import { ModalConfirmComponent } from '../../shared/layout/overlays/modal/modal-confirm/modal-confirm.component';
 import { ShoppingListDocInBackend } from '../../models/shopping-list.model';
+import { ModalUpdateMeasureComponent } from '../../shared/layout/overlays/modal/modal-measure/modal-update-measure.component';
 
 export interface ShoppingListElement {
   ingredientId: string | null;
@@ -184,6 +185,8 @@ export class ShoppingFacade {
     const selectedIngredients = this.ingredients().filter((ing) =>
       ingredients?.map((ingr) => ingr.id).includes(ing.id),
     );
+
+    console.log('selectedIngredients: ', selectedIngredients);
 
     const ingredientsPerCategorySelected = selectedIngredients.filter((ing) =>
       this.ingredientCategorySelected()
@@ -687,7 +690,7 @@ export class ShoppingFacade {
       (m) => m.id === ing.id,
     )?.measure;
 
-    this.updateIngredientsInShoppingList(shoppingListId!, {
+    this.updateOrSumIngredientMeasureInShoppingList(shoppingListId!, {
       id: ing.id,
       measure: updatedMeasure,
     });
@@ -734,6 +737,45 @@ export class ShoppingFacade {
     );
   }
 
+  public openUpdateIngredientMeasureModal(
+    event: MouseEvent,
+    shoppingElement: ShoppingListElement,
+  ) {
+    event.stopPropagation();
+
+    console.log('shoppingElement: ', shoppingElement);
+
+    const ingredient = this.ingredients().find(
+      (ing) => ing.id === shoppingElement.ingredientId,
+    );
+    const ingredientId = ingredient?.id ?? '';
+    const unit = ingredient?.unit;
+    const ingredientDefaultMeasure = ingredient?.measure;
+    const measure = shoppingElement.measure;
+
+    this.modalService.open(
+      ModalUpdateMeasureComponent,
+      {
+        title: 'Update ingredient measure',
+        ingredientName: shoppingElement.name,
+        unit,
+        measure,
+        btnConfirmColor: 'primary',
+        ingredientDefaultMeasure,
+      },
+      {
+        onConfirm: (data: { measure: number }) => {
+          (async () => {
+            await this.updateIngredientMeasureInShoppingList(
+              ingredientId,
+              data.measure,
+            );
+          })();
+        },
+      },
+    );
+  }
+
   public getIngredientUnit(ingredientId: string) {
     return (
       this.ingredients().find((ing) => ing.id === ingredientId)?.unit ?? ''
@@ -759,6 +801,11 @@ export class ShoppingFacade {
   /* ════════════════════════════════
    * Private Helpers
    * ════════════════════════════════ */
+  /**
+   * Add a new shopping list.
+   *
+   * @param shoppingListName - name of the shopping list to create
+   */
   private async addShoppingList(shoppingListName: string) {
     this.shoppingListDomainFacade.saveShoppingList({
       name: shoppingListName,
@@ -786,6 +833,11 @@ export class ShoppingFacade {
     this.shoppingService.saveShoppingCategorySelection(name);
   }
 
+  /**
+   * User selects category items and export them to the shopping list.
+   *
+   * @param itemsNames - names of the category items to export
+   */
   private async exportShoppingCategoryItems(itemsNames: string[]) {
     const shoppingListIdSelected = this.shoppingLists().find(
       (list) => list.name === this.shoppingListNameSelected(),
@@ -822,6 +874,11 @@ export class ShoppingFacade {
     );
   }
 
+  /**
+   * Update the shopping category items of a specific shopping list document.
+   *
+   * @param items - List of items from a shopping category
+   */
   private async updateShoppingCategoryItems(items: ShoppingCategoryItem[]) {
     const mustPreserveState = signal<boolean>(false);
 
@@ -844,6 +901,42 @@ export class ShoppingFacade {
     );
   }
 
+  /**
+   * Update the measure of an ingredient for a specific shopping list document.
+   *
+   * @param ingredientId - The id of the ingredient (element of the 'ingredients' property)
+   * @param updatedMeasure - Measure of the ingredient, updated by user via modal
+   */
+  private async updateIngredientMeasureInShoppingList(
+    ingredientId: string,
+    updatedMeasure: number,
+  ) {
+    const shoppingListId = this.shoppingListSelected()?.id;
+
+    const currentIngredients = this.shoppingListSelected()?.ingredients ?? [];
+
+    const existingIndex = currentIngredients.findIndex(
+      (ing) => ing.id === ingredientId,
+    );
+
+    const updatedIngredients = currentIngredients.map((ing, index) =>
+      index === existingIndex
+        ? {
+            ...ing,
+            measure: updatedMeasure ?? 0,
+          }
+        : ing,
+    );
+
+    const mustPreserveState = signal<boolean>(false);
+
+    this.shoppingListDomainFacade.updateIngredientsInShoppingList(
+      shoppingListId!,
+      updatedIngredients,
+      mustPreserveState,
+    );
+  }
+
   private async updateShoppingList(
     shoppingListIdToUpdate: string,
     newShoppingListName: string,
@@ -859,7 +952,14 @@ export class ShoppingFacade {
     this.updateShoppingListSelection(newShoppingListName);
   }
 
-  private async updateIngredientsInShoppingList(
+  /**
+   * Update the measure of an ingredient for a specific shopping list document. If the ingredient does not exist yet
+   *  in the list of ingredients, it will be added. If it exists, its new measure will be added to the original one.
+   *
+   * @param shoppingListIdToUpdate - The id of the shopping list selected
+   * @param newIngredient - Object representing the ingredient's new values for id and measure
+   */
+  private async updateOrSumIngredientMeasureInShoppingList(
     shoppingListIdToUpdate: string,
     newIngredient: { id: string; measure: number | undefined },
   ) {
@@ -867,15 +967,37 @@ export class ShoppingFacade {
 
     const currentIngredients = this.shoppingListSelected()?.ingredients ?? [];
 
-    const updatedIngredients = [...currentIngredients, newIngredient];
+    const existingIndex = currentIngredients.findIndex(
+      (ing) => ing.id === newIngredient.id,
+    );
 
-    await this.shoppingListDomainFacade.uptdateIngredientsInShoppingList(
+    const updatedIngredients =
+      existingIndex !== -1
+        ? // If id already exists, sum the measures
+          currentIngredients.map((ing, index) =>
+            index === existingIndex
+              ? {
+                  ...ing,
+                  measure: (ing.measure ?? 0) + (newIngredient.measure ?? 0),
+                }
+              : ing,
+          )
+        : // If id does not exist,  add as new object in the 'ingredients' property (array)
+          [...currentIngredients, newIngredient];
+
+    this.shoppingListDomainFacade.updateIngredientsInShoppingList(
       shoppingListIdToUpdate,
       updatedIngredients,
       mustPreserveState,
     );
   }
 
+  /**
+   * Delete a shopping list from db. If it contains quick items, those will be deleted as well from db.
+   *
+   * @param shoppingListElement - Element of a shopping list. Can be an existing ingredient, an item from an existing
+   * category, or a quick item.
+   */
   private async deleteShoppingList(
     shoppingListElement: ShoppingListDocInBackend,
   ) {
