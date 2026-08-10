@@ -148,7 +148,7 @@ export class RecipeBackendService {
           this._updating.set(false); // callback after all updates finish
         },
       );
-      console.log('Documents have been succesfully deleted...');
+      console.log('Documents have been succesfully updated...');
       mustPreserveState.set(true);
     } catch (error) {
       console.error('Error updating recipe: ', error);

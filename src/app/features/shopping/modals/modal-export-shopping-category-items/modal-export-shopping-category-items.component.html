@@ -1,0 +1,53 @@
+<app-section [surface]="3">
+  <app-stack variant="page">
+    <h2 class="text-title text-center">{{ title() }}</h2>
+
+    <app-stack variant="section">
+      <app-stack>
+        <div class="text-subtitle text-center">{{ category() }}</div>
+      </app-stack>
+
+      <app-stack>
+        @for (item of existingItems(); track $index) {
+          <button
+            class="category-item inset-inline-sm surface-2 surface-interactive"
+            [class.active]="selectedItems().includes(item.name)"
+            [disabled]="itemsAlreadyDisplayedOnPage().includes(item.name)"
+            [ngClass]="
+              itemsAlreadyDisplayedOnPage().includes(item.name)
+                ? 'btn--disabled'
+                : ''
+            "
+            (click)="toggleCategoryItem(item.name)"
+          >
+            <app-row>
+              <app-inline>
+                @if (selectedItems().includes(item.name)) {
+                  <i class="fa-solid fa-check"></i>
+                }
+                <span>{{ item.name }}</span>
+              </app-inline>
+            </app-row>
+          </button>
+        }
+      </app-stack>
+    </app-stack>
+
+    <app-row>
+      <app-button
+        variant="outline"
+        color="neutral"
+        size="md"
+        (clicked)="onCancel()"
+        >Cancel</app-button
+      >
+
+      <app-button
+        size="md"
+        (clicked)="onConfirm()"
+        [disabled]="this.selectedItems().length === 0"
+        >{{ exportMessage() }}</app-button
+      >
+    </app-row>
+  </app-stack>
+</app-section>

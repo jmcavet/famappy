@@ -1,4 +1,4 @@
-import { Component, input, output, signal } from '@angular/core';
+import { Component, computed, input, output, signal } from '@angular/core';
 import { RowComponent } from '../../../../shared/layout/primitives/row.component';
 import { InlineComponent } from '../../../../shared/layout/primitives/inline.component';
 import { ButtonComponent } from '../../../../shared/ui/button/button.component';
@@ -14,6 +14,7 @@ export class MeasureControlComponent {
   unit = input<string>('Kg');
   measureChange = output<'decr' | 'incr'>();
   disabled = input<boolean>(false);
+  surface = input<number>(2);
 
   decrease() {
     if (this.measure() > 0) {
@@ -24,4 +25,8 @@ export class MeasureControlComponent {
   increase() {
     this.measureChange.emit('incr');
   }
+
+  containerClasses = computed(
+    () => `surface-${this.surface()} rounded-2xl inset-sm`,
+  );
 }

@@ -1,51 +1,190 @@
-<div class="text-black dark:text-white flex flex-col items-center mt-8">
-  <h1 class="text-2xl">Welcome to Fam'appy v0.1.0</h1>
+<div class="h-full layout-hcf">
+  <app-header-shell>
+    <app-section inset="xl" [surface]="1" [shadow]="false">
+      <app-row>
+        <app-inline>
+          <app-button
+            variant="ghost"
+            routerLink="/settings"
+            routerLinkActive="active-link"
+          >
+            <i class="fa-solid fa-user fa-xl"></i>
+          </app-button>
+          <span class="text-title">Famappy</span>
+        </app-inline>
+        <app-button variant="ghost">
+          <i class="fa-regular fa-bell fa-xl fa-beat"></i>
+        </app-button>
+      </app-row>
+    </app-section>
+  </app-header-shell>
+  <app-page-layout>
+    @if (dataIsLoading()) {
+      <app-stack align="center">
+        <app-loading />
+      </app-stack>
+    } @else {
+      @if (!user()) {
+        <div class="flex-between mt-16 gap-4">
+          <app-button
+            [fullWidth]="true"
+            variant="outline"
+            size="lg"
+            routerLink="/login"
+            >Log in</app-button
+          >
+          <app-button [fullWidth]="true" size="lg" routerLink="/signup"
+            >sign up</app-button
+          >
+        </div>
+      } @else {
+        <app-stack variant="spacious" class="mt-8">
+          <div
+            class="bg-gradient-to-br from-primary-300 to-primary-100 dark:from-primary-700 dark:to-primary-900 inset-md rounded-xl"
+          >
+            <app-grid-responsive [cols]="2" [colsMd]="3" [colsLg]="4" gap="md">
+              <button
+                class="bg-primary-50 dark:bg-primary-950"
+                routerLink="/meals"
+              >
+                <app-stack>
+                  <i class="fa-solid fa-utensils"></i>
+                  <span class="text-title">Meals</span>
+                </app-stack>
+              </button>
 
-  @if (!user()) {
-    <div class="flex-between mt-16 gap-4">
-      <app-button
-        [fullWidth]="true"
-        variant="outline"
-        size="lg"
-        routerLink="/login"
-        >Log in</app-button
-      >
-      <app-button [fullWidth]="true" size="lg" routerLink="/signup"
-        >sign up</app-button
-      >
-    </div>
-  } @else {
-    <p
-      class="mt-6 bg-primary-100 text-primary-800 text-xl text-center px-4 py-2 rounded"
-    >
-      {{ userName() }}
-    </p>
+              <button
+                class="bg-primary-50 dark:bg-primary-950"
+                routerLink="/shopping"
+              >
+                <app-stack>
+                  <i class="fa-solid fa-cart-shopping"></i>
+                  <span class="text-title">Shopping</span>
+                </app-stack>
+              </button>
 
-    <p class="my-6">Plan your daily family life...</p>
+              <button
+                class="bg-primary-50 dark:bg-primary-950"
+                routerLink="/recipes"
+              >
+                <app-stack>
+                  <i class="fa-solid fa-mortar-pestle"></i>
+                  <span class="text-title">Recipes</span>
+                </app-stack>
+              </button>
 
-    <section class="surface-1 flex-center">
-      <button routerLink="/recipes">
-        <span class="mr-4 py-4"
-          ><i class="fa-solid fa-utensils fa-2xl"></i></span
-        >Recipes
-      </button>
+              <button
+                class="bg-primary-50 dark:bg-primary-950"
+                routerLink="/ingredients"
+              >
+                <app-stack>
+                  <i class="fa-solid fa-carrot"></i>
+                  <span class="text-title">Ingredients</span>
+                </app-stack>
+              </button>
+            </app-grid-responsive>
+          </div>
 
-      <button routerLink="/new-recipe">
-        <span class="mr-4 py-4"><i class="fa-solid fa-plus fa-2xl"></i></span
-        >New Recipe
-      </button>
-      <button routerLink="/ingredients">
-        <span class="mr-4 py-4"
-          ><i class="fa-solid fa-list-check fa-2xl"></i
-        ></span>
-        Ingredients
-      </button>
-      <button routerLink="/meals">
-        <span class="mr-4 py-4"
-          ><i class="fa-solid fa-list-check fa-2xl"></i
-        ></span>
-        Meals
-      </button>
-    </section>
-  }
+          <app-card>
+            <app-stack variant="section">
+              <app-row>
+                <h2 class="text-title">Menu of the day</h2>
+                <span class="text-meta">{{ currentDate | capitalize }}</span>
+              </app-row>
+              @if (dayMeals()?.length) {
+                <app-grid col1="max" col2="1" col3="max" gapX="sm" gapY="md">
+                  @for (meal of dayMeals(); track meal.id) {
+                    <span
+                      class="text-meta text-{{
+                        meal.mealType
+                      }}-light-bg dark:text-{{ meal.mealType }}-dark-bg"
+                      >{{ meal.mealType | capitalize }}</span
+                    >
+                    @if (meal.recipeId) {
+                      <app-button
+                        variant="ghost"
+                        routerLink="/recipes/{{ meal.recipeId }}"
+                        routerLinkActive="active-link"
+                      >
+                        <span class="text-body-lg">{{ meal.mealName }}</span>
+                      </app-button>
+                    } @else if (meal.manualRecipe) {
+                      <app-button
+                        variant="ghost"
+                        (clicked)="viewManualRecipe(meal.manualRecipe)"
+                      >
+                        <span class="text-body-lg">{{ meal.mealName }}</span>
+                      </app-button>
+                    }
+
+                    <div
+                      class="cook"
+                      [class.firstCook]="
+                        getCookPosition(meal.cookId) === 'first'
+                      "
+                      [class.secondCook]="
+                        getCookPosition(meal.cookId) === 'second'
+                      "
+                    >
+                      {{ getCookNameById(meal.cookId) }}
+                    </div>
+                  }
+                </app-grid>
+              } @else {
+                <app-button
+                  variant="ghost"
+                  routerLink="/meals"
+                  routerLinkActive="active-link"
+                  color="secondary"
+                >
+                  <app-inline>
+                    <span>Plan a meal</span>
+                    <i class="fa-solid fa-arrow-right fa-xl fa-beat"></i>
+                  </app-inline>
+                </app-button>
+              }
+            </app-stack>
+          </app-card>
+
+          <app-card>
+            <app-stack variant="section">
+              <h2 class="text-title">My shopping lists</h2>
+              <app-stack>
+                @for (
+                  shoppingListName of dbShoppingListsNames();
+                  track $index
+                ) {
+                  <app-row>
+                    <span class="color-text-muted">Date</span>
+                    <app-button
+                      variant="ghost"
+                      (clicked)="navigateToShoppingPage(shoppingListName)"
+                    >
+                      <span class="text-body-lg">{{ shoppingListName }}</span>
+                    </app-button>
+                  </app-row>
+                }
+              </app-stack>
+            </app-stack>
+          </app-card>
+
+          <app-stack variant="section">
+            <app-row>
+              <h2 class="text-title">Suggestion of the day</h2>
+
+              <app-button variant="ghost" (clicked)="shuffleReipes()">
+                <i class="fa-solid fa-shuffle fa-xl"></i>
+              </app-button>
+            </app-row>
+
+            <app-grid-responsive [colsMd]="3" [colsLg]="4" gap="sm">
+              @for (recipe of randomRecipes(); track $index) {
+                <app-recipe-card [recipeState]="recipe"></app-recipe-card>
+              }
+            </app-grid-responsive>
+          </app-stack>
+        </app-stack>
+      }
+    }
+  </app-page-layout>
 </div>

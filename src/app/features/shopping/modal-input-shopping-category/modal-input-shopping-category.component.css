@@ -1,0 +1,13 @@
+input[type="text"] {
+  @apply h-11 w-full rounded-lg border border-neutral-300 dark:border-neutral-700 dark:placeholder:text-neutral-500 leading-tight outline-none 
+  focus:border-primary-500 dark:focus:border-primary-400
+  focus:ring-2 focus:ring-primary-500/20 dark:focus:ring-primary-400/20;
+}
+
+input.ng-invalid.ng-touched {
+  @apply border border-danger dark:border-danger-dark;
+}
+
+.invalid {
+  @apply text-danger dark:text-danger-dark text-sm;
+}

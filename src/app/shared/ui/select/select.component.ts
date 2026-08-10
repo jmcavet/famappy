@@ -1,4 +1,10 @@
-import { Component, HostBinding, Input } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  HostBinding,
+  Input,
+  Output,
+} from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 
 type SelectColor = 'primary' | 'secondary' | 'neutral';
@@ -18,7 +24,8 @@ export class SelectComponent<T = string> {
 
   @HostBinding('class')
   get hostClasses() {
-    return this.responsive ? 'w-full md:w-fit block' : 'w-fit block';
+    // return this.responsive ? 'w-full md:w-fit block' : 'w-fit block';
+    return this.responsive ? 'w-full md:w-fit block' : 'block';
   }
 
   get classesLabel(): string {

@@ -1,0 +1,39 @@
+<app-section [surface]="3">
+  <app-stack variant="page">
+    <h2 class="text-title text-center">{{ title }}</h2>
+
+    <app-stack variant="section">
+      <app-stack variant="compact">
+        <span class="text-subtitle text-center">{{ ingredientName }}</span>
+      </app-stack>
+
+      <div class="w-full">
+        <app-measure-control
+          [measure]="measureTest()"
+          [unit]="unit"
+          [surface]="1"
+          (measureChange)="changeMeasure($event)"
+          (click)="$event.stopPropagation()"
+        />
+      </div>
+    </app-stack>
+
+    <app-row>
+      <app-button
+        variant="outline"
+        color="neutral"
+        size="md"
+        (clicked)="onCancel()"
+        >Cancel</app-button
+      >
+
+      <app-button
+        [color]="btnConfirmColor"
+        size="md"
+        (clicked)="onConfirm()"
+        [disabled]="measureTest() === measure"
+        >Update measure</app-button
+      >
+    </app-row>
+  </app-stack>
+</app-section>

@@ -21,6 +21,7 @@ export class AuthService {
 
   /** State signals */
   user = signal<User | null>(null);
+  userLoading = signal<boolean>(false);
   userName = signal<string>('');
   isLoggingIn = signal<boolean>(false);
   isSigningUp = signal<boolean>(false);
@@ -32,8 +33,11 @@ export class AuthService {
 
   constructor() {
     onAuthStateChanged(this.firebaseservice.auth, async (authUser) => {
+      this.userLoading.set(true);
+
       if (!authUser) {
         this.user.set(null);
+        this.userLoading.set(false);
         return;
       }
 
@@ -43,6 +47,8 @@ export class AuthService {
       } else {
         this.user.set(null);
       }
+
+      this.userLoading.set(false);
     });
   }
 
@@ -60,7 +66,7 @@ export class AuthService {
   async signupWithProfileAndMetadata(
     email: string,
     password: string,
-    familyName: string
+    familyName: string,
   ): Promise<UserCredential> {
     try {
       this.isSigningUp.set(true);
@@ -68,7 +74,7 @@ export class AuthService {
       const userCredential = await createUserWithEmailAndPassword(
         this.firebaseservice.auth,
         email,
-        password
+        password,
       );
 
       const user = userCredential.user;
@@ -93,7 +99,7 @@ export class AuthService {
 
   async loginWithEmailAndPassword(
     email: string,
-    password: string
+    password: string,
   ): Promise<UserCredential> {
     try {
       this.isLoggingIn.set(true);
@@ -101,7 +107,7 @@ export class AuthService {
       const userCredential = await signInWithEmailAndPassword(
         this.firebaseservice.auth,
         email,
-        password
+        password,
       );
 
       const user = userCredential.user;

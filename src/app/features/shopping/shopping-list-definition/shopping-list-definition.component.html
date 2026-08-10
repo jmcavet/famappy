@@ -1,0 +1,52 @@
+<div class="h-full layout-hcf">
+  <app-header-shell
+    ><div class="inset-md">
+      <app-stepper [navStep]="1" /></div
+  ></app-header-shell>
+
+  <app-page-layout>
+    @if (dataIsLoading()) {
+      <app-stack align="center">
+        <app-loading />
+      </app-stack>
+    } @else {
+      <app-section inset="lg">
+        <app-stack variant="section">
+          <app-row justify="center">
+            <h2 class="font-roboto text-title">
+              Provide a name for your shopping list
+            </h2>
+          </app-row>
+          <input
+            #autoFocusInput
+            type="text"
+            id="shoppingListTitle"
+            name="shoppingListTitle"
+            required
+            placeholder="Shopping list title"
+            autocomplete="off"
+            [value]="shoppingListTitle()"
+            (input)="shoppingListTitle.set($any($event.target).value)"
+            class="inset-x-md surface-2"
+          />
+        </app-stack>
+      </app-section>
+    }
+  </app-page-layout>
+
+  <app-section [surface]="0">
+    <div class="w-full">
+      <app-inline>
+        <app-button variant="outline" [fullWidth]="true" routerLink="/meals">
+          Cancel
+        </app-button>
+        <!-- <app-button [fullWidth]="true" routerLink="/shopping">
+          Create list
+        </app-button> -->
+        <app-button [fullWidth]="true" (clicked)="addShoppingList()">
+          Create list
+        </app-button>
+      </app-inline>
+    </div>
+  </app-section>
+</div>

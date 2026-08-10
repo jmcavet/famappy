@@ -20,6 +20,7 @@ import {
   getDocs,
   getDoc,
   writeBatch,
+  arrayRemove,
 } from 'firebase/firestore';
 
 import { BehaviorSubject } from 'rxjs';
@@ -31,6 +32,7 @@ import {
 } from '../../features/recipes/components/recipe-card/recipe.model';
 import { deleteObject, ref } from 'firebase/storage';
 import { CloseScrollStrategy } from '@angular/cdk/overlay';
+import { ShoppingListElement } from '../../features/shopping/shopping.facade';
 
 @Injectable({
   providedIn: 'root',
@@ -196,8 +198,32 @@ export class FirestoreService {
     if (onAllUpdatesComplete) onAllUpdatesComplete();
   }
 
+  async updateDocumentsInFirestore(
+    collectionName: string,
+    updates: { id: string; properties: object }[],
+    onDataLoaded?: () => void,
+  ): Promise<void> {
+    try {
+      const user = this.authService.user();
+      if (!user?.uid) throw new Error('Not authenticated');
+
+      const batch = writeBatch(this.firebaseService.db);
+
+      updates.forEach(({ id, properties }) => {
+        const docRef = doc(this.firebaseService.db, collectionName, id);
+        batch.update(docRef, { ...properties, userId: user.uid });
+      });
+
+      await batch.commit();
+
+      if (onDataLoaded) onDataLoaded();
+    } catch (e) {
+      console.error('Error updating multiple documents:', e);
+    }
+  }
+
   // TODO: refactor this method so that it becomes more generic...Seems difficult.
-  /** Reset multiple Firestore documents */
+  /** Remove multiple Firestore documents */
   async removeIdsFromCollectionPropertyInFirestore(
     collectionName: string,
     documentsToUpdate: RecipeWithId[],
@@ -256,6 +282,61 @@ export class FirestoreService {
       throw new Error(
         `Failed to delete document from collection ${collectionName}`,
       );
+    }
+  }
+
+  async removeDocumentsFromFirestore(
+    collectionName: string,
+    deletes: string[],
+    onDataLoaded?: () => void,
+  ): Promise<void> {
+    try {
+      const user = this.authService.user();
+      if (!user?.uid) throw new Error('Not authenticated');
+
+      const batch = writeBatch(this.firebaseService.db);
+
+      deletes.forEach((id) => {
+        const docRef = doc(this.firebaseService.db, collectionName, id);
+        batch.delete(docRef);
+      });
+
+      await batch.commit();
+
+      if (onDataLoaded) onDataLoaded();
+    } catch (e) {
+      console.error('Error removing multiple documents:', e);
+    }
+  }
+
+  async removeItemFromArrayProperty(
+    collectionName: string,
+    documentId: string,
+    elementType: string,
+    elementToRemove: string | { id: string | null; measure: number | null },
+    onDataLoaded?: () => void,
+  ): Promise<void> {
+    try {
+      const user = this.authService.user();
+
+      if (!user?.uid) throw new Error('Not authenticated');
+
+      const docRef = doc(this.firebaseService.db, collectionName, documentId);
+
+      console.log('Removing from collection:', collectionName);
+      console.log('Document ID:', documentId);
+      console.log('Property:', elementType);
+      console.log('Element to remove:', JSON.stringify(elementToRemove));
+
+      const toto = await updateDoc(docRef, {
+        [elementType]: arrayRemove(elementToRemove),
+        userId: user.uid,
+      });
+
+      // Notify once Firestore responds
+      if (onDataLoaded) onDataLoaded();
+    } catch (e) {
+      console.error('Error removing item from array:', e);
     }
   }
 

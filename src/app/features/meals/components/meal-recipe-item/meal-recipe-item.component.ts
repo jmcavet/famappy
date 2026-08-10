@@ -4,6 +4,7 @@ import { MealRecipeItemFacade } from './meal-recipe-item.facade';
 import { InlineComponent } from '../../../../shared/layout/primitives/inline.component';
 import { ButtonComponent } from '../../../../shared/ui/button/button.component';
 import { TagComponent } from '../../../../shared/ui/tag/tag.component';
+import { MealWithId } from '../../state/mealCart.model';
 
 export interface MealRecipeContext {
   recipe: Signal<any>;

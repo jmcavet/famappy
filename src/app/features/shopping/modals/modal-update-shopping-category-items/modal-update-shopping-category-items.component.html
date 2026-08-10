@@ -1,0 +1,53 @@
+<app-section [surface]="3">
+  <app-stack variant="page">
+    <h2 class="text-title text-center">{{ title() }}</h2>
+
+    <app-stack variant="section">
+      <app-stack>
+        <div class="text-subtitle text-center">{{ category() }}</div>
+      </app-stack>
+
+      <app-stack>
+        @for (item of itemValues(); track $index; let i = $index) {
+          <app-row gap="md">
+            <input
+              type="text"
+              id="item"
+              name="item"
+              required
+              placeholder="Update item"
+              autocomplete="off"
+              [value]="itemValues()[i].name"
+              (input)="updateItem(i, $any($event.target).value)"
+              class="inset-x-md surface-2 w-full"
+            />
+            <app-button
+              variant="ghost"
+              size="sm"
+              color="danger"
+              (clicked)="deleteItem(item)"
+              ><i class="fa-regular fa-trash-can text-xl"></i
+            ></app-button>
+          </app-row>
+        }
+      </app-stack>
+    </app-stack>
+
+    <app-row>
+      <app-button
+        variant="outline"
+        color="neutral"
+        size="md"
+        (clicked)="onCancel()"
+        >Cancel</app-button
+      >
+
+      <app-button
+        size="md"
+        (clicked)="onConfirm()"
+        [disabled]="!originalItemsHaveChanged()"
+        >Update</app-button
+      >
+    </app-row>
+  </app-stack>
+</app-section>

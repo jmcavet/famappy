@@ -12,6 +12,9 @@ export class ShoppingStateService {
     ingredientCategoryIdSelected: '',
     measures: [],
     units: [],
+    shoppingListNameSelected: '',
+    methodSelected: '',
+    shoppingCategoryNameSelected: '',
   };
 
   state = signal<ShoppingState>(this.initialState);

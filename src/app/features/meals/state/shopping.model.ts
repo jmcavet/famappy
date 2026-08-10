@@ -4,4 +4,7 @@ export interface ShoppingState {
   ingredientCategoryIdSelected: string;
   measures: { id: string; measure: number }[];
   units: string[];
+  shoppingListNameSelected: string;
+  methodSelected: string;
+  shoppingCategoryNameSelected: string;
 }

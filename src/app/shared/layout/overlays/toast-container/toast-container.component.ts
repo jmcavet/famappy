@@ -8,7 +8,7 @@ import { Component, ViewChild, ViewContainerRef } from '@angular/core';
 })
 export class ToastContainerComponent {
   @ViewChild('toastContainer', { read: ViewContainerRef, static: true })
-  container!: ViewContainerRef;
+  private container!: ViewContainerRef;
 
   public get viewContainerRef() {
     return this.container;

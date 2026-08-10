@@ -36,6 +36,18 @@ ng build
 
 This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
 
+## Deploying firestore indexes and rules
+
+After implementing new logic for creating a new collection in firestore (and later be able to add/read/update/remove documents),
+it is necessary to add those in both the firestore.indexes.json and firestore.rules files. Those must then be deployed to firestore.
+
+Use the following command: "firebase deploy --only firestore". This will deploy both files.
+
+- If wanting to deploy only the rules for instance, write: "firebase deploy --only firestore:rules"
+- If wanting to deploy only the indexes for instance, write: "firebase deploy --only firestore:indexes"
+
+The creating of the index always takes a few minutes, be patient before using the application.
+
 ## Running unit tests
 
 To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
