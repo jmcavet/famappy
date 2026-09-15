@@ -2,7 +2,7 @@
   <app-header-shell>
     <app-section inset="xl" [surface]="1" [shadow]="false">
       <app-row>
-        <app-inline>
+        <app-inline gap="lg">
           <app-button
             variant="ghost"
             routerLink="/settings"
@@ -10,7 +10,19 @@
           >
             <i class="fa-solid fa-user fa-xl"></i>
           </app-button>
-          <span class="text-title">Famappy</span>
+          <app-inline gap="xs">
+            <img
+              src="icons/icon-96x96.png"
+              srcset="
+                icons/icon-96x96.png 3x,
+                icons/icon-72x72.png 2x,
+                icons/icon-48x48.png 1x
+              "
+              alt="Famappy"
+              style="width: 32px; height: 32px; border-radius: 8px"
+            />
+            <span class="text-title"> Famappy</span>
+          </app-inline>
         </app-inline>
         <app-button variant="ghost">
           <i class="fa-regular fa-bell fa-xl fa-beat"></i>
@@ -89,7 +101,9 @@
             <app-stack variant="section">
               <app-row>
                 <h2 class="text-title">Menu of the day</h2>
-                <span class="text-meta">{{ currentDate | capitalize }}</span>
+                <span class="text-sub-title">{{
+                  currentDate | capitalize
+                }}</span>
               </app-row>
               @if (dayMeals()?.length) {
                 <app-grid col1="max" col2="1" col3="max" gapX="sm" gapY="md">
@@ -101,13 +115,14 @@
                       >{{ meal.mealType | capitalize }}</span
                     >
                     @if (meal.recipeId) {
-                      <app-button
-                        variant="ghost"
+                      <a
+                        class="color-text-primary"
                         routerLink="/recipes/{{ meal.recipeId }}"
                         routerLinkActive="active-link"
+                        ><span class="text-body-lg">{{
+                          meal.mealName
+                        }}</span></a
                       >
-                        <span class="text-body-lg">{{ meal.mealName }}</span>
-                      </app-button>
                     } @else if (meal.manualRecipe) {
                       <app-button
                         variant="ghost"
@@ -155,7 +170,7 @@
                   track $index
                 ) {
                   <app-row>
-                    <span class="color-text-muted">Date</span>
+                    <!-- <span class="color-text-muted">Date</span> -->
                     <app-button
                       variant="ghost"
                       (clicked)="navigateToShoppingPage(shoppingListName)"
