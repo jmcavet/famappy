@@ -27,13 +27,11 @@ import { MinToHourPipe } from '../../../shared/pipes/mintohour.pipe';
 import { CapitalizePipe } from '../../../shared/pipes/capitalize.pipe';
 import { TabsComponent } from '../../new-recipe/components/tabs/tabs.component';
 import { TabComponent } from '../../new-recipe/components/tab/tab.component';
-import { HeaderShellComponent } from '../../../shared/layout/shell/header-shell.component';
 import { SectionComponent } from '../../../shared/layout/primitives/section.component';
 import { InlineComponent } from '../../../shared/layout/primitives/inline.component';
 import { StackComponent } from '../../../shared/layout/primitives/stack.component';
 import { RowComponent } from '../../../shared/layout/primitives/row.component';
 import { ServingsControlComponent } from '../../../shared/ui/servings-control/servings-control.component';
-import { ChipComponent } from '../../../shared/ui/chip/chip.component';
 import { PageLayoutComponent } from '../../../shared/layout/primitives/page-layout.component';
 import { TagComponent } from '../../../shared/ui/tag/tag.component';
 import { FooterComponent } from '../../../shared/layout/shell/footer/footer.component';
@@ -53,13 +51,11 @@ import { LoadingComponent } from '../../../shared/layout/overlays/loading/loadin
     ButtonComponent,
     CapitalizePipe,
     PageLayoutComponent,
-    ChipComponent,
     RowComponent,
     ServingsControlComponent,
     InlineComponent,
     ButtonComponent,
     TagComponent,
-    HeaderShellComponent,
     SectionComponent,
     StackComponent,
     FooterComponent,
