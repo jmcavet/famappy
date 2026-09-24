@@ -1,4 +1,10 @@
-import { Component, computed, inject, signal } from '@angular/core';
+import {
+  Component,
+  computed,
+  inject,
+  linkedSignal,
+  signal,
+} from '@angular/core';
 import { LoadingComponent } from '../../../shared/layout/overlays/loading/loading.component';
 import { HeaderShellComponent } from '../../../shared/layout/shell/header-shell.component';
 import { PageLayoutComponent } from '../../../shared/layout/primitives/page-layout.component';
@@ -6,7 +12,6 @@ import { SectionComponent } from '../../../shared/layout/primitives/section.comp
 import { StackComponent } from '../../../shared/layout/primitives/stack.component';
 import { InlineComponent } from '../../../shared/layout/primitives/inline.component';
 import { ButtonComponent } from '../../../shared/ui/button/button.component';
-import { StepperComponent } from '../../meals/meals-cart/components/stepper/stepper.component';
 import { GridComponent } from '../../../shared/layout/primitives/grid.component';
 import { ChipComponent } from '../../../shared/ui/chip/chip.component';
 import { RouterLink } from '@angular/router';
@@ -15,7 +20,8 @@ import { CapitalizePipe } from '../../../shared/pipes/capitalize.pipe';
 import { MealFacade } from '../../meals/meals.facade';
 import { NgClass } from '@angular/common';
 import { ShoppingIngredientsSelectionFacade } from '../shopping-ingredients-selection/shopping-ingredients-selection.facade';
-import { ShoppingStateService } from '../../meals/state/shopping.service';
+import { ShoppingStateService } from '../state/shopping.service';
+import { StepperComponent } from '../components/stepper/stepper.component';
 
 @Component({
   selector: 'app-shopping-meals-selection',
@@ -48,7 +54,26 @@ export class ShoppingMealsSelectionComponent {
 
   weekDays = getWeekDays();
 
-  readonly selectedMeals = signal<{ dayName: string; mealType: string }[]>([]);
+  // readonly selectedMeals = signal<{ dayName: string; mealType: string }[]>([]);
+  selectedMeals = linkedSignal(() => {
+    const shoppingMealsSelected =
+      this.shoppingService.state().shoppingMealsSelected;
+
+    const mixedShoppingMealsSelected = shoppingMealsSelected.map((meal) => {
+      return { dayName: meal.weekDay.dayName, mealType: meal.recipe.mealType };
+    });
+
+    const uniqueShoppingMealsSelected = Array.from(
+      new Map(
+        mixedShoppingMealsSelected.map((item) => [
+          `${item.dayName}|${item.mealType}`,
+          item,
+        ]),
+      ).values(),
+    );
+
+    return uniqueShoppingMealsSelected;
+  });
 
   public selectAll() {
     this.weekDays.forEach((day) => {

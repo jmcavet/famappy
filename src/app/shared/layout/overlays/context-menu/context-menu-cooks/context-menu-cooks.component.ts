@@ -1,11 +1,4 @@
-import {
-  Component,
-  computed,
-  inject,
-  input,
-  OnInit,
-  Signal,
-} from '@angular/core';
+import { Component, inject, input, OnInit, Signal } from '@angular/core';
 import { ContextMenuCooksFacade } from './context-menu-cooks.facade';
 import { CalendarDay } from '../../../../../features/meals/components/calendar/calendar.facade';
 import {
@@ -17,7 +10,6 @@ import { LoadingComponent } from '../../loading/loading.component';
 import { StackComponent } from '../../../primitives/stack.component';
 import { SectionComponent } from '../../../primitives/section.component';
 import { ButtonComponent } from '../../../../ui/button/button.component';
-import { NgClass } from '@angular/common';
 
 export interface CookMenuContext {
   selectedDay: Signal<CalendarDay>;
@@ -33,7 +25,6 @@ export interface CookMenuContext {
     SectionComponent,
     StackComponent,
     ButtonComponent,
-    NgClass,
   ],
   templateUrl: './context-menu-cooks.component.html',
   styleUrl: './context-menu-cooks.component.css',

@@ -7,11 +7,9 @@ import { ButtonComponent } from '../../shared/ui/button/button.component';
 import { LoadingComponent } from '../../shared/layout/overlays/loading/loading.component';
 import { HeaderShellComponent } from '../../shared/layout/shell/header-shell.component';
 import { PageLayoutComponent } from '../../shared/layout/primitives/page-layout.component';
-import { SectionComponent } from '../../shared/layout/primitives/section.component';
 import { StackComponent } from '../../shared/layout/primitives/stack.component';
 import { InlineComponent } from '../../shared/layout/primitives/inline.component';
 import { FooterComponent } from '../../shared/layout/shell/footer/footer.component';
-import { RowComponent } from '../../shared/layout/primitives/row.component';
 import { CardComponent } from '../../shared/ui/card/card.component';
 
 @Component({
@@ -23,9 +21,7 @@ import { CardComponent } from '../../shared/ui/card/card.component';
     LoadingComponent,
     HeaderShellComponent,
     PageLayoutComponent,
-    SectionComponent,
     StackComponent,
-    RowComponent,
     InlineComponent,
     ButtonComponent,
     FooterComponent,

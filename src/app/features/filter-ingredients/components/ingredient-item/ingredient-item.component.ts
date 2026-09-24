@@ -5,7 +5,7 @@ import { InlineComponent } from '../../../../shared/layout/primitives/inline.com
 
 @Component({
   selector: 'app-ingredient-item',
-  imports: [RowComponent, InlineComponent, NgClass],
+  imports: [RowComponent, NgClass],
   templateUrl: './ingredient-item.component.html',
   styleUrl: './ingredient-item.component.css',
 })

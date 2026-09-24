@@ -1,4 +1,4 @@
-<!doctype html>
+<!-- <!doctype html>
 <html lang="en">
   <head>
     <title>Famappy</title>
@@ -22,6 +22,63 @@
     <link rel="manifest" href="manifest.webmanifest" />
     <meta name="theme-color" content="#1976d2" />
 
+    <script>
+      const theme = localStorage.getItem("theme");
+      if (theme === "dark") {
+        document.documentElement.classList.add("dark");
+      }
+    </script>
+  </head>
+  <body
+    class="h-dvh overflow-hidden surface-0 color-text-default text-body font-inter"
+  >
+    <app-root></app-root>
+    <noscript
+      >Please enable JavaScript to continue using this application.</noscript
+    >
+  </body>
+</html> -->
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <title>Famappy</title>
+    <base href="/" />
+
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Family meal planning, recipes and shopping lists"
+    />
+    <meta name="theme-color" content="#1a4db2" />
+
+    <!-- Icons -->
+    <link rel="icon" type="image/x-icon" href="favicon.ico" />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="icons/favicon-32x32.png"
+    />
+    <link rel="apple-touch-icon" href="icons/icon-192x192.png" />
+
+    <!-- PWA manifest -->
+    <link rel="manifest" href="manifest.webmanifest" />
+
+    <!-- Fonts -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Roboto:wght@500;600&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Font Awesome -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+    />
+
+    <!-- Dark mode init (must run before render to avoid flash) -->
     <script>
       const theme = localStorage.getItem("theme");
       if (theme === "dark") {

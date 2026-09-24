@@ -85,7 +85,7 @@
             <app-stack variant="compact">
               @for (ing of ingredientsFound(); track $index) {
                 <div
-                  class="surface-2 surface-interactive inset-sm w-full rounded"
+                  class="surface-2 surface-interactive inset-xs w-full rounded"
                   (click)="selectIngredientSuggestion(ing)"
                 >
                   <app-row>
@@ -228,7 +228,7 @@
                       size="sm"
                       (clicked)="openUpdateIngredientMeasureModal($event, ing)"
                       ><div class="h-6 w-6">
-                        <i class="fa-solid fa-pen-to-square fa-xl"></i></div
+                        <i class="fa-solid fa-scale-unbalanced fa-xl"></i></div
                     ></app-button>
                   }
 
@@ -246,6 +246,7 @@
         </app-stack>
       </app-section>
     </app-page-layout>
+
     <app-section [surface]="0">
       <app-button
         [fullWidth]="true"

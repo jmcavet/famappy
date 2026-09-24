@@ -3,7 +3,6 @@ import { RouterLink } from '@angular/router';
 import { LoadingComponent } from '../../../shared/layout/overlays/loading/loading.component';
 import { HeaderShellComponent } from '../../../shared/layout/shell/header-shell.component';
 import { PageLayoutComponent } from '../../../shared/layout/primitives/page-layout.component';
-import { StepperComponent } from '../../meals/meals-cart/components/stepper/stepper.component';
 import { SectionComponent } from '../../../shared/layout/primitives/section.component';
 import { StackComponent } from '../../../shared/layout/primitives/stack.component';
 import { InlineComponent } from '../../../shared/layout/primitives/inline.component';
@@ -13,6 +12,7 @@ import { SegmentedControlComponent } from '../../../shared/ui/segmented-control/
 import { ShoppingIngredientsSelectionFacade } from './shopping-ingredients-selection.facade';
 import { MeasureControlComponent } from '../components/measure-control/measure-control.component';
 import { NgClass } from '@angular/common';
+import { StepperComponent } from '../components/stepper/stepper.component';
 
 @Component({
   selector: 'app-shopping-ingredients-selection',
@@ -67,7 +67,7 @@ export class ShoppingIngredientsSelectionComponent {
     this.facade.disableIngredient(ingredientId);
   }
 
-  logMessageTest() {
-    this.facade.logMessageTest();
+  logWholeState() {
+    this.facade.logWholeState();
   }
 }
