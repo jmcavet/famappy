@@ -1,7 +1,7 @@
 <div class="h-full layout-hcf">
   <app-header-shell
     ><div class="inset-md">
-      <app-stepper [navStep]="1" /></div
+      <app-shopping-stepper [navStep]="2" /></div
   ></app-header-shell>
 
   <app-page-layout>
@@ -88,7 +88,7 @@
         <app-button
           [fullWidth]="true"
           routerLink="/shopping/shopping-list-definition"
-          (clicked)="logMessageTest()"
+          (clicked)="logWholeState()"
           [disabled]="nbMeasuresToExport() === 0"
         >
           Export {{ nbMeasuresToExport() }} ingredients

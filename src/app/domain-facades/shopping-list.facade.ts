@@ -69,12 +69,12 @@ export class ShoppingListDomainFacade {
   //   this.shoppingListBackendService.deleteIngredientfromStore(ingredientId);
   // }
 
-  deleteShoppingListElement(
+  public async deleteShoppingListElement(
     shoppingListId: string,
     elementType: string,
     elementToRemove: string | { id: string | null; measure: number | null },
   ) {
-    this.shoppingListBackendService.deleteShoppingListElementfromStore(
+    await this.shoppingListBackendService.deleteShoppingListElementfromStore(
       shoppingListId,
       elementType,
       elementToRemove,
@@ -82,12 +82,12 @@ export class ShoppingListDomainFacade {
   }
 
   public async deleteShoppingList(shoppingListIdToDelete: string) {
-    this.shoppingListBackendService.deleteShoppingListFromStore(
+    await this.shoppingListBackendService.deleteShoppingListFromStore(
       shoppingListIdToDelete,
     );
   }
 
-  deleteQuickItem(quickItemId: string) {
-    this.shoppingListBackendService.deleteQuickItemfromStore(quickItemId);
+  public async deleteQuickItem(quickItemId: string) {
+    await this.shoppingListBackendService.deleteQuickItemfromStore(quickItemId);
   }
 }

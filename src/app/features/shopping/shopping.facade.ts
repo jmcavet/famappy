@@ -576,6 +576,9 @@ export class ShoppingFacade {
     const { itemId, ingredientId, measure, quickItemId } = element;
 
     const shoppingListId = this.shoppingListSelected()?.id;
+
+    if (!shoppingListId) return;
+
     const elementType = itemId
       ? 'categoryItemIds'
       : quickItemId
@@ -585,14 +588,32 @@ export class ShoppingFacade {
     const _element = itemId ? itemId : { id: ingredientId, measure };
 
     if (quickItemId) {
-      this.shoppingListDomainFacade.deleteQuickItem(quickItemId);
+      await this.shoppingListDomainFacade.deleteQuickItem(quickItemId);
     } else if (shoppingListId && element) {
-      this.shoppingListDomainFacade.deleteShoppingListElement(
+      await this.shoppingListDomainFacade.deleteShoppingListElement(
         shoppingListId,
         elementType,
         _element,
       );
     }
+
+    const shoppingListIsEmpty = this.shoppingListIsEmpty();
+
+    if (shoppingListIsEmpty) {
+      await this.shoppingListDomainFacade.deleteShoppingList(shoppingListId);
+      console.log('THE LIST HAS BEEN REMOVED FROM DB');
+    }
+  }
+
+  private shoppingListIsEmpty() {
+    const shoppingListHasQuickItems = this.shoppingQuickItems().some(
+      (item) => item.shoppingListId === this.shoppingListSelected()?.id,
+    );
+
+    const nbIngredientsInShoppingList =
+      this.shoppingListSelected()?.ingredients.length;
+
+    return !shoppingListHasQuickItems && nbIngredientsInShoppingList === 0;
   }
 
   public selectIngredientType(

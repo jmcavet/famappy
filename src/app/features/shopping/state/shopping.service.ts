@@ -1,26 +1,38 @@
 import { Injectable, signal } from '@angular/core';
-import { ShoppingState } from '../../meals/state/shopping.model';
-import { IngredientType } from '../../../models/ingredient-type.model';
+import { ShoppingState } from './shopping.model';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ShoppingStateService {
-  initialState: ShoppingState = {
-    shoppingListTitle: '',
-    shoppingMealsSelected: [],
-    ingredientCategoryIdSelected: '',
-    measures: [],
-    units: [],
-    shoppingListNameSelected: '',
-    methodSelected: '',
-    shoppingCategoryNameSelected: '',
-  };
+  private get initialState(): ShoppingState {
+    return {
+      shoppingMealsSelected: [],
+      ingredientCategoryIdSelected: '',
+      measures: [],
+      units: [],
+      shoppingListNameSelected: '',
+      methodSelected: '',
+      shoppingCategoryNameSelected: '',
+      currentNavStep: 1,
+    };
+  }
 
   state = signal<ShoppingState>(this.initialState);
 
   saveMealsForShoppingList(selectedMeals: any[]) {
     this.updateProperty('shoppingMealsSelected', selectedMeals);
+  }
+
+  resetMealsForShoppingList() {
+    this.updateProperty('shoppingMealsSelected', []);
+  }
+
+  resetStateKeepListSelected() {
+    this.state.set({
+      ...this.initialState,
+      shoppingListNameSelected: this.state().shoppingListNameSelected,
+    });
   }
 
   setIngredientCategory(ingredientCategorySelected: any) {

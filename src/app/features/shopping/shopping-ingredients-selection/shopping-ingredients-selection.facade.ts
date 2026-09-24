@@ -2,8 +2,8 @@ import { inject, Injectable, signal, computed, effect } from '@angular/core';
 import { RecipeWithId } from '../../recipes/components/recipe-card/recipe.model';
 import { IngredientDomainFacade } from '../../../domain-facades/ingredient.facade';
 import { IngredientCategoryDomainFacade } from '../../../domain-facades/ingredientCategory.facade';
-import { ShoppingStateService } from '../../meals/state/shopping.service';
 import { RecipeDomainFacade } from '../../../domain-facades/recipe.facade';
+import { ShoppingStateService } from '../state/shopping.service';
 
 interface IngredientDisplay {
   id: string;
@@ -52,28 +52,16 @@ export class ShoppingIngredientsSelectionFacade {
   private dbRecipes = this.recipeDomainFacade.dbRecipes;
 
   constructor() {
-    // Set ingredient category once categories are loaded
-    effect(() => {
-      const ingredientCategories = this.ingredientCategories();
-      const selected = this.ingredientCategoryIdSelected();
-
-      if (!selected && ingredientCategories.length > 0) {
-        this.shoppingService.setIngredientCategory(ingredientCategories[0]);
-      }
-    });
-
     // Initialise the ingredient measures from DB once, only if state is empty
     effect(() => {
       const ingredients = this.allIngredientsFiltered();
 
       if (ingredients.length > 0 && this.measures().length === 0) {
-        console.log('ingredients: ', ingredients);
         const measures = ingredients.map((ing) => ({
           id: ing.id,
           measure: ing.measure,
         }));
 
-        console.log('INIT OF MEASURES: ', measures);
         this.shoppingService.initialiseMeasures(measures);
 
         this.initialMeasures.set(measures);
@@ -229,46 +217,73 @@ export class ShoppingIngredientsSelectionFacade {
     const ingredientsPerRecipes = this.recipesSelected().flatMap(
       (recipe: any) => recipe.ingredients,
     );
-    const uniqueIngredientsPerRecipes = [...new Set(ingredientsPerRecipes)];
 
-    const ingredientIds = uniqueIngredientsPerRecipes.flatMap((ing) => ing.id);
-    const uniqueIngredientIds = [...new Set(ingredientIds)];
+    const uniqueIngredientIds = [
+      ...new Set(ingredientsPerRecipes.flatMap((ing: any) => ing.id)),
+    ];
 
     // From the IDs, get the original (filtered) ingredients
     const ingredientsFiltered = this.ingredients().filter((ing) =>
       uniqueIngredientIds.includes(ing.id),
     );
 
-    // Get all Ingredient Category IDs corresponding to each of those ingredients
-    const filteredIngredientCategoryIds = ingredientsFiltered.map(
+    const filteredCategoryIds = ingredientsFiltered.map(
       (ing) => ing.categoryId,
     );
 
-    // Find the ingredient categories by their IDs
-    const selectedIngredientCategories = this.ingredientCategories().filter(
-      (ing) => filteredIngredientCategoryIds.includes(ing.id),
+    const selectedCategories = this.ingredientCategories().filter((cat) =>
+      filteredCategoryIds.includes(cat.id),
     );
 
-    // Return the sorted names of the ingredient categories
-    return selectedIngredientCategories
+    // Return sorted names
+    return selectedCategories
       .map((cat) => cat.name)
       .sort((a, b) => a.localeCompare(b));
   });
 
-  readonly ingredientCategoryNameSelected = computed(() => {
-    const ingredientCategorySelected = this.ingredientCategories().find(
-      (cat) =>
-        cat.id === this.shoppingService.state().ingredientCategoryIdSelected,
+  readonly ingredientCategoryObjectsSelected = computed(() => {
+    const ingredientsPerRecipes = this.recipesSelected().flatMap(
+      (recipe: any) => recipe.ingredients,
+    );
+    const uniqueIngredientIds = [
+      ...new Set(ingredientsPerRecipes.flatMap((ing: any) => ing.id)),
+    ];
+
+    const ingredientsFiltered = this.ingredients().filter((ing) =>
+      uniqueIngredientIds.includes(ing.id),
     );
 
-    return ingredientCategorySelected?.name ?? null;
+    const filteredCategoryIds = ingredientsFiltered.map(
+      (ing) => ing.categoryId,
+    );
+
+    return this.ingredientCategories()
+      .filter((cat) => filteredCategoryIds.includes(cat.id))
+      .sort((a, b) => a.name.localeCompare(b.name));
+  });
+
+  readonly ingredientCategoryNameSelected = computed(() => {
+    const selectedId = this.ingredientCategoryIdSelected();
+
+    const catExistsInAvailableCates = this.ingredientCategoryObjectsSelected()
+      .map((cat) => cat.id)
+      .includes(selectedId);
+
+    const firstCat = this.ingredientCategoryObjectsSelected()[0]?.id;
+    const catIdInState = catExistsInAvailableCates ? selectedId : firstCat;
+
+    const categoryId = catIdInState || firstCat;
+
+    return (
+      this.ingredientCategories().find((cat) => cat.id === categoryId)?.name ??
+      null
+    );
   });
 
   /* ════════════════════════════════
    * Public API (UI actions)
    * ════════════════════════════════ */
   changeMeasure(ingredientId: string, value: 'decr' | 'incr') {
-    console.log('CURRENT MEASURES: ', this.measures());
     const currMeasure =
       this.measures().find((m) => m.id === ingredientId)?.measure ?? 0;
 
@@ -348,8 +363,8 @@ export class ShoppingIngredientsSelectionFacade {
     return fromDb;
   };
 
-  logMessageTest() {
-    console.log('this.shoppingService.state(): ', this.shoppingService.state());
+  logWholeState() {
+    console.log('WHOLE STATE: ', this.shoppingService.state());
   }
 
   /* ════════════════════════════════
