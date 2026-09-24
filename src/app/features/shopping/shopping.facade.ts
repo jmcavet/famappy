@@ -61,12 +61,22 @@ export class ShoppingFacade {
         );
       }
 
-      // Initialize measures
+      // Add defaults for newly found ingredients without overwriting changes
+      // made to measures that are already tracked.
       const ingredients = this.ingredientsFound();
-      if (ingredients.length > 0 && this.measures().length === 0) {
-        this.measures.set(
-          ingredients.map((ing) => ({ id: ing.id, measure: ing.measure })),
-        );
+      const currentMeasures = this.measures();
+      const missingMeasures = ingredients
+        .filter(
+          (ingredient) =>
+            !currentMeasures.some((measure) => measure.id === ingredient.id),
+        )
+        .map((ingredient) => ({
+          id: ingredient.id,
+          measure: ingredient.measure,
+        }));
+
+      if (missingMeasures.length > 0) {
+        this.measures.set([...currentMeasures, ...missingMeasures]);
       }
     });
   }
@@ -331,6 +341,9 @@ export class ShoppingFacade {
     // Reset input field
     this.quickEntryItem.set('');
     this.ingredientsFound.set([]);
+
+    // Reset measures
+    this.measures.set([]);
   }
 
   public toggleMethod(method: string) {
@@ -653,7 +666,10 @@ export class ShoppingFacade {
 
   measureFor = (ingredientId: string): number => {
     return (
-      this.measures().find((meas) => meas.id === ingredientId)?.measure ?? 0
+      this.measures().find((measure) => measure.id === ingredientId)?.measure ??
+      this.ingredients().find((ingredient) => ingredient.id === ingredientId)
+        ?.measure ??
+      0
     );
   };
 
@@ -709,12 +725,16 @@ export class ShoppingFacade {
 
     const updatedMeasure = this.measures().find(
       (m) => m.id === ing.id,
-    )?.measure;
+    )?.measure ?? this.measureFor(ing.id);
 
     this.updateOrSumIngredientMeasureInShoppingList(shoppingListId!, {
       id: ing.id,
       measure: updatedMeasure,
     });
+
+    // Measures belong to the active search and must not carry over to the
+    // next ingredient suggestion.
+    this.measures.set([]);
   }
 
   public openUpdateQuickItemsModal(
