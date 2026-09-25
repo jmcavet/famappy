@@ -100,8 +100,13 @@ export class RecipeComponent {
   recipeId = input.required<string>();
 
   constructor() {
+    const initialServings = history.state.initialServings as number | undefined;
+
     effect(() => {
-      this.servings.set(this.recipe().servings);
+      const recipe = this.recipe();
+      if (!recipe) return;
+
+      this.servings.set(initialServings ?? recipe.servings);
     });
   }
 

@@ -10,6 +10,7 @@ export interface MealRecipeContext {
   recipe: Signal<any>;
   canDeleteMeal: Signal<boolean>;
   canViewRecipe: Signal<boolean>;
+  servings: Signal<number>;
 }
 
 @Component({
@@ -25,6 +26,7 @@ export class MealRecipeItemComponent {
   canDeleteMeal = input.required<boolean>();
   canViewRecipe = input.required<boolean>();
   showImage = input<boolean>(true);
+  servings = input<number>(1);
 
   /** UI Facade */
   private facade = inject(MealRecipeItemFacade);
@@ -33,6 +35,7 @@ export class MealRecipeItemComponent {
     recipe: this.recipe,
     canDeleteMeal: this.canDeleteMeal,
     canViewRecipe: this.canViewRecipe,
+    servings: this.servings,
   };
 
   /** Rendered on UI */
