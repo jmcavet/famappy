@@ -99,9 +99,14 @@ export class MealRecipeItemFacade {
 
   public viewRecipe() {
     // Navigate to the recipe selected
-    if (this._ctx.canViewRecipe()) {
-      this.router.navigate(['/recipes/', this._ctx.recipe().recipe.id]);
-    }
+    const meal = this._ctx.recipe();
+
+    this.router.navigate(['/recipes', meal.recipe.id], {
+      state: {
+        recipe: meal.recipe,
+        initialServings: this._ctx.servings(),
+      },
+    });
   }
 
   public removeMealFromSummary() {

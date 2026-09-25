@@ -24,6 +24,7 @@
                 [canViewRecipe]="true"
                 [canDeleteMeal]="true"
                 [showImage]="true"
+                [servings]="recipe.servings"
               />
             }
             @if (recipe.manualRecipe && recipe.mealType === "lunch") {
@@ -59,6 +60,7 @@
                 [canViewRecipe]="true"
                 [canDeleteMeal]="true"
                 [showImage]="true"
+                [servings]="recipe.servings"
               />
             }
             @if (recipe.manualRecipe && recipe.mealType === "dinner") {
