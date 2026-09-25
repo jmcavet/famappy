@@ -114,15 +114,26 @@
                       }}-light-bg dark:text-{{ meal.mealType }}-dark-bg"
                       >{{ meal.mealType | capitalize }}</span
                     >
+
                     @if (meal.recipeId) {
-                      <a
-                        class="color-text-primary"
-                        routerLink="/recipes/{{ meal.recipeId }}"
-                        routerLinkActive="active-link"
-                        ><span class="text-body-lg">{{
-                          meal.mealName
-                        }}</span></a
-                      >
+                      <app-inline gap="md">
+                        <a
+                          class="color-text-primary cursor-pointer"
+                          (click)="viewRecipe(meal.recipeId, meal.servings)"
+                          routerLinkActive="active-link"
+                        >
+                          <span class="text-body-lg">{{ meal.mealName }}</span>
+                        </a>
+
+                        @if (meal.totalTime !== undefined) {
+                          <app-inline gap="xs" class="color-text-muted">
+                            <i class="fa-regular fa-clock"></i>
+                            <span class="text-meta">{{
+                              meal.totalTime | mintohour
+                            }}</span>
+                          </app-inline>
+                        }
+                      </app-inline>
                     } @else if (meal.manualRecipe) {
                       <app-button
                         variant="ghost"
@@ -131,7 +142,6 @@
                         <span class="text-body-lg">{{ meal.mealName }}</span>
                       </app-button>
                     }
-
                     <div
                       class="cook"
                       [class.firstCook]="
@@ -170,7 +180,6 @@
                   track $index
                 ) {
                   <app-row>
-                    <!-- <span class="color-text-muted">Date</span> -->
                     <app-button
                       variant="ghost"
                       (clicked)="navigateToShoppingPage(shoppingListName)"
