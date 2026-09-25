@@ -51,12 +51,10 @@
         </div>
       } @else {
         <app-stack variant="spacious" class="mt-8">
-          <div
-            class="bg-gradient-to-br from-primary-300 to-primary-100 dark:from-primary-700 dark:to-primary-900 inset-md rounded-xl"
-          >
+          <div class="inset-md rounded-xl">
             <app-grid-responsive [cols]="2" [colsMd]="3" [colsLg]="4" gap="md">
               <button
-                class="bg-primary-50 dark:bg-primary-950"
+                class="bg-primary-100 dark:bg-primary-900"
                 routerLink="/meals"
               >
                 <app-stack>
@@ -66,7 +64,7 @@
               </button>
 
               <button
-                class="bg-primary-50 dark:bg-primary-950"
+                class="bg-primary-100 dark:bg-primary-900"
                 routerLink="/shopping"
               >
                 <app-stack>
@@ -76,7 +74,7 @@
               </button>
 
               <button
-                class="bg-primary-50 dark:bg-primary-950"
+                class="bg-primary-100 dark:bg-primary-900"
                 routerLink="/recipes"
               >
                 <app-stack>
@@ -86,7 +84,7 @@
               </button>
 
               <button
-                class="bg-primary-50 dark:bg-primary-950"
+                class="bg-primary-100 dark:bg-primary-900"
                 routerLink="/ingredients"
               >
                 <app-stack>
@@ -114,15 +112,26 @@
                       }}-light-bg dark:text-{{ meal.mealType }}-dark-bg"
                       >{{ meal.mealType | capitalize }}</span
                     >
+
                     @if (meal.recipeId) {
-                      <a
-                        class="color-text-primary"
-                        routerLink="/recipes/{{ meal.recipeId }}"
-                        routerLinkActive="active-link"
-                        ><span class="text-body-lg">{{
-                          meal.mealName
-                        }}</span></a
-                      >
+                      <app-inline gap="md">
+                        <a
+                          class="color-text-primary cursor-pointer"
+                          (click)="viewRecipe(meal.recipeId, meal.servings)"
+                          routerLinkActive="active-link"
+                        >
+                          <span class="text-body-lg">{{ meal.mealName }}</span>
+                        </a>
+
+                        @if (meal.totalTime !== undefined) {
+                          <app-inline gap="xs" class="color-text-muted">
+                            <i class="fa-regular fa-clock"></i>
+                            <span class="text-meta">{{
+                              meal.totalTime | mintohour
+                            }}</span>
+                          </app-inline>
+                        }
+                      </app-inline>
                     } @else if (meal.manualRecipe) {
                       <app-button
                         variant="ghost"
@@ -131,7 +140,6 @@
                         <span class="text-body-lg">{{ meal.mealName }}</span>
                       </app-button>
                     }
-
                     <div
                       class="cook"
                       [class.firstCook]="
@@ -170,7 +178,6 @@
                   track $index
                 ) {
                   <app-row>
-                    <!-- <span class="color-text-muted">Date</span> -->
                     <app-button
                       variant="ghost"
                       (clicked)="navigateToShoppingPage(shoppingListName)"

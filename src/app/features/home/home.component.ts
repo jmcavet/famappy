@@ -32,6 +32,7 @@ import { ModalService } from '../../shared/layout/overlays/modal/modal.service';
 import { ManualEntryViewComponent } from '../meals/components/manual-entry-view/manual-entry-view.component';
 import { ShoppingFacade } from '../shopping/shopping.facade';
 import { ShoppingStateService } from '../shopping/state/shopping.service';
+import { MinToHourPipe } from '../../shared/pipes/mintohour.pipe';
 
 @Component({
   selector: 'app-home',
@@ -50,6 +51,7 @@ import { ShoppingStateService } from '../shopping/state/shopping.service';
     RecipeCardComponent,
     LoadingComponent,
     CapitalizePipe,
+    MinToHourPipe,
   ],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css',
@@ -128,18 +130,21 @@ export class HomeComponent {
       return weekDay.dayOfMonth === dayOfMonth && weekDay.year === year;
     });
 
-    const dayMeals = meals?.map((meal) => {
-      let mealName;
-
-      if (meal.manualRecipe) mealName = meal.manualRecipe.name;
-      else if (meal.recipeId) mealName = this.getRecipeNamebyId(meal.recipeId);
+    const dayMeals = meals.map((meal) => {
+      const recipe = meal.recipeId
+        ? this.dbRecipes().find((item) => item.id === meal.recipeId)
+        : undefined;
 
       return {
         id: meal.id,
         mealType: meal.mealType,
         cookId: meal.cookId,
-        mealName,
+        mealName: meal.manualRecipe?.name ?? recipe?.title,
         recipeId: meal.recipeId,
+        servings: meal.servings,
+        totalTime: recipe
+          ? Number(recipe.preparationTime) + Number(recipe.cookingTime)
+          : undefined,
         manualRecipe: meal.manualRecipe,
       };
     });
@@ -212,5 +217,16 @@ export class HomeComponent {
     this.shoppingService.saveShoppingListSelection(shoppingListName);
 
     this.router.navigate(['/shopping']);
+  }
+
+  public viewRecipe(recipeId: string | null | undefined, servings: number) {
+    if (!recipeId) return;
+
+    const recipe = this.dbRecipes().find((item) => item.id === recipeId);
+    if (!recipe) return;
+
+    this.router.navigate(['/recipes', recipe.id], {
+      state: { recipe, initialServings: servings },
+    });
   }
 }
