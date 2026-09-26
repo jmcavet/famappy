@@ -10,7 +10,7 @@ import {
 import { TabComponent } from '../tab/tab.component';
 import { CommonModule } from '@angular/common';
 import { SegmentedControlComponent } from '../../../../shared/ui/segmented-control/segmented-control.component';
-import { GlobalStateService } from '../../../../services/global.service';
+import { RecipeStateService } from '../../../../services/state/recipe.service';
 
 @Component({
   selector: 'app-tabs',
@@ -39,30 +39,31 @@ export class TabsComponent {
   });
 
   /** Services */
-  private globalService = inject(GlobalStateService);
+  private recipeStateService = inject(RecipeStateService);
 
   /** Declaration of local signals */
-  globalState = this.globalService.globalState;
+  recipeState = this.recipeStateService.recipeState;
 
   readonly tabsTitles = signal<string[]>([]);
 
   readonly selectedTabTitle = computed(
-    () => this.globalState().selectedTabTitle,
+    () => this.recipeState().selectedTabTitle,
   );
 
   toggleTab(tabTitle: string) {
-    this.globalService.updateProperty('selectedTabTitle', tabTitle);
+    this.recipeStateService.updateProperty('selectedTabTitle', tabTitle);
     this.activateSelectedTab();
   }
 
   ngAfterContentInit() {
-    this.activateSelectedTab();
-
-    // Set initially
     this.tabsTitles.set(this.tabs?.toArray().map((tab) => tab.tabTitle) ?? []);
 
-    // Activate the first tab
-    this.toggleTab(this.tabsTitles()[0]);
+    const selectedTab = this.selectedTabTitle();
+    if (this.tabsTitles().includes(selectedTab)) {
+      this.activateSelectedTab();
+    } else {
+      this.toggleTab(this.tabsTitles()[0]);
+    }
   }
 
   activateSelectedTab() {
