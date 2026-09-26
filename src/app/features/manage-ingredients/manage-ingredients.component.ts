@@ -7,7 +7,7 @@ import {
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import {
-  IngredientWithIdAndDate,
+  IngredientDocInBackend,
   IngredientWithTypeName,
   SortKey,
 } from '../../models/ingredient.model';
@@ -23,7 +23,7 @@ import { SectionComponent } from '../../shared/layout/primitives/section.compone
 import { StackComponent } from '../../shared/layout/primitives/stack.component';
 import { InlineComponent } from '../../shared/layout/primitives/inline.component';
 import { ModalService } from '../../shared/layout/overlays/modal/modal.service';
-import { ModalInputComponent } from '../../shared/layout/overlays/modal/modal-input/modal-input.component';
+import { ModalEditIngredientComponent } from '../../shared/layout/overlays/modal/modal-edit-ingredient/modal-edit-ingredient.component';
 import { RowComponent } from '../../shared/layout/primitives/row.component';
 import { GridComponent } from '../../shared/layout/primitives/grid.component';
 import { Location } from '@angular/common';
@@ -79,19 +79,25 @@ export class ManageIngredientsComponent {
     this.facade.changeCategory(event);
   }
 
-  openUpdateModal(ingredient: any) {
+  openUpdateModal(ingredient: IngredientDocInBackend) {
     this.modalService.open(
-      ModalInputComponent,
+      ModalEditIngredientComponent,
       {
         title: 'Update ingredient',
         btnConfirmText: 'Apply',
         btnConfirmColor: 'primary',
-        existingItems: this.ingredientsFiltered(),
-        inputValue: ingredient.name,
+        existingItems: this.ingredientsFiltered()
+          .filter((item) => item.id !== ingredient.id)
+          .map((item) => item.name),
+        ingredient,
       },
       {
-        onConfirm: (newName: string) => {
-          const updatedIngredient = { ...ingredient, name: newName };
+        onConfirm: (changes: {
+          name: string;
+          measure: number;
+          unit: string;
+        }) => {
+          const updatedIngredient = { ...ingredient, ...changes };
           this.facade.updateIngredient(updatedIngredient);
         },
       },

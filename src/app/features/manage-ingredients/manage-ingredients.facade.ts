@@ -3,7 +3,7 @@ import { RecipeStateService } from '../../services/state/recipe.service';
 import { IngredientDomainFacade } from '../../domain-facades/ingredient.facade';
 import { IngredientCategoryDomainFacade } from '../../domain-facades/ingredientCategory.facade';
 import {
-  IngredientWithIdAndDate,
+  IngredientDocInBackend,
   IsAcending,
   SortKey,
 } from '../../models/ingredient.model';
@@ -154,7 +154,7 @@ export class ManageIngredientsFacade {
     );
   }
 
-  async updateIngredient(ingredient: IngredientWithIdAndDate) {
+  async updateIngredient(ingredient: IngredientDocInBackend) {
     /** Find the id of the ingredient category of the selected ingredient */
     const updatedIngredientCategorySearched =
       this.dbIngredientCategories().find(
@@ -168,6 +168,8 @@ export class ManageIngredientsFacade {
     const propertiesToUpdate = {
       categoryId: updatedIngredientCategoryId,
       name: ingredient.name,
+      measure: ingredient.measure,
+      unit: ingredient.unit,
     };
 
     this.ingredientDomainFacade.updateIngredient(
