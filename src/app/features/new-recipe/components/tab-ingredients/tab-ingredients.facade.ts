@@ -108,6 +108,7 @@ export class TabIngredientsFacade {
 
     // Reset the ingredient selected
     this.ingredientName.set('');
+    this.measure.set(1);
   }
 
   deleteIngredient(index: number) {
@@ -116,6 +117,7 @@ export class TabIngredientsFacade {
 
   // Preserve scroll position when returning from /ingredients
   navigateToIngredientsPage() {
+    this.recipeService.updateProperty('selectedTabTitle', 'ingredients');
     this.router.navigate(['/ingredients']);
   }
 }
