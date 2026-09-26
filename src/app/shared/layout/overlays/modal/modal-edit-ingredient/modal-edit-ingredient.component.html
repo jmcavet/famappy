@@ -1,0 +1,84 @@
+<app-section [surface]="3">
+  <app-stack variant="page">
+    <h2 class="text-title text-center">{{ title }}</h2>
+
+    <app-stack variant="section">
+      <app-stack variant="compact">
+        <label for="ingredient-name" class="color-text-muted">Name</label>
+        <input
+          type="text"
+          id="ingredient-name"
+          name="ingredientName"
+          required
+          autocomplete="off"
+          class="inset-x-md surface-1"
+          [(ngModel)]="name"
+          (ngModelChange)="onInputChange($event)"
+          (keydown.enter)="onConfirm()"
+        />
+        @if (invalidMessage) {
+          <span class="invalid">{{ invalidMessage }}</span>
+        }
+      </app-stack>
+
+      <app-stack variant="compact">
+        <p class="color-text-muted">Unit</p>
+        <app-inline [wrap]="true" gap="xs">
+          <app-chip [selected]="unit === null" (toggle)="selectUnit(null)">
+            <i class="fa-solid fa-ban" aria-label="No unit"></i>
+          </app-chip>
+          <app-chip [selected]="unit === 'cl'" (toggle)="selectUnit('cl')"
+            >cl</app-chip
+          >
+          <app-chip [selected]="unit === 'l'" (toggle)="selectUnit('l')"
+            >l</app-chip
+          >
+          <app-chip [selected]="unit === 'g'" (toggle)="selectUnit('g')"
+            >g</app-chip
+          >
+          <app-chip [selected]="unit === 'Kg'" (toggle)="selectUnit('Kg')"
+            >Kg</app-chip
+          >
+        </app-inline>
+      </app-stack>
+
+      <app-stack variant="compact">
+        <label for="ingredient-measure" class="color-text-muted"
+          >Default shopping measure</label
+        >
+        <input
+          type="number"
+          id="ingredient-measure"
+          name="ingredientMeasure"
+          min="0"
+          step="any"
+          required
+          class="inset-x-md surface-1"
+          autocomplete="off"
+          [(ngModel)]="measure"
+          (keydown.enter)="onConfirm()"
+        />
+      </app-stack>
+    </app-stack>
+
+    <app-row>
+      <app-button
+        variant="outline"
+        color="neutral"
+        size="md"
+        (clicked)="onCancel()"
+        >Cancel</app-button
+      >
+
+      <app-button
+        [color]="btnConfirmColor"
+        size="md"
+        (clicked)="onConfirm()"
+        [disabled]="
+          !!invalidMessage || !name.trim() || measure === null || measure < 0
+        "
+        >{{ btnConfirmText }}</app-button
+      >
+    </app-row>
+  </app-stack>
+</app-section>

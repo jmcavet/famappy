@@ -38,18 +38,26 @@
     <app-page-layout>
       <app-section>
         <app-stack>
-          <app-grid col1="max" col2="max" col3="1" gapX="xl" gapY="lg">
+          <div
+            class="grid grid-cols-[minmax(0,0.75fr)_minmax(0,2fr)_auto] items-center gap-x-sm gap-y-lg"
+          >
             @for (
               ingredient of ingredientsFiltered();
               track $index;
               let i = $index
             ) {
-              <span class="italic text-sm text-color-muted">
+              <span class="min-w-0 break-words italic text-sm color-text-muted">
                 {{ ingredient.categoryName }}
               </span>
-              <span>{{ ingredient.name }}</span>
+              <app-inline [wrap]="true" gap="xs" class="min-w-0">
+                <span class="min-w-0 break-words">{{ ingredient.name }}</span>
+                <app-inline gap="xs" class="shrink-0 color-text-subtle">
+                  <span>{{ ingredient.measure }}</span>
+                  <span>{{ ingredient.unit }}</span>
+                </app-inline>
+              </app-inline>
               <div class="justify-self-end">
-                <app-inline gap="sm">
+                <app-inline gap="xs">
                   <app-button
                     variant="ghost"
                     size="sm"
@@ -66,7 +74,7 @@
                 </app-inline>
               </div>
             }
-          </app-grid>
+          </div>
         </app-stack>
       </app-section>
     </app-page-layout>
