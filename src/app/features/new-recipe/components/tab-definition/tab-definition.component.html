@@ -223,6 +223,7 @@
           </app-inline>
 
           <app-button
+            id="btn-meal-category"
             variant="outline"
             (clicked)="navigateToMealCategoryPage()"
             >{{ mealCategoryName() | capitalize }}</app-button
@@ -235,9 +236,12 @@
             <span class="text-lg">Cuisine</span>
           </app-inline>
 
-          <app-button variant="outline" (clicked)="navigateToCuisinePage()">{{
-            cuisineName() | capitalize
-          }}</app-button>
+          <app-button
+            id="btn-cuisine"
+            variant="outline"
+            (clicked)="navigateToCuisinePage()"
+            >{{ cuisineName() | capitalize }}</app-button
+          >
         </app-row>
       </app-stack>
     </app-section>

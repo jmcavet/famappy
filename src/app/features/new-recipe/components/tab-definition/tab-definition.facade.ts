@@ -249,24 +249,58 @@ export class TabDefinitionFacade {
   }
 
   scrollBackToCuisineButton() {
-    // Once the page is viewed, scroll back to the cuisine button.
-    const idCuisine = sessionStorage.getItem('scrollTargetCuisine');
-    if (idCuisine) {
-      const el = document.getElementById(idCuisine);
-      if (el) {
-        el.scrollIntoView({ behavior: 'auto' });
-      }
-      sessionStorage.removeItem('scrollTargetCuisine');
-    }
+    const savedTargetTop = sessionStorage.getItem('newRecipeTargetTop');
+    const targets = [
+      ['scrollTargetCuisine', sessionStorage.getItem('scrollTargetCuisine')],
+      [
+        'scrollTargetMealCategory',
+        sessionStorage.getItem('scrollTargetMealCategory'),
+      ],
+    ] as const;
 
-    // Once the page is viewed, scroll back to the meal-category button.
-    const idMealCategory = sessionStorage.getItem('scrollTargetMealCategory');
-    if (idMealCategory) {
-      const el = document.getElementById(idMealCategory);
-      if (el) {
-        el.scrollIntoView({ behavior: 'auto' });
-      }
-      sessionStorage.removeItem('scrollTargetMealCategory');
+    for (const [storageKey, targetId] of targets) {
+      if (!targetId) continue;
+
+      let attempts = 0;
+      const scrollWhenRendered = () => {
+        const target = document.getElementById(targetId);
+        if (target) {
+          let restoreFrames = 0;
+          const restoreTargetPosition = () => {
+            const desiredTop = Number(savedTargetTop);
+            const currentTop = target.getBoundingClientRect().top;
+
+            if (savedTargetTop !== null && Number.isFinite(desiredTop)) {
+              const scrollDelta = currentTop - desiredTop;
+              const scrollContainer = this.findScrollableAncestor(target);
+
+              if (scrollContainer === document.scrollingElement) {
+                window.scrollBy(0, scrollDelta);
+              } else if (scrollContainer) {
+                scrollContainer.scrollTop += scrollDelta;
+              }
+            } else if (restoreFrames === 0) {
+              target.scrollIntoView({ behavior: 'auto', block: 'center' });
+            }
+
+            restoreFrames += 1;
+            if (restoreFrames < 8) {
+              requestAnimationFrame(restoreTargetPosition);
+            } else {
+              sessionStorage.removeItem('newRecipeTargetTop');
+              sessionStorage.removeItem(storageKey);
+            }
+          };
+
+          requestAnimationFrame(restoreTargetPosition);
+          return;
+        }
+
+        attempts += 1;
+        if (attempts < 10) requestAnimationFrame(scrollWhenRendered);
+      };
+
+      requestAnimationFrame(scrollWhenRendered);
     }
   }
 
@@ -319,6 +353,7 @@ export class TabDefinitionFacade {
   }
 
   public navigateToCuisinePage() {
+    this.saveTargetViewportPosition('btn-cuisine');
     // Store the actual target (button) so that when going back from the /cuisine page to the /new-recipe page,
     // the view scrolls back automatically to the button itself and not the top of the page (default).
     sessionStorage.setItem('scrollTargetCuisine', 'btn-cuisine');
@@ -327,11 +362,41 @@ export class TabDefinitionFacade {
   }
 
   public navigateToMealCategoryPage() {
+    this.saveTargetViewportPosition('btn-meal-category');
     // Store the actual target (button) so that when going back from the /meal-category page to the /new-recipe page,
     // the view scrolls back automatically to the button itself and not the top of the page (default).
     sessionStorage.setItem('scrollTargetMealCategory', 'btn-meal-category');
     sessionStorage.removeItem('scrollTargetCuisine');
     this.router.navigate(['/meal-category']);
+  }
+
+  private saveTargetViewportPosition(targetId: string) {
+    const target = document.getElementById(targetId);
+    if (!target) return;
+
+    sessionStorage.setItem(
+      'newRecipeTargetTop',
+      String(target.getBoundingClientRect().top),
+    );
+  }
+
+  private findScrollableAncestor(target: HTMLElement): HTMLElement | null {
+    let ancestor = target.parentElement;
+
+    while (ancestor && ancestor !== document.body) {
+      const overflowY = getComputedStyle(ancestor).overflowY;
+      if (
+        (overflowY === 'auto' ||
+          overflowY === 'scroll' ||
+          overflowY === 'overlay') &&
+        ancestor.scrollHeight > ancestor.clientHeight
+      ) {
+        return ancestor;
+      }
+      ancestor = ancestor.parentElement;
+    }
+
+    return document.scrollingElement as HTMLElement | null;
   }
 
   public async onFileSelected(event: any) {
