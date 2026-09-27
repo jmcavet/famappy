@@ -1,4 +1,5 @@
 import { Component, computed, inject, signal, ViewChild } from '@angular/core';
+import { Location } from '@angular/common';
 
 import { Router } from '@angular/router';
 import { Recipe } from '../recipes/components/recipe-card/recipe.model';
@@ -46,6 +47,7 @@ import { SectionComponent } from '../../shared/layout/primitives/section.compone
 })
 export class NewRecipeComponent {
   private router = inject(Router);
+  private location = inject(Location);
 
   /** Services */
   private recipeService = inject(RecipeBackendService);
@@ -92,6 +94,10 @@ export class NewRecipeComponent {
       this.buttonSaveOrUpdate.set('Update');
       this.recipeId.set(navigationState.id);
     }
+  }
+
+  goBack() {
+    this.location.back();
   }
 
   async onAddOrUpdateRecipe() {

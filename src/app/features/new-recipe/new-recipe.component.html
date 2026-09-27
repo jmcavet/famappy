@@ -24,7 +24,9 @@
 
     <app-section>
       <app-inline>
-        <app-button variant="outline" [fullWidth]="true"> Cancel</app-button>
+        <app-button variant="outline" [fullWidth]="true" (clicked)="goBack()">
+          Cancel
+        </app-button>
 
         <app-button
           [fullWidth]="true"
