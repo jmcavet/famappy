@@ -44,7 +44,45 @@ export interface RecipeState {
   thumbnailUrl: string;
 }
 
-export interface RecipeDocInBackend extends Omit<
+export type RecipeDocInBackend = Pick<
   RecipeState,
-  'ingredient' | 'ingredientId' | 'selectedTabTitle' | 'filter' | 'nbFilters'
-> {}
+  | 'title'
+  | 'preparationTime'
+  | 'cookingTime'
+  | 'servings'
+  | 'difficulty'
+  | 'price'
+  | 'frequency'
+  | 'seasonsSelected'
+  | 'recipeCategoryIds'
+  | 'mealCategoryId'
+  | 'cuisineId'
+  | 'source'
+  | 'comment'
+  | 'ingredients'
+  | 'instructions'
+  | 'imageUrl'
+  | 'thumbnailUrl'
+>;
+
+export function toRecipeDocInBackend(state: RecipeState): RecipeDocInBackend {
+  return {
+    title: state.title,
+    preparationTime: state.preparationTime,
+    cookingTime: state.cookingTime,
+    servings: state.servings,
+    difficulty: state.difficulty,
+    price: state.price,
+    frequency: state.frequency,
+    seasonsSelected: [...state.seasonsSelected],
+    recipeCategoryIds: [...state.recipeCategoryIds],
+    mealCategoryId: state.mealCategoryId,
+    cuisineId: state.cuisineId,
+    source: state.source,
+    comment: state.comment,
+    ingredients: state.ingredients.map((ingredient) => ({ ...ingredient })),
+    instructions: [...state.instructions],
+    imageUrl: state.imageUrl,
+    thumbnailUrl: state.thumbnailUrl,
+  };
+}

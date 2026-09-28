@@ -1,5 +1,5 @@
 import { Component, computed, inject, input, Input } from '@angular/core';
-import { RecipeState } from '../../../../models/recipe.model';
+import { RecipeWithId } from './recipe.model';
 import { MinToHourPipe } from '../../../../shared/pipes/mintohour.pipe';
 import { CuisineBackendService } from '../../../../services/backend/cuisine.service';
 import { MealCategoryBackendService } from '../../../../services/backend/meal-category.service';
@@ -26,8 +26,7 @@ import { StackComponent } from '../../../../shared/layout/primitives/stack.compo
   styleUrl: './recipe-card.component.css',
 })
 export class RecipeCardComponent {
-  // @Input() recipeState?: RecipeState;
-  recipeState = input<RecipeState>();
+  recipeState = input<RecipeWithId>();
 
   activated = input<boolean>(false);
   cardSurface = input<'0' | '1' | '2' | '3'>('1');

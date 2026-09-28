@@ -1,4 +1,11 @@
-import { computed, inject, Injectable, Signal, signal } from '@angular/core';
+import {
+  computed,
+  effect,
+  inject,
+  Injectable,
+  Signal,
+  signal,
+} from '@angular/core';
 import { RecipeDomainFacade } from '../../../../domain-facades/recipe.facade';
 import { RecipeCategoryDomainFacade } from '../../../../domain-facades/recipeCategory.facade';
 import { RecipeCategoryBackendService } from '../../../../services/backend/recipe-category.service';
@@ -19,6 +26,7 @@ import { ModalInputComponent } from '../../../../shared/layout/overlays/modal/mo
 
 export interface TabDefinitionContext {
   buttonType: Signal<string>;
+  recipeId: Signal<string>;
 }
 
 /** This UI facade may inject domain facades. However, domain facades must NEVER inject UI facades!! */
@@ -66,12 +74,28 @@ export class TabDefinitionFacade {
   // imageUrl = this.recipeService.recipeState().imageUrl;
   readonly imageUrl = computed(() => this.recipeService.recipeState().imageUrl);
 
-  titleIsUnique = signal<boolean>(true);
+  private readonly _titleValue = signal('');
+  readonly titleIsUnique = computed(() => {
+    const normalizedTitle = this.normalizeTitle(this._titleValue());
+    if (!normalizedTitle) return true;
+
+    const editingRecipeId = this._ctx.recipeId();
+    return !this.dbRecipes().some(
+      (recipe) =>
+        recipe.id !== editingRecipeId &&
+        this.normalizeTitle(recipe.title) === normalizedTitle,
+    );
+  });
 
   form: FormGroup = this._formBuilder.group({
     title: [
       '',
-      [Validators.required, Validators.minLength(3), Validators.maxLength(36)],
+      [
+        Validators.required,
+        Validators.pattern(/\S/),
+        Validators.minLength(3),
+        Validators.maxLength(36),
+      ],
     ],
     preparationTime: [
       '',
@@ -96,8 +120,17 @@ export class TabDefinitionFacade {
    * ================================ */
   /** Private signals */
   private _ctx!: TabDefinitionContext;
+  private readonly _contextConnected = signal(false);
+
+  private readonly _titleValidityEffect = effect(() => {
+    if (!this._contextConnected()) return;
+    this.updateFormValidity();
+  });
+
   public connect(ctx: TabDefinitionContext) {
     this._ctx = ctx;
+    this._contextConnected.set(true);
+    this.updateFormValidity();
   }
 
   /* ================================
@@ -144,10 +177,6 @@ export class TabDefinitionFacade {
   });
 
   readonly messageUniqueTitle = computed(() => {
-    if (this._ctx.buttonType() === 'Update') {
-      return '';
-    }
-
     return this.titleIsUnique() ? '' : 'Title already exists in database.';
   });
 
@@ -182,28 +211,16 @@ export class TabDefinitionFacade {
       comment: state.comment,
     });
 
+    this._titleValue.set(this.form.get('title')?.value ?? '');
+
     /** Subscribe to any changes in the status of the form (whether it is valid or not)*/
     this.form.statusChanges.subscribe(() => {
-      let formIsValid;
-      if (this._ctx.buttonType() === 'Save') {
-        formIsValid = this.form.valid && this.titleIsUnique();
-      } else {
-        formIsValid = this.form.valid && this.titleIsUnique();
-      }
-      this.recipeService.setFormValidity(formIsValid);
+      this.updateFormValidity();
     });
 
     this.form.get('title')?.valueChanges.subscribe((value: string) => {
-      const titleExists = this.dbRecipes().some((item) => item.title === value);
-      this.titleIsUnique.set(!titleExists);
-
-      let formIsValid;
-      if (this._ctx.buttonType() === 'Save') {
-        formIsValid = this.form.valid && this.titleIsUnique();
-      } else {
-        formIsValid = this.form.valid && this.titleIsUnique();
-      }
-      this.recipeService.setFormValidity(formIsValid);
+      this._titleValue.set(value ?? '');
+      this.updateFormValidity();
     });
 
     /** Subscribe to the 'title' input field value changes */
@@ -230,6 +247,17 @@ export class TabDefinitionFacade {
     this.form.get('comment')?.valueChanges.subscribe((value) => {
       this.recipeService.updateProperty('comment', value);
     });
+
+    this.updateFormValidity();
+  }
+
+  private updateFormValidity() {
+    if (!this._contextConnected()) return;
+    this.recipeService.setFormValidity(this.form.valid && this.titleIsUnique());
+  }
+
+  private normalizeTitle(value: string): string {
+    return value.trim().replace(/\s+/g, ' ').toLowerCase();
   }
 
   resetRecipeState() {
@@ -325,13 +353,6 @@ export class TabDefinitionFacade {
     );
   }
 
-  public onTitleChange(value: string) {
-    const existingRecipeTitles = this.dbRecipes().find(
-      (item) => item.title === value,
-    );
-    this.titleIsUnique.set(existingRecipeTitles === undefined);
-  }
-
   public setDifficulty(difficultySelected: Difficulty) {
     this.recipeService.updateProperty('difficulty', difficultySelected);
   }
@@ -405,6 +426,7 @@ export class TabDefinitionFacade {
     if (!file) return;
 
     this.recipeService.imageFile.set(file);
+    this.recipeService.imageChange.set('replaced');
 
     // Revoke previous URL if it exists
     const currentUrl = this.imageUrl();
@@ -425,5 +447,6 @@ export class TabDefinitionFacade {
     this.recipeService.updateProperty('imageUrl', '');
 
     this.recipeService.imageFile.set(null);
+    this.recipeService.imageChange.set('removed');
   }
 }

@@ -8,7 +8,6 @@
             id="title"
             name=""
             formControlName="title"
-            (input)="onTitleChange($any($event.target).value)"
             placeholder="Title"
             autocomplete="off"
             class="inset-x-md surface-1"
@@ -24,6 +23,9 @@
               }
               @if (form.get("title")?.errors?.["maxlength"]) {
                 <small>Title must be no greater than 36 characters long.</small>
+              }
+              @if (form.get("title")?.errors?.["pattern"]) {
+                <small>Title cannot contain only spaces.</small>
               }
             </div>
           }

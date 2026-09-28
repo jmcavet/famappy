@@ -91,6 +91,7 @@ export class RecipeComponent {
   readonly cuisinesAreLoading = this.cuisineService.loading;
   readonly mealCategoriesAreLoading = this.mealCategoryService.loading;
   readonly recipesAreLoading = this.recipeService.loading;
+  readonly recipesLoaded = this.recipeService.recipesLoaded;
   readonly recipeIsBeingDeleted = this.recipeService.deleting;
 
   /** Declaration of local signals */
@@ -108,6 +109,12 @@ export class RecipeComponent {
 
       this.servings.set(initialServings ?? recipe.servings);
     });
+
+    effect(() => {
+      if (this.recipesLoaded() && !this.recipesAreLoading() && !this.recipe()) {
+        this.router.navigate(['/recipes']);
+      }
+    });
   }
 
   goBack() {
@@ -124,6 +131,8 @@ export class RecipeComponent {
   readonly pageIsLoading = computed(
     () =>
       this.recipesAreLoading() ||
+      !this.recipesLoaded() ||
+      !this.recipe() ||
       this.mealCategoriesAreLoading() ||
       this.cuisinesAreLoading(),
   );
@@ -133,17 +142,7 @@ export class RecipeComponent {
   });
 
   readonly recipe: Signal<RecipeWithId> = computed(() => {
-    /** Get the 'recipe' object from the navigation state (if passed) */
-    const recipeFromHistory = history.state.recipe;
-
-    /** If the recipe has been provided by the history state, use it, otherwise
-     * find it by comparing the id of all recipes to the one provided in the url
-     */
-    const recipe = recipeFromHistory
-      ? recipeFromHistory
-      : this.dbRecipes().find((recipe) => recipe.id === this.recipeId());
-
-    return recipe;
+    return this.dbRecipes().find((recipe) => recipe.id === this.recipeId())!;
   });
 
   imageLoadedMap: WritableSignal<{ [recipeId: string]: boolean }> = signal({});
@@ -256,13 +255,11 @@ export class RecipeComponent {
   }
 
   onEditRecipe() {
-    if (!this.recipe()) return;
+    const recipe = this.recipe();
+    if (!recipe) return;
 
-    this.recipeStateService.updateRecipeState(this.recipe());
-
-    this.router.navigate(['new-recipe'], {
-      state: { recipe: this.recipe(), id: this.recipeId() },
-    });
+    this.recipeStateService.updateRecipeState(recipe, recipe.id);
+    this.router.navigate(['/new-recipe', recipe.id, 'edit']);
   }
 
   openDeleteModal(event: MouseEvent, recipeId: string) {

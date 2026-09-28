@@ -14,6 +14,7 @@ import {
   onSnapshot,
   orderBy,
   query,
+  setDoc,
   Timestamp,
   updateDoc,
   where,
@@ -91,7 +92,8 @@ export class FirestoreService {
     collectionName: string,
     newDocument: object,
     onDataLoaded?: () => void,
-  ): Promise<string | void> {
+    documentId?: string,
+  ): Promise<string> {
     console.log('THIS IS MY newDocument: ', newDocument);
     try {
       const collectionRef = collection(this.firebaseService.db, collectionName);
@@ -102,19 +104,29 @@ export class FirestoreService {
         throw new Error('User not authenticated');
       }
 
-      const docRef = await addDoc(collectionRef, {
+      const documentData = {
         ...newDocument,
         userId: user.uid,
         dateCreated: Timestamp.now(), // Add the current timestamp as dateCreated
-      });
+      };
+
+      let savedDocumentId: string;
+      if (documentId) {
+        await setDoc(doc(collectionRef, documentId), documentData);
+        savedDocumentId = documentId;
+      } else {
+        const docRef = await addDoc(collectionRef, documentData);
+        savedDocumentId = docRef.id;
+      }
 
       // Notify once Firestore responds (even if the data is an empty array)
       if (onDataLoaded) onDataLoaded();
 
       // Return the document ID after it is created
-      return docRef.id;
+      return savedDocumentId;
     } catch (e) {
       console.error('Error adding document: ', e);
+      throw e;
     }
   }
 
@@ -155,7 +167,7 @@ export class FirestoreService {
     idToUpdate: string,
     propertiesToUpdate: object,
     onDataLoaded?: () => void,
-  ): Promise<string | void> {
+  ): Promise<void> {
     try {
       const user = this.authService.user();
 
@@ -168,6 +180,7 @@ export class FirestoreService {
       if (onDataLoaded) onDataLoaded();
     } catch (e) {
       console.error('Error updating document: ', e);
+      throw e;
     }
   }
 

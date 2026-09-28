@@ -16,6 +16,7 @@ import {
 } from 'firebase/storage';
 import { NgxImageCompressService } from 'ngx-image-compress';
 import { RecipeDocInBackend } from '../../models/recipe.model';
+import { collection, deleteField, doc } from 'firebase/firestore';
 
 @Injectable({
   providedIn: 'root',
@@ -30,6 +31,8 @@ export class RecipeBackendService {
 
   private readonly _loading = signal<boolean>(false);
   readonly loading = this._loading.asReadonly();
+  private readonly _recipesLoaded = signal<boolean>(false);
+  readonly recipesLoaded = this._recipesLoaded.asReadonly();
 
   private readonly _saving = signal<boolean>(false);
   readonly saving = this._saving.asReadonly();
@@ -55,6 +58,7 @@ export class RecipeBackendService {
 
   loadRecipesFromFirestore(userId: string) {
     this._loading.set(true);
+    this._recipesLoaded.set(false);
 
     this.firestoreService.loadFirestoreCollection<any>(
       'recipes',
@@ -63,6 +67,7 @@ export class RecipeBackendService {
       () => {
         // This callback runs once Firestore returns data (even empty)
         this._loading.set(false);
+        this._recipesLoaded.set(true);
       },
     );
   }
@@ -72,23 +77,31 @@ export class RecipeBackendService {
    *
    * @param recipe - Recipe object
    */
-  async saveRecipeIntoStore(recipe: RecipeDocInBackend) {
+  createRecipeId(): string {
+    return doc(collection(this.firebaseService.db, 'recipes')).id;
+  }
+
+  async saveRecipeIntoStore(
+    recipe: RecipeDocInBackend,
+    recipeId: string,
+  ): Promise<string> {
     this._saving.set(true);
 
     try {
       const docId = await this.firestoreService.saveDocumentIntoStore(
         'recipes',
         recipe,
-        () => {
-          // This callback runs once Firestore returns data (even empty)
-          this._saving.set(false);
-        },
+        undefined,
+        recipeId,
       );
       console.log('New recipe document ID: ', docId);
 
       return docId;
     } catch (error) {
       console.error('Error saving recipe: ', error);
+      throw error;
+    } finally {
+      this._saving.set(false);
     }
   }
 
@@ -101,7 +114,7 @@ export class RecipeBackendService {
    */
   async updateRecipeInStore(
     recipeIdToUpdate: string,
-    recipeObject: any,
+    recipeObject: RecipeDocInBackend,
     mustPreserveState: WritableSignal<boolean>,
   ) {
     this._updating.set(true);
@@ -110,10 +123,16 @@ export class RecipeBackendService {
       await this.firestoreService.updateDocumentInFirestore(
         'recipes',
         recipeIdToUpdate,
-        recipeObject,
-        () => {
-          // This callback runs once Firestore returns data (even empty)
-          this._updating.set(false);
+        {
+          ...recipeObject,
+          ingredient: deleteField(),
+          ingredientId: deleteField(),
+          selectedTabTitle: deleteField(),
+          filter: deleteField(),
+          nbFilters: deleteField(),
+          difficultiesSelected: deleteField(),
+          frequenciesSelected: deleteField(),
+          cuisinesSelected: deleteField(),
         },
       );
 
@@ -122,6 +141,9 @@ export class RecipeBackendService {
       mustPreserveState.set(true);
     } catch (error) {
       console.error('Error updating recipe: ', error);
+      throw error;
+    } finally {
+      this._updating.set(false);
     }
   }
 
@@ -308,6 +330,7 @@ export class RecipeBackendService {
       });
     } catch (error) {
       console.error('Error uploading image in firebase: ', error);
+      throw error;
     } finally {
       this._saving.set(false);
     }
