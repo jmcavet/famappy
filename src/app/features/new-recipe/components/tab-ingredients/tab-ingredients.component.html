@@ -62,23 +62,27 @@
     @if (recipeIngredients().length > 0) {
       <app-section>
         <app-stack variant="section">
-          <app-form-grid>
+          <div
+            class="grid grid-cols-[max-content_minmax(0,1fr)_auto] gap-x-md gap-y-sm"
+          >
             @for (ingredient of recipeIngredients(); track $index) {
-              <app-inline gap="xs">
-                <span> {{ ingredient.measure }}</span>
-                <span>{{ ingredient.unit }}</span>
-              </app-inline>
-              <app-row>
-                <span class="w-full">{{ ingredient.name }}</span>
+              <div
+                class="col-span-3 grid [grid-template-columns:subgrid] items-center rounded inset-x-sm inset-y-md surface-2"
+              >
+                <app-inline gap="xs" class="color-text-subtle">
+                  <span>{{ ingredient.measure }}</span>
+                  <span>{{ ingredient.unit }}</span>
+                </app-inline>
+                <span class="min-w-0 break-words">{{ ingredient.name }}</span>
                 <app-button
                   color="danger"
                   variant="ghost"
                   (clicked)="onDeleteIngredient($index)"
                   ><i class="fa-regular fa-trash-can text-xl"></i>
                 </app-button>
-              </app-row>
+              </div>
             }
-          </app-form-grid>
+          </div>
         </app-stack>
       </app-section>
     }
