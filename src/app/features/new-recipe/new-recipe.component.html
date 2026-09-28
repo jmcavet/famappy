@@ -9,7 +9,10 @@
         <app-stack variant="section">
           <app-tabs [surface]="0" insetX="none" insetX="md" [fixedTop]="true">
             <app-tab tabTitle="definition" [active]="true">
-              <app-tab-definition [buttonType]="buttonSaveOrUpdate()" />
+              <app-tab-definition
+                [buttonType]="buttonSaveOrUpdate()"
+                [recipeId]="recipeId() ?? ''"
+              />
             </app-tab>
             <app-tab tabTitle="ingredients">
               <app-tab-ingredients />
@@ -31,7 +34,7 @@
         <app-button
           [fullWidth]="true"
           (clicked)="onAddOrUpdateRecipe()"
-          [disabled]="!formIsValid()"
+          [disabled]="!canSubmit()"
           >{{ buttonSaveOrUpdate() }}</app-button
         >
       </app-inline>

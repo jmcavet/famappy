@@ -1,5 +1,5 @@
 import { RecipeIngredient } from '../../../../models/ingredient.model';
-import { RecipeState } from '../../../../models/recipe.model';
+import { RecipeDocInBackend } from '../../../../models/recipe.model';
 
 // Represents an object of collection "recipes" in Firestore
 export interface Recipe {
@@ -20,6 +20,6 @@ export interface Recipe {
 }
 
 // Used to add the document ID of the firestore object in order to eventually later on remove the Recipe by id
-export interface RecipeWithId extends RecipeState {
+export interface RecipeWithId extends RecipeDocInBackend {
   id: string;
 }

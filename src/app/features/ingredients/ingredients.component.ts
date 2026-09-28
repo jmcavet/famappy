@@ -41,15 +41,6 @@ export class IngredientsComponent {
   ingredientCategoriesNames = this.facade.ingredientCategoriesNames;
   ingredientCategoryNameSelected = this.facade.ingredientCategoryNameSelected;
 
-  @ViewChild('ingredientInput') ingredientInput!: ElementRef<HTMLInputElement>;
-
-  /** Access the input field and focus it on view initialization */
-  ngAfterViewInit(): void {
-    setTimeout(() => {
-      this.ingredientInput.nativeElement.focus();
-    });
-  }
-
   onResetInput() {
     this.facade.resetInput();
   }

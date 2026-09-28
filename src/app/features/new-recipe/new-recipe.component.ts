@@ -1,14 +1,24 @@
-import { Component, computed, inject, signal, ViewChild } from '@angular/core';
+import {
+  Component,
+  computed,
+  effect,
+  inject,
+  input,
+  ViewChild,
+} from '@angular/core';
 import { Location } from '@angular/common';
 
 import { Router } from '@angular/router';
-import { Recipe } from '../recipes/components/recipe-card/recipe.model';
 import { TabsComponent } from './components/tabs/tabs.component';
 import { TabComponent } from './components/tab/tab.component';
 import { TabDefinitionComponent } from './components/tab-definition/tab-definition.component';
 import { TabIngredientsComponent } from './components/tab-ingredients/tab-ingredients.component';
 import { TabInstructionsComponent } from './components/tab-instructions/tab-instructions.component';
 import { RecipeBackendService } from '../../services/backend/recipe.service';
+import {
+  RecipeDocInBackend,
+  toRecipeDocInBackend,
+} from '../../models/recipe.model';
 import { ToastService } from '../../services/toast.service';
 import { RecipeStateService } from '../../services/state/recipe.service';
 import {
@@ -64,69 +74,121 @@ export class NewRecipeComponent {
 
   /** Declaration of local signals */
   recipeState = this.stateRecipeService.recipeState;
-  buttonSaveOrUpdate = signal<string>('Save');
-  recipeId = signal<string>('');
+  readonly recipeId = input<string | undefined>();
+  readonly buttonSaveOrUpdate = computed(() =>
+    this.recipeId() ? 'Update' : 'Save',
+  );
+  private initializedEditId: string | null = null;
   uploadProgress = this.recipeService.uploadProgress;
+  readonly dbRecipes = this.recipeService.recipes;
+  readonly recipesAreLoading = this.recipeService.loading;
+  readonly recipesLoaded = this.recipeService.recipesLoaded;
 
   /** Declaration of recipe state signals */
   readonly formIsValid = computed(() => {
     return this.stateRecipeService.formIsValid();
   });
+  readonly canSubmit = computed(
+    () =>
+      this.formIsValid() &&
+      (!this.recipeId() || this.stateRecipeService.recipeHasChanges()),
+  );
 
   readonly pageLoading = computed(() => {
     return (
       this.recipeIsSaving() ||
       this.recipeIsUpdating() ||
-      this.recipeCategoriesLoading()
+      this.recipeCategoriesLoading() ||
+      (!!this.recipeId() &&
+        (!this.recipesLoaded() ||
+          this.recipesAreLoading() ||
+          !this.dbRecipes().some((recipe) => recipe.id === this.recipeId()) ||
+          this.stateRecipeService.editingRecipeId() !== this.recipeId()))
     );
   });
 
   @ViewChild(TabDefinitionComponent) childComponent!: TabDefinitionComponent;
 
   constructor() {
-    const navigation = this.router.getCurrentNavigation();
-    const navigationState = navigation?.extras?.state as {
-      recipe: Recipe;
-      id: string;
-    };
+    effect(() => {
+      const recipeId = this.recipeId();
+      if (!recipeId) {
+        if (this.stateRecipeService.editingRecipeId()) {
+          this.stateRecipeService.resetRecipeState();
+        }
+        this.initializedEditId = null;
+        return;
+      }
 
-    if (navigationState?.recipe) {
-      this.buttonSaveOrUpdate.set('Update');
-      this.recipeId.set(navigationState.id);
-    }
+      if (this.initializedEditId === recipeId) return;
+
+      if (this.stateRecipeService.editingRecipeId() === recipeId) {
+        this.initializedEditId = recipeId;
+        return;
+      }
+
+      if (!this.recipesLoaded() || this.recipesAreLoading()) return;
+
+      const recipe = this.dbRecipes().find((item) => item.id === recipeId);
+      if (!recipe) {
+        this.router.navigate(['/recipes']);
+        return;
+      }
+
+      this.stateRecipeService.updateRecipeState(recipe, recipeId);
+      this.initializedEditId = recipeId;
+    });
   }
 
   goBack() {
-    this.location.back();
+    const recipeId = this.recipeId();
+    this.stateRecipeService.resetRecipeState();
+    if (recipeId) {
+      this.router.navigate(['/recipes', recipeId]);
+    } else {
+      this.location.back();
+    }
   }
 
   async onAddOrUpdateRecipe() {
-    const {
-      ingredient,
-      ingredientId,
-      selectedTabTitle,
-      filter,
-      nbFilters,
-      ...recipe
-    } = this.recipeState();
+    const recipe = toRecipeDocInBackend(this.recipeState());
 
     const storage = getStorage();
 
     const imageFile = this.stateRecipeService.imageFile();
-
-    // Create a copy of the original image url from the firestore object. If I use 'recipe.imageUrl' later
-    // in the code after having redefined the new image, I won't be able to remove the original image (from firebase)
-    // since it would refer to the most updated/redefined one!
-    const originalImageUrl = recipe.imageUrl?.slice();
+    const imageChange = this.stateRecipeService.imageChange();
+    const originalImage = this.stateRecipeService.originalImage();
 
     try {
       if (this.buttonSaveOrUpdate() === 'Save') {
-        const recipeId = await this.recipeService.saveRecipeIntoStore(recipe);
+        const recipeId = this.recipeService.createRecipeId();
+        let recipeToSave: RecipeDocInBackend | null = null;
+        try {
+          recipeToSave = await this.uploadImageToFirebase(
+            imageFile,
+            recipeId,
+            storage,
+            recipe,
+          );
+          await this.recipeService.saveRecipeIntoStore(recipeToSave, recipeId);
+        } catch (error) {
+          if (imageChange === 'replaced' && recipeToSave?.imageUrl) {
+            await this.removeImagesFromUrl(recipeToSave.imageUrl);
+          }
+          throw error;
+        }
 
-        if (!recipeId) throw new Error('No recipe ID returned');
+        this.toastService.show('New recipe saved in database', 'success');
+
+        this.childComponent.resetRecipeState();
+
+        // Navigate back to all recipes
+        this.router.navigate(['/recipes']);
+      } else {
+        const recipeId = this.recipeId();
+        if (!recipeId) throw new Error('Recipe ID is missing in edit mode');
 
         const updatedRecipe = await this.uploadImageToFirebase(
-          false,
           imageFile,
           recipeId,
           storage,
@@ -140,55 +202,27 @@ export class NewRecipeComponent {
             this.stateRecipeService.mustPreserveState,
           );
         } catch (error) {
-          this.toastService.show(
-            'Could not update the recipe document with imageUrl',
-            'error',
-          );
+          if (
+            imageChange === 'replaced' &&
+            updatedRecipe.imageUrl &&
+            updatedRecipe.imageUrl !== originalImage?.imageUrl
+          ) {
+            await this.removeImagesFromUrl(updatedRecipe.imageUrl);
+          }
+          throw error;
         }
 
-        this.toastService.show('New recipe saved in database', 'success');
-
-        this.childComponent.resetRecipeState();
-
-        // Navigate back to all recipes
-        this.router.navigate(['/recipes']);
-      } else {
-        const updatedRecipe = await this.uploadImageToFirebase(
-          true,
-          imageFile,
-          this.recipeId(),
-          storage,
-          recipe,
-        );
-
-        try {
-          await this.recipeService.updateRecipeInStore(
-            this.recipeId(),
-            updatedRecipe,
-            this.stateRecipeService.mustPreserveState,
-          );
-        } catch (error) {
-          this.toastService.show(
-            'Could not update the recipe document with imageUrl',
-            'error',
-          );
-        }
-
-        try {
-          if (originalImageUrl)
-            await this.removeImagesFromUrl(originalImageUrl);
-        } catch (error) {
-          console.log('Error while removing images from firebase: ', error);
+        if (imageChange !== 'unchanged' && originalImage?.imageUrl) {
+          await this.removeImagesFromUrl(originalImage.imageUrl);
         }
 
         this.childComponent.resetRecipeState();
+        this.stateRecipeService.imageFile.set(null);
 
         this.toastService.show('Recipe updated in database', 'success');
 
         // Navigate with the recipe ID and pass the recipe object in the state
-        this.router.navigate(['/recipes', this.recipeId()], {
-          state: { recipe: recipe },
-        });
+        this.router.navigate(['/recipes', recipeId]);
       }
     } catch (error) {
       const message =
@@ -197,55 +231,56 @@ export class NewRecipeComponent {
           : 'Recipe could not be updated in database';
       this.toastService.show(message, 'error');
     }
-
-    this.stateRecipeService.resetRecipeState();
   }
 
   async uploadImageToFirebase(
-    update: boolean,
     imageFile: File | null,
     recipeId: string,
     storage: FirebaseStorage,
-    recipe: any,
+    recipe: RecipeDocInBackend,
   ) {
-    if (imageFile) {
-      const imagePath = `recipes/${recipeId}/${imageFile?.name}`;
+    const imageChange = this.stateRecipeService.imageChange();
+
+    if (imageChange === 'replaced') {
+      if (!imageFile) throw new Error('Replacement image file is missing');
+
+      const uploadFileName = `${crypto.randomUUID()}_${imageFile.name}`;
+      const imagePath = `recipes/${recipeId}/${uploadFileName}`;
       const imageRef = ref(storage, imagePath);
 
-      const thumbnailPath = `recipes/${recipeId}/thumb_${imageFile?.name}`;
+      const thumbnailPath = `recipes/${recipeId}/thumb_${uploadFileName}`;
       const thumbnailRef = ref(storage, thumbnailPath);
 
-      await this.recipeService.uploadImageToFirebase(
-        imageRef,
-        thumbnailRef,
-        imageFile,
-      );
+      try {
+        await this.recipeService.uploadImageToFirebase(
+          imageRef,
+          thumbnailRef,
+          imageFile,
+        );
 
-      // Download both image and thumbnail urls from firebase
-      const imageUrl =
-        await this.recipeService.downloadImageUrlFromFirebase(imageRef);
+        const imageUrl =
+          await this.recipeService.downloadImageUrlFromFirebase(imageRef);
 
-      const thumbnailUrl =
-        await this.recipeService.downloadImageUrlFromFirebase(thumbnailRef);
+        const thumbnailUrl =
+          await this.recipeService.downloadImageUrlFromFirebase(thumbnailRef);
 
-      // Add both image and thumbnail urls as properties of the original recipe object
-      if (imageUrl && thumbnailUrl) {
-        recipe['imageUrl'] = imageUrl;
-        recipe['thumbnailUrl'] = thumbnailUrl;
+        if (!imageUrl || !thumbnailUrl) {
+          throw new Error('Could not retrieve uploaded image URLs');
+        }
+
+        recipe.imageUrl = imageUrl;
+        recipe.thumbnailUrl = thumbnailUrl;
+      } catch (error) {
+        await Promise.all([
+          deleteObject(imageRef).catch(() => undefined),
+          deleteObject(thumbnailRef).catch(() => undefined),
+        ]);
+        throw error;
       }
-    } else {
-      if (update) {
-        // Use case when the use removes the existing image for the recipe
-        recipe['imageUrl'] = '';
-        recipe['thumbnailUrl'] = '';
-      }
+    } else if (imageChange === 'removed') {
+      recipe.imageUrl = '';
+      recipe.thumbnailUrl = '';
     }
-
-    /** Reset the imageFile, otherwise next time users save a recipe without loading an image,
-     * it will still have the previous imageFile in memory (from the state) and will upload this
-     * very image.
-     */
-    this.stateRecipeService.imageFile.set(null);
 
     return recipe;
   }

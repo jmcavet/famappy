@@ -23,6 +23,7 @@ import { FormGridComponent } from '../../../../shared/layout/primitives/form-gri
 
 export interface TabDefinitionContext {
   buttonType: Signal<string>;
+  recipeId: Signal<string>;
 }
 
 @Component({
@@ -47,6 +48,7 @@ export interface TabDefinitionContext {
 })
 export class TabDefinitionComponent {
   buttonType = input.required<string>();
+  recipeId = input<string>('');
 
   private facade = inject(TabDefinitionFacade);
 
@@ -75,6 +77,7 @@ export class TabDefinitionComponent {
 
   private ctx: TabDefinitionContext = {
     buttonType: this.buttonType,
+    recipeId: this.recipeId,
   };
 
   ngOnInit() {
@@ -85,10 +88,6 @@ export class TabDefinitionComponent {
 
   resetRecipeState() {
     this.facade.resetRecipeState();
-  }
-
-  onTitleChange(value: string) {
-    this.facade.onTitleChange(value);
   }
 
   onServingsChange(value: number) {

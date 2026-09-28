@@ -75,6 +75,9 @@ export class ShoppingCategoryBackendService {
       return docId;
     } catch (error) {
       console.error('Error saving shopping category: ', error);
+      throw error;
+    } finally {
+      this._saving.set(false);
     }
   }
 }

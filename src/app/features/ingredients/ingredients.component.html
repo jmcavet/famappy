@@ -57,7 +57,7 @@
     >
     <app-page-layout>
       <app-section>
-        <app-stack>
+        <app-stack variant="default">
           @for (
             ingredient of ingredientsFiltered();
             track ingredient.id;
@@ -65,7 +65,7 @@
           ) {
             <div
               (click)="selectIngredient(ingredient.id)"
-              class="surface-1 surface-interactive p-3 w-full rounded-none sm:rounded-md"
+              class="w-full rounded inset-inline-md surface-2 surface-interactive"
             >
               <app-row>
                 <span>{{ ingredient.name }}</span>

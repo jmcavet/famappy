@@ -1,11 +1,13 @@
-import { effect, Injectable, signal } from '@angular/core';
+import { computed, effect, Injectable, signal } from '@angular/core';
 
 import { RecipeCategoryDocInBackend } from '../../models/cuisine.model';
 import {
   Difficulty,
   Frequency,
+  RecipeDocInBackend,
   RecipeState,
   Season,
+  toRecipeDocInBackend,
 } from '../../models/recipe.model';
 import { RecipeIngredient } from '../../models/ingredient.model';
 
@@ -53,6 +55,26 @@ export class RecipeStateService {
   };
 
   recipeState = signal<RecipeState>(this.initialRecipeState);
+  readonly editingRecipeId = signal<string | null>(null);
+  private readonly originalRecipe = signal<RecipeDocInBackend | null>(null);
+  readonly recipeHasChanges = computed(() => {
+    const original = this.originalRecipe();
+    if (!original) return false;
+
+    return (
+      this.imageChange() !== 'unchanged' ||
+      JSON.stringify(toRecipeDocInBackend(this.recipeState())) !==
+        JSON.stringify(original)
+    );
+  });
+
+  readonly imageChange = signal<'unchanged' | 'replaced' | 'removed'>(
+    'unchanged',
+  );
+  readonly originalImage = signal<Pick<
+    RecipeState,
+    'imageUrl' | 'thumbnailUrl'
+  > | null>(null);
 
   formIsValid = signal<boolean>(false);
 
@@ -75,11 +97,49 @@ export class RecipeStateService {
    */
   resetRecipeState() {
     this.recipeState.set(this.initialRecipeState);
+    this.editingRecipeId.set(null);
+    this.originalRecipe.set(null);
+    this.imageChange.set('unchanged');
+    this.originalImage.set(null);
+    this.imageFile.set(null);
   }
 
-  updateRecipeState(newState: RecipeState) {
-    newState['selectedTabTitle'] = 'definition';
-    this.recipeState.set(newState);
+  updateRecipeState(newState: RecipeDocInBackend, recipeId: string) {
+    this.editingRecipeId.set(recipeId);
+    this.originalImage.set({
+      imageUrl: newState.imageUrl,
+      thumbnailUrl: newState.thumbnailUrl,
+    });
+    this.imageChange.set('unchanged');
+    this.imageFile.set(null);
+    const draft: RecipeState = {
+      ...this.initialRecipeState,
+      title: newState.title,
+      preparationTime: newState.preparationTime,
+      cookingTime: newState.cookingTime,
+      servings: newState.servings,
+      difficulty: newState.difficulty,
+      price: newState.price,
+      frequency: newState.frequency,
+      seasonsSelected: [...(newState.seasonsSelected ?? [])],
+      recipeCategoryIds: [...(newState.recipeCategoryIds ?? [])],
+      mealCategoryId: newState.mealCategoryId,
+      cuisineId: newState.cuisineId,
+      source: newState.source,
+      comment: newState.comment,
+      ingredients: (newState.ingredients ?? []).map((ingredient) => ({
+        ...ingredient,
+      })),
+      instructions: [...(newState.instructions ?? [])],
+      imageUrl: newState.imageUrl ?? '',
+      thumbnailUrl: newState.thumbnailUrl ?? '',
+      filter: {
+        ...this.initialRecipeState.filter,
+      },
+      selectedTabTitle: 'definition',
+    };
+    this.recipeState.set(draft);
+    this.originalRecipe.set(toRecipeDocInBackend(draft));
     this.preserveState(true);
   }
 
