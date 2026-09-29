@@ -216,13 +216,12 @@ export class NewRecipeComponent {
           await this.removeImagesFromUrl(originalImage.imageUrl);
         }
 
-        this.childComponent.resetRecipeState();
-        this.stateRecipeService.imageFile.set(null);
-
         this.toastService.show('Recipe updated in database', 'success');
 
-        // Navigate with the recipe ID and pass the recipe object in the state
-        this.router.navigate(['/recipes', recipeId]);
+        const navigated = await this.router.navigate(['/recipes', recipeId]);
+        if (navigated) {
+          this.stateRecipeService.resetRecipeState();
+        }
       }
     } catch (error) {
       const message =

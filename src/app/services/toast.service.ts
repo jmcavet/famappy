@@ -24,8 +24,9 @@ export class ToastService {
     const componentRef: ComponentRef<ToastComponent> =
       this.containerRef.createComponent(ToastComponent);
 
-    componentRef.instance.message = message;
-    componentRef.instance.type = type;
+    componentRef.setInput('message', message);
+    componentRef.setInput('type', type);
+    componentRef.changeDetectorRef.detectChanges();
 
     setTimeout(() => {
       componentRef.destroy();
