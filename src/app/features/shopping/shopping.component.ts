@@ -90,6 +90,8 @@ export class ShoppingComponent {
 
   readonly quickEntryItem = this.shoppingFacade.quickEntryItem;
   readonly ingredientsFound = this.shoppingFacade.ingredientsFound;
+  readonly nameSortAscending = this.shoppingFacade.nameSortAscending;
+  readonly categorySortAscending = this.shoppingFacade.categorySortAscending;
 
   readonly ingredientCategoriesSorted =
     this.shoppingFacade.ingredientCategoriesSorted;
@@ -113,6 +115,10 @@ export class ShoppingComponent {
 
   setInputItem(item: string) {
     this.shoppingFacade.setInputItem(item);
+  }
+
+  toggleIngredientSort(sortBy: 'name' | 'category') {
+    this.shoppingFacade.toggleIngredientSort(sortBy);
   }
 
   measureFor(ingredientId: string) {

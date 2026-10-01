@@ -26,6 +26,7 @@ import {
 import { ModalConfirmComponent } from '../../shared/layout/overlays/modal/modal-confirm/modal-confirm.component';
 import { ShoppingListDocInBackend } from '../../models/shopping-list.model';
 import { ModalUpdateMeasureComponent } from '../../shared/layout/overlays/modal/modal-measure/modal-update-measure.component';
+import { sortIngredientSuggestions } from './ingredient-suggestion-sort';
 
 export interface ShoppingListElement {
   ingredientId: string | null;
@@ -40,6 +41,15 @@ export interface ShoppingCategoryItem {
   id: string;
   name: string;
 }
+
+interface ShoppingIngredientSuggestion {
+  id: string;
+  name: string;
+  category: string;
+  measure: number;
+  unit: string;
+}
+
 @Injectable({ providedIn: 'root' })
 export class ShoppingFacade {
   constructor() {
@@ -109,15 +119,10 @@ export class ShoppingFacade {
    * ════════════════════════════════ */
   /** Public signals */
   public quickEntryItem = signal<string>('');
-  public ingredientsFound = signal<
-    {
-      id: string;
-      name: string;
-      category: string;
-      measure: number;
-      unit: string;
-    }[]
-  >([]);
+  public ingredientsFound = signal<ShoppingIngredientSuggestion[]>([]);
+  readonly activeIngredientSort = signal<'name' | 'category' | null>(null);
+  readonly nameSortAscending = signal(true);
+  readonly categorySortAscending = signal(true);
   public searchIngredientsAdded = signal<
     { id: string; name: string; category: string }[]
   >([]);
@@ -256,12 +261,46 @@ export class ShoppingFacade {
         quickItemId: null,
       }));
 
-    return [
+    const shoppingListElements: ShoppingListElement[] = [
       ...ingredientsIdName,
       ...(this.ingredientCategorySelected() ? [] : categoryItemsIdName),
       ...(this.ingredientCategorySelected() ? [] : quickItemsIdName),
       ...(this.ingredientCategorySelected() ? [] : searchIngredientsIdName),
-    ].sort((a, b) => a.name.localeCompare(b.name));
+    ];
+    const ingredientCategoryNames = new Map(
+      this.ingredientCategories().map((category) => [
+        category.id,
+        category.name,
+      ]),
+    );
+    const shoppingCategoryNames = new Map(
+      this.shoppingCategories().map((category) => [category.id, category.name]),
+    );
+    const sortBy = this.activeIngredientSort() ?? 'name';
+    const ascending =
+      sortBy === 'name'
+        ? this.nameSortAscending()
+        : this.categorySortAscending();
+
+    return sortIngredientSuggestions(
+      shoppingListElements.map((element) => {
+        const ingredientCategoryId = element.ingredientId
+          ? this.ingredients().find(
+              (ingredient) => ingredient.id === element.ingredientId,
+            )?.categoryId
+          : undefined;
+
+        return {
+          ...element,
+          category: ingredientCategoryId
+            ? (ingredientCategoryNames.get(ingredientCategoryId) ?? '')
+            : (shoppingCategoryNames.get(element.shoppingCategoryId ?? '') ??
+              ''),
+        };
+      }),
+      sortBy,
+      ascending,
+    );
   });
 
   readonly shoppingCategoriesNames = computed(() => {
@@ -350,6 +389,16 @@ export class ShoppingFacade {
     this.shoppingService.saveMethodSelection(method);
   }
 
+  public toggleIngredientSort(sortBy: 'name' | 'category') {
+    if (this.activeIngredientSort() === sortBy) {
+      const direction =
+        sortBy === 'name' ? this.nameSortAscending : this.categorySortAscending;
+      direction.update((ascending) => !ascending);
+    } else {
+      this.activeIngredientSort.set(sortBy);
+    }
+  }
+
   public getShoppingCategoryById(categoryId: string | null) {
     return this.shoppingCategories().find((cat) => cat.id === categoryId);
   }
@@ -374,14 +423,13 @@ export class ShoppingFacade {
         });
 
       this.ingredientsFound.set(
-        ingredientsFound.length ? ingredientsFound : [],
+        ingredientsFound.sort((left, right) =>
+          left.name.localeCompare(right.name),
+        ),
       );
     } else {
       this.ingredientsFound.set([]);
     }
-
-    // Sort ingredient alphabetically
-    this.ingredientsFound().sort((a, b) => a.name.localeCompare(b.name));
 
     this.quickEntryItem.set(inputEntry);
   }
@@ -723,9 +771,9 @@ export class ShoppingFacade {
       (list) => list.name === this.shoppingListNameSelected(),
     )?.id;
 
-    const updatedMeasure = this.measures().find(
-      (m) => m.id === ing.id,
-    )?.measure ?? this.measureFor(ing.id);
+    const updatedMeasure =
+      this.measures().find((m) => m.id === ing.id)?.measure ??
+      this.measureFor(ing.id);
 
     this.updateOrSumIngredientMeasureInShoppingList(shoppingListId!, {
       id: ing.id,
