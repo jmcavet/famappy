@@ -2,7 +2,7 @@ import { Component, HostBinding, input, output } from '@angular/core';
 
 type ButtonType = 'button' | 'submit' | 'reset';
 type ButtonShape = 'rounded' | 'pill';
-type ButtonVariant = 'filled' | 'outline' | 'ghost';
+export type ButtonVariant = 'filled' | 'outline' | 'ghost';
 export type ButtonColor =
   | 'primary'
   | 'secondary'

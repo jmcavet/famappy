@@ -33,6 +33,7 @@ export interface ShoppingListElement {
   itemId: string | null;
   shoppingCategoryId: string | null;
   name: string;
+  dateCreated?: string | Date | null;
   measure: number | null;
   quickItemId: string | null;
 }
@@ -120,7 +121,10 @@ export class ShoppingFacade {
   /** Public signals */
   public quickEntryItem = signal<string>('');
   public ingredientsFound = signal<ShoppingIngredientSuggestion[]>([]);
-  readonly activeIngredientSort = signal<'name' | 'category' | null>(null);
+  readonly activeIngredientSort = signal<
+    'category' | 'dateCreated' | 'name' | null
+  >('dateCreated');
+  readonly dateSortAscending = signal(false); // Newest date first
   readonly nameSortAscending = signal(true);
   readonly categorySortAscending = signal(true);
   public searchIngredientsAdded = signal<
@@ -215,6 +219,7 @@ export class ShoppingFacade {
         itemId: null,
         shoppingCategoryId: null,
         name: ing.name,
+        dateCreated: ing.dateCreated,
         measure: this.getIngredientMeasure(ing.id) ?? 0,
         quickItemId: null,
       }));
@@ -230,6 +235,7 @@ export class ShoppingFacade {
       itemId: item.id,
       shoppingCategoryId: item.shoppingCategoryId,
       name: item.name,
+      dateCreated: item.dateCreated,
       measure: null,
       quickItemId: null,
     }));
@@ -246,6 +252,7 @@ export class ShoppingFacade {
       itemId: null,
       shoppingCategoryId: null,
       name: item.name,
+      dateCreated: item.dateCreated,
       measure: null,
       quickItemId: item.id,
     }));
@@ -257,6 +264,9 @@ export class ShoppingFacade {
         itemId: null,
         shoppingCategoryId: null,
         name: ing.name,
+        dateCreated: this.ingredients().find(
+          (ingredient) => ingredient.id === ing.id,
+        )?.dateCreated,
         measure: this.getIngredientMeasure(ing.id) ?? 0,
         quickItemId: null,
       }));
@@ -280,7 +290,9 @@ export class ShoppingFacade {
     const ascending =
       sortBy === 'name'
         ? this.nameSortAscending()
-        : this.categorySortAscending();
+        : sortBy === 'category'
+          ? this.categorySortAscending()
+          : this.dateSortAscending();
 
     return sortIngredientSuggestions(
       shoppingListElements.map((element) => {
@@ -368,6 +380,7 @@ export class ShoppingFacade {
    * Public API (UI actions)
    * ════════════════════════════════ */
   methods = ['Quick entry', 'Ingredients', 'Categories'];
+  sortings = ['Date', 'Category', 'Name'];
 
   public addQuickEntryItem() {
     const shoppingListId = this.shoppingListSelected()?.id;
@@ -389,10 +402,14 @@ export class ShoppingFacade {
     this.shoppingService.saveMethodSelection(method);
   }
 
-  public toggleIngredientSort(sortBy: 'name' | 'category') {
+  public toggleIngredientSort(sortBy: 'name' | 'category' | 'dateCreated') {
     if (this.activeIngredientSort() === sortBy) {
       const direction =
-        sortBy === 'name' ? this.nameSortAscending : this.categorySortAscending;
+        sortBy === 'name'
+          ? this.nameSortAscending
+          : sortBy === 'category'
+            ? this.categorySortAscending
+            : this.dateSortAscending;
       direction.update((ascending) => !ascending);
     } else {
       this.activeIngredientSort.set(sortBy);
