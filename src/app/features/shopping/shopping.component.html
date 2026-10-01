@@ -83,7 +83,7 @@
             <div class="flex justify-between gap-8">
               <app-button
                 class="flex-1"
-                variant="outline"
+                color="secondary"
                 [fullWidth]="true"
                 (clicked)="toggleIngredientSort('name')"
               >
@@ -96,7 +96,7 @@
               </app-button>
               <app-button
                 class="flex-1"
-                variant="outline"
+                color="secondary"
                 [fullWidth]="true"
                 (clicked)="toggleIngredientSort('category')"
               >
@@ -198,7 +198,7 @@
     <app-page-layout maxSize="lg">
       <app-section inset="lg">
         <app-stack variant="section">
-          <app-inline gap="sm" [wrap]="true">
+          <!-- <app-inline gap="sm" [wrap]="true">
             @for (cat of ingredientCategoriesSorted(); track $index) {
               <app-chip
                 [selected]="ingredientCategorySelected()?.name === cat.name"
@@ -212,7 +212,7 @@
                 >{{ cat.name }}</app-chip
               >
             }
-          </app-inline>
+          </app-inline> -->
 
           <app-stack variant="section">
             <div class="shopping-list-rows">
