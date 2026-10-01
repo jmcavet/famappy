@@ -109,7 +109,7 @@
               </app-button>
             </div>
           }
-          @if (ingredientsFound()) {
+          @if (ingredientsFound().length > 0) {
             <app-stack variant="compact">
               @for (ing of ingredientsFound(); track ing.id) {
                 <div
