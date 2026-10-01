@@ -123,11 +123,12 @@
             <app-button
               class="flex-1"
               color="secondary"
+              [variant]="dateBtnVariant()"
               [fullWidth]="true"
               size="sm"
-              (clicked)="toggleIngredientSort('name')"
+              (clicked)="toggleIngredientSort('dateCreated')"
             >
-              @if (categorySortAscending()) {
+              @if (dateSortAscending()) {
                 <i class="fa-solid fa-arrow-down-1-9 mr-2"></i>
               } @else {
                 <i class="fa-solid fa-arrow-up-1-9 mr-2"></i>
@@ -137,6 +138,7 @@
             <app-button
               class="flex-1"
               color="secondary"
+              [variant]="categoryBtnVariant()"
               [fullWidth]="true"
               size="sm"
               (clicked)="toggleIngredientSort('category')"
@@ -151,8 +153,9 @@
             <app-button
               class="flex-1"
               color="secondary"
-              size="sm"
+              [variant]="nameBtnVariant()"
               [fullWidth]="true"
+              size="sm"
               (clicked)="toggleIngredientSort('name')"
             >
               @if (nameSortAscending()) {

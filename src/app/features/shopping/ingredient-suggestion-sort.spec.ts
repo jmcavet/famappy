@@ -28,4 +28,23 @@ describe('sortIngredientSuggestions', () => {
       ),
     ).toEqual(['Carrot', 'Apple', 'Banana']);
   });
+
+  it('sorts dates chronologically and leaves missing dates last', () => {
+    const datedIngredients = [
+      { name: 'New ingredient', dateCreated: '2025-03-01T00:00:00.000Z' },
+      { name: 'No date' },
+      { name: 'Old ingredient', dateCreated: '2024-01-01T00:00:00.000Z' },
+    ];
+
+    expect(
+      sortIngredientSuggestions(datedIngredients, 'dateCreated', true).map(
+        (ingredient) => ingredient.name,
+      ),
+    ).toEqual(['Old ingredient', 'New ingredient', 'No date']);
+    expect(
+      sortIngredientSuggestions(datedIngredients, 'dateCreated', false).map(
+        (ingredient) => ingredient.name,
+      ),
+    ).toEqual(['New ingredient', 'Old ingredient', 'No date']);
+  });
 });

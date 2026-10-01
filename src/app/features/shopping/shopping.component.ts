@@ -1,9 +1,12 @@
-import { Component, inject, effect } from '@angular/core';
+import { Component, inject, effect, computed, Signal } from '@angular/core';
 import { StackComponent } from '../../shared/layout/primitives/stack.component';
 import { LoadingComponent } from '../../shared/layout/overlays/loading/loading.component';
 import { PageLayoutComponent } from '../../shared/layout/primitives/page-layout.component';
 import { InlineComponent } from '../../shared/layout/primitives/inline.component';
-import { ButtonComponent } from '../../shared/ui/button/button.component';
+import {
+  ButtonComponent,
+  ButtonVariant,
+} from '../../shared/ui/button/button.component';
 import { HeaderShellComponent } from '../../shared/layout/shell/header-shell.component';
 import { FooterComponent } from '../../shared/layout/shell/footer/footer.component';
 import { SectionComponent } from '../../shared/layout/primitives/section.component';
@@ -91,7 +94,8 @@ export class ShoppingComponent {
   readonly quickEntryItem = this.shoppingFacade.quickEntryItem;
   readonly ingredientsFound = this.shoppingFacade.ingredientsFound;
 
-  // readonly dateSortAscending = this.shoppingFacade.dateSortAscending;
+  readonly activeIngredientSort = this.shoppingFacade.activeIngredientSort;
+  readonly dateSortAscending = this.shoppingFacade.dateSortAscending;
   readonly categorySortAscending = this.shoppingFacade.categorySortAscending;
   readonly nameSortAscending = this.shoppingFacade.nameSortAscending;
 
@@ -100,6 +104,18 @@ export class ShoppingComponent {
 
   readonly deleteElement = (element: ShoppingListElement) =>
     this.shoppingFacade.deleteElement(element);
+
+  readonly dateBtnVariant: Signal<ButtonVariant> = computed(() => {
+    return this.activeIngredientSort() === 'dateCreated' ? 'filled' : 'outline';
+  });
+
+  readonly categoryBtnVariant: Signal<ButtonVariant> = computed(() => {
+    return this.activeIngredientSort() === 'category' ? 'filled' : 'outline';
+  });
+
+  readonly nameBtnVariant: Signal<ButtonVariant> = computed(() => {
+    return this.activeIngredientSort() === 'name' ? 'filled' : 'outline';
+  });
 
   countIngredientsPerCategory(cat: IngredientCategoryDocInBackend) {
     return this.shoppingFacade.countIngredientsPerCategory(cat);
@@ -119,7 +135,7 @@ export class ShoppingComponent {
     this.shoppingFacade.setInputItem(item);
   }
 
-  toggleIngredientSort(sortBy: 'category' | 'name') {
+  toggleIngredientSort(sortBy: 'category' | 'dateCreated' | 'name') {
     this.shoppingFacade.toggleIngredientSort(sortBy);
   }
 
