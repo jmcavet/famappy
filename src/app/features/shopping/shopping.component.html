@@ -80,6 +80,34 @@
                   <i class="fa-solid fa-plus fa-lg"></i></div
               ></app-button>
             </app-grid>
+            <div class="shopping-sort-controls">
+              <app-button
+                class="flex-1"
+                variant="outline"
+                [fullWidth]="true"
+                (clicked)="toggleListSort('name')"
+              >
+                @if (nameSortAscending()) {
+                  <i class="fa-solid fa-arrow-down-a-z mr-2"></i>
+                } @else {
+                  <i class="fa-solid fa-arrow-down-z-a mr-2"></i>
+                }
+                By name
+              </app-button>
+              <app-button
+                class="flex-1"
+                variant="outline"
+                [fullWidth]="true"
+                (clicked)="toggleListSort('category')"
+              >
+                @if (categorySortAscending()) {
+                  <i class="fa-solid fa-arrow-down-a-z mr-2"></i>
+                } @else {
+                  <i class="fa-solid fa-arrow-down-z-a mr-2"></i>
+                }
+                By category
+              </app-button>
+            </div>
           }
           @if (ingredientsFound()) {
             <app-stack variant="compact">

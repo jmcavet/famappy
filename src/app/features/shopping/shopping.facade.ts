@@ -26,12 +26,14 @@ import {
 import { ModalConfirmComponent } from '../../shared/layout/overlays/modal/modal-confirm/modal-confirm.component';
 import { ShoppingListDocInBackend } from '../../models/shopping-list.model';
 import { ModalUpdateMeasureComponent } from '../../shared/layout/overlays/modal/modal-measure/modal-update-measure.component';
+import { sortShoppingListElements } from './shopping-list-sort';
 
 export interface ShoppingListElement {
   ingredientId: string | null;
   itemId: string | null;
   shoppingCategoryId: string | null;
   name: string;
+  category?: string;
   measure: number | null;
   quickItemId: string | null;
 }
@@ -103,6 +105,10 @@ export class ShoppingFacade {
 
   // /** Transitional state (shared by several ui) */
   private shoppingService = inject(ShoppingStateService);
+
+  readonly activeListSort = signal<'name' | 'category' | null>(null);
+  readonly nameSortAscending = signal(true);
+  readonly categorySortAscending = signal(true);
 
   /* ════════════════════════════════
    * Local UI state (owned by this facade)
@@ -256,12 +262,45 @@ export class ShoppingFacade {
         quickItemId: null,
       }));
 
-    return [
+    const elements: ShoppingListElement[] = [
       ...ingredientsIdName,
       ...(this.ingredientCategorySelected() ? [] : categoryItemsIdName),
       ...(this.ingredientCategorySelected() ? [] : quickItemsIdName),
       ...(this.ingredientCategorySelected() ? [] : searchIngredientsIdName),
-    ].sort((a, b) => a.name.localeCompare(b.name));
+    ];
+    const ingredientsById = new Map(
+      this.ingredients().map((ingredient) => [ingredient.id, ingredient]),
+    );
+    const ingredientCategoriesById = new Map(
+      this.ingredientCategories().map((category) => [
+        category.id,
+        category.name,
+      ]),
+    );
+    const shoppingCategoriesById = new Map(
+      this.shoppingCategories().map((category) => [category.id, category.name]),
+    );
+    const activeSort = this.activeListSort() ?? 'name';
+    const sortAscending =
+      activeSort === 'name'
+        ? this.nameSortAscending()
+        : this.categorySortAscending();
+
+    return sortShoppingListElements(
+      elements.map((element) => {
+        const ingredient = element.ingredientId
+          ? ingredientsById.get(element.ingredientId)
+          : undefined;
+        const category = ingredient
+          ? (ingredientCategoriesById.get(ingredient.categoryId) ?? '')
+          : (shoppingCategoriesById.get(element.shoppingCategoryId ?? '') ??
+            '');
+
+        return { ...element, category };
+      }),
+      activeSort,
+      sortAscending,
+    );
   });
 
   readonly shoppingCategoriesNames = computed(() => {
@@ -348,6 +387,17 @@ export class ShoppingFacade {
 
   public toggleMethod(method: string) {
     this.shoppingService.saveMethodSelection(method);
+  }
+
+  public toggleListSort(sortBy: 'name' | 'category') {
+    if (this.activeListSort() === sortBy) {
+      const direction =
+        sortBy === 'name' ? this.nameSortAscending : this.categorySortAscending;
+      direction.update((ascending) => !ascending);
+      return;
+    }
+
+    this.activeListSort.set(sortBy);
   }
 
   public getShoppingCategoryById(categoryId: string | null) {
@@ -723,9 +773,9 @@ export class ShoppingFacade {
       (list) => list.name === this.shoppingListNameSelected(),
     )?.id;
 
-    const updatedMeasure = this.measures().find(
-      (m) => m.id === ing.id,
-    )?.measure ?? this.measureFor(ing.id);
+    const updatedMeasure =
+      this.measures().find((m) => m.id === ing.id)?.measure ??
+      this.measureFor(ing.id);
 
     this.updateOrSumIngredientMeasureInShoppingList(shoppingListId!, {
       id: ing.id,

@@ -73,6 +73,8 @@ export class ShoppingComponent {
     this.shoppingFacade.ingredientCategorySelected;
 
   readonly shoppingListElements = this.shoppingFacade.shoppingListElements;
+  readonly nameSortAscending = this.shoppingFacade.nameSortAscending;
+  readonly categorySortAscending = this.shoppingFacade.categorySortAscending;
 
   readonly selectIngredientType = this.shoppingFacade.selectIngredientType;
 
@@ -167,6 +169,10 @@ export class ShoppingComponent {
 
   toggleMethod(method: string) {
     this.shoppingFacade.toggleMethod(method);
+  }
+
+  toggleListSort(sortBy: 'name' | 'category') {
+    this.shoppingFacade.toggleListSort(sortBy);
   }
 
   openUpdateQuickItemsModal(event: MouseEvent, ing: ShoppingListElement) {
