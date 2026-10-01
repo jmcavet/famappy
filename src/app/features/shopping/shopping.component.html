@@ -80,34 +80,6 @@
                   <i class="fa-solid fa-plus fa-lg"></i></div
               ></app-button>
             </app-grid>
-            <div class="flex justify-between gap-8">
-              <app-button
-                class="flex-1"
-                color="secondary"
-                [fullWidth]="true"
-                (clicked)="toggleIngredientSort('name')"
-              >
-                @if (nameSortAscending()) {
-                  <i class="fa-solid fa-arrow-down-a-z mr-2"></i>
-                } @else {
-                  <i class="fa-solid fa-arrow-down-z-a mr-2"></i>
-                }
-                By name
-              </app-button>
-              <app-button
-                class="flex-1"
-                color="secondary"
-                [fullWidth]="true"
-                (clicked)="toggleIngredientSort('category')"
-              >
-                @if (categorySortAscending()) {
-                  <i class="fa-solid fa-arrow-down-a-z mr-2"></i>
-                } @else {
-                  <i class="fa-solid fa-arrow-down-z-a mr-2"></i>
-                }
-                By category
-              </app-button>
-            </div>
           }
           @if (ingredientsFound().length > 0) {
             <app-stack variant="compact">
@@ -146,6 +118,51 @@
               }
             </app-stack>
           }
+
+          <div class="flex justify-between gap-8">
+            <app-button
+              class="flex-1"
+              color="secondary"
+              [fullWidth]="true"
+              size="sm"
+              (clicked)="toggleIngredientSort('name')"
+            >
+              @if (categorySortAscending()) {
+                <i class="fa-solid fa-arrow-down-1-9 mr-2"></i>
+              } @else {
+                <i class="fa-solid fa-arrow-up-1-9 mr-2"></i>
+              }
+              Date
+            </app-button>
+            <app-button
+              class="flex-1"
+              color="secondary"
+              [fullWidth]="true"
+              size="sm"
+              (clicked)="toggleIngredientSort('category')"
+            >
+              @if (categorySortAscending()) {
+                <i class="fa-solid fa-arrow-down-a-z mr-2"></i>
+              } @else {
+                <i class="fa-solid fa-arrow-up-a-z mr-2"></i>
+              }
+              Category
+            </app-button>
+            <app-button
+              class="flex-1"
+              color="secondary"
+              size="sm"
+              [fullWidth]="true"
+              (clicked)="toggleIngredientSort('name')"
+            >
+              @if (nameSortAscending()) {
+                <i class="fa-solid fa-arrow-down-a-z mr-2"></i>
+              } @else {
+                <i class="fa-solid fa-arrow-up-a-z mr-2"></i>
+              }
+              Name
+            </app-button>
+          </div>
           @if (methodSelected() === this.methods[1]) {}
           @if (methodSelected() === this.methods[2]) {
             <app-grid col1="max" col2="1" col3="max" gapX="sm" gapY="md">

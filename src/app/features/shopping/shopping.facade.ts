@@ -120,7 +120,9 @@ export class ShoppingFacade {
   /** Public signals */
   public quickEntryItem = signal<string>('');
   public ingredientsFound = signal<ShoppingIngredientSuggestion[]>([]);
-  readonly activeIngredientSort = signal<'name' | 'category' | null>(null);
+  readonly activeIngredientSort = signal<'category' | 'name' | null>(
+    'category',
+  );
   readonly nameSortAscending = signal(true);
   readonly categorySortAscending = signal(true);
   public searchIngredientsAdded = signal<
