@@ -80,10 +80,38 @@
                   <i class="fa-solid fa-plus fa-lg"></i></div
               ></app-button>
             </app-grid>
+            <div class="flex justify-between gap-8">
+              <app-button
+                class="flex-1"
+                variant="outline"
+                [fullWidth]="true"
+                (clicked)="toggleIngredientSort('name')"
+              >
+                @if (nameSortAscending()) {
+                  <i class="fa-solid fa-arrow-down-a-z mr-2"></i>
+                } @else {
+                  <i class="fa-solid fa-arrow-down-z-a mr-2"></i>
+                }
+                By name
+              </app-button>
+              <app-button
+                class="flex-1"
+                variant="outline"
+                [fullWidth]="true"
+                (clicked)="toggleIngredientSort('category')"
+              >
+                @if (categorySortAscending()) {
+                  <i class="fa-solid fa-arrow-down-a-z mr-2"></i>
+                } @else {
+                  <i class="fa-solid fa-arrow-down-z-a mr-2"></i>
+                }
+                By category
+              </app-button>
+            </div>
           }
-          @if (ingredientsFound()) {
+          @if (ingredientsFound().length > 0) {
             <app-stack variant="compact">
-              @for (ing of ingredientsFound(); track $index) {
+              @for (ing of ingredientsFound(); track ing.id) {
                 <div
                   class="surface-2 surface-interactive inset-xs w-full rounded"
                   (click)="selectIngredientSuggestion(ing)"
@@ -187,61 +215,73 @@
           </app-inline>
 
           <app-stack variant="section">
-            <app-grid col1="max" col2="1" col3="max" gapX="md">
+            <div class="shopping-list-rows">
               @for (ing of shoppingListElements(); track $index) {
-                @if (ing.ingredientId) {
-                  <app-inline>
-                    <i class="fa-solid fa-carrot"></i>
-                    <span>{{ ingredientName(ing.ingredientId) }}</span>
-                  </app-inline>
-                  <div class="color-text-muted">
-                    <app-inline gap="xs">
-                      <span>{{ ing.measure }}</span>
-                      <span>{{ ingredientUnit(ing.ingredientId) }}</span>
-                    </app-inline>
-                  </div>
-                } @else {
-                  <app-inline>
-                    @if (ing.quickItemId) {
-                      <i class="fa-solid fa-forward"></i>
-                    } @else {
-                      <i class="fa-solid fa-store"></i>
+                <div class="shopping-list-row">
+                  <span
+                    class="shopping-list-cell shopping-list-name"
+                    [title]="ing.name"
+                  >
+                    {{ ing.name }}
+                  </span>
+
+                  <div
+                    class="shopping-list-cell shopping-list-measure color-text-muted"
+                  >
+                    @if (ing.ingredientId) {
+                      <app-inline gap="xs">
+                        <span>{{ ing.measure }}</span>
+                        <span>{{ ingredientUnit(ing.ingredientId) }}</span>
+                      </app-inline>
                     }
-                    <span>{{ ing.name }}</span>
+                  </div>
+
+                  <span
+                    class="shopping-list-cell shopping-list-category color-text-muted"
+                    [title]="ing.category"
+                  >
+                    {{ ing.category }}
+                  </span>
+
+                  <app-inline
+                    class="shopping-list-cell shopping-list-actions"
+                    gap="sm"
+                  >
+                    @if (ing.quickItemId) {
+                      <app-button
+                        variant="ghost"
+                        size="sm"
+                        (clicked)="openUpdateQuickItemsModal($event, ing)"
+                        ><div class="h-6 w-6">
+                          <i class="fa-solid fa-pen-to-square fa-xl"></i></div
+                      ></app-button>
+                    }
+
+                    @if (ing.ingredientId) {
+                      <app-button
+                        variant="ghost"
+                        size="sm"
+                        (clicked)="
+                          openUpdateIngredientMeasureModal($event, ing)
+                        "
+                        ><div class="h-6 w-6">
+                          <i
+                            class="fa-solid fa-scale-unbalanced fa-xl"
+                          ></i></div
+                      ></app-button>
+                    }
+
+                    <app-button
+                      variant="ghost"
+                      size="sm"
+                      color="danger"
+                      (clicked)="deleteElement(ing)"
+                      ><i class="fa-regular fa-trash-can text-xl"></i
+                    ></app-button>
                   </app-inline>
-                  <span></span>
-                }
-                <app-inline class="justify-self-end">
-                  @if (ing.quickItemId) {
-                    <app-button
-                      variant="ghost"
-                      size="sm"
-                      (clicked)="openUpdateQuickItemsModal($event, ing)"
-                      ><div class="h-6 w-6">
-                        <i class="fa-solid fa-pen-to-square fa-xl"></i></div
-                    ></app-button>
-                  }
-
-                  @if (ing.ingredientId) {
-                    <app-button
-                      variant="ghost"
-                      size="sm"
-                      (clicked)="openUpdateIngredientMeasureModal($event, ing)"
-                      ><div class="h-6 w-6">
-                        <i class="fa-solid fa-scale-unbalanced fa-xl"></i></div
-                    ></app-button>
-                  }
-
-                  <app-button
-                    variant="ghost"
-                    size="sm"
-                    color="danger"
-                    (clicked)="deleteElement(ing)"
-                    ><i class="fa-regular fa-trash-can text-xl"></i
-                  ></app-button>
-                </app-inline>
+                </div>
               }
-            </app-grid>
+            </div>
           </app-stack>
         </app-stack>
       </app-section>
