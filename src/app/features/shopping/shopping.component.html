@@ -7,7 +7,7 @@
     <app-header-shell
       ><app-section inset="lg">
         <app-stack variant="default">
-          <h1 class="text-headline text-center">Shopping List</h1>
+          <!-- <h1 class="text-headline text-center">Shopping List</h1> -->
 
           <app-grid col1="1" col2="max" gapX="md" gapY="md">
             <div class="w-full">
@@ -256,12 +256,28 @@
                     }
                   </div>
 
-                  <span
+                  <!-- <span
                     class="shopping-list-cell shopping-list-category color-text-muted"
                     [title]="ing.category"
                   >
                     {{ ing.category }}
-                  </span>
+                  </span> -->
+
+                  @if (ing.category && ing.ingredientId) {
+                    <app-button
+                      [variant]="
+                        ingredientCategoryToggled() === ing.category
+                          ? 'filled'
+                          : 'outline'
+                      "
+                      color="secondary"
+                      size="sm"
+                      (clicked)="toggleIngredientCategory(ing.category)"
+                      >{{ ing.category }}</app-button
+                    >
+                  } @else {
+                    <span></span>
+                  }
 
                   <app-inline
                     class="shopping-list-cell shopping-list-actions"

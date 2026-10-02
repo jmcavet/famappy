@@ -136,6 +136,8 @@ export class ShoppingFacade {
   );
   public shoppingCategoryItemsSelected = signal<string[]>([]);
 
+  public ingredientCategoryToggled = signal<string | undefined>(undefined);
+
   readonly measures = signal<{ id: string; measure: number }[]>([]);
 
   /* ════════════════════════════════
@@ -200,6 +202,9 @@ export class ShoppingFacade {
   readonly shoppingListElements = computed(() => {
     // Shopping ingredients
     const ingredients = this.shoppingListSelected()?.ingredients;
+    const toggledCategoryId = this.ingredientCategories().find(
+      (category) => category.name === this.ingredientCategoryToggled(),
+    )?.id;
 
     const selectedIngredients = this.ingredients().filter((ing) =>
       ingredients?.map((ingr) => ingr.id).includes(ing.id),
@@ -207,10 +212,13 @@ export class ShoppingFacade {
 
     console.log('selectedIngredients: ', selectedIngredients);
 
-    const ingredientsPerCategorySelected = selectedIngredients.filter((ing) =>
-      this.ingredientCategorySelected()
-        ? ing.categoryId === this.ingredientCategorySelected()?.id
-        : ing,
+    const ingredientsPerCategorySelected = selectedIngredients.filter(
+      (ingredient) =>
+        this.ingredientCategoryToggled()
+          ? ingredient.categoryId === toggledCategoryId
+          : this.ingredientCategorySelected()
+            ? ingredient.categoryId === this.ingredientCategorySelected()?.id
+            : true,
     );
 
     const ingredientsIdName: ShoppingListElement[] =
@@ -273,9 +281,15 @@ export class ShoppingFacade {
 
     const shoppingListElements: ShoppingListElement[] = [
       ...ingredientsIdName,
-      ...(this.ingredientCategorySelected() ? [] : categoryItemsIdName),
-      ...(this.ingredientCategorySelected() ? [] : quickItemsIdName),
-      ...(this.ingredientCategorySelected() ? [] : searchIngredientsIdName),
+      ...(this.ingredientCategoryToggled() || this.ingredientCategorySelected()
+        ? []
+        : categoryItemsIdName),
+      ...(this.ingredientCategoryToggled() || this.ingredientCategorySelected()
+        ? []
+        : quickItemsIdName),
+      ...(this.ingredientCategoryToggled() || this.ingredientCategorySelected()
+        ? []
+        : searchIngredientsIdName),
     ];
     const ingredientCategoryNames = new Map(
       this.ingredientCategories().map((category) => [
@@ -657,6 +671,26 @@ export class ShoppingFacade {
 
     if (!shoppingListId) return;
 
+    const toggledCategory = this.ingredientCategoryToggled();
+    const toggledCategoryId = this.ingredientCategories().find(
+      (category) => category.name === toggledCategory,
+    )?.id;
+    const ingredientCategoryById = new Map(
+      this.ingredients().map((ingredient) => [
+        ingredient.id,
+        ingredient.categoryId,
+      ]),
+    );
+    const isLastIngredientInToggledCategory =
+      ingredientId !== null &&
+      toggledCategoryId !== undefined &&
+      ingredientCategoryById.get(ingredientId) === toggledCategoryId &&
+      !(this.shoppingListSelected()?.ingredients ?? []).some(
+        (ingredient) =>
+          ingredient.id !== ingredientId &&
+          ingredientCategoryById.get(ingredient.id) === toggledCategoryId,
+      );
+
     const elementType = itemId
       ? 'categoryItemIds'
       : quickItemId
@@ -673,6 +707,10 @@ export class ShoppingFacade {
         elementType,
         _element,
       );
+    }
+
+    if (isLastIngredientInToggledCategory) {
+      this.ingredientCategoryToggled.set(undefined);
     }
 
     const shoppingListIsEmpty = this.shoppingListIsEmpty();
@@ -902,6 +940,14 @@ export class ShoppingFacade {
     );
 
     return ingredientsPerCategorySelected.length;
+  }
+
+  public toggleIngredientCategory(ingredientCategory: string) {
+    this.ingredientCategoryToggled.set(
+      ingredientCategory === this.ingredientCategoryToggled()
+        ? undefined
+        : ingredientCategory,
+    );
   }
 
   /* ════════════════════════════════

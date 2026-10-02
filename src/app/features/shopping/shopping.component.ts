@@ -102,6 +102,9 @@ export class ShoppingComponent {
   readonly ingredientCategoriesSorted =
     this.shoppingFacade.ingredientCategoriesSorted;
 
+  readonly ingredientCategoryToggled =
+    this.shoppingFacade.ingredientCategoryToggled;
+
   readonly deleteElement = (element: ShoppingListElement) =>
     this.shoppingFacade.deleteElement(element);
 
@@ -119,6 +122,10 @@ export class ShoppingComponent {
 
   countIngredientsPerCategory(cat: IngredientCategoryDocInBackend) {
     return this.shoppingFacade.countIngredientsPerCategory(cat);
+  }
+
+  toggleIngredientCategory(ingredientCategory: string) {
+    this.shoppingFacade.toggleIngredientCategory(ingredientCategory);
   }
 
   selectIngredientSuggestion(ing: {

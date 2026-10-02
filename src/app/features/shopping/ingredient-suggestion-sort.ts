@@ -13,6 +13,7 @@ export function sortIngredientSuggestions<
   sortBy: IngredientSuggestionSortKey,
   ascending: boolean,
 ): T[] {
+  console.log('ITEMS', items);
   return [...items].sort((left, right) => {
     if (sortBy === 'dateCreated') {
       const leftDate = toTimestamp(left.dateCreated);
