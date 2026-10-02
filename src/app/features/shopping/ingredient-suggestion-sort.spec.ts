@@ -29,6 +29,26 @@ describe('sortIngredientSuggestions', () => {
     ).toEqual(['Carrot', 'Apple', 'Banana']);
   });
 
+  it('keeps rows without an ingredient ID last in either category direction', () => {
+    const mixedItems = [
+      { name: 'Quick item', category: 'A category', ingredientId: null },
+      { name: 'Zucchini', category: 'Vegetable', ingredientId: '4' },
+      { name: 'Apple', category: 'Fruit', ingredientId: '1' },
+    ];
+
+    expect(
+      sortIngredientSuggestions(mixedItems, 'category', true).map(
+        (item) => item.name,
+      ),
+    ).toEqual(['Apple', 'Zucchini', 'Quick item']);
+
+    expect(
+      sortIngredientSuggestions(mixedItems, 'category', false).map(
+        (item) => item.name,
+      ),
+    ).toEqual(['Zucchini', 'Apple', 'Quick item']);
+  });
+
   it('sorts dates chronologically and leaves missing dates last', () => {
     const datedIngredients = [
       { name: 'New ingredient', dateCreated: '2025-03-01T00:00:00.000Z' },

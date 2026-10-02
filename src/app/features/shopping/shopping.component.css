@@ -11,8 +11,8 @@ input.ng-invalid.ng-touched {
 .shopping-list-rows {
   display: grid;
   grid-template-columns:
-    minmax(0, 1.2fr) minmax(4.5rem, max-content) minmax(0, 1fr)
-    max-content;
+    max-content max-content minmax(0, 1fr)
+    max-content max-content;
   column-gap: 0.5rem;
   row-gap: 0.5rem;
 }
@@ -29,6 +29,19 @@ input.ng-invalid.ng-touched {
   min-width: 0;
 }
 
+.shopping-list-name {
+  grid-column: 1;
+}
+
+.shopping-list-measure {
+  grid-column: 2;
+}
+
+.shopping-list-category-column {
+  grid-column: 4;
+  justify-self: end;
+}
+
 .shopping-list-name,
 .shopping-list-category {
   overflow: hidden;
@@ -37,5 +50,33 @@ input.ng-invalid.ng-touched {
 }
 
 .shopping-list-actions {
+  grid-column: 5;
   justify-self: end;
+}
+
+.shopping-list-row:not(.has-ingredient) .shopping-list-measure,
+.shopping-list-row:not(.has-ingredient) .shopping-list-category-column {
+  display: none;
+}
+
+.shopping-list-row:not(.has-ingredient) .shopping-list-name {
+  grid-column: 1 / 5;
+}
+
+@media (max-width: 640px) {
+  .shopping-list-rows {
+    grid-template-columns: minmax(0, 1fr) max-content max-content max-content;
+  }
+
+  .shopping-list-category-column {
+    grid-column: 3;
+  }
+
+  .shopping-list-actions {
+    grid-column: 4;
+  }
+
+  .shopping-list-row:not(.has-ingredient) .shopping-list-name {
+    grid-column: 1 / 4;
+  }
 }
