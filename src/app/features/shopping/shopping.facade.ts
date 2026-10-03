@@ -27,6 +27,7 @@ import { ModalConfirmComponent } from '../../shared/layout/overlays/modal/modal-
 import { ShoppingListDocInBackend } from '../../models/shopping-list.model';
 import { ModalUpdateMeasureComponent } from '../../shared/layout/overlays/modal/modal-measure/modal-update-measure.component';
 import { sortIngredientSuggestions } from './ingredient-suggestion-sort';
+import { ToastService } from '../../services/toast.service';
 
 export interface ShoppingListElement {
   ingredientId: string | null;
@@ -55,11 +56,14 @@ interface ShoppingIngredientSuggestion {
 export class ShoppingFacade {
   constructor() {
     effect(() => {
-      // Save the first available shopping list as the one selected (if not yet saved in state)
-      if (!this.shoppingListNameSelected()) {
-        this.shoppingService.saveShoppingListSelection(
-          this.shoppingListsNames()[0],
-        );
+      const shoppingListNames = this.shoppingListsNames();
+      const selectedShoppingListName = this.shoppingListNameSelected();
+
+      if (
+        shoppingListNames.length > 0 &&
+        !shoppingListNames.includes(selectedShoppingListName ?? '')
+      ) {
+        this.shoppingService.saveShoppingListSelection(shoppingListNames[0]);
       }
 
       // Save the first method ('Quick entry') as the one selected
@@ -111,6 +115,7 @@ export class ShoppingFacade {
   );
 
   private modalService = inject(ModalService);
+  private toastService = inject(ToastService);
 
   // /** Transitional state (shared by several ui) */
   private shoppingService = inject(ShoppingStateService);
@@ -716,8 +721,8 @@ export class ShoppingFacade {
     const shoppingListIsEmpty = this.shoppingListIsEmpty();
 
     if (shoppingListIsEmpty) {
-      await this.shoppingListDomainFacade.deleteShoppingList(shoppingListId);
-      console.log('THE LIST HAS BEEN REMOVED FROM DB');
+      const shoppingList = this.shoppingListSelected();
+      if (shoppingList) await this.deleteShoppingList(shoppingList);
     }
   }
 
@@ -1154,9 +1159,35 @@ export class ShoppingFacade {
     shoppingListElement: ShoppingListDocInBackend,
   ) {
     const shoppingListId = shoppingListElement.id;
+    const shouldSelectAnotherList =
+      this.shoppingListNameSelected() === shoppingListElement.name;
+    const nextShoppingListName = this.shoppingListsNames().find(
+      (name) => name !== shoppingListElement.name,
+    );
 
     // Delete shopping list from firestore
-    await this.shoppingListDomainFacade.deleteShoppingList(shoppingListId);
+    const deleted =
+      await this.shoppingListDomainFacade.deleteShoppingList(shoppingListId);
+
+    if (!deleted) {
+      this.toastService.show(
+        `Shopping list "${shoppingListElement.name}" could not be removed`,
+        'error',
+      );
+
+      return;
+    }
+
+    if (shouldSelectAnotherList) {
+      this.shoppingService.saveShoppingListSelection(
+        nextShoppingListName ?? '',
+      );
+    }
+
+    this.toastService.show(
+      `Shopping list "${shoppingListElement.name}" removed successfully`,
+      'success',
+    );
 
     const correspondingShoppingQuickItemsIds = this.shoppingQuickItems()
       .filter((item) => item.shoppingListId === shoppingListId)

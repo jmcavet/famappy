@@ -82,7 +82,7 @@ export class ShoppingListDomainFacade {
   }
 
   public async deleteShoppingList(shoppingListIdToDelete: string) {
-    await this.shoppingListBackendService.deleteShoppingListFromStore(
+    return await this.shoppingListBackendService.deleteShoppingListFromStore(
       shoppingListIdToDelete,
     );
   }

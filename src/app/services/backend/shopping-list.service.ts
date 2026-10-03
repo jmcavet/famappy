@@ -164,20 +164,20 @@ export class ShoppingListBackendService {
     }
   }
 
-  async deleteShoppingListFromStore(shoppingListId: string) {
+  async deleteShoppingListFromStore(shoppingListId: string): Promise<boolean> {
     this._deleting.set(true);
 
     try {
       await this.firestoreService.removeDocumentFromFirestore(
         'shopping-lists',
         shoppingListId,
-        () => {
-          // This callback runs once Firestore returns
-          this._deleting.set(false);
-        },
       );
+      return true;
     } catch (error) {
       console.error('Error removing shopping list document: ', error);
+      return false;
+    } finally {
+      this._deleting.set(false);
     }
   }
 
