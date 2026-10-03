@@ -14,7 +14,7 @@ input.ng-invalid.ng-touched {
     max-content max-content minmax(0, 1fr)
     max-content max-content;
   column-gap: 0.5rem;
-  row-gap: 0.5rem;
+  row-gap: 1rem;
 }
 
 .shopping-list-row {

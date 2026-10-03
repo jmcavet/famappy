@@ -216,9 +216,8 @@
     ></app-header-shell>
 
     <app-page-layout maxSize="lg">
-      <app-section inset="lg">
-        <app-stack variant="section">
-          <!-- <app-inline gap="sm" [wrap]="true">
+      <!-- <app-section inset="lg"> -->
+      <!-- <app-inline gap="sm" [wrap]="true">
             @for (cat of ingredientCategoriesSorted(); track $index) {
               <app-chip
                 [selected]="ingredientCategorySelected()?.name === cat.name"
@@ -234,93 +233,88 @@
             }
           </app-inline> -->
 
-          <app-stack variant="section">
+      <app-stack variant="section">
+        <div
+          class="shopping-list-rows"
+          [class.category-filtered]="!!ingredientCategoryToggled()"
+        >
+          @for (ing of shoppingListElements(); track $index) {
             <div
-              class="shopping-list-rows"
-              [class.category-filtered]="!!ingredientCategoryToggled()"
+              class="shopping-list-row w-full rounded inset-inline-sm surface-1"
+              [class.has-ingredient]="!!ing.ingredientId"
             >
-              @for (ing of shoppingListElements(); track $index) {
-                <div
-                  class="shopping-list-row"
-                  [class.has-ingredient]="!!ing.ingredientId"
-                >
-                  <span
-                    class="shopping-list-cell shopping-list-name"
-                    [title]="ing.name"
-                  >
-                    {{ ing.name }}
-                  </span>
+              <span
+                class="shopping-list-cell shopping-list-name"
+                [title]="ing.name"
+              >
+                {{ ing.name }}
+              </span>
 
-                  <div
-                    class="shopping-list-cell shopping-list-measure color-text-muted"
-                  >
-                    @if (ing.ingredientId) {
-                      <app-inline gap="xs">
-                        <span>{{ ing.measure }}</span>
-                        <span>{{ ingredientUnit(ing.ingredientId) }}</span>
-                      </app-inline>
-                    }
-                  </div>
-
-                  @if (ing.category && ing.ingredientId) {
-                    <app-button
-                      class="shopping-list-category-column"
-                      [variant]="
-                        ingredientCategoryToggled() === ing.category
-                          ? 'filled'
-                          : 'outline'
-                      "
-                      color="neutral"
-                      size="xs"
-                      (clicked)="toggleIngredientCategory(ing.category)"
-                      >{{ ing.category }}</app-button
-                    >
-                  } @else {
-                    <span class="shopping-list-category-column"></span>
-                  }
-
-                  <app-inline
-                    class="shopping-list-cell shopping-list-actions"
-                    gap="sm"
-                  >
-                    @if (ing.quickItemId) {
-                      <app-button
-                        variant="ghost"
-                        size="sm"
-                        (clicked)="openUpdateQuickItemsModal($event, ing)"
-                        ><div class="h-6 w-6">
-                          <i class="fa-solid fa-pen-to-square fa-xl"></i></div
-                      ></app-button>
-                    }
-
-                    @if (ing.ingredientId) {
-                      <app-button
-                        variant="ghost"
-                        size="sm"
-                        (clicked)="
-                          openUpdateIngredientMeasureModal($event, ing)
-                        "
-                        ><div class="h-6 w-6">
-                          <i
-                            class="fa-solid fa-scale-unbalanced fa-xl"
-                          ></i></div
-                      ></app-button>
-                    }
-
-                    <app-button
-                      variant="ghost"
-                      size="sm"
-                      color="danger"
-                      (clicked)="deleteElement(ing)"
-                      ><i class="fa-regular fa-trash-can text-xl"></i
-                    ></app-button>
+              <div
+                class="shopping-list-cell shopping-list-measure color-text-muted"
+              >
+                @if (ing.ingredientId) {
+                  <app-inline gap="xs">
+                    <span>{{ ing.measure }}</span>
+                    <span>{{ ingredientUnit(ing.ingredientId) }}</span>
                   </app-inline>
-                </div>
+                }
+              </div>
+
+              @if (ing.category && ing.ingredientId) {
+                <app-button
+                  class="shopping-list-category-column"
+                  [variant]="
+                    ingredientCategoryToggled() === ing.category
+                      ? 'filled'
+                      : 'outline'
+                  "
+                  color="neutral"
+                  size="xs"
+                  (clicked)="toggleIngredientCategory(ing.category)"
+                  >{{ ing.category }}</app-button
+                >
+              } @else {
+                <span class="shopping-list-category-column"></span>
               }
+
+              <app-inline
+                class="shopping-list-cell shopping-list-actions"
+                gap="sm"
+              >
+                @if (ing.quickItemId) {
+                  <app-button
+                    variant="ghost"
+                    size="sm"
+                    (clicked)="openUpdateQuickItemsModal($event, ing)"
+                    ><div class="h-6 w-6">
+                      <i class="fa-solid fa-pen-to-square fa-xl"></i></div
+                  ></app-button>
+                }
+
+                @if (ing.ingredientId) {
+                  <app-button
+                    variant="ghost"
+                    size="sm"
+                    (clicked)="openUpdateIngredientMeasureModal($event, ing)"
+                    ><div class="h-6 w-6">
+                      <i class="fa-solid fa-scale-unbalanced fa-xl"></i></div
+                  ></app-button>
+                }
+
+                <app-button
+                  variant="ghost"
+                  size="sm"
+                  color="danger"
+                  (clicked)="deleteElement(ing)"
+                  ><i class="fa-regular fa-trash-can text-xl"></i
+                ></app-button>
+              </app-inline>
             </div>
-          </app-stack>
-        </app-stack>
-      </app-section>
+          }
+        </div>
+      </app-stack>
+      <!-- </app-section> -->
     </app-page-layout>
 
     <app-section [surface]="0">
