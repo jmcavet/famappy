@@ -3,6 +3,7 @@ name: Story
 about: A user-facing piece of work, typically linked as a sub-issue under an epic
 title: ""
 labels: story
+assignees: jmcavet
 ---
 
 ## Description

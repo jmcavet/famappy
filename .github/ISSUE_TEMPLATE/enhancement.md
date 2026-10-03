@@ -3,6 +3,7 @@ name: Enhancement
 about: An existing feature that works as originally built, but needs improved or changed logic
 title: ""
 labels: enhancement
+assignees: jmcavet
 ---
 
 ## Current Behavior
