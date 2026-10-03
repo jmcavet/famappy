@@ -3,6 +3,7 @@ name: Bug
 about: Something isn't working as expected
 title: ""
 labels: bug
+assignees: jmcavet
 ---
 
 ## Description
