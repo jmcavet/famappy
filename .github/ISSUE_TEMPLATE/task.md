@@ -3,6 +3,7 @@ name: Task
 about: A small, well-defined technical step, often part of a larger story
 title: ""
 labels: task
+assignees: jmcavet
 ---
 
 ## Description

@@ -3,6 +3,7 @@ name: Epic
 about: A large feature or body of work, broken down into stories
 title: ""
 labels: epic
+assignees: jmcavet
 ---
 
 ## Goal
