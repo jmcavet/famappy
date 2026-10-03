@@ -79,4 +79,18 @@ input.ng-invalid.ng-touched {
   .shopping-list-row:not(.has-ingredient) .shopping-list-name {
     grid-column: 1 / 4;
   }
+
+  .shopping-list-rows.category-filtered {
+    grid-template-columns:
+      minmax(0, max-content) max-content minmax(0, 1fr) max-content
+      max-content;
+  }
+
+  .shopping-list-rows.category-filtered .shopping-list-category-column {
+    grid-column: 4;
+  }
+
+  .shopping-list-rows.category-filtered .shopping-list-actions {
+    grid-column: 5;
+  }
 }
