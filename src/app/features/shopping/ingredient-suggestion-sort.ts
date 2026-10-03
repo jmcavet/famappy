@@ -2,6 +2,7 @@ export type IngredientSuggestionSortKey = 'name' | 'category' | 'dateCreated';
 
 export interface IngredientSuggestionSortItem {
   name: string;
+  ingredientId?: string | null;
   category?: string;
   dateCreated?: string | Date | null;
 }
@@ -14,6 +15,15 @@ export function sortIngredientSuggestions<
   ascending: boolean,
 ): T[] {
   return [...items].sort((left, right) => {
+    if (sortBy === 'category') {
+      const leftHasIngredient = Boolean(left.ingredientId);
+      const rightHasIngredient = Boolean(right.ingredientId);
+
+      if (leftHasIngredient !== rightHasIngredient) {
+        return leftHasIngredient ? -1 : 1;
+      }
+    }
+
     if (sortBy === 'dateCreated') {
       const leftDate = toTimestamp(left.dateCreated);
       const rightDate = toTimestamp(right.dateCreated);

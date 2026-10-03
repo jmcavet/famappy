@@ -7,7 +7,7 @@
     <app-header-shell
       ><app-section inset="lg">
         <app-stack variant="default">
-          <h1 class="text-headline text-center">Shopping List</h1>
+          <!-- <h1 class="text-headline text-center">Shopping List</h1> -->
 
           <app-grid col1="1" col2="max" gapX="md" gapY="md">
             <div class="w-full">
@@ -235,9 +235,15 @@
           </app-inline> -->
 
           <app-stack variant="section">
-            <div class="shopping-list-rows">
+            <div
+              class="shopping-list-rows"
+              [class.category-filtered]="!!ingredientCategoryToggled()"
+            >
               @for (ing of shoppingListElements(); track $index) {
-                <div class="shopping-list-row">
+                <div
+                  class="shopping-list-row"
+                  [class.has-ingredient]="!!ing.ingredientId"
+                >
                   <span
                     class="shopping-list-cell shopping-list-name"
                     [title]="ing.name"
@@ -256,12 +262,22 @@
                     }
                   </div>
 
-                  <span
-                    class="shopping-list-cell shopping-list-category color-text-muted"
-                    [title]="ing.category"
-                  >
-                    {{ ing.category }}
-                  </span>
+                  @if (ing.category && ing.ingredientId) {
+                    <app-button
+                      class="shopping-list-category-column"
+                      [variant]="
+                        ingredientCategoryToggled() === ing.category
+                          ? 'filled'
+                          : 'outline'
+                      "
+                      color="neutral"
+                      size="xs"
+                      (clicked)="toggleIngredientCategory(ing.category)"
+                      >{{ ing.category }}</app-button
+                    >
+                  } @else {
+                    <span class="shopping-list-category-column"></span>
+                  }
 
                   <app-inline
                     class="shopping-list-cell shopping-list-actions"
