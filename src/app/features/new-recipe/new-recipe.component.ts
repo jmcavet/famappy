@@ -151,6 +151,17 @@ export class NewRecipeComponent {
   }
 
   async onAddOrUpdateRecipe() {
+    if (this.stateRecipeService.imageCropPending()) {
+      const cropApplied = await this.childComponent.applyImageCrop();
+      if (!cropApplied) {
+        this.toastService.show(
+          'Recipe image crop could not be applied',
+          'error',
+        );
+        return;
+      }
+    }
+
     const recipe = toRecipeDocInBackend(this.recipeState());
 
     const storage = getStorage();
@@ -224,6 +235,7 @@ export class NewRecipeComponent {
         }
       }
     } catch (error) {
+      console.error('Recipe save or update failed:', error);
       const message =
         this.buttonSaveOrUpdate() === 'Save'
           ? 'Recipe could not be saved in database'

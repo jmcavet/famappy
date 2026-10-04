@@ -40,6 +40,7 @@ describe('RecipeStateService', () => {
     expect(service.recipeState().selectedTabTitle).toBe('definition');
     expect(service.editingRecipeId()).toBe('recipe-1');
     expect(service.recipeHasChanges()).toBe(false);
+    expect(service.imageCropPending()).toBe(false);
 
     service.updateProperty('title', 'Updated soup');
     expect(service.recipeHasChanges()).toBe(true);

@@ -420,12 +420,9 @@ export class TabDefinitionFacade {
     return document.scrollingElement as HTMLElement | null;
   }
 
-  public async onFileSelected(event: any) {
-    const file: File = event.target.files[0];
-
-    if (!file) return;
-
+  public onFileSelected(file: File) {
     this.recipeService.imageFile.set(file);
+    this.recipeService.imageCropPending.set(true);
     this.recipeService.imageChange.set('replaced');
 
     // Revoke previous URL if it exists
@@ -434,8 +431,31 @@ export class TabDefinitionFacade {
       URL.revokeObjectURL(currentUrl);
     }
 
-    // this.imageUrl = URL.createObjectURL(file);
     this.recipeService.updateProperty('imageUrl', URL.createObjectURL(file));
+  }
+
+  public applyImageCrop(croppedImage: Blob) {
+    const currentFile = this.recipeService.imageFile();
+    if (!currentFile) return;
+
+    const croppedFile = new File([croppedImage], currentFile.name, {
+      type: croppedImage.type || currentFile.type || 'image/jpeg',
+      lastModified: Date.now(),
+    });
+
+    const currentUrl = this.imageUrl();
+    if (currentUrl) URL.revokeObjectURL(currentUrl);
+
+    this.recipeService.imageFile.set(croppedFile);
+    this.recipeService.imageCropPending.set(false);
+    this.recipeService.updateProperty(
+      'imageUrl',
+      URL.createObjectURL(croppedFile),
+    );
+  }
+
+  public useOriginalImage() {
+    this.recipeService.imageCropPending.set(false);
   }
 
   /** Private methods */
@@ -447,6 +467,7 @@ export class TabDefinitionFacade {
     this.recipeService.updateProperty('imageUrl', '');
 
     this.recipeService.imageFile.set(null);
+    this.recipeService.imageCropPending.set(false);
     this.recipeService.imageChange.set('removed');
   }
 }

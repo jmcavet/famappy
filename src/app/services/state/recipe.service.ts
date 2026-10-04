@@ -87,6 +87,7 @@ export class RecipeStateService {
   cuisineName = signal<string>('none');
 
   imageFile = signal<File | null>(null);
+  readonly imageCropPending = signal(false);
 
   dateIsIncreasing = signal<boolean>(true);
 
@@ -102,6 +103,7 @@ export class RecipeStateService {
     this.imageChange.set('unchanged');
     this.originalImage.set(null);
     this.imageFile.set(null);
+    this.imageCropPending.set(false);
   }
 
   updateRecipeState(newState: RecipeDocInBackend, recipeId: string) {
@@ -112,6 +114,7 @@ export class RecipeStateService {
     });
     this.imageChange.set('unchanged');
     this.imageFile.set(null);
+    this.imageCropPending.set(false);
     const draft: RecipeState = {
       ...this.initialRecipeState,
       title: newState.title,

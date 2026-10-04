@@ -23,7 +23,7 @@
                 [src]="recipe().imageUrl"
                 alt="'recipe().title'"
                 (load)="onImageLoad(recipe().id)"
-                class="w-full h-80 object-cover transition-all duration-700 ease-in-out z-10"
+                class="w-full aspect-[3/2] object-cover transition-all duration-700 ease-in-out z-10"
                 [class.blur-sm]="!imageLoadedMap()[recipe().id]"
                 [class.opacity-0]="!imageLoadedMap()[recipe().id]"
               />

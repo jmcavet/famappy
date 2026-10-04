@@ -63,13 +63,54 @@
                     ><i class="fa-solid fa-trash"></i
                   ></app-button>
                 </div>
-              }
-              @if (imageUrl()) {
-                <img
-                  [src]="imageUrl()"
-                  alt="Image preview"
-                  class="w-auto h-[35vh] rounded shadow border border-neutral-200 dark:border-neutral-700"
-                />
+                @if (isCroppingImage) {
+                  <div class="w-full max-w-2xl">
+                    <p class="text-sm mb-2">
+                      Drag over the image to choose the crop area.
+                    </p>
+                    <div
+                      class="recipe-image-viewport"
+                      (pointerdown)="startCropSelection($event)"
+                      (pointermove)="updateCropSelectionFromPointer($event)"
+                      (pointerup)="finishCropSelection($event)"
+                      (pointercancel)="finishCropSelection($event)"
+                    >
+                      <img
+                        #cropSourceImage
+                        [src]="imageUrl()"
+                        alt="Select the area to use for the recipe image"
+                        class="recipe-image-source"
+                        (load)="initializeCropSelection($event)"
+                      />
+                      <div
+                        class="recipe-image-selection"
+                        [style.left.%]="cropSelection.x * 100"
+                        [style.top.%]="cropSelection.y * 100"
+                        [style.width.%]="cropSelection.width * 100"
+                        [style.height.%]="cropSelection.height * 100"
+                      ></div>
+                    </div>
+                    <app-row justify="end">
+                      <app-button
+                        variant="outline"
+                        [disabled]="isApplyingCrop"
+                        (clicked)="cancelImageCrop()"
+                        >Use original</app-button
+                      >
+                      <app-button
+                        [disabled]="isApplyingCrop"
+                        (clicked)="applyImageCrop()"
+                        >Apply crop</app-button
+                      >
+                    </app-row>
+                  </div>
+                } @else {
+                  <img
+                    [src]="imageUrl()"
+                    alt="Image preview"
+                    class="w-auto h-[35vh] rounded shadow border border-neutral-200 dark:border-neutral-700"
+                  />
+                }
               }
             </app-stack>
           </app-row>
