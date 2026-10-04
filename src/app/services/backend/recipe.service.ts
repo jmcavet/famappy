@@ -266,16 +266,18 @@ export class RecipeBackendService {
       const compressedImage = await this.imageCompress.compressFile(
         dataUrl,
         -1,
-        60,
-        60,
+        60, // ratio
+        60, // quality
       );
 
       // Create thumbnail version (25% size & quality)
       const thumbnailImage = await this.imageCompress.compressFile(
         dataUrl,
         -1,
-        25,
-        25,
+        100, // ratio
+        60, // quality
+        400,
+        400,
       );
 
       const fullBlob = this.dataUrlToBlob(compressedImage);

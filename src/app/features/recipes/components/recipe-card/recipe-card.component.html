@@ -11,7 +11,7 @@
           <figure class="rounded-lg rounded-b-none overflow-hidden relative">
             <img
               [src]="recipeState()?.thumbnailUrl"
-              [alt]="recipeState()?.title"
+              [alt]="recipeState()?.title || 'Recipe image'"
               loading="lazy"
               class="card-image"
             />
