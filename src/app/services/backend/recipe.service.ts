@@ -262,20 +262,20 @@ export class RecipeBackendService {
         reader.onerror = reject;
       });
 
-      // Compress full version (50% quality)
+      // Compress full version (60% quality)
       const compressedImage = await this.imageCompress.compressFile(
         dataUrl,
         -1,
-        50,
-        50,
+        60,
+        60,
       );
 
-      // Create thumbnail version (10% size & quality)
+      // Create thumbnail version (25% size & quality)
       const thumbnailImage = await this.imageCompress.compressFile(
         dataUrl,
         -1,
-        10,
-        10,
+        25,
+        25,
       );
 
       const fullBlob = this.dataUrlToBlob(compressedImage);
