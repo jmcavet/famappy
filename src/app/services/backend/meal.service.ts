@@ -116,13 +116,11 @@ export class MealBackendService {
       await this.firestoreService.removeDocumentFromFirestore(
         'meals',
         mealIdToDelete,
-        () => {
-          // This callback runs once Firestore returns
-          this._deleting.set(false);
-        },
       );
     } catch (error) {
       console.error('Error deleting meal: ', error);
+    } finally {
+      this._deleting.set(false);
     }
   }
 

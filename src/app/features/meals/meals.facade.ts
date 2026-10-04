@@ -25,6 +25,7 @@ export class MealFacade {
   private mealBackendService = inject(MealBackendService);
   private recipeBackendService = inject(RecipeBackendService);
   private mealCategoryBackendService = inject(MealCategoryBackendService);
+  private readonly mealsBeingDeleted = new Set<string>();
 
   /** Declaration of signals communicating with firestore */
   readonly mealsLoading: Signal<boolean> = this.mealBackendService.loading;
@@ -42,12 +43,10 @@ export class MealFacade {
 
   constructor() {
     effect(() => {
-      // Identify meals potentially older to the current date. If found, remove them from the database.
-      const meals = this.backendMeals();
+      if (this.mealsLoading()) return;
 
-      if (meals.length === 0) return;
-
-      this.cleanOldMeals(meals);
+      // Clean raw meal documents so old meals are not skipped when their recipe is missing.
+      void this.cleanOldMeals(this.dbMeals());
     });
   }
 
@@ -136,23 +135,39 @@ export class MealFacade {
   METHODS
   ----------------------------
   */
-  cleanOldMeals(backendMeals: MealDateRef[]) {
+  async cleanOldMeals(backendMeals: MealDateRef[]) {
     const oldMeals = backendMeals?.filter((meal) => {
       const day = meal.weekDay;
       const monthIndex = months.indexOf(day.monthName);
+      if (monthIndex < 0) return false;
+
       const mealDate = new Date(day.year, monthIndex, day.dayOfMonth);
+      if (Number.isNaN(mealDate.getTime())) return false;
+
       mealDate.setHours(0, 0, 0, 0);
       const today = new Date();
       today.setHours(0, 0, 0, 0);
       return mealDate < today;
     });
-    if (oldMeals && oldMeals.length > 0) {
-      oldMeals?.map((meal) => this.deleteMealFromStore(meal.id));
-    }
+
+    const mealsToDelete = oldMeals.filter(
+      (meal) => !this.mealsBeingDeleted.has(meal.id),
+    );
+
+    await Promise.all(
+      mealsToDelete.map(async (meal) => {
+        this.mealsBeingDeleted.add(meal.id);
+        try {
+          await this.deleteMealFromStore(meal.id);
+        } finally {
+          this.mealsBeingDeleted.delete(meal.id);
+        }
+      }),
+    );
   }
 
   async deleteMealFromStore(mealId: string) {
-    this.mealBackendService.deleteMealFromStore(mealId);
+    await this.mealBackendService.deleteMealFromStore(mealId);
   }
 
   async updateMealFromStore(

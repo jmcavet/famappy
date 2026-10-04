@@ -137,4 +137,16 @@ describe('MealFacade', () => {
       'old-meal',
     );
   });
+
+  it('should not issue duplicate deletes while an old meal is being removed', () => {
+    const pastYear = new Date().getFullYear() - 1;
+    const meals = [createMeal('old-meal', pastYear, 'January', 'tuesday', 1)];
+
+    void facade.cleanOldMeals(meals);
+    void facade.cleanOldMeals(meals);
+
+    expect(mealBackendService.deleteMealFromStore).toHaveBeenCalledOnceWith(
+      'old-meal',
+    );
+  });
 });
