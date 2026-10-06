@@ -35,158 +35,149 @@
       <app-stack align="center">
         <app-loading />
       </app-stack>
+    } @else if (!user()) {
+      <div class="flex-between mt-16 gap-4">
+        <app-button
+          [fullWidth]="true"
+          variant="outline"
+          size="lg"
+          routerLink="/login"
+          >Log in</app-button
+        >
+        <app-button [fullWidth]="true" size="lg" routerLink="/signup"
+          >sign up</app-button
+        >
+      </div>
     } @else {
-      @if (!user()) {
-        <div class="flex-between mt-16 gap-4">
-          <app-button
-            [fullWidth]="true"
-            variant="outline"
-            size="lg"
-            routerLink="/login"
-            >Log in</app-button
-          >
-          <app-button [fullWidth]="true" size="lg" routerLink="/signup"
-            >sign up</app-button
-          >
+      <app-stack variant="spacious" class="mt-8">
+        <div class="inset-md rounded-xl">
+          <app-grid-responsive [cols]="2" [colsMd]="3" [colsLg]="4" gap="md">
+            <button
+              routerLink="/meals"
+              class="h-32 bg-primary-100 dark:bg-primary-900 bg-[url('/illustrations/meals.svg')] bg-no-repeat bg-center bg-contain shadow-md dark:shadow-none dark:ring-1 dark:ring-white/20"
+            ></button>
+
+            <button
+              routerLink="/shopping"
+              class="h-32 bg-primary-100 dark:bg-primary-900 bg-[url('/illustrations/shopping.svg')] bg-no-repeat bg-center bg-contain shadow-md dark:shadow-none dark:ring-1 dark:ring-white/20"
+            ></button>
+
+            <button
+              routerLink="/recipes"
+              class="h-32 bg-primary-100 dark:bg-primary-900 bg-[url('/illustrations/recipes.svg')] bg-no-repeat bg-center bg-contain shadow-md dark:shadow-none dark:ring-1 dark:ring-white/20"
+            ></button>
+
+            <button
+              routerLink="/ingredients"
+              class="h-32 bg-primary-100 dark:bg-primary-900 bg-[url('/illustrations/ingredients.svg')] bg-no-repeat bg-center bg-contain shadow-md dark:shadow-none dark:ring-1 dark:ring-white/20"
+            ></button>
+          </app-grid-responsive>
         </div>
-      } @else {
-        <app-stack variant="spacious" class="mt-8">
-          <div class="inset-md rounded-xl">
-            <app-grid-responsive [cols]="2" [colsMd]="3" [colsLg]="4" gap="md">
-              <button
-                routerLink="/meals"
-                class="h-32 bg-primary-100 dark:bg-primary-900 bg-[url('/illustrations/meals.svg')] bg-no-repeat bg-center bg-contain shadow-md dark:shadow-none dark:ring-1 dark:ring-white/20"
-              ></button>
 
-              <button
-                routerLink="/shopping"
-                class="h-32 bg-primary-100 dark:bg-primary-900 bg-[url('/illustrations/shopping.svg')] bg-no-repeat bg-center bg-contain shadow-md dark:shadow-none dark:ring-1 dark:ring-white/20"
-              ></button>
-
-              <button
-                routerLink="/recipes"
-                class="h-32 bg-primary-100 dark:bg-primary-900 bg-[url('/illustrations/recipes.svg')] bg-no-repeat bg-center bg-contain shadow-md dark:shadow-none dark:ring-1 dark:ring-white/20"
-              ></button>
-
-              <button
-                routerLink="/ingredients"
-                class="h-32 bg-primary-100 dark:bg-primary-900 bg-[url('/illustrations/ingredients.svg')] bg-no-repeat bg-center bg-contain shadow-md dark:shadow-none dark:ring-1 dark:ring-white/20"
-              ></button>
-            </app-grid-responsive>
-          </div>
-
-          <app-card>
-            <app-stack variant="section">
-              <app-row>
-                <h2 class="text-title">Menu of the day</h2>
-                <span class="text-sub-title">{{
-                  currentDate | capitalize
-                }}</span>
-              </app-row>
-              @if (dayMeals()?.length) {
-                <app-grid col1="max" col2="1" col3="max" gapX="sm" gapY="md">
-                  @for (meal of dayMeals(); track meal.id) {
-                    <span
-                      class="text-meta text-{{
-                        meal.mealType
-                      }}-light-bg dark:text-{{ meal.mealType }}-dark-bg"
-                      >{{ meal.mealType | capitalize }}</span
-                    >
-
-                    @if (meal.recipeId) {
-                      <app-inline gap="md">
-                        <a
-                          class="color-text-primary cursor-pointer"
-                          (click)="viewRecipe(meal.recipeId, meal.servings)"
-                          routerLinkActive="active-link"
-                        >
-                          <span class="text-body-lg">{{ meal.mealName }}</span>
-                        </a>
-
-                        @if (meal.totalTime !== undefined) {
-                          <app-inline gap="xs" class="color-text-muted">
-                            <i class="fa-regular fa-clock"></i>
-                            <span class="text-meta">{{
-                              meal.totalTime | mintohour
-                            }}</span>
-                          </app-inline>
-                        }
-                      </app-inline>
-                    } @else if (meal.manualRecipe) {
-                      <app-button
-                        variant="ghost"
-                        (clicked)="viewManualRecipe(meal.manualRecipe)"
-                      >
-                        <span class="text-body-lg">{{ meal.mealName }}</span>
-                      </app-button>
-                    }
-                    <div
-                      class="cook"
-                      [class.firstCook]="
-                        getCookPosition(meal.cookId) === 'first'
-                      "
-                      [class.secondCook]="
-                        getCookPosition(meal.cookId) === 'second'
-                      "
-                    >
-                      {{ getCookNameById(meal.cookId) }}
-                    </div>
-                  }
-                </app-grid>
-              } @else {
-                <app-button
-                  variant="ghost"
-                  routerLink="/meals"
-                  routerLinkActive="active-link"
-                  color="secondary"
-                >
-                  <app-inline>
-                    <span>Plan a meal</span>
-                    <i class="fa-solid fa-arrow-right fa-xl fa-beat"></i>
-                  </app-inline>
-                </app-button>
-              }
-            </app-stack>
-          </app-card>
-
-          <app-card>
-            <app-stack variant="section">
-              <h2 class="text-title">My shopping lists</h2>
-              <app-stack>
-                @for (
-                  shoppingListName of dbShoppingListsNames();
-                  track $index
-                ) {
-                  <app-row>
-                    <app-button
-                      variant="ghost"
-                      (clicked)="navigateToShoppingPage(shoppingListName)"
-                    >
-                      <span class="text-body-lg">{{ shoppingListName }}</span>
-                    </app-button>
-                  </app-row>
-                }
-              </app-stack>
-            </app-stack>
-          </app-card>
-
+        <app-card>
           <app-stack variant="section">
             <app-row>
-              <h2 class="text-title">Suggestion of the day</h2>
-
-              <app-button variant="ghost" (clicked)="shuffleReipes()">
-                <i class="fa-solid fa-shuffle fa-xl"></i>
-              </app-button>
+              <h2 class="text-title">Menu of the day</h2>
+              <span class="text-sub-title">{{ currentDate | capitalize }}</span>
             </app-row>
+            @if (dayMeals()?.length) {
+              <app-grid col1="max" col2="1" col3="max" gapX="sm" gapY="md">
+                @for (meal of dayMeals(); track meal.id) {
+                  <span
+                    class="text-meta text-{{
+                      meal.mealType
+                    }}-light-bg dark:text-{{ meal.mealType }}-dark-bg"
+                    >{{ meal.mealType | capitalize }}</span
+                  >
 
-            <app-grid-responsive [colsMd]="3" [colsLg]="4" gap="sm">
-              @for (recipe of randomRecipes(); track $index) {
-                <app-recipe-card [recipeState]="recipe"></app-recipe-card>
-              }
-            </app-grid-responsive>
+                  @if (meal.recipeId) {
+                    <app-inline gap="md">
+                      <a
+                        class="color-text-primary cursor-pointer"
+                        (click)="viewRecipe(meal.recipeId, meal.servings)"
+                        routerLinkActive="active-link"
+                      >
+                        <span class="text-body-lg">{{ meal.mealName }}</span>
+                      </a>
+
+                      @if (meal.totalTime !== undefined) {
+                        <app-inline gap="xs" class="color-text-muted">
+                          <i class="fa-regular fa-clock"></i>
+                          <span class="text-meta">{{
+                            meal.totalTime | mintohour
+                          }}</span>
+                        </app-inline>
+                      }
+                    </app-inline>
+                  } @else if (meal.manualRecipe) {
+                    <app-button
+                      variant="ghost"
+                      (clicked)="viewManualRecipe(meal.manualRecipe)"
+                    >
+                      <span class="text-body-lg">{{ meal.mealName }}</span>
+                    </app-button>
+                  }
+                  <div
+                    class="cook"
+                    [class.firstCook]="getCookPosition(meal.cookId) === 'first'"
+                    [class.secondCook]="
+                      getCookPosition(meal.cookId) === 'second'
+                    "
+                  >
+                    {{ getCookNameById(meal.cookId) }}
+                  </div>
+                }
+              </app-grid>
+            } @else {
+              <app-button
+                variant="ghost"
+                routerLink="/meals"
+                routerLinkActive="active-link"
+                color="secondary"
+              >
+                <app-inline>
+                  <span>Plan a meal</span>
+                  <i class="fa-solid fa-arrow-right fa-xl fa-beat"></i>
+                </app-inline>
+              </app-button>
+            }
           </app-stack>
+        </app-card>
+
+        <app-card>
+          <app-stack variant="section">
+            <h2 class="text-title">My shopping lists</h2>
+            <app-stack>
+              @for (shoppingListName of dbShoppingListsNames(); track $index) {
+                <app-row>
+                  <app-button
+                    variant="ghost"
+                    (clicked)="navigateToShoppingPage(shoppingListName)"
+                  >
+                    <span class="text-body-lg">{{ shoppingListName }}</span>
+                  </app-button>
+                </app-row>
+              }
+            </app-stack>
+          </app-stack>
+        </app-card>
+
+        <app-stack variant="section">
+          <app-row>
+            <h2 class="text-title">Suggestion of the day</h2>
+
+            <app-button variant="ghost" (clicked)="shuffleReipes()">
+              <i class="fa-solid fa-shuffle fa-xl"></i>
+            </app-button>
+          </app-row>
+
+          <app-grid-responsive [colsMd]="3" [colsLg]="4" gap="sm">
+            @for (recipe of randomRecipes(); track $index) {
+              <app-recipe-card [recipeState]="recipe"></app-recipe-card>
+            }
+          </app-grid-responsive>
         </app-stack>
-      }
+      </app-stack>
     }
   </app-page-layout>
 </div>
