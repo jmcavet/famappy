@@ -99,14 +99,19 @@ export class HomeComponent {
 
   user = signal<User | null>(null);
 
-  dataIsLoading = computed(
-    () =>
+  dataIsLoading = computed(() => {
+    if (!this.authService.user() && !this.authService.userLoading()) {
+      return false;
+    }
+
+    return (
       this.authService.userLoading() ||
       this.mealsLoading() ||
       this.membersLoading() ||
       this.recipesLoading() ||
-      this.shoppingListsLoading(),
-  );
+      this.shoppingListsLoading()
+    );
+  });
 
   ngOnInit(): void {
     const auth = getAuth(); // Get Firebase Auth instance

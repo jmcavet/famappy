@@ -32,7 +32,7 @@ export class MealBackendService {
 
   meals = signal<MealDocWithIdInBackend[]>([]);
 
-  private readonly _loading = signal<boolean>(true);
+  private readonly _loading = signal<boolean>(false);
   readonly loading = this._loading.asReadonly();
 
   private readonly _saving = signal<boolean>(false);
@@ -51,9 +51,12 @@ export class MealBackendService {
     effect(() => {
       const user = this.authService.user();
 
-      if (user) {
-        this.loadMealsFromFirestore(user.uid);
+      if (!user) {
+        this._loading.set(false);
+        return;
       }
+
+      this.loadMealsFromFirestore(user.uid);
     });
   }
 
