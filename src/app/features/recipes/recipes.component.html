@@ -4,27 +4,37 @@
   </app-stack>
 } @else {
   <div class="layout-stack h-dvh">
-    <app-header-shell
-      ><app-recipe-search
-        [(filter)]="filterText"
-        [recipesFilteredByTitle]="recipesFilteredByTitle()"
-        [recipesFiltered]="recipesFiltered()"
-        [dbMealCategories]="dbMealCategories()"
-        [dbCuisines]="dbCuisines()"
-        [dbRecipeCategories]="dbRecipeCategories()"
-        [dbIngredients]="dbIngredients()"
-        [dbIngredientCategories]="dbIngredientCategories()"
-    /></app-header-shell>
-    <app-page-layout maxSize="lg">
-      <app-grid-responsive [colsMd]="3" [colsLg]="4" gap="sm">
-        @for (recipe of recipesFiltered(); track $index) {
-          <app-recipe-card
-            [recipeState]="recipe"
-            (click)="clickOnRecipeCard(recipe)"
-          ></app-recipe-card>
-        }
-      </app-grid-responsive>
-    </app-page-layout>
+    @if (recipesFiltered().length === 0) {
+      <app-page-layout maxSize="lg">
+        <p
+          class="text-center text-lg h-screen flex items-center justify-center"
+        >
+          No recipes found. Create a new recipe to get started.
+        </p>
+      </app-page-layout>
+    } @else {
+      <app-header-shell
+        ><app-recipe-search
+          [(filter)]="filterText"
+          [recipesFilteredByTitle]="recipesFilteredByTitle()"
+          [recipesFiltered]="recipesFiltered()"
+          [dbMealCategories]="dbMealCategories()"
+          [dbCuisines]="dbCuisines()"
+          [dbRecipeCategories]="dbRecipeCategories()"
+          [dbIngredients]="dbIngredients()"
+          [dbIngredientCategories]="dbIngredientCategories()"
+      /></app-header-shell>
+      <app-page-layout maxSize="lg">
+        <app-grid-responsive [colsMd]="3" [colsLg]="4" gap="sm">
+          @for (recipe of recipesFiltered(); track $index) {
+            <app-recipe-card
+              [recipeState]="recipe"
+              (click)="clickOnRecipeCard(recipe)"
+            ></app-recipe-card>
+          }
+        </app-grid-responsive>
+      </app-page-layout>
+    }
     <app-footer />
   </div>
 
