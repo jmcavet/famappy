@@ -5,13 +5,15 @@
 } @else {
   <div class="layout-stack h-dvh">
     @if (recipesFiltered().length === 0) {
-      <app-page-layout maxSize="lg">
-        <p
-          class="text-center text-lg h-screen flex items-center justify-center"
-        >
-          No recipes found. Create a new recipe to get started.
-        </p>
-      </app-page-layout>
+      <div class="flex flex-1 items-center justify-center">
+        <div class="container-lg inset-x-md">
+          <app-section [surface]="0" [shadow]="false" class="h-screen">
+            <app-button [fullWidth]="true" routerLink="/new-recipe"
+              >Create a new recipe to get started</app-button
+            >
+          </app-section>
+        </div>
+      </div>
     } @else {
       <app-header-shell
         ><app-recipe-search
@@ -34,9 +36,9 @@
           }
         </app-grid-responsive>
       </app-page-layout>
+
+      <app-floating-button routerLink="/new-recipe"></app-floating-button>
     }
     <app-footer />
   </div>
-
-  <app-floating-button routerLink="/new-recipe"></app-floating-button>
 }

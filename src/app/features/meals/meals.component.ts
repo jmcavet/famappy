@@ -28,7 +28,7 @@ import { RowComponent } from '../../shared/layout/primitives/row.component';
     ButtonComponent,
     FooterComponent,
     CardComponent,
-    RowComponent,
+    SectionComponent,
   ],
   templateUrl: './meals.component.html',
   styleUrl: './meals.component.css',

@@ -6,31 +6,17 @@
   <div class="layout-stack h-dvh">
     <app-header-shell><app-calendar /></app-header-shell>
     @if (nbParents() === 0) {
-      <div
-        class="text-center text-lg h-screen flex items-center justify-center"
-      >
-        <app-stack>
-          <p>
-            You have not defined any parent yet. Please add at least one parent
-            to be able to plan meals.
-          </p>
-          <app-row justify="center">
-            <!-- <app-button variant="ghost" routerLink="/members">
-              Add first parent
-            </app-button> -->
+      <div class="flex flex-1 items-center justify-center">
+        <div class="container-lg inset-x-md">
+          <app-section [surface]="0" [shadow]="false" class="h-screen">
             <app-button
-              variant="ghost"
+              [fullWidth]="true"
               routerLink="/members"
               routerLinkActive="active-link"
-              color="secondary"
+              >Define the first parent</app-button
             >
-              <app-inline>
-                <span>Add first parent</span>
-                <i class="fa-solid fa-arrow-right fa-xl fa-beat"></i>
-              </app-inline>
-            </app-button>
-          </app-row>
-        </app-stack>
+          </app-section>
+        </div>
       </div>
     } @else {
       <app-page-layout maxSize="lg">
