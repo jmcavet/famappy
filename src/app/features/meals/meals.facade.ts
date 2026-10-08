@@ -9,6 +9,7 @@ import { RecipeBackendService } from '../../services/backend/recipe.service';
 import { MealCategoryBackendService } from '../../services/backend/meal-category.service';
 import { RecipeWithId } from '../recipes/components/recipe-card/recipe.model';
 import { MealCategoryDocInBackend } from '../../models/cuisine.model';
+import { MemberDomainFacade } from '../../domain-facades/member.facade';
 
 export interface MealDateRef {
   id: string;
@@ -21,11 +22,26 @@ export interface MealDateRef {
 
 @Injectable({ providedIn: 'root' })
 export class MealFacade {
+  /* ================================
+   * Dependencies (injected)
+   * ================================ */
+
+  /** Domain access (business state & actions) */
+  private memberDomainFacade = inject(MemberDomainFacade);
+
   // Backend services
   private mealBackendService = inject(MealBackendService);
   private recipeBackendService = inject(RecipeBackendService);
   private mealCategoryBackendService = inject(MealCategoryBackendService);
   private readonly mealsBeingDeleted = new Set<string>();
+
+  /* ================================
+   * UI state (owned by this facade)
+   * ================================ */
+
+  /** Internal signals */
+  private readonly membersLoading = this.memberDomainFacade.membersLoading;
+  readonly dbMembers = this.memberDomainFacade.dbMembers;
 
   /** Declaration of signals communicating with firestore */
   readonly mealsLoading: Signal<boolean> = this.mealBackendService.loading;
@@ -61,9 +77,14 @@ export class MealFacade {
   readonly dataIsLoading = computed(
     () =>
       this.mealsLoading() ||
+      this.membersLoading() ||
       this.recipesLoading() ||
       this.mealCategoriesLoading(),
   );
+
+  readonly nbParents = computed(() => {
+    return this.dbMembers().filter((member) => member.type === 'parent').length;
+  });
 
   readonly backendMeals = computed(() => {
     // A meal from the backend represents only 1 recipe!

@@ -5,41 +5,73 @@
 } @else {
   <div class="layout-stack h-dvh">
     <app-header-shell><app-calendar /></app-header-shell>
-    <app-page-layout maxSize="lg">
-      <div class="w-full">
-        <app-inline>
-          <app-button [fullWidth]="true" routerLink="/meals/definition"
-            ><app-inline gap="sm">
-              <i class="fa-regular fa-calendar-days"></i>
-              <span>Plan meals</span>
-            </app-inline></app-button
-          >
-
-          <app-button [fullWidth]="true" routerLink="/shopping/meals-selection"
-            ><app-inline gap="sm">
-              <i class="fa-solid fa-shopping-cart"></i>
-              <span>Export list</span></app-inline
-            ></app-button
-          >
-        </app-inline>
+    @if (nbParents() === 0) {
+      <div
+        class="text-center text-lg h-screen flex items-center justify-center"
+      >
+        <app-stack>
+          <p>
+            You have not defined any parent yet. Please add at least one parent
+            to be able to plan meals.
+          </p>
+          <app-row justify="center">
+            <!-- <app-button variant="ghost" routerLink="/members">
+              Add first parent
+            </app-button> -->
+            <app-button
+              variant="ghost"
+              routerLink="/members"
+              routerLinkActive="active-link"
+              color="secondary"
+            >
+              <app-inline>
+                <span>Add first parent</span>
+                <i class="fa-solid fa-arrow-right fa-xl fa-beat"></i>
+              </app-inline>
+            </app-button>
+          </app-row>
+        </app-stack>
       </div>
+    } @else {
+      <app-page-layout maxSize="lg">
+        <div class="w-full">
+          <app-inline>
+            <app-button [fullWidth]="true" routerLink="/meals/definition"
+              ><app-inline gap="sm">
+                <i class="fa-regular fa-calendar-days"></i>
+                <span>Plan meals</span>
+              </app-inline></app-button
+            >
 
-      @for (
-        dailyMealPlan of dailyMealPlans();
-        track dailyMealPlan.weekDay.dayName;
-        let i = $index
-      ) {
-        <app-card>
-          <app-stack>
-            <app-meal-day-card
-              [dailyMealPlan]="dailyMealPlan"
-              id="day-{{ i }}"
-              class="scroll-mt-20"
-            />
-          </app-stack>
-        </app-card>
-      }
-    </app-page-layout>
+            <app-button
+              [fullWidth]="true"
+              routerLink="/shopping/meals-selection"
+              ><app-inline gap="sm">
+                <i class="fa-solid fa-shopping-cart"></i>
+                <span>Export list</span></app-inline
+              ></app-button
+            >
+          </app-inline>
+        </div>
+
+        @for (
+          dailyMealPlan of dailyMealPlans();
+          track dailyMealPlan.weekDay.dayName;
+          let i = $index
+        ) {
+          <app-card>
+            <app-stack>
+              <app-meal-day-card
+                [dailyMealPlan]="dailyMealPlan"
+                id="day-{{ i }}"
+                class="scroll-mt-20"
+              />
+            </app-stack>
+          </app-card>
+        }
+      </app-page-layout>
+    }
+
     <app-footer />
   </div>
 }
