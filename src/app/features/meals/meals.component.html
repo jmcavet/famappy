@@ -5,41 +5,59 @@
 } @else {
   <div class="layout-stack h-dvh">
     <app-header-shell><app-calendar /></app-header-shell>
-    <app-page-layout maxSize="lg">
-      <div class="w-full">
-        <app-inline>
-          <app-button [fullWidth]="true" routerLink="/meals/definition"
-            ><app-inline gap="sm">
-              <i class="fa-regular fa-calendar-days"></i>
-              <span>Plan meals</span>
-            </app-inline></app-button
-          >
-
-          <app-button [fullWidth]="true" routerLink="/shopping/meals-selection"
-            ><app-inline gap="sm">
-              <i class="fa-solid fa-shopping-cart"></i>
-              <span>Export list</span></app-inline
-            ></app-button
-          >
-        </app-inline>
+    @if (nbParents() === 0) {
+      <div class="flex flex-1 items-center justify-center">
+        <div class="container-lg inset-x-md">
+          <app-section [surface]="0" [shadow]="false" class="h-screen">
+            <app-button
+              [fullWidth]="true"
+              routerLink="/members"
+              routerLinkActive="active-link"
+              >Define the first parent</app-button
+            >
+          </app-section>
+        </div>
       </div>
+    } @else {
+      <app-page-layout maxSize="lg">
+        <div class="w-full">
+          <app-inline>
+            <app-button [fullWidth]="true" routerLink="/meals/definition"
+              ><app-inline gap="sm">
+                <i class="fa-regular fa-calendar-days"></i>
+                <span>Plan meals</span>
+              </app-inline></app-button
+            >
 
-      @for (
-        dailyMealPlan of dailyMealPlans();
-        track dailyMealPlan.weekDay.dayName;
-        let i = $index
-      ) {
-        <app-card>
-          <app-stack>
-            <app-meal-day-card
-              [dailyMealPlan]="dailyMealPlan"
-              id="day-{{ i }}"
-              class="scroll-mt-20"
-            />
-          </app-stack>
-        </app-card>
-      }
-    </app-page-layout>
+            <app-button
+              [fullWidth]="true"
+              routerLink="/shopping/meals-selection"
+              ><app-inline gap="sm">
+                <i class="fa-solid fa-shopping-cart"></i>
+                <span>Export list</span></app-inline
+              ></app-button
+            >
+          </app-inline>
+        </div>
+
+        @for (
+          dailyMealPlan of dailyMealPlans();
+          track dailyMealPlan.weekDay.dayName;
+          let i = $index
+        ) {
+          <app-card>
+            <app-stack>
+              <app-meal-day-card
+                [dailyMealPlan]="dailyMealPlan"
+                id="day-{{ i }}"
+                class="scroll-mt-20"
+              />
+            </app-stack>
+          </app-card>
+        }
+      </app-page-layout>
+    }
+
     <app-footer />
   </div>
 }

@@ -38,6 +38,8 @@ import { GridResponsiveComponent } from '../../shared/layout/primitives/grid-res
 import { FooterComponent } from '../../shared/layout/shell/footer/footer.component';
 import { LoadingComponent } from '../../shared/layout/overlays/loading/loading.component';
 import { FloatingButtonComponent } from '../../shared/layout/shell/floating-button/floating-button.component';
+import { SectionComponent } from '../../shared/layout/primitives/section.component';
+import { ButtonComponent } from '../../shared/ui/button/button.component';
 
 export interface RecipeWithDate extends RecipeWithId {
   dateCreated: Date | string | Timestamp;
@@ -57,6 +59,8 @@ export interface RecipeWithDate extends RecipeWithId {
     GridResponsiveComponent,
     FloatingButtonComponent,
     StackComponent,
+    SectionComponent,
+    ButtonComponent,
   ],
   templateUrl: './recipes.component.html',
   styleUrl: './recipes.component.css',

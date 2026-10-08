@@ -4,220 +4,241 @@
   </app-stack>
 } @else {
   <div class="layout-stack h-dvh">
-    <app-header-shell
-      ><app-section inset="lg">
-        <app-stack variant="default">
-          <!-- <h1 class="text-headline text-center">Shopping List</h1> -->
-
-          <app-grid col1="1" col2="max" gapX="md" gapY="md">
-            <div class="w-full">
-              <app-select-test
-                [options]="shoppingListsNames()"
-                [value]="shoppingListNameSelected()"
-                (valueChange)="updateShoppingListSelection($event)"
-              ></app-select-test>
-            </div>
-            <app-inline>
-              <app-button
-                variant="ghost"
-                size="sm"
-                (clicked)="
-                  openUpdateShoppingListModal(
-                    $event,
-                    shoppingListNameSelected()
-                  )
-                "
-                ><div class="h-6 w-6">
-                  <i class="fa-solid fa-pen-to-square fa-xl"></i></div
-              ></app-button>
-              <app-button
-                variant="ghost"
-                size="sm"
-                color="danger"
-                (clicked)="
-                  openDeleteShoppingListModal(
-                    $event,
-                    shoppingListNameSelected()
-                  )
-                "
-                ><div class="h-6 w-6">
-                  <i class="fa-regular fa-trash-can fa-xl"></i></div
-              ></app-button>
-            </app-inline>
-          </app-grid>
-
-          <app-segmented-control
-            [fullWidth]="true"
-            size="sm"
-            [options]="this.methods"
-            [selectedInput]="methodSelected()"
-            (selectionChange)="toggleMethod($event)"
-          >
-          </app-segmented-control>
-
-          @if (methodSelected() === this.methods[0]) {
-            <app-grid col1="1" col2="max" gapX="md" gapY="md">
-              <div class="w-full">
-                <input
-                  type="text"
-                  id="quickEntryItem"
-                  name="quickEntryItem"
-                  required
-                  placeholder="Enter an item or existing ingredient"
-                  autocomplete="off"
-                  [value]="quickEntryItem()"
-                  (input)="setInputItem($any($event.target).value)"
-                  (keydown.enter)="addQuickEntryItem()"
-                  class="inset-x-md surface-2"
-                />
-              </div>
-              <app-button
-                shape="pill"
-                color="secondary"
-                [disabled]="!quickEntryItem()"
-                (clicked)="addQuickEntryItem()"
-                ><div class="h-6 w-6">
-                  <i class="fa-solid fa-plus fa-lg"></i></div
-              ></app-button>
-            </app-grid>
-          }
-          @if (ingredientsFound().length > 0) {
-            <app-stack variant="compact">
-              @for (ing of ingredientsFound(); track ing.id) {
-                <div
-                  class="surface-2 surface-interactive inset-xs w-full rounded"
-                  (click)="selectIngredientSuggestion(ing)"
-                >
-                  <app-row>
-                    <span>
-                      @if (
-                        ing.name | highlightMatch: quickEntryItem();
-                        as parts
-                      ) {
-                        <span>{{ parts.prefix }}</span>
-                        <span
-                          class="font-bold text-lg text-primary-700 dark:text-primary-200"
-                          >{{ parts.match }}</span
-                        >
-                        <span>{{ parts.rest }}</span>
-                      }
-                    </span>
-                    <div class="w-48">
-                      <app-measure-control
-                        [measure]="measureFor(ing.id)"
-                        [unit]="ing.unit"
-                        [surface]="1"
-                        (measureChange)="
-                          onMeasuresChange(ing.id, ing.unit, $event)
-                        "
-                        (click)="$event.stopPropagation()"
-                      />
-                    </div>
-                  </app-row>
+    @if (shoppingListsNames().length === 0) {
+      <div class="flex flex-1 items-center justify-center">
+        <div class="container-lg inset-x-md">
+          <app-section [surface]="0" [shadow]="false" class="h-screen">
+            <app-button
+              [fullWidth]="true"
+              (clicked)="openAddShoppingListInputModal($event)"
+              >Create a new list to get started</app-button
+            >
+          </app-section>
+        </div>
+      </div>
+    } @else {
+      <app-header-shell
+        ><app-section inset="lg">
+          <app-stack variant="default">
+            @if (shoppingListsNames().length === 0) {
+              <app-stack align="center">
+                <p class="text-center text-lg">
+                  No shopping lists found. Create a new list to get started.
+                </p>
+              </app-stack>
+            } @else {
+              <app-grid col1="1" col2="max" gapX="md" gapY="md">
+                <div class="w-full">
+                  <app-select-test
+                    [options]="shoppingListsNames()"
+                    [value]="shoppingListNameSelected()"
+                    (valueChange)="updateShoppingListSelection($event)"
+                  ></app-select-test>
                 </div>
-              }
-            </app-stack>
-          }
+                <app-inline>
+                  <app-button
+                    variant="ghost"
+                    size="sm"
+                    (clicked)="
+                      openUpdateShoppingListModal(
+                        $event,
+                        shoppingListNameSelected()
+                      )
+                    "
+                    ><div class="h-6 w-6">
+                      <i class="fa-solid fa-pen-to-square fa-xl"></i></div
+                  ></app-button>
+                  <app-button
+                    variant="ghost"
+                    size="sm"
+                    color="danger"
+                    (clicked)="
+                      openDeleteShoppingListModal(
+                        $event,
+                        shoppingListNameSelected()
+                      )
+                    "
+                    ><div class="h-6 w-6">
+                      <i class="fa-regular fa-trash-can fa-xl"></i></div
+                  ></app-button>
+                </app-inline>
+              </app-grid>
 
-          <div class="flex justify-between gap-8">
-            <app-button
-              class="flex-1"
-              color="secondary"
-              [variant]="dateBtnVariant()"
-              [fullWidth]="true"
-              size="sm"
-              (clicked)="toggleIngredientSort('dateCreated')"
-            >
-              @if (dateSortAscending()) {
-                <i class="fa-solid fa-arrow-down-1-9 mr-2"></i>
-              } @else {
-                <i class="fa-solid fa-arrow-up-1-9 mr-2"></i>
+              <app-segmented-control
+                [fullWidth]="true"
+                size="sm"
+                [options]="this.methods"
+                [selectedInput]="methodSelected()"
+                (selectionChange)="toggleMethod($event)"
+              >
+              </app-segmented-control>
+
+              @if (methodSelected() === this.methods[0]) {
+                <app-grid col1="1" col2="max" gapX="md" gapY="md">
+                  <div class="w-full">
+                    <input
+                      type="text"
+                      id="quickEntryItem"
+                      name="quickEntryItem"
+                      required
+                      placeholder="Enter an item or existing ingredient"
+                      autocomplete="off"
+                      [value]="quickEntryItem()"
+                      (input)="setInputItem($any($event.target).value)"
+                      (keydown.enter)="addQuickEntryItem()"
+                      class="inset-x-md surface-2"
+                    />
+                  </div>
+                  <app-button
+                    shape="pill"
+                    color="secondary"
+                    [disabled]="!quickEntryItem()"
+                    (clicked)="addQuickEntryItem()"
+                    ><div class="h-6 w-6">
+                      <i class="fa-solid fa-plus fa-lg"></i></div
+                  ></app-button>
+                </app-grid>
               }
-              Date
-            </app-button>
-            <app-button
-              class="flex-1"
-              color="secondary"
-              [variant]="categoryBtnVariant()"
-              [fullWidth]="true"
-              size="sm"
-              (clicked)="toggleIngredientSort('category')"
-            >
-              @if (categorySortAscending()) {
-                <i class="fa-solid fa-arrow-down-a-z mr-2"></i>
-              } @else {
-                <i class="fa-solid fa-arrow-up-a-z mr-2"></i>
+              @if (ingredientsFound().length > 0) {
+                <app-stack variant="compact">
+                  @for (ing of ingredientsFound(); track ing.id) {
+                    <div
+                      class="surface-2 surface-interactive inset-xs w-full rounded"
+                      (click)="selectIngredientSuggestion(ing)"
+                    >
+                      <app-row>
+                        <span>
+                          @if (
+                            ing.name | highlightMatch: quickEntryItem();
+                            as parts
+                          ) {
+                            <span>{{ parts.prefix }}</span>
+                            <span
+                              class="font-bold text-lg text-primary-700 dark:text-primary-200"
+                              >{{ parts.match }}</span
+                            >
+                            <span>{{ parts.rest }}</span>
+                          }
+                        </span>
+                        <div class="w-48">
+                          <app-measure-control
+                            [measure]="measureFor(ing.id)"
+                            [unit]="ing.unit"
+                            [surface]="1"
+                            (measureChange)="
+                              onMeasuresChange(ing.id, ing.unit, $event)
+                            "
+                            (click)="$event.stopPropagation()"
+                          />
+                        </div>
+                      </app-row>
+                    </div>
+                  }
+                </app-stack>
               }
-              Category
-            </app-button>
-            <app-button
-              class="flex-1"
-              color="secondary"
-              [variant]="nameBtnVariant()"
-              [fullWidth]="true"
-              size="sm"
-              (clicked)="toggleIngredientSort('name')"
-            >
-              @if (nameSortAscending()) {
-                <i class="fa-solid fa-arrow-down-a-z mr-2"></i>
-              } @else {
-                <i class="fa-solid fa-arrow-up-a-z mr-2"></i>
-              }
-              Name
-            </app-button>
-          </div>
-          @if (methodSelected() === this.methods[1]) {}
-          @if (methodSelected() === this.methods[2]) {
-            <app-grid col1="max" col2="1" col3="max" gapX="sm" gapY="md">
-              <app-button
-                shape="pill"
-                variant="ghost"
-                (clicked)="openAddShoppingCategoryInputModal($event)"
-                ><div class="h-6 w-6">
-                  <i class="fa-solid fa-plus fa-xl"></i></div
-              ></app-button>
-              <div class="w-full">
-                <app-select-test
-                  [options]="shoppingCategoriesNames()"
-                  [value]="shoppingCategoryNameSelected()"
-                  (valueChange)="updateShoppingCategoryNameSelection($event)"
-                ></app-select-test>
+
+              <div class="flex justify-between gap-8">
+                <app-button
+                  class="flex-1"
+                  color="secondary"
+                  [variant]="dateBtnVariant()"
+                  [fullWidth]="true"
+                  size="sm"
+                  (clicked)="toggleIngredientSort('dateCreated')"
+                >
+                  @if (dateSortAscending()) {
+                    <i class="fa-solid fa-arrow-down-1-9 mr-2"></i>
+                  } @else {
+                    <i class="fa-solid fa-arrow-up-1-9 mr-2"></i>
+                  }
+                  Date
+                </app-button>
+                <app-button
+                  class="flex-1"
+                  color="secondary"
+                  [variant]="categoryBtnVariant()"
+                  [fullWidth]="true"
+                  size="sm"
+                  (clicked)="toggleIngredientSort('category')"
+                >
+                  @if (categorySortAscending()) {
+                    <i class="fa-solid fa-arrow-down-a-z mr-2"></i>
+                  } @else {
+                    <i class="fa-solid fa-arrow-up-a-z mr-2"></i>
+                  }
+                  Category
+                </app-button>
+                <app-button
+                  class="flex-1"
+                  color="secondary"
+                  [variant]="nameBtnVariant()"
+                  [fullWidth]="true"
+                  size="sm"
+                  (clicked)="toggleIngredientSort('name')"
+                >
+                  @if (nameSortAscending()) {
+                    <i class="fa-solid fa-arrow-down-a-z mr-2"></i>
+                  } @else {
+                    <i class="fa-solid fa-arrow-up-a-z mr-2"></i>
+                  }
+                  Name
+                </app-button>
               </div>
-              <app-inline gap="md">
-                <app-button
-                  color="secondary"
-                  variant="ghost"
-                  (clicked)="openAddShoppingCategoryItemInputModal($event)"
-                  ><div class="h-6 w-6">
-                    <i class="fa-solid fa-plus fa-xl"></i></div
-                ></app-button>
+              @if (methodSelected() === this.methods[1]) {}
+              @if (methodSelected() === this.methods[2]) {
+                <app-grid col1="max" col2="1" col3="max" gapX="sm" gapY="md">
+                  <app-button
+                    shape="pill"
+                    variant="ghost"
+                    (clicked)="openAddShoppingCategoryInputModal($event)"
+                    ><div class="h-6 w-6">
+                      <i class="fa-solid fa-plus fa-xl"></i></div
+                  ></app-button>
+                  <div class="w-full">
+                    <app-select-test
+                      [options]="shoppingCategoriesNames()"
+                      [value]="shoppingCategoryNameSelected()"
+                      (valueChange)="
+                        updateShoppingCategoryNameSelection($event)
+                      "
+                    ></app-select-test>
+                  </div>
+                  <app-inline gap="md">
+                    <app-button
+                      color="secondary"
+                      variant="ghost"
+                      (clicked)="openAddShoppingCategoryItemInputModal($event)"
+                      ><div class="h-6 w-6">
+                        <i class="fa-solid fa-plus fa-xl"></i></div
+                    ></app-button>
 
-                <app-button
-                  variant="ghost"
-                  color="secondary"
-                  size="sm"
-                  (clicked)="openUpdateShoppingCategoryModal($event)"
-                  ><div class="h-6 w-6">
-                    <i class="fa-solid fa-pen-to-square fa-xl"></i></div
-                ></app-button>
+                    <app-button
+                      variant="ghost"
+                      color="secondary"
+                      size="sm"
+                      (clicked)="openUpdateShoppingCategoryModal($event)"
+                      ><div class="h-6 w-6">
+                        <i class="fa-solid fa-pen-to-square fa-xl"></i></div
+                    ></app-button>
 
-                <app-button
-                  variant="ghost"
-                  color="secondary"
-                  size="sm"
-                  (clicked)="openExportShoppingCategoryItemsModal($event)"
-                  ><div class="h-6 w-6">
-                    <i class="fa-solid fa-store fa-xl"></i></div
-                ></app-button>
-              </app-inline>
-            </app-grid>
-          }
-        </app-stack> </app-section
-    ></app-header-shell>
+                    <app-button
+                      variant="ghost"
+                      color="secondary"
+                      size="sm"
+                      (clicked)="openExportShoppingCategoryItemsModal($event)"
+                      ><div class="h-6 w-6">
+                        <i class="fa-solid fa-store fa-xl"></i></div
+                    ></app-button>
+                  </app-inline>
+                </app-grid>
+              }
+            }
+          </app-stack> </app-section
+      ></app-header-shell>
 
-    <app-page-layout maxSize="lg">
-      <!-- <app-section inset="lg"> -->
-      <!-- <app-inline gap="sm" [wrap]="true">
+      <app-page-layout maxSize="lg">
+        <!-- <app-section inset="lg"> -->
+        <!-- <app-inline gap="sm" [wrap]="true">
             @for (cat of ingredientCategoriesSorted(); track $index) {
               <app-chip
                 [selected]="ingredientCategorySelected()?.name === cat.name"
@@ -233,97 +254,99 @@
             }
           </app-inline> -->
 
-      <app-stack variant="section">
-        <div
-          class="shopping-list-rows"
-          [class.category-filtered]="!!ingredientCategoryToggled()"
-        >
-          @for (ing of shoppingListElements(); track $index) {
-            <div
-              class="shopping-list-row w-full rounded inset-inline-sm surface-1"
-              [class.has-ingredient]="!!ing.ingredientId"
-            >
-              <span
-                class="shopping-list-cell shopping-list-name"
-                [title]="ing.name"
-              >
-                {{ ing.name }}
-              </span>
-
+        <app-stack variant="section">
+          <div
+            class="shopping-list-rows"
+            [class.category-filtered]="!!ingredientCategoryToggled()"
+          >
+            @for (ing of shoppingListElements(); track $index) {
               <div
-                class="shopping-list-cell shopping-list-measure color-text-muted"
+                class="shopping-list-row w-full rounded inset-inline-sm surface-1"
+                [class.has-ingredient]="!!ing.ingredientId"
               >
-                @if (ing.ingredientId) {
-                  <app-inline gap="xs">
-                    <span>{{ ing.measure }}</span>
-                    <span>{{ ingredientUnit(ing.ingredientId) }}</span>
-                  </app-inline>
-                }
-              </div>
-
-              @if (ing.category && ing.ingredientId) {
-                <app-button
-                  class="shopping-list-category-column"
-                  [variant]="
-                    ingredientCategoryToggled() === ing.category
-                      ? 'filled'
-                      : 'outline'
-                  "
-                  color="neutral"
-                  size="xs"
-                  (clicked)="toggleIngredientCategory(ing.category)"
-                  >{{ ing.category }}</app-button
+                <span
+                  class="shopping-list-cell shopping-list-name"
+                  [title]="ing.name"
                 >
-              } @else {
-                <span class="shopping-list-category-column"></span>
-              }
+                  {{ ing.name }}
+                </span>
 
-              <app-inline
-                class="shopping-list-cell shopping-list-actions"
-                gap="sm"
-              >
-                @if (ing.quickItemId) {
+                <div
+                  class="shopping-list-cell shopping-list-measure color-text-muted"
+                >
+                  @if (ing.ingredientId) {
+                    <app-inline gap="xs">
+                      <span>{{ ing.measure }}</span>
+                      <span>{{ ingredientUnit(ing.ingredientId) }}</span>
+                    </app-inline>
+                  }
+                </div>
+
+                @if (ing.category && ing.ingredientId) {
+                  <app-button
+                    class="shopping-list-category-column"
+                    [variant]="
+                      ingredientCategoryToggled() === ing.category
+                        ? 'filled'
+                        : 'outline'
+                    "
+                    color="neutral"
+                    size="xs"
+                    (clicked)="toggleIngredientCategory(ing.category)"
+                    >{{ ing.category }}</app-button
+                  >
+                } @else {
+                  <span class="shopping-list-category-column"></span>
+                }
+
+                <app-inline
+                  class="shopping-list-cell shopping-list-actions"
+                  gap="sm"
+                >
+                  @if (ing.quickItemId) {
+                    <app-button
+                      variant="ghost"
+                      size="sm"
+                      (clicked)="openUpdateQuickItemsModal($event, ing)"
+                      ><div class="h-6 w-6">
+                        <i class="fa-solid fa-pen-to-square fa-xl"></i></div
+                    ></app-button>
+                  }
+
+                  @if (ing.ingredientId) {
+                    <app-button
+                      variant="ghost"
+                      size="sm"
+                      (clicked)="openUpdateIngredientMeasureModal($event, ing)"
+                      ><div class="h-6 w-6">
+                        <i class="fa-solid fa-scale-unbalanced fa-xl"></i></div
+                    ></app-button>
+                  }
+
                   <app-button
                     variant="ghost"
                     size="sm"
-                    (clicked)="openUpdateQuickItemsModal($event, ing)"
-                    ><div class="h-6 w-6">
-                      <i class="fa-solid fa-pen-to-square fa-xl"></i></div
+                    color="danger"
+                    (clicked)="deleteElement(ing)"
+                    ><i class="fa-regular fa-trash-can text-xl"></i
                   ></app-button>
-                }
+                </app-inline>
+              </div>
+            }
+          </div>
+        </app-stack>
+        <!-- </app-section> -->
+      </app-page-layout>
 
-                @if (ing.ingredientId) {
-                  <app-button
-                    variant="ghost"
-                    size="sm"
-                    (clicked)="openUpdateIngredientMeasureModal($event, ing)"
-                    ><div class="h-6 w-6">
-                      <i class="fa-solid fa-scale-unbalanced fa-xl"></i></div
-                  ></app-button>
-                }
+      <app-section [surface]="0">
+        <app-button
+          [fullWidth]="true"
+          (clicked)="openAddShoppingListInputModal($event)"
+          >Create new list</app-button
+        >
+      </app-section>
+    }
 
-                <app-button
-                  variant="ghost"
-                  size="sm"
-                  color="danger"
-                  (clicked)="deleteElement(ing)"
-                  ><i class="fa-regular fa-trash-can text-xl"></i
-                ></app-button>
-              </app-inline>
-            </div>
-          }
-        </div>
-      </app-stack>
-      <!-- </app-section> -->
-    </app-page-layout>
-
-    <app-section [surface]="0">
-      <app-button
-        [fullWidth]="true"
-        (clicked)="openAddShoppingListInputModal($event)"
-        >Create new list</app-button
-      >
-    </app-section>
     <app-footer />
   </div>
 }

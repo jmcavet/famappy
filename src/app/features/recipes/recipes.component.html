@@ -4,29 +4,41 @@
   </app-stack>
 } @else {
   <div class="layout-stack h-dvh">
-    <app-header-shell
-      ><app-recipe-search
-        [(filter)]="filterText"
-        [recipesFilteredByTitle]="recipesFilteredByTitle()"
-        [recipesFiltered]="recipesFiltered()"
-        [dbMealCategories]="dbMealCategories()"
-        [dbCuisines]="dbCuisines()"
-        [dbRecipeCategories]="dbRecipeCategories()"
-        [dbIngredients]="dbIngredients()"
-        [dbIngredientCategories]="dbIngredientCategories()"
-    /></app-header-shell>
-    <app-page-layout maxSize="lg">
-      <app-grid-responsive [colsMd]="3" [colsLg]="4" gap="sm">
-        @for (recipe of recipesFiltered(); track $index) {
-          <app-recipe-card
-            [recipeState]="recipe"
-            (click)="clickOnRecipeCard(recipe)"
-          ></app-recipe-card>
-        }
-      </app-grid-responsive>
-    </app-page-layout>
+    @if (recipesFiltered().length === 0) {
+      <div class="flex flex-1 items-center justify-center">
+        <div class="container-lg inset-x-md">
+          <app-section [surface]="0" [shadow]="false" class="h-screen">
+            <app-button [fullWidth]="true" routerLink="/new-recipe"
+              >Create a new recipe to get started</app-button
+            >
+          </app-section>
+        </div>
+      </div>
+    } @else {
+      <app-header-shell
+        ><app-recipe-search
+          [(filter)]="filterText"
+          [recipesFilteredByTitle]="recipesFilteredByTitle()"
+          [recipesFiltered]="recipesFiltered()"
+          [dbMealCategories]="dbMealCategories()"
+          [dbCuisines]="dbCuisines()"
+          [dbRecipeCategories]="dbRecipeCategories()"
+          [dbIngredients]="dbIngredients()"
+          [dbIngredientCategories]="dbIngredientCategories()"
+      /></app-header-shell>
+      <app-page-layout maxSize="lg">
+        <app-grid-responsive [colsMd]="3" [colsLg]="4" gap="sm">
+          @for (recipe of recipesFiltered(); track $index) {
+            <app-recipe-card
+              [recipeState]="recipe"
+              (click)="clickOnRecipeCard(recipe)"
+            ></app-recipe-card>
+          }
+        </app-grid-responsive>
+      </app-page-layout>
+
+      <app-floating-button routerLink="/new-recipe"></app-floating-button>
+    }
     <app-footer />
   </div>
-
-  <app-floating-button routerLink="/new-recipe"></app-floating-button>
 }
