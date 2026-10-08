@@ -77,7 +77,10 @@
         <app-card>
           <app-stack variant="section">
             <app-row>
-              <h2 class="text-title">Menu of the day</h2>
+              <app-inline gap="sm">
+                <i class="fa-solid fa-utensils"></i>
+                <h2 class="text-title">Menu of the day</h2>
+              </app-inline>
               <span class="text-sub-title">{{ currentDate | capitalize }}</span>
             </app-row>
             @if (dayMeals()?.length) {
@@ -146,7 +149,10 @@
 
         <app-card>
           <app-stack variant="section">
-            <h2 class="text-title">My shopping lists</h2>
+            <app-inline gap="sm">
+              <i class="fa-solid fa-cart-shopping"></i>
+              <h2 class="text-title">My shopping lists</h2>
+            </app-inline>
             <app-stack>
               @for (shoppingListName of dbShoppingListsNames(); track $index) {
                 <app-row>
@@ -164,12 +170,31 @@
 
         <app-stack variant="section">
           <app-row>
-            <h2 class="text-title">Suggestion of the day</h2>
+            <app-inline gap="sm">
+              <i class="fa-solid fa-mortar-pestle"></i>
+              <h2 class="text-title">Suggestion of the day</h2>
+            </app-inline>
 
             <app-button variant="ghost" (clicked)="shuffleReipes()">
               <i class="fa-solid fa-shuffle fa-xl"></i>
             </app-button>
           </app-row>
+
+          @if (randomRecipes().length === 0) {
+            <app-row>
+              <app-button
+                variant="ghost"
+                routerLink="/new-recipe"
+                routerLinkActive="active-link"
+                color="secondary"
+              >
+                <app-inline>
+                  <span>Add your first recipe</span>
+                  <i class="fa-solid fa-arrow-right fa-xl fa-beat"></i>
+                </app-inline>
+              </app-button>
+            </app-row>
+          }
 
           <app-grid-responsive [colsMd]="3" [colsLg]="4" gap="sm">
             @for (recipe of randomRecipes(); track $index) {
