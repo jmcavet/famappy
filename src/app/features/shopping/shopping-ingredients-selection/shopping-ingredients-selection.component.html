@@ -31,13 +31,14 @@
 
       <app-section>
         <app-stack variant="section">
-          <app-grid col1="max" col2="1" col3="max" gapX="md" gapY="lg">
+          <app-grid col1="1" col2="1" col3="max" gapX="md" gapY="lg">
             @for (
               ing of ingredientsSelectedSorted();
               track $index;
               let i = $index
             ) {
               <span
+                class="min-w-0 truncate"
                 [ngClass]="
                   ingredientsDisabled().includes(ing.id)
                     ? 'color-text-muted line-through'
