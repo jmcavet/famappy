@@ -59,10 +59,7 @@ export class ShoppingFacade {
       const shoppingListNames = this.shoppingListsNames();
       const selectedShoppingListName = this.shoppingListNameSelected();
 
-      if (
-        shoppingListNames.length > 0 &&
-        !shoppingListNames.includes(selectedShoppingListName ?? '')
-      ) {
+      if (shoppingListNames.length > 0 && !selectedShoppingListName) {
         this.shoppingService.saveShoppingListSelection(shoppingListNames[0]);
       }
 
@@ -365,6 +362,10 @@ export class ShoppingFacade {
    * State Projections (expose internal state)
    * ════════════════════════════════ */
   readonly shoppingListNameSelected = computed(() => {
+    console.log(
+      'UPDATE LIST: ',
+      this.shoppingService.state().shoppingListNameSelected,
+    );
     return this.shoppingService.state().shoppingListNameSelected;
   });
 
