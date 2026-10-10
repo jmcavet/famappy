@@ -1,4 +1,11 @@
-import { inject, Injectable, signal, computed, effect } from '@angular/core';
+import {
+  inject,
+  Injectable,
+  signal,
+  computed,
+  effect,
+  untracked,
+} from '@angular/core';
 import { RecipeWithId } from '../../recipes/components/recipe-card/recipe.model';
 import { IngredientDomainFacade } from '../../../domain-facades/ingredient.facade';
 import { IngredientCategoryDomainFacade } from '../../../domain-facades/ingredientCategory.facade';
@@ -65,6 +72,12 @@ export class ShoppingIngredientsSelectionFacade {
         this.shoppingService.initialiseMeasures(measures);
 
         this.initialMeasures.set(measures);
+      }
+
+      // Once the first category has been identified, trigger the function that displays its available ingredients
+      const category = this.ingredientCategoryNameSelected();
+      if (category) {
+        untracked(() => this.toggleIngredientCategory(category));
       }
     });
   }
@@ -362,10 +375,6 @@ export class ShoppingIngredientsSelectionFacade {
 
     return fromDb;
   };
-
-  logWholeState() {
-    console.log('WHOLE STATE: ', this.shoppingService.state());
-  }
 
   /* ════════════════════════════════
    * Private Helpers
