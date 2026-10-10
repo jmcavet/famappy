@@ -66,8 +66,4 @@ export class ShoppingIngredientsSelectionComponent {
   disableIngredient(ingredientId: string) {
     this.facade.disableIngredient(ingredientId);
   }
-
-  logWholeState() {
-    this.facade.logWholeState();
-  }
 }
