@@ -12,6 +12,7 @@ import { MealBackendService } from '../../../../services/backend/meal.service';
 import { CalendarDay } from '../calendar/calendar.facade';
 import { MealType, MealWithId } from '../../state/mealCart.model';
 import { ModalService } from '../../../../shared/layout/overlays/modal/modal.service';
+import { IngredientDocInBackend } from '../../../../models/ingredient.model';
 
 @Injectable({ providedIn: 'root' })
 export class ManualEntryFacade {
@@ -76,13 +77,14 @@ export class ManualEntryFacade {
   public mealDescription = signal('');
   public ingredients = signal<{ name: string; fromDb: boolean }[]>([]);
   public ingredientSearched = signal('');
-  public suggestedIngredients = signal<string[]>([]);
+  public suggestedIngredients = signal<IngredientDocInBackend[]>([]);
   public ingredientFromDb = signal<boolean>(false);
   public instructions = signal<string[]>([]);
   public instruction = signal('');
   public createAnother = signal(false);
-
   private wasModalPreviouslyOpen = false;
+
+  readonly measures = signal<{ id: string; measure: number }[]>([]);
 
   /* ================================
    * Computed signals
@@ -95,19 +97,19 @@ export class ManualEntryFacade {
    * ================================ */
 
   /** Private methods */
-  private onIngredientChanged(value: string) {
-    if (value.length < 3) {
+  private onIngredientChanged(ingredientSearched: string) {
+    if (ingredientSearched.length < 3) {
       this.suggestedIngredients.update(() => []);
       return;
     }
 
-    const ingredientsFound = this.dbIngredientsNames().filter(
-      (ingredientName) => {
-        return ingredientName.toLowerCase().includes(value.toLowerCase());
-      },
+    const ingredientsFoundTest = this.dbIngredients().filter((ing) =>
+      ing.name.toLowerCase().includes(ingredientSearched.toLowerCase()),
     );
 
-    this.suggestedIngredients.update(() => ingredientsFound);
+    if (ingredientsFoundTest) {
+      this.suggestedIngredients.update(() => ingredientsFoundTest);
+    }
   }
 
   /** Public UI methods */
@@ -147,6 +149,44 @@ export class ManualEntryFacade {
 
   public removeInstruction(index: number) {
     this.instructions.update((arr) => arr.filter((el, i) => i !== index));
+  }
+
+  public changeMeasure(
+    ingredientId: string,
+    ingredientUnit: string | null,
+    value: 'decr' | 'incr',
+  ) {
+    this.suggestedIngredients.update((ingredients) =>
+      ingredients.map((ingredient) => {
+        if (ingredient.id !== ingredientId) return ingredient;
+
+        let newMeasure;
+        const refMeasure =
+          this.dbIngredients().find((ing) => ing.id === ingredientId)
+            ?.measure ?? 0;
+
+        console.log('refMeasure: ', refMeasure);
+
+        if (ingredientUnit === null) {
+          newMeasure =
+            value === 'decr' ? ingredient.measure - 1 : ingredient.measure + 1;
+        } else {
+          if (value === 'decr' && ingredient.measure !== 0) {
+            newMeasure = Math.max(
+              0,
+              Math.ceil(ingredient.measure / refMeasure) * refMeasure -
+                refMeasure,
+            );
+          } else {
+            newMeasure =
+              Math.floor(ingredient.measure / refMeasure) * refMeasure +
+              refMeasure;
+          }
+        }
+
+        return { ...ingredient, measure: newMeasure };
+      }),
+    );
   }
 
   public async onConfirm() {

@@ -52,13 +52,35 @@
           </app-inline>
 
           @for (suggestedIngredient of suggestedIngredients(); track $index) {
-            <div class="inset-x-md">
-              <app-button
-                variant="ghost"
-                color="neutral"
-                (clicked)="selectSuggestedIngredient(suggestedIngredient)"
-                >{{ suggestedIngredient }}</app-button
-              >
+            <div
+              class="surface-2 surface-interactive inset-xs w-full rounded"
+              (click)="selectSuggestedIngredient(suggestedIngredient.name)"
+            >
+              <app-row>
+                <app-button
+                  variant="ghost"
+                  color="neutral"
+                  (clicked)="
+                    selectSuggestedIngredient(suggestedIngredient.name)
+                  "
+                  >{{ suggestedIngredient.name }}</app-button
+                >
+                <div class="w-48">
+                  <app-measure-control
+                    [measure]="suggestedIngredient.measure"
+                    [unit]="suggestedIngredient.unit"
+                    [surface]="1"
+                    (measureChange)="
+                      onMeasuresChange(
+                        suggestedIngredient.id,
+                        suggestedIngredient.unit,
+                        $event
+                      )
+                    "
+                    (click)="$event.stopPropagation()"
+                  />
+                </div>
+              </app-row>
             </div>
           }
 

@@ -9,6 +9,7 @@ import { SectionComponent } from '../../../../shared/layout/primitives/section.c
 import { StackComponent } from '../../../../shared/layout/primitives/stack.component';
 import { RowComponent } from '../../../../shared/layout/primitives/row.component';
 import { InlineComponent } from '../../../../shared/layout/primitives/inline.component';
+import { MeasureControlComponent } from '../../../shopping/components/measure-control/measure-control.component';
 
 @Component({
   selector: 'app-manual-entry',
@@ -19,6 +20,7 @@ import { InlineComponent } from '../../../../shared/layout/primitives/inline.com
     RowComponent,
     InlineComponent,
     ButtonComponent,
+    MeasureControlComponent,
   ],
   templateUrl: './manual-entry.component.html',
   styleUrl: './manual-entry.component.css',
@@ -62,6 +64,14 @@ export class ManualEntryComponent {
 
   selectSuggestedIngredient(suggestedIngredient: string) {
     this.facade.selectSuggestedIngredient(suggestedIngredient);
+  }
+
+  onMeasuresChange(
+    ingredientId: string,
+    ingredientUnit: string | null,
+    value: 'decr' | 'incr',
+  ) {
+    this.facade.changeMeasure(ingredientId, ingredientUnit, value);
   }
 
   toggleCreateAnother() {
