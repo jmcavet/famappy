@@ -1,4 +1,11 @@
-import { Component, computed, inject, signal } from '@angular/core';
+import {
+  Component,
+  computed,
+  ElementRef,
+  inject,
+  signal,
+  ViewChild,
+} from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { LoadingComponent } from '../../../shared/layout/overlays/loading/loading.component';
 import { HeaderShellComponent } from '../../../shared/layout/shell/header-shell.component';
@@ -44,6 +51,13 @@ export class ShoppingListDefinitionComponent {
   public shoppingListTitle = signal('');
 
   dataIsLoading = computed(() => false);
+
+  @ViewChild('autoFocusInput') inputRef!: ElementRef<HTMLInputElement>;
+
+  ngAfterViewChecked() {
+    // Focus the input. SetTimeout avoids timing issues when rendering elements
+    setTimeout(() => this.inputRef?.nativeElement?.focus());
+  }
 
   async addShoppingList() {
     // Kepp only ingredients that have a measure != 0
