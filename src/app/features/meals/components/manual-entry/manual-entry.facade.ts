@@ -1,5 +1,4 @@
 import {
-  computed,
   effect,
   ElementRef,
   inject,
@@ -75,8 +74,17 @@ export class ManualEntryFacade {
    * Component inputs (UI context)
    * ================================ */
   public mealDescription = signal('');
-  public ingredients = signal<{ name: string; fromDb: boolean }[]>([]);
-  public ingredientSearched = signal('');
+  public ingredients = signal<
+    {
+      name: string;
+      measure: number | null;
+      unit: string | null;
+      fromDb: boolean;
+    }[]
+  >([]);
+  public ingredientSearched = signal<string>('');
+  private measure = signal<number | null>(null);
+  private unit = signal<string | null>(null);
   public suggestedIngredients = signal<IngredientDocInBackend[]>([]);
   public ingredientFromDb = signal<boolean>(false);
   public instructions = signal<string[]>([]);
@@ -103,20 +111,26 @@ export class ManualEntryFacade {
       return;
     }
 
-    const ingredientsFoundTest = this.dbIngredients().filter((ing) =>
+    const ingredientsFound = this.dbIngredients().filter((ing) =>
       ing.name.toLowerCase().includes(ingredientSearched.toLowerCase()),
     );
 
-    if (ingredientsFoundTest) {
-      this.suggestedIngredients.update(() => ingredientsFoundTest);
+    if (ingredientsFound) {
+      this.suggestedIngredients.update(() => ingredientsFound);
     }
   }
 
   /** Public UI methods */
-  public selectSuggestedIngredient(suggestedIngredient: string) {
-    this.ingredientSearched.set(suggestedIngredient);
+  public selectSuggestedIngredient(
+    suggestedIngredient: IngredientDocInBackend,
+  ) {
+    this.ingredientSearched.set(suggestedIngredient.name);
+    this.measure.set(suggestedIngredient.measure);
+    this.unit.set(suggestedIngredient.unit);
     this.ingredientFromDb.update(() => true);
     this.addIngredient();
+
+    // Reset
     this.suggestedIngredients.update(() => []);
     this.ingredientSearched.update(() => '');
 
@@ -131,10 +145,17 @@ export class ManualEntryFacade {
   public addIngredient() {
     this.ingredients.update((previous) => [
       ...previous,
-      { name: this.ingredientSearched(), fromDb: this.ingredientFromDb() },
+      {
+        name: this.ingredientSearched(),
+        measure: this.measure(),
+        unit: this.unit(),
+        fromDb: this.ingredientFromDb(),
+      },
     ]);
 
     this.ingredientSearched.update(() => '');
+    this.measure.set(null);
+    this.unit.set('');
   }
 
   public removeIngredient(index: number) {
@@ -164,8 +185,6 @@ export class ManualEntryFacade {
         const refMeasure =
           this.dbIngredients().find((ing) => ing.id === ingredientId)
             ?.measure ?? 0;
-
-        console.log('refMeasure: ', refMeasure);
 
         if (ingredientUnit === null) {
           newMeasure =

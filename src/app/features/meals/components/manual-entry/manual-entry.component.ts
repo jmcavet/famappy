@@ -10,6 +10,7 @@ import { StackComponent } from '../../../../shared/layout/primitives/stack.compo
 import { RowComponent } from '../../../../shared/layout/primitives/row.component';
 import { InlineComponent } from '../../../../shared/layout/primitives/inline.component';
 import { MeasureControlComponent } from '../../../shopping/components/measure-control/measure-control.component';
+import { IngredientDocInBackend } from '../../../../models/ingredient.model';
 
 @Component({
   selector: 'app-manual-entry',
@@ -62,7 +63,7 @@ export class ManualEntryComponent {
     this.facade.ngAfterViewChecked(this.inputRef);
   }
 
-  selectSuggestedIngredient(suggestedIngredient: string) {
+  selectSuggestedIngredient(suggestedIngredient: IngredientDocInBackend) {
     this.facade.selectSuggestedIngredient(suggestedIngredient);
   }
 
