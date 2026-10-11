@@ -47,7 +47,6 @@ export class ManualEntryComponent {
   ingredientSearched = this.facade.ingredientSearched;
   suggestedIngredients = this.facade.suggestedIngredients;
   dbIngredientsNames = this.facade.dbIngredientsNames;
-  ingredientFromDb = this.facade.ingredientFromDb;
 
   instructions = this.facade.instructions;
   instruction = this.facade.instruction;

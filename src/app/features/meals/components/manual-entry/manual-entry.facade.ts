@@ -79,14 +79,12 @@ export class ManualEntryFacade {
       name: string;
       measure: number | null;
       unit: string | null;
-      fromDb: boolean;
     }[]
   >([]);
   public ingredientSearched = signal<string>('');
   private measure = signal<number | null>(null);
   private unit = signal<string | null>(null);
   public suggestedIngredients = signal<IngredientDocInBackend[]>([]);
-  public ingredientFromDb = signal<boolean>(false);
   public instructions = signal<string[]>([]);
   public instruction = signal('');
   public createAnother = signal(false);
@@ -127,15 +125,11 @@ export class ManualEntryFacade {
     this.ingredientSearched.set(suggestedIngredient.name);
     this.measure.set(suggestedIngredient.measure);
     this.unit.set(suggestedIngredient.unit);
-    this.ingredientFromDb.update(() => true);
     this.addIngredient();
 
     // Reset
     this.suggestedIngredients.update(() => []);
     this.ingredientSearched.update(() => '');
-
-    // Reset to default (false)
-    this.ingredientFromDb.update(() => false);
   }
 
   public toggleCreateAnother() {
@@ -149,7 +143,6 @@ export class ManualEntryFacade {
         name: this.ingredientSearched(),
         measure: this.measure(),
         unit: this.unit(),
-        fromDb: this.ingredientFromDb(),
       },
     ]);
 
@@ -244,7 +237,7 @@ export class ManualEntryFacade {
         cookId,
         manualRecipe: {
           name: this.mealDescription(),
-          ingredients: this.ingredients().map((ing) => ing.name),
+          ingredients: this.ingredients(),
           instructions: this.instructions(),
         },
       };
