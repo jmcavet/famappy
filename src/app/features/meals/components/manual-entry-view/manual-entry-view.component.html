@@ -1,8 +1,6 @@
 <app-section [surface]="3">
   <app-stack variant="page">
-    <h1 class="text-headline font-roboto text-center">
-      {{ name() }}
-    </h1>
+    <h1 class="text-headline font-roboto text-center">{{ name() }}</h1>
 
     <app-section [surface]="2" [shadow]="false">
       <app-stack variant="section">
@@ -11,9 +9,23 @@
         <app-row>
           <app-inline [wrap]="true">
             @for (ingredient of ingredients(); track ingredient) {
-              <app-tag variant="outline" color="neutral">{{
-                ingredient
-              }}</app-tag>
+              <app-tag variant="outline" color="neutral" size="sm">
+                <app-inline gap="sm">
+                  <span>{{ ingredient.name }}</span>
+                  @if (ingredient.measure) {
+                    @if (ingredient.unit) {
+                      <app-inline gap="xs" class="color-text-subtle">
+                        <span>({{ ingredient.measure }}</span>
+                        <span>{{ ingredient.unit }})</span>
+                      </app-inline>
+                    } @else {
+                      <span class="color-text-subtle"
+                        >({{ ingredient.measure }})</span
+                      >
+                    }
+                  }
+                </app-inline>
+              </app-tag>
             }
           </app-inline>
         </app-row>

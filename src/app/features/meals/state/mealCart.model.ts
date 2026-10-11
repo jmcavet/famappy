@@ -11,7 +11,12 @@ export interface MealDocInBackend {
   cookId: string | null;
   manualRecipe: {
     name: string;
-    ingredients: string[];
+    // ingredients: string[];
+    ingredients: {
+      name: string;
+      measure: number | null;
+      unit: string | null;
+    }[];
     instructions: string[];
   } | null;
 }
@@ -29,7 +34,12 @@ export interface Meal {
   cookId: string | null;
   manualRecipe: {
     name: string;
-    ingredients: string[];
+    // ingredients: string[];
+    ingredients: {
+      name: string;
+      measure: number | null;
+      unit: string | null;
+    }[];
     instructions: string[];
   } | null;
 }

@@ -207,7 +207,11 @@ export class HomeComponent {
 
   public viewManualRecipe(manualRecipe: {
     name: string;
-    ingredients: string[];
+    ingredients: {
+      name: string;
+      measure: number | null;
+      unit: string | null;
+    }[];
     instructions: string[];
   }) {
     const { name, ingredients, instructions } = manualRecipe;

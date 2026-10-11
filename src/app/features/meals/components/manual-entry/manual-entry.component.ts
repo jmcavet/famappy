@@ -9,6 +9,8 @@ import { SectionComponent } from '../../../../shared/layout/primitives/section.c
 import { StackComponent } from '../../../../shared/layout/primitives/stack.component';
 import { RowComponent } from '../../../../shared/layout/primitives/row.component';
 import { InlineComponent } from '../../../../shared/layout/primitives/inline.component';
+import { MeasureControlComponent } from '../../../shopping/components/measure-control/measure-control.component';
+import { IngredientDocInBackend } from '../../../../models/ingredient.model';
 
 @Component({
   selector: 'app-manual-entry',
@@ -19,6 +21,7 @@ import { InlineComponent } from '../../../../shared/layout/primitives/inline.com
     RowComponent,
     InlineComponent,
     ButtonComponent,
+    MeasureControlComponent,
   ],
   templateUrl: './manual-entry.component.html',
   styleUrl: './manual-entry.component.css',
@@ -44,7 +47,6 @@ export class ManualEntryComponent {
   ingredientSearched = this.facade.ingredientSearched;
   suggestedIngredients = this.facade.suggestedIngredients;
   dbIngredientsNames = this.facade.dbIngredientsNames;
-  ingredientFromDb = this.facade.ingredientFromDb;
 
   instructions = this.facade.instructions;
   instruction = this.facade.instruction;
@@ -60,8 +62,16 @@ export class ManualEntryComponent {
     this.facade.ngAfterViewChecked(this.inputRef);
   }
 
-  selectSuggestedIngredient(suggestedIngredient: string) {
+  selectSuggestedIngredient(suggestedIngredient: IngredientDocInBackend) {
     this.facade.selectSuggestedIngredient(suggestedIngredient);
+  }
+
+  onMeasuresChange(
+    ingredientId: string,
+    ingredientUnit: string | null,
+    value: 'decr' | 'incr',
+  ) {
+    this.facade.changeMeasure(ingredientId, ingredientUnit, value);
   }
 
   toggleCreateAnother() {

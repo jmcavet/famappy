@@ -52,19 +52,36 @@
           </app-inline>
 
           @for (suggestedIngredient of suggestedIngredients(); track $index) {
-            <div class="inset-x-md">
-              <app-button
-                variant="ghost"
-                color="neutral"
-                (clicked)="selectSuggestedIngredient(suggestedIngredient)"
-                >{{ suggestedIngredient }}</app-button
-              >
+            <div
+              class="surface-2 surface-interactive inset-xs w-full rounded"
+              (click)="selectSuggestedIngredient(suggestedIngredient)"
+            >
+              <app-row>
+                <app-button variant="ghost" color="neutral">{{
+                  suggestedIngredient.name
+                }}</app-button>
+                <div class="w-48">
+                  <app-measure-control
+                    [measure]="suggestedIngredient.measure"
+                    [unit]="suggestedIngredient.unit"
+                    [surface]="1"
+                    (measureChange)="
+                      onMeasuresChange(
+                        suggestedIngredient.id,
+                        suggestedIngredient.unit,
+                        $event
+                      )
+                    "
+                    (click)="$event.stopPropagation()"
+                  />
+                </div>
+              </app-row>
             </div>
           }
 
           @for (ingredient of ingredients(); track $index) {
             <div class="w-full surface-2 inset-inline-sm">
-              <app-inline>
+              <!-- <app-inline>
                 <span class="flex-1">{{ ingredient.name }}</span>
                 @if (ingredient.fromDb) {
                   <i class="fa-solid fa-utensils"></i>
@@ -76,7 +93,30 @@
                   (clicked)="removeIngredient($index)"
                   ><i class="fa-regular fa-trash-can text-xl"></i
                 ></app-button>
-              </app-inline>
+              </app-inline> -->
+              <app-row>
+                <app-inline>
+                  <span>{{ ingredient.name }}</span>
+                  <app-inline gap="xs">
+                    <span class="flex-1 color-text-subtle">{{
+                      ingredient.measure
+                    }}</span>
+                    <span class="flex-1 color-text-subtle">{{
+                      ingredient.unit
+                    }}</span>
+                  </app-inline>
+                  <!-- @if (ingredient.fromDb) {
+                    <i class="fa-solid fa-utensils"></i>
+                  } -->
+                </app-inline>
+                <app-button
+                  variant="ghost"
+                  size="sm"
+                  color="danger"
+                  (clicked)="removeIngredient($index)"
+                  ><i class="fa-regular fa-trash-can text-xl"></i
+                ></app-button>
+              </app-row>
             </div>
           }
         </app-stack>
