@@ -1,4 +1,4 @@
-import { Component, inject, effect, computed, Signal } from '@angular/core';
+import { Component, inject, computed, Signal } from '@angular/core';
 import { StackComponent } from '../../shared/layout/primitives/stack.component';
 import { LoadingComponent } from '../../shared/layout/overlays/loading/loading.component';
 import { PageLayoutComponent } from '../../shared/layout/primitives/page-layout.component';
@@ -20,6 +20,7 @@ import { RowComponent } from '../../shared/layout/primitives/row.component';
 import { c } from '../../../../node_modules/@angular/cdk/a11y-module.d-DBHGyKoh';
 import { HighlightMatchPipe } from '../../shared/pipes/highlight-match.pipe';
 import { MeasureControlComponent } from './components/measure-control/measure-control.component';
+import { ModalInputShoppingCategoryComponent } from './modal-input-shopping-category/modal-input-shopping-category.component';
 
 @Component({
   selector: 'app-shopping',
@@ -39,21 +40,13 @@ import { MeasureControlComponent } from './components/measure-control/measure-co
     MeasureControlComponent,
     LoadingComponent,
     HighlightMatchPipe,
+    ModalInputShoppingCategoryComponent,
   ],
   templateUrl: './shopping.component.html',
   styleUrl: './shopping.component.css',
 })
 export class ShoppingComponent {
   private shoppingFacade = inject(ShoppingFacade);
-
-  constructor() {
-    effect(() => {
-      console.log(
-        'shoppingListNameSelected in shopping:',
-        this.shoppingListNameSelected(),
-      );
-    });
-  }
 
   dataIsLoading = this.shoppingFacade.dataIsLoading;
 
@@ -90,6 +83,9 @@ export class ShoppingComponent {
 
   readonly methods = this.shoppingFacade.methods;
   readonly methodSelected = this.shoppingFacade.methodSelected;
+  readonly test123 = computed(
+    () => this.methodSelected() === this.methods[1],
+  );
 
   readonly quickEntryItem = this.shoppingFacade.quickEntryItem;
   readonly ingredientsFound = this.shoppingFacade.ingredientsFound;

@@ -21,6 +21,7 @@ export class SegmentedControlComponent<T extends string> {
   options = input.required<T[]>();
   hasBadge = input<boolean>(false);
   badgeValues = input<number[]>([]);
+  selectionControlled = input<boolean>(false);
 
   // initial selected value from parent
   selectedInput = input<T | null>(null);
@@ -62,7 +63,9 @@ export class SegmentedControlComponent<T extends string> {
   }
 
   select(option: T) {
-    this.selected.set(option);
+    if (!this.selectionControlled()) {
+      this.selected.set(option);
+    }
     this.selectionChange.emit(option);
   }
 }

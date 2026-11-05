@@ -18,6 +18,7 @@ import { ModalInputShoppingCategoryComponent } from './modal-input-shopping-cate
 import { ModalExportShoppingCategoryItemsComponent } from './modals/modal-export-shopping-category-items/modal-export-shopping-category-items.component';
 import { ShoppingCategoryItemsDomainFacade } from '../../domain-facades/shopping-category-items.facade';
 import { ModalUpdateShoppingCategoryItemsComponent } from './modals/modal-update-shopping-category-items/modal-update-shopping-category-items.component';
+import { ModalShoppingFavoritesComponent } from './modals/modal-shopping-favorites/modal-shopping-favorites.component';
 import { ShoppingQuickItemsDomainFacade } from '../../domain-facades/shopping-quick-items.facade';
 import {
   IngredientCategoryDocInBackend,
@@ -399,7 +400,7 @@ export class ShoppingFacade {
   /* ════════════════════════════════
    * Public API (UI actions)
    * ════════════════════════════════ */
-  methods = ['Quick entry', 'Ingredients', 'Categories'];
+  methods = ['Quick entry', 'Favorites', 'Categories'];
   sortings = ['Date', 'Category', 'Name'];
 
   public addQuickEntryItem() {
@@ -419,6 +420,13 @@ export class ShoppingFacade {
   }
 
   public toggleMethod(method: string) {
+    if (method === this.methods[1]) {
+      this.modalService.open(ModalShoppingFavoritesComponent, undefined, {
+        fullScreen: true,
+      });
+      return;
+    }
+
     this.shoppingService.saveMethodSelection(method);
   }
 

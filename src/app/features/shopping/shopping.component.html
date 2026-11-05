@@ -69,10 +69,12 @@
                 size="sm"
                 [options]="this.methods"
                 [selectedInput]="methodSelected()"
+                [selectionControlled]="true"
                 (selectionChange)="toggleMethod($event)"
               >
               </app-segmented-control>
 
+              <!-- QUICK ENTRY method -->
               @if (methodSelected() === this.methods[0]) {
                 <app-grid col1="1" col2="max" gapX="md" gapY="md">
                   <div class="w-full">
@@ -184,7 +186,8 @@
                   Name
                 </app-button>
               </div>
-              @if (methodSelected() === this.methods[1]) {}
+
+              <!-- CATEGORIES method -->
               @if (methodSelected() === this.methods[2]) {
                 <app-grid col1="max" col2="1" col3="max" gapX="sm" gapY="md">
                   <app-button

@@ -4,6 +4,7 @@ export interface ModalOptions {
   onConfirm?: (payload: any) => void;
   onCancel?: () => void;
   onClose?: () => void;
+  fullScreen?: boolean;
 }
 
 export interface ModalConfig {
@@ -12,6 +13,7 @@ export interface ModalConfig {
   onConfirm?: (result?: any) => void;
   onCancel?: (result?: any) => void;
   onClose?: (result?: any) => void;
+  fullScreen?: boolean;
 }
 
 @Injectable({
