@@ -7,7 +7,6 @@ import { Component, computed, input } from '@angular/core';
   host: {
     '[class]': 'hostClasses()',
   },
-  styles: [':host { display: content; }'],
 })
 export class StackComponent {
   variant = input<
