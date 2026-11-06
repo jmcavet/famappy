@@ -1,4 +1,4 @@
-import { Component, inject, Input } from '@angular/core';
+import { Component, inject, Input, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ButtonComponent } from '../../../../ui/button/button.component';
 import { ChipComponent } from '../../../../ui/chip/chip.component';
@@ -35,12 +35,15 @@ export class ModalEditIngredientComponent {
   unit: string | null = null;
   invalidMessage: string | undefined;
 
+  isFavorite = signal<boolean>(false);
+
   private modalService = inject(ModalService);
 
   ngOnInit(): void {
     this.name = this.ingredient.name;
     this.measure = this.ingredient.measure;
     this.unit = this.ingredient.unit || null;
+    this.isFavorite.set(this.ingredient.isFavorite);
   }
 
   onInputChange(value: string): void {
@@ -62,6 +65,10 @@ export class ModalEditIngredientComponent {
     if (this.measure === null) this.measure = 1;
   }
 
+  toggleFavorite() {
+    this.isFavorite.set(!this.isFavorite());
+  }
+
   onCancel(): void {
     this.modalService.cancel();
   }
@@ -81,6 +88,7 @@ export class ModalEditIngredientComponent {
       name,
       measure: this.measure,
       unit: this.unit ?? '',
+      isFavorite: this.isFavorite(),
     });
   }
 }

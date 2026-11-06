@@ -96,6 +96,7 @@ export class ManageIngredientsComponent {
           name: string;
           measure: number;
           unit: string;
+          isFavorite: boolean;
         }) => {
           const updatedIngredient = { ...ingredient, ...changes };
           this.facade.updateIngredient(updatedIngredient);

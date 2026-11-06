@@ -170,6 +170,7 @@ export class ManageIngredientsFacade {
       name: ingredient.name,
       measure: ingredient.measure,
       unit: ingredient.unit,
+      isFavorite: ingredient.isFavorite,
     };
 
     this.ingredientDomainFacade.updateIngredient(
