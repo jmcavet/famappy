@@ -50,7 +50,14 @@
                 {{ ingredient.categoryName }}
               </span>
               <app-inline [wrap]="true" gap="xs" class="min-w-0">
-                <span class="min-w-0 break-words">{{ ingredient.name }}</span>
+                <app-inline gap="sm">
+                  @if (ingredient.isFavorite) {
+                    <i class="fa-solid fa-heart color-text-secondary"></i>
+                  } @else {
+                    <i class="fa-regular fa-heart color-text-subtle"></i>
+                  }
+                  <span class="min-w-0 break-words">{{ ingredient.name }}</span>
+                </app-inline>
                 <app-inline gap="xs" class="shrink-0 color-text-subtle">
                   <span>{{ ingredient.measure }}</span>
                   <span>{{ ingredient.unit }}</span>
