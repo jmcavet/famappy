@@ -40,6 +40,7 @@ export class ModalAddIngredientComponent {
   name = signal<string>('');
   measure = signal<number | null>(null);
   unit = signal<string | null>(null);
+  isFavorite = signal<boolean>(false);
 
   private modalService = inject(ModalService);
 
@@ -47,6 +48,10 @@ export class ModalAddIngredientComponent {
 
   onCancel() {
     this.modalService.cancel();
+  }
+
+  toggleFavorite() {
+    this.isFavorite.set(!this.isFavorite());
   }
 
   ngOnInit(): void {
@@ -83,6 +88,7 @@ export class ModalAddIngredientComponent {
       name: this.name(),
       measure: this.measure(),
       unit: this.unit(),
+      favorite: this.isFavorite(),
     });
   }
 }

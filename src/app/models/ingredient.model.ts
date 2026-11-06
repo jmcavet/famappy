@@ -23,6 +23,7 @@ export interface IngredientDocInBackend {
   categoryId: string;
   measure: number;
   unit: string;
+  favorite: boolean;
 }
 
 export interface IngredientCategoryDocInBackend {

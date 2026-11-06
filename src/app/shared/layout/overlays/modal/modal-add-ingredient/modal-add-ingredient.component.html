@@ -59,6 +59,17 @@
           [class.disabled]="unit() === null"
         />
       </app-stack>
+
+      <app-stack variant="compact">
+        <p class="color-text-muted">Favorite</p>
+        <a (click)="toggleFavorite()">
+          @if (isFavorite()) {
+            <i class="fa-solid fa-heart fa-2xl color-text-primary"></i>
+          } @else {
+            <i class="fa-regular fa-heart fa-2xl color-text-subtle"></i>
+          }
+        </a>
+      </app-stack>
     </app-stack>
 
     <app-row>

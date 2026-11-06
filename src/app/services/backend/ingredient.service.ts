@@ -62,6 +62,7 @@ export class IngredientBackendService {
   async saveIngredientIntoStore(propertiesToSave: object) {
     this._saving.set(true);
 
+    console.log('propertiesToSave: ', propertiesToSave);
     try {
       const docId = await this.firestoreService.saveDocumentIntoStore(
         'ingredients',

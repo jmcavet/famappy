@@ -62,21 +62,27 @@ export class IngredientAdderFacade {
         existingItems: this._ctx.existingIngredientNames(),
       },
       {
-        onConfirm: ({ name, measure, unit }) => {
+        onConfirm: ({ name, measure, unit, favorite }) => {
           (async () => {
-            await this.addIngredient(name, measure, unit);
+            await this.addIngredient(name, measure, unit, favorite);
           })();
         },
       },
     );
   }
 
-  async addIngredient(name: string, measure: number, unit: string) {
+  async addIngredient(
+    name: string,
+    measure: number,
+    unit: string,
+    isFavorite: boolean,
+  ) {
     const propertiesToSave = {
       categoryId: this.ingredientCategorySelected()?.id,
       name,
       measure,
       unit,
+      isFavorite,
     };
 
     this.ingredientDomainFacade.saveIngredient(propertiesToSave);
