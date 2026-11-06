@@ -28,6 +28,10 @@
     @apply text-primary dark:text-primary-dark;
   }
 
+  .color-text-secondary {
+    @apply text-secondary dark:text-secondary-dark;
+  }
+
   .color-text-link {
     @apply text-primary dark:text-primary-dark hover:text-primary/80 dark:hover:text-primary-dark/80 transition-colors;
   }
