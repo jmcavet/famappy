@@ -13,7 +13,37 @@
     </button>
   </header>
 
-  <main class="flex-1 overflow-y-auto"></main>
+  <main class="flex-1 overflow-y-auto">
+    <div class="sticky top-0 z-10 surface-1">
+      <app-stack>
+        <div
+          class="category-list-scroll inset-x-md inset-y-md min-w-0 overflow-x-hidden overflow-y-auto"
+        >
+          <app-inline class="w-full" gap="sm" [wrap]="true">
+            @for (
+              ingredientCategory of ingredientCategories();
+              track ingredientCategory.id
+            ) {
+              <app-chip
+                size="sm"
+                [selected]="categoryIdSelected() === ingredientCategory.id"
+                (toggle)="toggleSelection(ingredientCategory)"
+                >{{ ingredientCategory.name }}</app-chip
+              >
+            }
+          </app-inline>
+        </div>
+      </app-stack>
+    </div>
+    <app-stack>
+      @for (
+        ingredient of ingredientsPerCategorySelected();
+        track ingredient.id
+      ) {
+        <p class="text-2xl py-12 px-4">{{ ingredient.name }}</p>
+      }
+    </app-stack>
+  </main>
 
   <footer class="surface-2 inset-md">
     <app-row gap="md">

@@ -3,3 +3,21 @@
   max-width: 100vw;
   height: 95dvh;
 }
+
+.category-list-scroll {
+  --category-chip-row-height: 2rem;
+  --category-row-gap: 0.5rem;
+  --category-list-padding-y: 0.75rem;
+  box-sizing: border-box;
+  max-height: calc(
+    (3 * var(--category-chip-row-height)) +
+      (2 * var(--category-row-gap)) +
+      (2 * var(--category-list-padding-y))
+  );
+}
+
+@media (min-width: 768px) {
+  .category-list-scroll {
+    --category-list-padding-y: 1rem;
+  }
+}
