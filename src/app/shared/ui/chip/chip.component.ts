@@ -16,6 +16,7 @@ export class ChipComponent {
   @Input() fullWidth: false | true = false;
   @Input() selected: false | true = false;
   @Input() badgeCount: number = 0;
+  @Input() badgeColor: ChipColor = 'neutral';
   @Input() disabled: false | true = false;
   @Input() interactive: false | true = true;
 
@@ -48,5 +49,15 @@ export class ChipComponent {
     }
 
     return classes.join(' ');
+  }
+
+  get badgeClasses(): string {
+    const colorClasses: Record<ChipColor, string> = {
+      primary: 'bg-primary-500 dark:bg-primary-600',
+      secondary: 'bg-secondary-500 dark:bg-secondary-600',
+      neutral: 'bg-neutral-400 dark:bg-neutral-600',
+    };
+
+    return `absolute -top-2 -right-2 ${colorClasses[this.badgeColor]} text-white text-xs rounded-full min-w-5 h-5 px-1 flex items-center justify-center`;
   }
 }

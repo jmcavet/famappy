@@ -1,7 +1,7 @@
 <div
-  class="favorites-modal surface-1 flex flex-col overflow-hidden rounded-b-xl"
+  class="favorites-modal surface-0 flex flex-col overflow-hidden rounded-b-xl"
 >
-  <header class="surface-2 relative flex items-center justify-center inset-md">
+  <header class="surface-1 relative flex items-center justify-center inset-md">
     <h1 class="text-title text-center">Favorites</h1>
     <button
       type="button"
@@ -14,7 +14,7 @@
   </header>
 
   <main class="flex-1 overflow-y-auto">
-    <div class="sticky top-0 z-10 surface-1">
+    <div class="sticky top-0 z-10 surface-0">
       <app-stack>
         <div
           class="category-list-scroll inset-x-md inset-y-md min-w-0 overflow-x-hidden overflow-y-auto"
@@ -27,6 +27,10 @@
               <app-chip
                 size="sm"
                 [selected]="categoryIdSelected() === ingredientCategory.id"
+                [badgeCount]="
+                  selectedIngredientCountForCategory(ingredientCategory.id)
+                "
+                badgeColor="secondary"
                 (toggle)="toggleSelection(ingredientCategory)"
                 >{{ ingredientCategory.name }}</app-chip
               >
@@ -79,9 +83,7 @@
                 <app-measure-control
                   [measure]="measureFor(ingredient)"
                   [unit]="ingredient.unit"
-                  [disabled]="
-                    isIngredientAlreadyInShoppingList(ingredient.id)
-                  "
+                  [disabled]="isIngredientAlreadyInShoppingList(ingredient.id)"
                   (measureChange)="changeIngredientMeasure(ingredient, $event)"
                 />
               </div>
@@ -92,18 +94,36 @@
     </app-section>
   </main>
 
-  <footer class="surface-2 inset-md">
+  <footer class="surface-1 inset-md">
     <app-row gap="md">
       <app-button
         variant="outline"
         color="neutral"
         [fullWidth]="true"
+        class="basis-1/3"
         (clicked)="close()"
         >Cancel</app-button
       >
-      <app-button [fullWidth]="true" (clicked)="validate()"
-        >Validate</app-button
+      <app-button
+        [fullWidth]="true"
+        class="min-w-0 basis-2/3"
+        [disabled]="selectedFavoriteIngredientsCount() === 0"
+        [color]="
+          selectedFavoriteIngredientsCount() === 0 ? 'neutral' : 'primary'
+        "
+        (clicked)="validate()"
       >
+        @if (selectedFavoriteIngredientsCount() > 0) {
+          Export {{ selectedFavoriteIngredientsCount() }}
+          {{
+            selectedFavoriteIngredientsCount() === 1
+              ? "ingredient"
+              : "ingredients"
+          }}
+        } @else {
+          Export
+        }
+      </app-button>
     </app-row>
   </footer>
 </div>

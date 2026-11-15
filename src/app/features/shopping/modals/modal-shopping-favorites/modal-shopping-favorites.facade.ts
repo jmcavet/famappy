@@ -57,6 +57,9 @@ export class ModalShoppingFavoritesFacade {
   /** Internal signals */
   readonly categoryIdSelected = signal<string | null>(null);
   readonly selectedFavoriteIngredients = signal<string[]>([]);
+  readonly selectedFavoriteIngredientsCount = computed(
+    () => this.selectedFavoriteIngredients().length,
+  );
   readonly selectedFavoriteMeasures = linkedSignal(() =>
     (this.context()?.shoppingListIngredients() ?? []).reduce<
       Record<string, number>
@@ -129,6 +132,14 @@ export class ModalShoppingFavoritesFacade {
     });
   }
 
+  selectedIngredientCountForCategory(categoryId: string) {
+    const selectedIds = new Set(this.selectedFavoriteIngredients());
+
+    return this.ingredientsPerCategory(categoryId).filter((ingredient) =>
+      selectedIds.has(ingredient.id),
+    ).length;
+  }
+
   measureFor(ingredient: IngredientDocInBackend) {
     return this.selectedFavoriteMeasures()[ingredient.id] ?? ingredient.measure;
   }
@@ -184,5 +195,11 @@ export class ModalShoppingFavoritesFacade {
         );
       }
     });
+  }
+
+  private ingredientsPerCategory(categoryId: string) {
+    return this.dbIngredients().filter(
+      (ingredient) => ingredient.categoryId === categoryId && ingredient.isFavorite,
+    );
   }
 }

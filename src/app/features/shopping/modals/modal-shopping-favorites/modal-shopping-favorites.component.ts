@@ -50,6 +50,8 @@ export class ModalShoppingFavoritesComponent {
 
   categoryIdSelected = this.facade.categoryIdSelected;
   selectedFavoriteIngredients = this.facade.selectedFavoriteIngredients;
+  selectedFavoriteIngredientsCount =
+    this.facade.selectedFavoriteIngredientsCount;
 
   toggleSelection(category: IngredientCategoryDocInBackend) {
     this.facade.toggleSelection(category);
@@ -57,6 +59,10 @@ export class ModalShoppingFavoritesComponent {
 
   selectIngredient(ingredientId: string) {
     this.facade.selectIngredient(ingredientId);
+  }
+
+  selectedIngredientCountForCategory(categoryId: string) {
+    return this.facade.selectedIngredientCountForCategory(categoryId);
   }
 
   isIngredientAlreadyInShoppingList(ingredientId: string) {
