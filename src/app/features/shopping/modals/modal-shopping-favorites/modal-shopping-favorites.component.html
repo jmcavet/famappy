@@ -35,14 +35,44 @@
         </div>
       </app-stack>
     </div>
-    <app-stack>
-      @for (
-        ingredient of ingredientsPerCategorySelected();
-        track ingredient.id
-      ) {
-        <p class="text-2xl py-12 px-4">{{ ingredient.name }}</p>
-      }
-    </app-stack>
+    <app-section>
+      <app-stack variant="default">
+        @for (
+          ingredient of ingredientsPerCategorySelected();
+          track ingredient.id
+        ) {
+          <div
+            (click)="selectIngredient(ingredient.id)"
+            class="ingredient-item inset-inline-sm surface-2 surface-interactive"
+            [class.active]="
+              this.selectedFavoriteIngredients().includes(ingredient.id)
+            "
+          >
+            <app-row gap="md">
+              <div class="w-full">
+                <app-row>
+                  <span>{{ ingredient.name }}</span>
+                  @if (
+                    this.selectedFavoriteIngredients().includes(ingredient.id)
+                  ) {
+                    <i class="fa-solid fa-check color-text-secondary"></i>
+                  } @else {
+                    <i class="fa-regular fa-circle color-text-subtle"></i>
+                  }
+                </app-row>
+              </div>
+              <div>
+                <app-inline>
+                  <span>-</span>
+                  <span>1</span>
+                  <span>+</span>
+                </app-inline>
+              </div>
+            </app-row>
+          </div>
+        }
+      </app-stack>
+    </app-section>
   </main>
 
   <footer class="surface-2 inset-md">

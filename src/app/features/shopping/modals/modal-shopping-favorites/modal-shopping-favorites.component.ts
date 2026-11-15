@@ -6,6 +6,7 @@ import { StackComponent } from '../../../../shared/layout/primitives/stack.compo
 import { InlineComponent } from '../../../../shared/layout/primitives/inline.component';
 import { ChipComponent } from '../../../../shared/ui/chip/chip.component';
 import { IngredientCategoryDocInBackend } from '../../../../models/ingredient.model';
+import { SectionComponent } from '../../../../shared/layout/primitives/section.component';
 
 @Component({
   selector: 'app-modal-shopping-favorites',
@@ -13,6 +14,7 @@ import { IngredientCategoryDocInBackend } from '../../../../models/ingredient.mo
     ButtonComponent,
     RowComponent,
     StackComponent,
+    SectionComponent,
     InlineComponent,
     ChipComponent,
   ],
@@ -27,10 +29,16 @@ export class ModalShoppingFavoritesComponent {
   ingredientsPerCategorySelected = this.facade.ingredientsPerCategorySelected;
   categoryIdsWithFavoriteIngredients =
     this.facade.categoryIdsWithFavoriteIngredients;
+
   categoryIdSelected = this.facade.categoryIdSelected;
+  selectedFavoriteIngredients = this.facade.selectedFavoriteIngredients;
 
   toggleSelection(category: IngredientCategoryDocInBackend) {
     this.facade.toggleSelection(category);
+  }
+
+  selectIngredient(ingredientId: string) {
+    this.facade.selectIngredient(ingredientId);
   }
 
   close() {

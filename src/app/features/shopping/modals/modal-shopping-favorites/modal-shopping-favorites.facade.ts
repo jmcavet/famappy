@@ -37,6 +37,7 @@ export class ModalShoppingFavoritesFacade {
    * ================================ */
   /** Internal signals */
   readonly categoryIdSelected = signal<string | null>(null);
+  readonly selectedFavoriteIngredients = signal<string[]>([]);
 
   /* ================================
    * Computed signals
@@ -77,6 +78,20 @@ export class ModalShoppingFavoritesFacade {
 
   public toggleSelection(category: IngredientCategoryDocInBackend) {
     this.categoryIdSelected.set(category.id);
+  }
+
+  selectIngredient(ingredientId: string) {
+    console.log(
+      'selectedFavoriteIngredients',
+      this.selectedFavoriteIngredients(),
+    );
+    this.selectedFavoriteIngredients.update((currentSelected) => {
+      if (currentSelected.includes(ingredientId)) {
+        return currentSelected.filter((id) => id !== ingredientId);
+      } else {
+        return [...currentSelected, ingredientId];
+      }
+    });
   }
 
   close() {

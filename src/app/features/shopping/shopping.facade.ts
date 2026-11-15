@@ -363,10 +363,6 @@ export class ShoppingFacade {
    * State Projections (expose internal state)
    * ════════════════════════════════ */
   readonly shoppingListNameSelected = computed(() => {
-    console.log(
-      'UPDATE LIST: ',
-      this.shoppingService.state().shoppingListNameSelected,
-    );
     return this.shoppingService.state().shoppingListNameSelected;
   });
 
