@@ -5,8 +5,12 @@ import { ModalShoppingFavoritesFacade } from './modal-shopping-favorites.facade'
 import { StackComponent } from '../../../../shared/layout/primitives/stack.component';
 import { InlineComponent } from '../../../../shared/layout/primitives/inline.component';
 import { ChipComponent } from '../../../../shared/ui/chip/chip.component';
-import { IngredientCategoryDocInBackend } from '../../../../models/ingredient.model';
+import {
+  IngredientCategoryDocInBackend,
+  IngredientDocInBackend,
+} from '../../../../models/ingredient.model';
 import { SectionComponent } from '../../../../shared/layout/primitives/section.component';
+import { MeasureControlComponent } from '../../components/measure-control/measure-control.component';
 
 @Component({
   selector: 'app-modal-shopping-favorites',
@@ -17,6 +21,7 @@ import { SectionComponent } from '../../../../shared/layout/primitives/section.c
     SectionComponent,
     InlineComponent,
     ChipComponent,
+    MeasureControlComponent,
   ],
   providers: [ModalShoppingFavoritesFacade],
   templateUrl: './modal-shopping-favorites.component.html',
@@ -39,6 +44,17 @@ export class ModalShoppingFavoritesComponent {
 
   selectIngredient(ingredientId: string) {
     this.facade.selectIngredient(ingredientId);
+  }
+
+  measureFor(ingredient: IngredientDocInBackend) {
+    return this.facade.measureFor(ingredient);
+  }
+
+  changeIngredientMeasure(
+    ingredient: IngredientDocInBackend,
+    direction: 'decr' | 'incr',
+  ) {
+    this.facade.changeIngredientMeasure(ingredient, direction);
   }
 
   close() {

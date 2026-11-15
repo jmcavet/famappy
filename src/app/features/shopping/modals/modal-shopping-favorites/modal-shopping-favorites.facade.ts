@@ -2,7 +2,10 @@ import { computed, inject, Injectable, signal, effect } from '@angular/core';
 import { ModalService } from '../../../../shared/layout/overlays/modal/modal.service';
 import { IngredientDomainFacade } from '../../../../domain-facades/ingredient.facade';
 import { IngredientCategoryDomainFacade } from '../../../../domain-facades/ingredientCategory.facade';
-import { IngredientCategoryDocInBackend } from '../../../../models/ingredient.model';
+import {
+  IngredientCategoryDocInBackend,
+  IngredientDocInBackend,
+} from '../../../../models/ingredient.model';
 
 @Injectable()
 export class ModalShoppingFavoritesFacade {
@@ -38,6 +41,7 @@ export class ModalShoppingFavoritesFacade {
   /** Internal signals */
   readonly categoryIdSelected = signal<string | null>(null);
   readonly selectedFavoriteIngredients = signal<string[]>([]);
+  readonly selectedFavoriteMeasures = signal<Record<string, number>>({});
 
   /* ================================
    * Computed signals
@@ -81,10 +85,6 @@ export class ModalShoppingFavoritesFacade {
   }
 
   selectIngredient(ingredientId: string) {
-    console.log(
-      'selectedFavoriteIngredients',
-      this.selectedFavoriteIngredients(),
-    );
     this.selectedFavoriteIngredients.update((currentSelected) => {
       if (currentSelected.includes(ingredientId)) {
         return currentSelected.filter((id) => id !== ingredientId);
@@ -92,6 +92,30 @@ export class ModalShoppingFavoritesFacade {
         return [...currentSelected, ingredientId];
       }
     });
+  }
+
+  measureFor(ingredient: IngredientDocInBackend) {
+    return (
+      this.selectedFavoriteMeasures()[ingredient.id] ?? ingredient.measure
+    );
+  }
+
+  changeIngredientMeasure(
+    ingredient: IngredientDocInBackend,
+    direction: 'decr' | 'incr',
+  ) {
+    const currentMeasure = this.measureFor(ingredient);
+    const step =
+      ingredient.unit && ingredient.measure > 0 ? ingredient.measure : 1;
+    const nextMeasure =
+      direction === 'decr'
+        ? Math.max(0, currentMeasure - step)
+        : currentMeasure + step;
+
+    this.selectedFavoriteMeasures.update((measures) => ({
+      ...measures,
+      [ingredient.id]: nextMeasure,
+    }));
   }
 
   close() {

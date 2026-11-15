@@ -43,15 +43,15 @@
         ) {
           <div
             (click)="selectIngredient(ingredient.id)"
-            class="ingredient-item inset-inline-sm surface-2 surface-interactive"
+            class="ingredient-item inset-inline-xs surface-2 surface-interactive"
             [class.active]="
               this.selectedFavoriteIngredients().includes(ingredient.id)
             "
           >
-            <app-row gap="md">
-              <div class="w-full">
+            <div class="flex w-full min-w-0 items-center gap-4">
+              <div class="min-w-0 flex-1">
                 <app-row>
-                  <span>{{ ingredient.name }}</span>
+                  <span class="min-w-0 truncate">{{ ingredient.name }}</span>
                   @if (
                     this.selectedFavoriteIngredients().includes(ingredient.id)
                   ) {
@@ -61,14 +61,14 @@
                   }
                 </app-row>
               </div>
-              <div>
-                <app-inline>
-                  <span>-</span>
-                  <span>1</span>
-                  <span>+</span>
-                </app-inline>
+              <div class="shrink-0" (click)="$event.stopPropagation()">
+                <app-measure-control
+                  [measure]="measureFor(ingredient)"
+                  [unit]="ingredient.unit"
+                  (measureChange)="changeIngredientMeasure(ingredient, $event)"
+                />
               </div>
-            </app-row>
+            </div>
           </div>
         }
       </app-stack>
