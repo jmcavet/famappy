@@ -12,10 +12,15 @@ export interface ShoppingListWithIdAndDate extends ShoppingListWithId {
   dateCreated: string;
 }
 
+export interface ShoppingListIngredient {
+  id: string;
+  measure: number;
+}
+
 export interface ShoppingListDocInBackend {
   id: string;
   name: string;
   dateCreated: string;
-  ingredients: { id: string; measure: number }[];
+  ingredients: ShoppingListIngredient[];
   categoryItemIds: string[];
 }

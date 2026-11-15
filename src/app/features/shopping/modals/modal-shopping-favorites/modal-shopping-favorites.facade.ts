@@ -6,6 +6,7 @@ import {
   IngredientCategoryDocInBackend,
   IngredientDocInBackend,
 } from '../../../../models/ingredient.model';
+import { ShoppingListIngredient } from '../../../../models/shopping-list.model';
 
 @Injectable()
 export class ModalShoppingFavoritesFacade {
@@ -123,7 +124,18 @@ export class ModalShoppingFavoritesFacade {
   }
 
   validate() {
-    this.modalService.confirm();
+    const selectedIngredients = this.dbIngredients()
+      .filter((ingredient) =>
+        this.selectedFavoriteIngredients().includes(ingredient.id),
+      )
+      .map(
+        (ingredient): ShoppingListIngredient => ({
+          id: ingredient.id,
+          measure: this.measureFor(ingredient),
+        }),
+      );
+
+    this.modalService.confirm(selectedIngredients);
   }
 
   constructor() {

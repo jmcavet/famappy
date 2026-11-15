@@ -25,7 +25,10 @@ import {
   SortKey,
 } from '../../models/ingredient.model';
 import { ModalConfirmComponent } from '../../shared/layout/overlays/modal/modal-confirm/modal-confirm.component';
-import { ShoppingListDocInBackend } from '../../models/shopping-list.model';
+import {
+  ShoppingListDocInBackend,
+  ShoppingListIngredient,
+} from '../../models/shopping-list.model';
 import { ModalUpdateMeasureComponent } from '../../shared/layout/overlays/modal/modal-measure/modal-update-measure.component';
 import { sortIngredientSuggestions } from './ingredient-suggestion-sort';
 import { ToastService } from '../../services/toast.service';
@@ -419,6 +422,9 @@ export class ShoppingFacade {
     if (method === this.methods[1]) {
       this.modalService.open(ModalShoppingFavoritesComponent, undefined, {
         fullScreen: true,
+        onConfirm: (selectedIngredients: ShoppingListIngredient[]) => {
+          this.addFavoriteIngredientsToShoppingList(selectedIngredients);
+        },
       });
       return;
     }
@@ -848,6 +854,37 @@ export class ShoppingFacade {
     // Measures belong to the active search and must not carry over to the
     // next ingredient suggestion.
     this.measures.set([]);
+  }
+
+  private addFavoriteIngredientsToShoppingList(
+    selectedIngredients: ShoppingListIngredient[],
+  ) {
+    const shoppingListId = this.shoppingListSelected()?.id;
+    if (selectedIngredients.length === 0) return;
+    if (!shoppingListId) {
+      this.toastService.show('Select a shopping list first', 'error');
+      return;
+    }
+
+    const measuresByIngredient = new Map(
+      (this.shoppingListSelected()?.ingredients ?? []).map(
+        ({ id, measure }) => [id, measure] as const,
+      ),
+    );
+
+    for (const ingredient of selectedIngredients) {
+      measuresByIngredient.set(
+        ingredient.id,
+        (measuresByIngredient.get(ingredient.id) ?? 0) + ingredient.measure,
+      );
+    }
+
+    const mustPreserveState = signal<boolean>(false);
+    this.shoppingListDomainFacade.updateIngredientsInShoppingList(
+      shoppingListId,
+      Array.from(measuresByIngredient, ([id, measure]) => ({ id, measure })),
+      mustPreserveState,
+    );
   }
 
   public openUpdateQuickItemsModal(
