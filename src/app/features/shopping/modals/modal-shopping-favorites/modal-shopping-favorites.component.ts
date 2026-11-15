@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, input, Signal } from '@angular/core';
 import { ButtonComponent } from '../../../../shared/ui/button/button.component';
 import { RowComponent } from '../../../../shared/layout/primitives/row.component';
 import { ModalShoppingFavoritesFacade } from './modal-shopping-favorites.facade';
@@ -11,6 +11,11 @@ import {
 } from '../../../../models/ingredient.model';
 import { SectionComponent } from '../../../../shared/layout/primitives/section.component';
 import { MeasureControlComponent } from '../../components/measure-control/measure-control.component';
+import { ShoppingListIngredient } from '../../../../models/shopping-list.model';
+
+export interface ModalShoppingFavoritesContext {
+  shoppingListIngredients: Signal<ShoppingListIngredient[]>;
+}
 
 @Component({
   selector: 'app-modal-shopping-favorites',
@@ -30,6 +35,14 @@ import { MeasureControlComponent } from '../../components/measure-control/measur
 export class ModalShoppingFavoritesComponent {
   private readonly facade = inject(ModalShoppingFavoritesFacade);
 
+  shoppingListIngredients = input<ShoppingListIngredient[]>([]);
+
+  ngOnInit() {
+    this.facade.connect({
+      shoppingListIngredients: this.shoppingListIngredients,
+    });
+  }
+
   ingredientCategories = this.facade.ingredientCategories;
   ingredientsPerCategorySelected = this.facade.ingredientsPerCategorySelected;
   categoryIdsWithFavoriteIngredients =
@@ -44,6 +57,10 @@ export class ModalShoppingFavoritesComponent {
 
   selectIngredient(ingredientId: string) {
     this.facade.selectIngredient(ingredientId);
+  }
+
+  isIngredientAlreadyInShoppingList(ingredientId: string) {
+    return this.facade.isIngredientAlreadyInShoppingList(ingredientId);
   }
 
   measureFor(ingredient: IngredientDocInBackend) {

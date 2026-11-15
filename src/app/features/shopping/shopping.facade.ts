@@ -420,12 +420,19 @@ export class ShoppingFacade {
 
   public toggleMethod(method: string) {
     if (method === this.methods[1]) {
-      this.modalService.open(ModalShoppingFavoritesComponent, undefined, {
-        fullScreen: true,
-        onConfirm: (selectedIngredients: ShoppingListIngredient[]) => {
-          this.addFavoriteIngredientsToShoppingList(selectedIngredients);
+      this.modalService.open(
+        ModalShoppingFavoritesComponent,
+        {
+          shoppingListIngredients:
+            this.shoppingListSelected()?.ingredients ?? [],
         },
-      });
+        {
+          fullScreen: true,
+          onConfirm: (selectedIngredients: ShoppingListIngredient[]) => {
+            this.addFavoriteIngredientsToShoppingList(selectedIngredients);
+          },
+        },
+      );
       return;
     }
 

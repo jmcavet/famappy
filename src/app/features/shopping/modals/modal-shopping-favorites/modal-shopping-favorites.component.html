@@ -9,7 +9,7 @@
       class="surface-interactive absolute right-4 flex h-10 w-10 items-center justify-center rounded-full"
       (click)="close()"
     >
-      <i class="fa-solid fa-xmark" aria-hidden="true"></i>
+      <i class="fa-solid fa-xmark fa-xl" aria-hidden="true"></i>
     </button>
   </header>
 
@@ -43,7 +43,21 @@
         ) {
           <div
             (click)="selectIngredient(ingredient.id)"
-            class="ingredient-item inset-inline-xs surface-2 surface-interactive"
+            class="ingredient-item inset-inline-xs surface-2"
+            [class.surface-interactive]="
+              !isIngredientAlreadyInShoppingList(ingredient.id)
+            "
+            [class.already-in-shopping-list]="
+              isIngredientAlreadyInShoppingList(ingredient.id)
+            "
+            [attr.aria-disabled]="
+              isIngredientAlreadyInShoppingList(ingredient.id)
+            "
+            [title]="
+              isIngredientAlreadyInShoppingList(ingredient.id)
+                ? 'Already in the shopping list'
+                : null
+            "
             [class.active]="
               this.selectedFavoriteIngredients().includes(ingredient.id)
             "
@@ -65,6 +79,9 @@
                 <app-measure-control
                   [measure]="measureFor(ingredient)"
                   [unit]="ingredient.unit"
+                  [disabled]="
+                    isIngredientAlreadyInShoppingList(ingredient.id)
+                  "
                   (measureChange)="changeIngredientMeasure(ingredient, $event)"
                 />
               </div>

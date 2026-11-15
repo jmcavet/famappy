@@ -29,3 +29,7 @@
   @apply bg-primary-100/70 text-primary-800
            dark:bg-primary-400/30 dark:text-primary-50;
 }
+
+.ingredient-item.already-in-shopping-list {
+  @apply cursor-not-allowed text-neutral-500 opacity-60 dark:text-neutral-400;
+}
