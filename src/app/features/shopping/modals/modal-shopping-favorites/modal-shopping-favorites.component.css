@@ -10,8 +10,7 @@
   --category-list-padding-y: 0.75rem;
   box-sizing: border-box;
   max-height: calc(
-    (3 * var(--category-chip-row-height)) +
-      (2 * var(--category-row-gap)) +
+    (3 * var(--category-chip-row-height)) + (2 * var(--category-row-gap)) +
       (2 * var(--category-list-padding-y))
   );
 }
@@ -20,4 +19,16 @@
   .category-list-scroll {
     --category-list-padding-y: 1rem;
   }
+}
+
+.ingredient-item {
+  @apply w-full rounded-lg transform transition-all duration-200;
+}
+
+.ingredient-item.active {
+  @apply bg-primary/10 dark:bg-primary-dark/20;
+}
+
+.ingredient-item.already-in-shopping-list {
+  @apply cursor-not-allowed opacity-60;
 }

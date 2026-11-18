@@ -1,8 +1,20 @@
-import { computed, inject, Injectable, signal, effect } from '@angular/core';
+import {
+  computed,
+  effect,
+  inject,
+  Injectable,
+  linkedSignal,
+  signal,
+} from '@angular/core';
 import { ModalService } from '../../../../shared/layout/overlays/modal/modal.service';
 import { IngredientDomainFacade } from '../../../../domain-facades/ingredient.facade';
 import { IngredientCategoryDomainFacade } from '../../../../domain-facades/ingredientCategory.facade';
-import { IngredientCategoryDocInBackend } from '../../../../models/ingredient.model';
+import {
+  IngredientCategoryDocInBackend,
+  IngredientDocInBackend,
+} from '../../../../models/ingredient.model';
+import { ShoppingListIngredient } from '../../../../models/shopping-list.model';
+import type { ModalShoppingFavoritesContext } from './modal-shopping-favorites.component';
 
 @Injectable()
 export class ModalShoppingFavoritesFacade {
@@ -32,11 +44,36 @@ export class ModalShoppingFavoritesFacade {
   readonly ingredientCategoriesLoading =
     this.ingredientCategoryDomainFacade.ingredientCategoriesLoading;
 
+  private readonly context =
+    signal<ModalShoppingFavoritesContext | null>(null);
+
+  connect(context: ModalShoppingFavoritesContext) {
+    this.context.set(context);
+  }
+
   /* ================================
    * UI state (owned by this facade)
    * ================================ */
   /** Internal signals */
   readonly categoryIdSelected = signal<string | null>(null);
+  readonly selectedFavoriteIngredients = signal<string[]>([]);
+  readonly selectedFavoriteIngredientsCount = computed(
+    () => this.selectedFavoriteIngredients().length,
+  );
+  readonly selectedFavoriteMeasures = linkedSignal(() =>
+    (this.context()?.shoppingListIngredients() ?? []).reduce<
+      Record<string, number>
+    >((measures, ingredient) => {
+      measures[ingredient.id] = ingredient.measure;
+      return measures;
+    }, {}),
+  );
+  private readonly shoppingListIngredientIds = computed(
+    () =>
+      new Set(
+        this.context()?.shoppingListIngredients().map(({ id }) => id) ?? [],
+      ),
+  );
 
   /* ================================
    * Computed signals
@@ -79,12 +116,71 @@ export class ModalShoppingFavoritesFacade {
     this.categoryIdSelected.set(category.id);
   }
 
+  isIngredientAlreadyInShoppingList(ingredientId: string) {
+    return this.shoppingListIngredientIds().has(ingredientId);
+  }
+
+  selectIngredient(ingredientId: string) {
+    if (this.isIngredientAlreadyInShoppingList(ingredientId)) return;
+
+    this.selectedFavoriteIngredients.update((currentSelected) => {
+      if (currentSelected.includes(ingredientId)) {
+        return currentSelected.filter((id) => id !== ingredientId);
+      } else {
+        return [...currentSelected, ingredientId];
+      }
+    });
+  }
+
+  selectedIngredientCountForCategory(categoryId: string) {
+    const selectedIds = new Set(this.selectedFavoriteIngredients());
+
+    return this.ingredientsPerCategory(categoryId).filter((ingredient) =>
+      selectedIds.has(ingredient.id),
+    ).length;
+  }
+
+  measureFor(ingredient: IngredientDocInBackend) {
+    return this.selectedFavoriteMeasures()[ingredient.id] ?? ingredient.measure;
+  }
+
+  changeIngredientMeasure(
+    ingredient: IngredientDocInBackend,
+    direction: 'decr' | 'incr',
+  ) {
+    if (this.isIngredientAlreadyInShoppingList(ingredient.id)) return;
+
+    const currentMeasure = this.measureFor(ingredient);
+    const step =
+      ingredient.unit && ingredient.measure > 0 ? ingredient.measure : 1;
+    const nextMeasure =
+      direction === 'decr'
+        ? Math.max(0, currentMeasure - step)
+        : currentMeasure + step;
+
+    this.selectedFavoriteMeasures.update((measures) => ({
+      ...measures,
+      [ingredient.id]: nextMeasure,
+    }));
+  }
+
   close() {
     this.modalService.cancel();
   }
 
   validate() {
-    this.modalService.confirm();
+    const selectedIngredients = this.dbIngredients()
+      .filter((ingredient) =>
+        this.selectedFavoriteIngredients().includes(ingredient.id),
+      )
+      .map(
+        (ingredient): ShoppingListIngredient => ({
+          id: ingredient.id,
+          measure: this.measureFor(ingredient),
+        }),
+      );
+
+    this.modalService.confirm(selectedIngredients);
   }
 
   constructor() {
@@ -99,5 +195,11 @@ export class ModalShoppingFavoritesFacade {
         );
       }
     });
+  }
+
+  private ingredientsPerCategory(categoryId: string) {
+    return this.dbIngredients().filter(
+      (ingredient) => ingredient.categoryId === categoryId && ingredient.isFavorite,
+    );
   }
 }
