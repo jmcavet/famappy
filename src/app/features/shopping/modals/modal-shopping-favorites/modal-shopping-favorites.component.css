@@ -26,10 +26,9 @@
 }
 
 .ingredient-item.active {
-  @apply bg-primary-100/70 text-primary-800
-           dark:bg-primary-400/30 dark:text-primary-50;
+  @apply bg-primary/10 dark:bg-primary-dark/20;
 }
 
 .ingredient-item.already-in-shopping-list {
-  @apply cursor-not-allowed text-neutral-500 opacity-60 dark:text-neutral-400;
+  @apply cursor-not-allowed opacity-60;
 }
