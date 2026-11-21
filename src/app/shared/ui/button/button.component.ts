@@ -1,3 +1,4 @@
+import { NgTemplateOutlet } from '@angular/common';
 import { Component, HostBinding, input, output } from '@angular/core';
 
 type ButtonType = 'button' | 'submit' | 'reset';
@@ -19,6 +20,7 @@ type ButtonSize = 'xs' | 'sm' | 'md' | 'lg';
   selector: 'app-button',
   templateUrl: './button.component.html',
   styleUrl: './button.component.css',
+  imports: [NgTemplateOutlet],
 })
 export class ButtonComponent {
   type = input<ButtonType>('button');
@@ -29,6 +31,7 @@ export class ButtonComponent {
   disabled = input<boolean>(false);
   fullWidth = input<boolean>(false);
   shadow = input<boolean>(false);
+  href = input<string | undefined>();
 
   clicked = output<MouseEvent>();
 

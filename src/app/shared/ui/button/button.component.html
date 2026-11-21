@@ -1,10 +1,24 @@
+<ng-template #content>
+  <ng-content />
+</ng-template>
 <div [class.w-full]="fullWidth()">
-  <button
-    [attr.type]="type()"
-    [disabled]="disabled()"
-    [class]="classes"
-    (click)="onClick($event)"
-  >
-    <ng-content />
-  </button>
+  @if (href(); as linkHref) {
+    <a
+      [href]="linkHref"
+      [class]="classes"
+      [attr.aria-disabled]="disabled() ? 'true' : null"
+      [attr.tabindex]="disabled() ? -1 : null"
+    >
+      <ng-container [ngTemplateOutlet]="content" />
+    </a>
+  } @else {
+    <button
+      [attr.type]="type()"
+      [disabled]="disabled()"
+      [class]="classes"
+      (click)="onClick($event)"
+    >
+      <ng-container [ngTemplateOutlet]="content" />
+    </button>
+  }
 </div>
