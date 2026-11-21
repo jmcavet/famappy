@@ -3,15 +3,20 @@ import { Component, computed, input } from '@angular/core';
 @Component({
   selector: 'app-card',
   standalone: true,
-  template: `<div [class]="hostClasses()">
+  template: `<div [class]="hostClasses()" [class.h-full]="fullHeight()">
     <ng-content />
   </div>`,
+  host: {
+    '[class.block]': 'fullHeight()',
+    '[class.h-full]': 'fullHeight()',
+  },
 })
 export class CardComponent {
   surface = input<'0' | '1' | '2' | '3'>('1');
   inset = input<'none' | 'xs' | 'sm' | 'md' | 'lg' | 'xl'>('md');
   interactive = input<boolean>(false);
   activated = input<boolean>(false);
+  fullHeight = input<boolean>(false);
 
   hostClasses = computed(() => {
     return [
