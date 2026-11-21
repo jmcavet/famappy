@@ -1,44 +1,126 @@
-<h1 class="text-3xl mb-8 dark:text-white">Sign up for free</h1>
+<main class="surface-0 layout-row--center min-h-dvh px-4 py-8 sm:px-6">
+  <app-card class="w-full max-w-md" inset="lg">
+    <div class="layout-stack space-md">
+      <header class="text-center">
+        <h1 class="text-headline">Sign up for free</h1>
+        <p class="mt-2 text-body-sm color-text-muted">
+          Create your family account to start planning meals.
+        </p>
+      </header>
 
-<form
-  [formGroup]="form"
-  (ngSubmit)="onSubmit()"
-  class="flex flex-col items-center justify-between gap-8"
->
-  <input
-    type="text"
-    placeholder="Family Name"
-    formControlName="familyName"
-    class="p-2 w-full dark:bg-gray-800"
-  />
-  <input
-    type="text"
-    placeholder="Email"
-    formControlName="email"
-    class="p-2 w-full dark:bg-gray-800"
-  />
-  <input
-    type="password"
-    placeholder="Password"
-    formControlName="password"
-    class="p-2 w-full dark:bg-gray-800"
-  />
-  <button
-    class="bg-primary-600 text-white dark:bg-primary-500 px-4 py-2 w-full"
-    type="submit"
-  >
-    Sign up
-  </button>
-</form>
+      <form
+        [formGroup]="form"
+        (ngSubmit)="onSubmit()"
+        class="layout-stack space-md"
+        novalidate
+      >
+        <div class="layout-stack space-xs">
+          <label class="field-label" for="signup-family-name">Family name</label>
+          <input
+            id="signup-family-name"
+            type="text"
+            autocomplete="organization"
+            formControlName="familyName"
+            class="input surface-2 inset-x-md inset-y-sm w-full"
+            [attr.aria-invalid]="
+              form.controls.familyName.touched && form.controls.familyName.invalid
+            "
+            [attr.aria-describedby]="
+              form.controls.familyName.touched && form.controls.familyName.invalid
+                ? 'signup-family-name-error'
+                : null
+            "
+          />
+          @if (
+            form.controls.familyName.touched &&
+            form.controls.familyName.invalid
+          ) {
+            <small id="signup-family-name-error" class="error">
+              Enter a family name.
+            </small>
+          }
+        </div>
 
-@if (formErrors()) {
-<small class="error">
-  {{ formErrors() }}
-</small>
-}
+        <div class="layout-stack space-xs">
+          <label class="field-label" for="signup-email">Email</label>
+          <input
+            id="signup-email"
+            type="email"
+            autocomplete="email"
+            formControlName="email"
+            class="input surface-2 inset-x-md inset-y-sm w-full"
+            [attr.aria-invalid]="
+              form.controls.email.touched && form.controls.email.invalid
+            "
+            [attr.aria-describedby]="
+              form.controls.email.touched && form.controls.email.invalid
+                ? 'signup-email-error'
+                : null
+            "
+          />
+          @if (form.controls.email.touched && form.controls.email.invalid) {
+            <small id="signup-email-error" class="error">
+              Enter a valid email address.
+            </small>
+          }
+        </div>
 
-<div class="flex flex-col items-center">
+        <div class="layout-stack space-xs">
+          <label class="field-label" for="signup-password">Password</label>
+          <input
+            id="signup-password"
+            type="password"
+            autocomplete="new-password"
+            formControlName="password"
+            class="input surface-2 inset-x-md inset-y-sm w-full"
+            [attr.aria-invalid]="
+              form.controls.password.touched && form.controls.password.invalid
+            "
+            [attr.aria-describedby]="
+              form.controls.password.touched && form.controls.password.invalid
+                ? 'signup-password-error'
+                : null
+            "
+          />
+          @if (
+            form.controls.password.touched &&
+            form.controls.password.invalid
+          ) {
+            <small id="signup-password-error" class="error">
+              Enter a password.
+            </small>
+          }
+        </div>
+
+        @if (formErrors()) {
+          <small class="error" role="alert">
+            {{ formErrors() }}
+          </small>
+        }
+
+        <app-button
+          type="submit"
+          [fullWidth]="true"
+          [disabled]="isSigningUp()"
+          size="lg"
+        >
+          {{ isSigningUp() ? 'Signing up...' : 'Sign up' }}
+        </app-button>
+      </form>
+
+      <p class="text-center text-body-sm">
+        Already have an account?
+        <a
+          routerLink="/login"
+          class="font-medium text-primary-700 underline underline-offset-4 dark:text-primary-300"
+        >
+          Log in
+        </a>
+      </p>
+    </div>
+  </app-card>
+
   @if (isSigningUp()) {
-  <app-loading />
+    <app-loading />
   }
-</div>
+</main>
