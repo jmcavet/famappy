@@ -1,13 +1,21 @@
 import { Component, computed, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../services/backend/auth.service';
 import { FirebaseService } from '../../services/backend/firebase.service';
 import { LoadingComponent } from '../../shared/layout/overlays/loading/loading.component';
+import { CardComponent } from '../../shared/ui/card/card.component';
+import { ButtonComponent } from '../../shared/ui/button/button.component';
 
 @Component({
   selector: 'app-signup',
-  imports: [ReactiveFormsModule, LoadingComponent],
+  imports: [
+    ReactiveFormsModule,
+    RouterLink,
+    LoadingComponent,
+    CardComponent,
+    ButtonComponent,
+  ],
   templateUrl: './signup.component.html',
   styleUrl: './signup.component.css',
 })
@@ -26,11 +34,18 @@ export class SignupComponent {
 
   form = this.fb.nonNullable.group({
     familyName: ['', Validators.required],
-    email: ['', Validators.required],
+    email: ['', [Validators.required, Validators.email]],
     password: ['', Validators.required],
   });
 
   onSubmit() {
+    this.formErrors.set('');
+
+    if (this.form.invalid) {
+      this.form.markAllAsTouched();
+      return;
+    }
+
     const { email, password, familyName } = this.form.getRawValue();
 
     this.authService
