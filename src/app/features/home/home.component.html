@@ -2,52 +2,195 @@
   <app-header-shell>
     <app-section inset="xl" [surface]="1" [shadow]="false">
       <app-row>
-        <app-inline gap="lg">
+        <app-inline gap="xs">
+          <img
+            src="icons/icon-96x96.png"
+            srcset="
+              icons/icon-96x96.png 3x,
+              icons/icon-72x72.png 2x,
+              icons/icon-48x48.png 1x
+            "
+            alt="Famappy"
+            style="width: 32px; height: 32px; border-radius: 8px"
+          />
+          <span class="text-title"> Famappy</span>
+        </app-inline>
+        @if (user()) {
           <app-button
             variant="ghost"
             routerLink="/settings"
             routerLinkActive="active-link"
+            aria-label="Settings"
           >
             <i class="fa-solid fa-user fa-xl"></i>
           </app-button>
-          <app-inline gap="xs">
-            <img
-              src="icons/icon-96x96.png"
-              srcset="
-                icons/icon-96x96.png 3x,
-                icons/icon-72x72.png 2x,
-                icons/icon-48x48.png 1x
-              "
-              alt="Famappy"
-              style="width: 32px; height: 32px; border-radius: 8px"
-            />
-            <span class="text-title"> Famappy</span>
+        } @else if (!dataIsLoading()) {
+          <app-inline gap="sm">
+            <app-button size="sm" variant="outline" routerLink="/login"
+              >Log in</app-button
+            >
+            <app-button size="sm" routerLink="/signup">Sign up</app-button>
           </app-inline>
-        </app-inline>
-        <app-button variant="ghost">
-          <i class="fa-regular fa-bell fa-xl fa-beat"></i>
-        </app-button>
+        }
       </app-row>
     </app-section>
   </app-header-shell>
-  <app-page-layout>
+  <app-page-layout [maxSize]="user() ? 'md' : 'xl'">
     @if (dataIsLoading()) {
       <app-stack align="center">
         <app-loading />
       </app-stack>
     } @else if (!user()) {
-      <div class="flex-between mt-16 gap-4">
-        <app-button
-          [fullWidth]="true"
-          variant="outline"
-          size="lg"
-          routerLink="/login"
-          >Log in</app-button
+      <app-stack variant="page">
+        <section
+          aria-labelledby="welcome-heading"
+          class="grid gap-8 rounded-2xl surface-1 inset-lg md:grid-cols-2 md:items-center md:inset-xl"
         >
-        <app-button [fullWidth]="true" size="lg" routerLink="/signup"
-          >sign up</app-button
-        >
-      </div>
+          <div class="space-y-6">
+            <p class="text-meta color-text-primary">Welcome to Famappy</p>
+            <h1 id="welcome-heading" class="text-4xl font-bold tracking-tight">
+              Family meals, made easier.
+            </h1>
+            <p class="text-body-lg color-text-muted">
+              Plan meals, keep your favorite recipes together, and make the
+              shopping list as a family.
+            </p>
+            <app-inline gap="md" [wrap]="true">
+              <app-button size="lg" routerLink="/signup"
+                >Get started</app-button
+              >
+              <app-button
+                size="lg"
+                variant="outline"
+                href="#how-it-works"
+                >Explore</app-button
+              >
+            </app-inline>
+          </div>
+          <div
+            class="flex min-h-56 items-center justify-center rounded-xl bg-primary-100 p-6 dark:bg-primary-900"
+          >
+            <img
+              src="/illustrations/meals.svg"
+              alt="Illustration of planning family meals"
+              class="max-h-64 w-full object-contain"
+            />
+          </div>
+        </section>
+
+        <section id="features" aria-labelledby="features-heading">
+          <div class="mb-6 space-y-2">
+            <h2 id="features-heading" class="text-title">
+              Made for families planning meals together
+            </h2>
+            <p class="text-body color-text-muted">
+              Keep your family menu, favorite recipes, and shopping lists
+              together so it is easier to decide what to make and what to buy.
+            </p>
+          </div>
+          <div class="grid gap-4 md:grid-cols-3">
+            <app-card [fullHeight]="true">
+              <div class="space-y-4">
+                <img
+                  src="/illustrations/meals.svg"
+                  alt=""
+                  class="h-28 w-full object-contain"
+                />
+                <h3 class="text-title">Know what is on the menu</h3>
+                <p class="text-body color-text-muted">
+                  Plan meals for the days ahead and keep track of who is cooking.
+                </p>
+              </div>
+            </app-card>
+            <app-card [fullHeight]="true">
+              <div class="space-y-4">
+                <img
+                  src="/illustrations/recipes.svg"
+                  alt=""
+                  class="h-28 w-full object-contain"
+                />
+                <h3 class="text-title">Make family favorites easy to find</h3>
+                <p class="text-body color-text-muted">
+                  Keep your recipes together and bring them into your meal plan
+                  when you need inspiration.
+                </p>
+              </div>
+            </app-card>
+            <app-card [fullHeight]="true">
+              <div class="space-y-4">
+                <img
+                  src="/illustrations/shopping.svg"
+                  alt=""
+                  class="h-28 w-full object-contain"
+                />
+                <h3 class="text-title">Shop with a plan</h3>
+                <p class="text-body color-text-muted">
+                  Prepare a shopping list around the meals and ingredients you
+                  need.
+                </p>
+              </div>
+            </app-card>
+          </div>
+        </section>
+
+        <section id="how-it-works" aria-labelledby="how-it-works-heading">
+          <div class="mb-6 space-y-2">
+            <h2 id="how-it-works-heading" class="text-title">
+              How Famappy works
+            </h2>
+            <p class="text-body color-text-muted">
+              From deciding what to eat to getting your shopping done, keep
+              everything organized in three simple steps.
+            </p>
+          </div>
+          <ol class="grid gap-4 md:grid-cols-3">
+            <li>
+              <app-card [fullHeight]="true">
+                <div class="space-y-4">
+                  <span
+                    class="flex h-10 w-10 items-center justify-center rounded-full bg-primary-100 font-semibold text-primary-800 dark:bg-primary-900 dark:text-primary-100"
+                    >1</span
+                  >
+                  <h3 class="text-title">Gather your recipes</h3>
+                  <p class="text-body color-text-muted">
+                    Keep the recipes your family enjoys together and ready for
+                    meal planning.
+                  </p>
+                </div>
+              </app-card>
+            </li>
+            <li>
+              <app-card [fullHeight]="true">
+                <div class="space-y-4">
+                  <span
+                    class="flex h-10 w-10 items-center justify-center rounded-full bg-primary-100 font-semibold text-primary-800 dark:bg-primary-900 dark:text-primary-100"
+                    >2</span
+                  >
+                  <h3 class="text-title">Plan your meals</h3>
+                  <p class="text-body color-text-muted">
+                    Choose what to make and organize meals for the days ahead.
+                  </p>
+                </div>
+              </app-card>
+            </li>
+            <li>
+              <app-card [fullHeight]="true">
+                <div class="space-y-4">
+                  <span
+                    class="flex h-10 w-10 items-center justify-center rounded-full bg-primary-100 font-semibold text-primary-800 dark:bg-primary-900 dark:text-primary-100"
+                    >3</span
+                  >
+                  <h3 class="text-title">Get ready to shop</h3>
+                  <p class="text-body color-text-muted">
+                    Use your shopping list to keep track of what you need for
+                    planned meals.
+                  </p>
+                </div>
+              </app-card>
+            </li>
+          </ol>
+        </section>
+      </app-stack>
     } @else {
       <app-stack variant="spacious" class="mt-8">
         <div class="inset-md rounded-xl">
@@ -205,4 +348,45 @@
       </app-stack>
     }
   </app-page-layout>
+  @if (!dataIsLoading() && !user()) {
+    <footer class="surface-1 inset-sm color-text-muted">
+      <div
+        class="mx-auto flex max-w-6xl flex-col items-center gap-2 sm:flex-row sm:justify-between"
+      >
+        <nav aria-label="Footer navigation">
+          <ul class="flex flex-wrap justify-center gap-x-4 gap-y-1">
+            <li>
+              <a
+                routerLink="/about"
+                class="text-body-sm hover:underline focus-visible:underline"
+                >About</a
+              >
+            </li>
+            <li>
+              <a
+                routerLink="/contact"
+                class="text-body-sm hover:underline focus-visible:underline"
+                >Contact</a
+              >
+            </li>
+            <li>
+              <a
+                routerLink="/privacy"
+                class="text-body-sm hover:underline focus-visible:underline"
+                >Privacy</a
+              >
+            </li>
+            <li>
+              <a
+                routerLink="/terms"
+                class="text-body-sm hover:underline focus-visible:underline"
+                >Terms</a
+              >
+            </li>
+          </ul>
+        </nav>
+        <small class="text-body-sm">&copy; {{ currentYear }} Famappy</small>
+      </div>
+    </footer>
+  }
 </div>
