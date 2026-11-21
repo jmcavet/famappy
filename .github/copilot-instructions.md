@@ -36,7 +36,7 @@ Use these instructions when assisting with the Famappy application.
 - Follow the design-system axes documented in `docs/design-system.md`: surface, geometry, layout, inset, space, density, and typography.
 - Prefer existing utility classes and SCSS partials in `src/styles/` over one-off styles.
 - Keep responsive behavior, accessibility, loading states, empty states, and error states in mind for user-facing changes.
-- Use existing PrimeNG, Material, and project components consistently; do not add a new UI library for a small feature.
+- Use existing project components consistently; do not add a new UI library for a small feature. Use reusable components (buttons, input field, etc.) in the shared directory.
 
 ## Firebase and Data Changes
 

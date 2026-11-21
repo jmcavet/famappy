@@ -96,6 +96,7 @@ export class HomeComponent {
 
   weekDays = getWeekDays();
   currentDate = currentDate();
+  readonly currentYear = new Date().getFullYear();
 
   user = signal<User | null>(null);
 
