@@ -33,6 +33,12 @@ export class MembersComponent {
   /** Declaration of local signals */
   memberType = signal<string>('parent');
   modalTitle = signal<string>('');
+  readonly parentCount = computed(
+    () => this.dbMembers().filter((member) => member.type === 'parent').length,
+  );
+  readonly addMemberDisabled = computed(
+    () => this.memberType() === 'parent' && this.parentCount() >= 2,
+  );
 
   toggleMember(member: string) {
     this.memberType.update(() => member);
@@ -49,9 +55,4 @@ export class MembersComponent {
   //   this.modalTitle.set(`Enter new ${this.memberType}`);
   // }
 
-  getMembersByTypeComputed(memberType: string): Signal<any[]> {
-    return computed(() => {
-      return this.dbMembers().filter((member) => member.type === memberType);
-    });
-  }
 }

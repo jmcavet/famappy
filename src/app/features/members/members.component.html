@@ -11,14 +11,16 @@
     >
     </app-segmented-control>
 
-    @if (
-      (getMembersByTypeComputed("parent").length < 4 ||
-        memberType() === "child") &&
-      !isLoading()
-    ) {
-      <app-member-modal [type]="memberType()" [title]="modalTitle()"
+    @if (!isLoading()) {
+      <app-member-modal
+        [type]="memberType()"
+        [title]="modalTitle()"
+        [disabled]="addMemberDisabled()"
         ><div class="mx-auto text-center">
-          <app-button variant="ghost" size="md"
+          <app-button
+            variant="ghost"
+            size="md"
+            [disabled]="addMemberDisabled()"
             ><i class="fa fa-plus fa-xl mr-2"></i>Add
             {{ memberType() }}</app-button
           >
