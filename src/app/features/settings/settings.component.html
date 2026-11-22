@@ -1,36 +1,164 @@
 <div class="h-full layout-hcf">
-  <header class="page-full-width">
-    <p class="text-2xl text-center">Settings</p>
+  <header class="page-full-width settings-header">
+    <h1 class="text-title text-center">Settings</h1>
   </header>
 
-  <div class="space-y-6 py-4">
-    <section class="surface-1">
-      <app-segmented-control
-        [fullWidth]="false"
-        size="md"
-        [options]="['light', 'dark']"
-        color="primary"
-        [selectedInput]="theme.theme()"
-        (selectionChange)="toggleTheme()"
-      >
-      </app-segmented-control>
+  <div class="settings-content section-scroll">
+    <section aria-labelledby="family-heading">
+      <h2 id="family-heading" class="settings-section-heading">
+        Family &amp; meal planning
+      </h2>
+      <div class="surface-1 settings-card">
+        <a class="settings-row" routerLink="/members">
+          <span class="settings-row-label">
+            <i class="fa-solid fa-person" aria-hidden="true"></i>
+            <span>
+              <span class="settings-primary-text">Family members</span>
+              <span class="settings-row-description color-text-muted">
+                Manage the people in your household
+              </span>
+            </span>
+          </span>
+          <i
+            class="fa-solid fa-chevron-right color-text-muted"
+            aria-hidden="true"
+          ></i>
+        </a>
+        <div class="settings-row settings-family-name">
+          @if (!editingFamilyName()) {
+            <div>
+              <p class="settings-primary-text">Family name</p>
+              <p class="settings-row-description color-text-muted">
+                {{ familyName() || "Not set" }}
+              </p>
+            </div>
+            <app-button
+              variant="ghost"
+              size="sm"
+              (clicked)="startEditingFamilyName()"
+            >
+              Edit
+            </app-button>
+          } @else {
+            <div class="settings-family-editor">
+              <label class="settings-primary-text" for="family-name">
+                Family name
+              </label>
+              <input
+                id="family-name"
+                class="input surface-2 inset-x-md inset-y-sm w-full"
+                type="text"
+                autocomplete="organization"
+                [ngModel]="familyNameDraft()"
+                (ngModelChange)="familyNameDraft.set($event)"
+              />
+              <div class="settings-family-actions">
+                <app-button
+                  variant="ghost"
+                  size="sm"
+                  [disabled]="savingFamilyName()"
+                  (clicked)="cancelEditingFamilyName()"
+                >
+                  Cancel
+                </app-button>
+                <app-button
+                  variant="filled"
+                  color="primary"
+                  size="sm"
+                  [disabled]="!familyNameDraft().trim() || savingFamilyName()"
+                  (clicked)="saveFamilyName()"
+                >
+                  {{ savingFamilyName() ? "Saving..." : "Save" }}
+                </app-button>
+              </div>
+            </div>
+          }
+        </div>
+      </div>
     </section>
 
-    <section class="surface-1">
-      <app-button variant="ghost" routerLink="/members"
-        ><i class="fa-solid fa-person fa-2xl mr-2"></i>Members</app-button
-      >
+    <section aria-labelledby="preferences-heading">
+      <h2 id="preferences-heading" class="settings-section-heading">
+        Preferences
+      </h2>
+      <div class="surface-1 settings-card">
+        <div class="settings-preference">
+          <div>
+            <p class="settings-primary-text">Appearance</p>
+            <p class="settings-row-description color-text-muted">
+              Choose how Famappy looks
+            </p>
+          </div>
+          <app-segmented-control
+            [fullWidth]="false"
+            size="md"
+            [options]="['light', 'dark']"
+            color="primary"
+            [selectedInput]="theme.theme()"
+            (selectionChange)="toggleTheme()"
+          />
+        </div>
+      </div>
     </section>
-  </div>
 
-  <div class="page-full-width page-x-padding py-2">
-    <app-button
-      variant="outline"
-      color="primary"
-      [fullWidth]="true"
-      (clicked)="logout()"
-    >
-      Log out
-    </app-button>
+    <section aria-labelledby="notifications-heading">
+      <h2 id="notifications-heading" class="settings-section-heading">
+        Notifications
+      </h2>
+      <div class="surface-1 settings-card">
+        <label class="settings-row settings-toggle-row" for="meal-reminders">
+          <span>
+            <span class="settings-primary-text">Meal reminders</span>
+            <span class="settings-row-description color-text-muted">
+              Get reminders for upcoming meals
+            </span>
+          </span>
+          <input
+            id="meal-reminders"
+            class="settings-switch"
+            type="checkbox"
+            role="switch"
+            [checked]="mealRemindersEnabled()"
+            (change)="mealRemindersEnabled.set(!mealRemindersEnabled())"
+          />
+        </label>
+
+        <label
+          class="settings-row settings-toggle-row"
+          for="push-notifications"
+        >
+          <span>
+            <span class="settings-primary-text">Push notifications</span>
+            <span class="settings-row-description color-text-muted">
+              Receive push notification updates
+            </span>
+          </span>
+          <input
+            id="push-notifications"
+            class="settings-switch"
+            type="checkbox"
+            role="switch"
+            [checked]="pushNotificationsEnabled()"
+            (change)="pushNotificationsEnabled.set(!pushNotificationsEnabled())"
+          />
+        </label>
+      </div>
+    </section>
+
+    <section aria-labelledby="session-heading">
+      <h2 id="session-heading" class="settings-section-heading">Session</h2>
+      <div class="surface-1 settings-card settings-session-card">
+        <app-button
+          variant="outline"
+          color="neutral"
+          size="lg"
+          [fullWidth]="true"
+          (clicked)="logout()"
+        >
+          <i class="fa-solid fa-right-from-bracket mr-2" aria-hidden="true"></i>
+          Log out
+        </app-button>
+      </div>
+    </section>
   </div>
 </div>

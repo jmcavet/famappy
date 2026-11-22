@@ -1,3 +1,116 @@
-section {
-  @apply space-y-4 p-4 sm:p-8 rounded-xl;
+.settings-header {
+  @apply pt-6 pb-3;
+}
+
+.settings-content {
+  @apply layout-stack gap-6 px-2 sm:px-4 py-4;
+}
+
+.settings-section-heading {
+  @apply text-base font-semibold mb-2 px-1;
+}
+
+.settings-card {
+  @apply rounded-xl overflow-hidden;
+}
+
+.settings-account,
+.settings-preference,
+.settings-row {
+  @apply p-4 sm:p-5;
+}
+
+.settings-account {
+  @apply flex items-center gap-4;
+}
+
+.settings-avatar {
+  @apply flex h-12 w-12 shrink-0 items-center justify-center rounded-full surface-2;
+}
+
+.settings-account-details {
+  @apply layout-stack min-w-0;
+}
+
+.settings-primary-text {
+  @apply block font-medium;
+}
+
+.settings-row {
+  @apply flex w-full items-center justify-between gap-4;
+}
+
+.settings-row-label {
+  @apply flex items-center gap-4;
+}
+
+.settings-row-description {
+  @apply block text-sm mt-0.5;
+}
+
+.settings-preference {
+  @apply flex items-center justify-between gap-4;
+}
+
+.settings-row {
+  @apply no-underline;
+}
+
+.settings-session-card {
+  @apply p-2 sm:p-3;
+}
+
+.settings-family-name {
+  @apply border-t;
+}
+
+.settings-family-editor {
+  @apply layout-stack w-full gap-3;
+}
+
+.settings-family-actions {
+  @apply flex items-center justify-end gap-2;
+}
+
+.settings-family-actions app-button {
+  @apply flex h-9 items-center;
+}
+
+.settings-family-actions app-button > div,
+.settings-family-actions app-button button {
+  @apply h-full;
+}
+
+.settings-family-actions app-button button {
+  @apply flex items-center justify-center;
+}
+
+.settings-toggle-row {
+  @apply cursor-pointer;
+}
+
+.settings-toggle-row + .settings-toggle-row {
+  @apply border-t;
+}
+
+.settings-switch {
+  @apply relative h-6 w-11 shrink-0 cursor-pointer appearance-none rounded-full surface-2 transition-colors;
+}
+
+.settings-switch::before {
+  content: "";
+  @apply absolute left-1 top-1 h-4 w-4 rounded-full bg-white transition-transform;
+  box-shadow: 0 1px 3px rgb(0 0 0 / 25%);
+}
+
+.settings-switch:checked {
+  @apply bg-primary;
+}
+
+.settings-switch:checked::before {
+  @apply translate-x-5;
+}
+
+.settings-switch:focus-visible {
+  @apply outline outline-2 outline-offset-2 outline-primary;
 }
