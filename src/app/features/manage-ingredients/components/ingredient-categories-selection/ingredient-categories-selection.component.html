@@ -17,12 +17,17 @@
     <app-button size="sm" (clicked)="openAddModal($event)" [fullWidth]="true">
       <app-inline>
         <i class="fa-solid fa-plus text-xl"></i>
-        <span>Add a category</span>
+        <span>Add category</span>
       </app-inline>
     </app-button>
   </app-inline>
 
-  <app-inline gap="sm" [wrap]="true">
+  <div
+    class="category-list"
+    role="group"
+    aria-label="Ingredient categories"
+    tabindex="0"
+  >
     @for (cat of ingredientCategoriesSorted(); track $index) {
       <app-chip
         [selected]="ingredientCategorySelected()?.name === cat.name"
@@ -35,5 +40,5 @@
         >{{ cat.name }}</app-chip
       >
     }
-  </app-inline>
+  </div>
 </app-stack>
