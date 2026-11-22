@@ -1,40 +1,70 @@
-<div class="space-y-8">
-  <h1 class="title">Family members</h1>
+<main class="layout-stack section-scroll members-page">
+  <header class="members-header">
+    <app-button
+      class="back-button"
+      variant="ghost"
+      size="sm"
+      title="Go back"
+      (clicked)="goBack()"
+    >
+      <i class="fa-solid fa-arrow-left-long text-xl" aria-hidden="true"></i>
+      <span class="sr-only">Go back</span>
+    </app-button>
+    <h1 class="text-title members-title">Family members</h1>
+    @if (!isLoading()) {
+      <span class="text-body-sm color-text-muted">
+        {{ memberCount() }}
+        {{ memberType() }}{{ memberCount() === 1 ? "" : "s" }}
+      </span>
+    }
+  </header>
 
-  <section class="surface-1 flex-col-center gap-2">
+  <section class="surface-1 inset-md layout-stack space-md member-controls">
     <app-segmented-control
-      [fullWidth]="false"
+      [fullWidth]="true"
       size="lg"
       [options]="['parent', 'child']"
       [selectedInput]="memberType()"
       (selectionChange)="toggleMember($event)"
-    >
-    </app-segmented-control>
+    />
 
-    @if (
-      (getMembersByTypeComputed("parent").length < 4 ||
-        memberType() === "child") &&
-      !isLoading()
-    ) {
-      <app-member-modal [type]="memberType()" [title]="modalTitle()"
-        ><div class="mx-auto text-center">
-          <app-button variant="ghost" size="md"
-            ><i class="fa fa-plus fa-xl mr-2"></i>Add
-            {{ memberType() }}</app-button
-          >
-        </div>
+    @if (!isLoading()) {
+      <app-member-modal
+        [type]="memberType()"
+        [title]="modalTitle()"
+        [disabled]="addMemberDisabled()"
+      >
+        <app-button
+          variant="filled"
+          color="primary"
+          size="md"
+          [fullWidth]="true"
+          [disabled]="addMemberDisabled()"
+        >
+          <i class="fa fa-plus mr-2" aria-hidden="true"></i>
+          <span>Add {{ memberType() }}</span>
+        </app-button>
       </app-member-modal>
     }
   </section>
 
-  <section class="member-cards-container">
+  <section
+    class="member-cards-container"
+    [attr.aria-label]="memberType() + ' members'"
+  >
     @if (isLoading()) {
       <app-loading />
-    }
-    @for (member of dbMembers(); track $index) {
-      @if (member.type === memberType() && !isLoading()) {
+    } @else if (visibleMembers().length === 0) {
+      <div class="member-empty-state surface-1 inset-lg">
+        <i class="fa-regular fa-user text-3xl color-text-muted" aria-hidden="true"></i>
+        <p class="text-body color-text-muted">
+          No {{ memberType() }}s have been added yet.
+        </p>
+      </div>
+    } @else {
+      @for (member of visibleMembers(); track member.id) {
         <app-member [member]="member" [members]="dbMembers()" />
       }
     }
   </section>
-</div>
+</main>

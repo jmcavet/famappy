@@ -58,6 +58,7 @@ export class MemberModalComponent {
   @Input() birthday: string = this.initialForm.birthday;
   @Input() mainBtnText: string = 'Save';
   @Input() buttonIsDisabled: boolean = true;
+  @Input() disabled: boolean = false;
 
   ngOnInit(): void {
     this.modalForm = this._formBuilder.group({
@@ -103,6 +104,10 @@ export class MemberModalComponent {
   }
 
   openModal() {
+    if (this.disabled) {
+      return;
+    }
+
     this.isModalOpen.set(true);
   }
 

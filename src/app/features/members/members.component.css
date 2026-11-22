@@ -1,11 +1,27 @@
-.title {
-  @apply text-2xl my-2 mt-4 text-center;
+.members-page {
+  @apply container-xl page-x-padding space-lg py-6 md:py-8;
 }
 
-section {
-  @apply p-4 sm:p-8 rounded-xl;
+.members-header {
+  @apply grid grid-cols-[44px_minmax(0,1fr)_auto] items-center gap-2 inset-x-sm;
+}
+
+.back-button {
+  @apply min-w-11 justify-self-start;
+}
+
+.members-title {
+  @apply text-center;
+}
+
+.member-controls {
+  @apply rounded-xl;
 }
 
 .member-cards-container {
-  @apply grid grid-cols-1 sm:grid-cols-2 gap-8 sm:gap-16;
+  @apply grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6;
+}
+
+.member-empty-state {
+  @apply layout-stack items-center justify-center text-center rounded-xl min-h-40 md:col-span-2;
 }
