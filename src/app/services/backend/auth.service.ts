@@ -20,7 +20,7 @@ export class AuthService {
   firebaseservice = inject(FirebaseService);
 
   /** State signals */
-  user = signal<User | null>(null);
+  user = signal<(User & { familyName?: string }) | null>(null);
   userLoading = signal<boolean>(false);
   userName = signal<string>('');
   isLoggingIn = signal<boolean>(false);
@@ -124,6 +124,28 @@ export class AuthService {
     } finally {
       this.isLoggingIn.set(false);
     }
+  }
+
+  async updateFamilyName(familyName: string): Promise<void> {
+    const user = this.firebaseservice.auth.currentUser;
+
+    if (!user) {
+      throw new Error('No authenticated user.');
+    }
+
+    await updateProfile(user, { displayName: familyName });
+    await setDoc(
+      doc(this.firebaseservice.db, 'users', user.uid),
+      { familyName },
+      { merge: true },
+    );
+
+    this.userName.set(familyName);
+    this.user.update((currentUser) =>
+      currentUser
+        ? { ...currentUser, displayName: familyName, familyName }
+        : currentUser,
+    );
   }
 
   logout() {
