@@ -1,6 +1,6 @@
 import { Component, computed, inject, Signal, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { CommonModule } from '@angular/common';
+import { CommonModule, Location } from '@angular/common';
 import { MemberComponent } from './components/member/member.component';
 import { MemberModalComponent } from './components/member-modal/member-modal.component';
 import { MemberBackendService } from '../../services/backend/member.service';
@@ -26,6 +26,7 @@ import { MemberWithId } from './components/member/member.model';
 export class MembersComponent {
   /** Services */
   private memberBackendService = inject(MemberBackendService);
+  private location = inject(Location);
 
   /** Declaration of signals communicating with firestore */
   readonly dbMembers: Signal<MemberWithId[]> =
@@ -54,6 +55,10 @@ export class MembersComponent {
   toggleMember(member: string) {
     this.memberType.update(() => member);
     this.modalTitle.set(`Enter new ${this.memberType()}`);
+  }
+
+  goBack() {
+    this.location.back();
   }
 
   // showParents() {

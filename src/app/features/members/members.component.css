@@ -3,7 +3,15 @@
 }
 
 .members-header {
-  @apply inset-x-sm;
+  @apply grid grid-cols-[44px_minmax(0,1fr)_auto] items-center gap-2 inset-x-sm;
+}
+
+.back-button {
+  @apply min-w-11 justify-self-start;
+}
+
+.members-title {
+  @apply text-center;
 }
 
 .member-controls {
