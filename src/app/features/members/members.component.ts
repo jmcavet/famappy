@@ -7,6 +7,7 @@ import { MemberBackendService } from '../../services/backend/member.service';
 import { SegmentedControlComponent } from '../../shared/ui/segmented-control/segmented-control.component';
 import { ButtonComponent } from '../../shared/ui/button/button.component';
 import { LoadingComponent } from '../../shared/layout/overlays/loading/loading.component';
+import { MemberWithId } from './components/member/member.model';
 
 @Component({
   selector: 'app-members',
@@ -27,14 +28,24 @@ export class MembersComponent {
   private memberBackendService = inject(MemberBackendService);
 
   /** Declaration of signals communicating with firestore */
-  readonly dbMembers: Signal<any[]> = this.memberBackendService.members;
+  readonly dbMembers: Signal<MemberWithId[]> =
+    this.memberBackendService.members;
   readonly isLoading = this.memberBackendService.loading;
 
   /** Declaration of local signals */
   memberType = signal<string>('parent');
-  modalTitle = signal<string>('');
+  readonly modalTitle = signal<string>('Enter new parent');
   readonly parentCount = computed(
     () => this.dbMembers().filter((member) => member.type === 'parent').length,
+  );
+  readonly memberCount = computed(
+    () =>
+      this.dbMembers().filter(
+        (member) => member.type === this.memberType(),
+      ).length,
+  );
+  readonly visibleMembers = computed(() =>
+    this.dbMembers().filter((member) => member.type === this.memberType()),
   );
   readonly addMemberDisabled = computed(
     () => this.memberType() === 'parent' && this.parentCount() >= 2,
