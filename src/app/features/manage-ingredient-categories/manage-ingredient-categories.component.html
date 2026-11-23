@@ -26,27 +26,40 @@
     <app-page-layout>
       <app-section>
         <app-stack variant="section">
-          @for (ingredientCategory of dbIngredientCategories(); track $index) {
-            <app-row>
-              <span>{{ ingredientCategory.name }}</span>
-              <app-inline gap="sm">
-                <app-button
-                  variant="ghost"
-                  size="sm"
-                  (clicked)="openUpdateModal($event, ingredientCategory)"
-                  ><i class="fa-regular fa-pen-to-square text-xl"></i
-                ></app-button>
+          <div
+            class="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-x-sm gap-y-lg"
+          >
+            @for (
+              ingredientCategory of dbIngredientCategories();
+              track $index
+            ) {
+              <div
+                class="col-span-full grid [grid-template-columns:subgrid] items-center rounded inset-inline-sm surface-2"
+              >
+                <span class="min-w-0 break-words">{{
+                  ingredientCategory.name
+                }}</span>
+                <div class="justify-self-end">
+                  <app-inline gap="xs">
+                    <app-button
+                      variant="ghost"
+                      size="sm"
+                      (clicked)="openUpdateModal($event, ingredientCategory)"
+                      ><i class="fa-regular fa-pen-to-square text-xl"></i
+                    ></app-button>
 
-                <app-button
-                  variant="ghost"
-                  size="sm"
-                  color="danger"
-                  (clicked)="openDeleteModal($event, ingredientCategory.id)"
-                  ><i class="fa-regular fa-trash-can text-xl"></i
-                ></app-button>
-              </app-inline>
-            </app-row>
-          }
+                    <app-button
+                      variant="ghost"
+                      size="sm"
+                      color="danger"
+                      (clicked)="openDeleteModal($event, ingredientCategory.id)"
+                      ><i class="fa-regular fa-trash-can text-xl"></i
+                    ></app-button>
+                  </app-inline>
+                </div>
+              </div>
+            }
+          </div>
         </app-stack>
       </app-section>
     </app-page-layout>
