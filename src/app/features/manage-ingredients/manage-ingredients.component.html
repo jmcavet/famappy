@@ -20,17 +20,13 @@
             </div>
           </app-row>
 
-          <app-ingredient-categories-selection-page />
+          <app-stack>
+            <app-ingredient-categories-selection-page />
 
-          <app-ingredient-adder
-            [existingIngredientNames]="existingIngredientNames()"
-          />
-
-          <app-ingredient-filter
-            [(filterSelected)]="filterSelected"
-            [isAscending]="isAscending()"
-            (filterSelectedChange)="onFilterSelected($event)"
-          />
+            <app-ingredient-adder
+              [existingIngredientNames]="existingIngredientNames()"
+            />
+          </app-stack>
         </app-stack>
       </div>
     </app-header-shell>
@@ -38,47 +34,70 @@
     <app-page-layout>
       <app-section>
         <app-stack>
+          <app-ingredient-filter
+            [(filterSelected)]="filterSelected"
+            [isAscending]="isAscending()"
+            (filterSelectedChange)="onFilterSelected($event)"
+          />
+
           <div
-            class="grid grid-cols-[minmax(0,0.75fr)_minmax(0,2fr)_auto] items-center gap-x-sm gap-y-lg"
+            class="grid grid-cols-[max-content_minmax(0,1fr)_auto] items-center gap-x-md gap-y-lg"
+            [class.category-filtered]="isCategoryFiltered()"
           >
             @for (
               ingredient of ingredientsFiltered();
               track $index;
               let i = $index
             ) {
-              <span class="min-w-0 break-words italic text-sm color-text-muted">
-                {{ ingredient.categoryName }}
-              </span>
-              <app-inline [wrap]="true" gap="xs" class="min-w-0">
-                <app-inline gap="sm">
-                  @if (ingredient.isFavorite) {
-                    <i class="fa-solid fa-heart color-text-secondary"></i>
-                  } @else {
-                    <i class="fa-regular fa-heart color-text-subtle"></i>
-                  }
-                  <span class="min-w-0 break-words">{{ ingredient.name }}</span>
+              <div
+                class="col-span-full grid [grid-template-columns:subgrid] items-center rounded inset-inline-sm surface-2"
+              >
+                @if (!isCategoryFiltered()) {
+                  <span
+                    class="min-w-0 break-words italic text-sm color-text-muted"
+                    [attr.aria-label]="ingredient.categoryName"
+                    [title]="ingredient.categoryName"
+                  >
+                    {{
+                      ingredient.categoryName.length > 5
+                        ? ingredient.categoryName.slice(0, 5) + "..."
+                        : ingredient.categoryName
+                    }}
+                  </span>
+                }
+                <app-inline gap="xs" class="min-w-0">
+                  <app-inline gap="sm" class="min-w-0 flex-1">
+                    @if (ingredient.isFavorite) {
+                      <i class="fa-solid fa-heart color-text-secondary"></i>
+                    } @else {
+                      <i class="fa-regular fa-heart color-text-subtle"></i>
+                    }
+                    <span class="min-w-0 break-words">{{
+                      ingredient.name
+                    }}</span>
+                  </app-inline>
+                  <app-inline gap="xs" class="shrink-0 color-text-subtle">
+                    <span>{{ ingredient.measure }}</span>
+                    <span>{{ ingredient.unit }}</span>
+                  </app-inline>
                 </app-inline>
-                <app-inline gap="xs" class="shrink-0 color-text-subtle">
-                  <span>{{ ingredient.measure }}</span>
-                  <span>{{ ingredient.unit }}</span>
-                </app-inline>
-              </app-inline>
-              <div class="justify-self-end">
-                <app-inline gap="xs">
-                  <app-button
-                    variant="ghost"
-                    size="sm"
-                    (clicked)="openUpdateModal(ingredient)"
-                    ><i class="fa-regular fa-pen-to-square text-xl"></i
-                  ></app-button>
-                  <app-button
-                    variant="ghost"
-                    size="sm"
-                    color="danger"
-                    (clicked)="openDeleteModal($event, ingredient.id)"
-                    ><i class="fa-regular fa-trash-can text-xl"></i
-                  ></app-button>
-                </app-inline>
+                <div class="justify-self-end">
+                  <app-inline gap="xs">
+                    <app-button
+                      variant="ghost"
+                      size="sm"
+                      (clicked)="openUpdateModal(ingredient)"
+                      ><i class="fa-regular fa-pen-to-square text-xl"></i
+                    ></app-button>
+                    <app-button
+                      variant="ghost"
+                      size="sm"
+                      color="danger"
+                      (clicked)="openDeleteModal($event, ingredient.id)"
+                      ><i class="fa-regular fa-trash-can text-xl"></i
+                    ></app-button>
+                  </app-inline>
+                </div>
               </div>
             }
           </div>

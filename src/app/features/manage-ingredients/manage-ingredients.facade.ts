@@ -40,6 +40,11 @@ export class ManageIngredientsFacade {
 
   readonly dbIngredientCategories =
     this.ingredientCategoryDomainFacade.dbIngredientCategories;
+  readonly isCategoryFiltered = computed(
+    () =>
+      this.ingredientCategoryDomainFacade.ingredientCategorySelected() !==
+      undefined,
+  );
   readonly ingredientCategoriesLoading =
     this.ingredientCategoryDomainFacade.ingredientCategoriesLoading;
 
