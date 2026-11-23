@@ -2,6 +2,10 @@
   @apply mx-2 bg-red-200 text-red-600 dark:bg-red-900 dark:text-red-200 p-2 mt-2 rounded;
 }
 
+.category-filtered {
+  grid-template-columns: minmax(0, 2fr) auto;
+}
+
 .message-no-category {
   @apply mx-auto flex flex-col items-center justify-between gap-0 bg-yellow-100 dark:bg-yellow-900 border-2 border-yellow-400 dark:border-yellow-500 p-4 w-max rounded-2xl;
 }

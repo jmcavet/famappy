@@ -62,6 +62,7 @@ export class ManageIngredientsComponent {
   /** Domain-derived state */
   readonly ingredientCategories = this.facade.dbIngredientCategories;
   readonly pageIsLoading = this.facade.pageIsLoading;
+  readonly isCategoryFiltered = this.facade.isCategoryFiltered;
 
   /** Local-derived state */
   readonly existingIngredientNames = this.facade.existingIngredientNames;
