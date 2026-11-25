@@ -302,14 +302,25 @@
               <h2 class="text-title">My shopping lists</h2>
             </app-inline>
             <app-stack>
-              @for (shoppingListName of dbShoppingListsNames(); track $index) {
-                <app-row>
+              @for (
+                shoppingList of shoppingListsWithItemCounts();
+                track shoppingList.id
+              ) {
+                <app-row class="w-full" gap="md">
                   <app-button
                     variant="ghost"
-                    (clicked)="navigateToShoppingPage(shoppingListName)"
+                    class="flex-1"
+                    [fullWidth]="true"
+                    (clicked)="navigateToShoppingPage(shoppingList.name)"
                   >
-                    <span class="text-body-lg">{{ shoppingListName }}</span>
+                    <span class="text-body-lg w-full text-left">{{
+                      shoppingList.name
+                    }}</span>
                   </app-button>
+                  <span class="text-meta"
+                    >{{ shoppingList.itemCount }}
+                    {{ shoppingList.itemCount === 1 ? 'item' : 'items' }}</span
+                  >
                 </app-row>
               }
             </app-stack>
