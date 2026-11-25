@@ -54,7 +54,11 @@ export function currentDate() {
   const dayName = dayNames[d.getDay()];
   const dayOfMonth = d.getDate();
   const monthName = months[d.getMonth()];
-  const year = d.getFullYear();
 
-  return dayName + '-' + dayOfMonth + '-' + monthName;
+  const shortDayName =
+    dayName[0].toUpperCase() + dayName.slice(1, 3);
+  const shortMonthName =
+    monthName[0].toUpperCase() + monthName.slice(1, 3);
+
+  return shortDayName + '-' + dayOfMonth + '-' + shortMonthName;
 }

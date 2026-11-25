@@ -197,23 +197,43 @@
           <app-grid-responsive [cols]="2" [colsMd]="3" [colsLg]="4" gap="md">
             <button
               routerLink="/meals"
-              class="h-32 bg-primary-100 dark:bg-primary-900 bg-[url('/illustrations/meals.svg')] bg-no-repeat bg-center bg-contain shadow-md dark:shadow-none dark:ring-1 dark:ring-white/20"
-            ></button>
+              class="relative h-32 bg-primary-100 dark:bg-primary-900 bg-[url('/illustrations/meals.svg')] bg-no-repeat bg-center bg-contain shadow-md dark:shadow-none dark:ring-1 dark:ring-white/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2"
+            >
+              <span
+                class="absolute bottom-2 left-1/2 z-10 -translate-x-1/2 whitespace-nowrap rounded-md bg-white/95 px-3 py-1 text-sm font-semibold text-primary-900 shadow-sm dark:bg-neutral-900/95 dark:text-white"
+                >Plan meals</span
+              >
+            </button>
 
             <button
               routerLink="/shopping"
-              class="h-32 bg-primary-100 dark:bg-primary-900 bg-[url('/illustrations/shopping.svg')] bg-no-repeat bg-center bg-contain shadow-md dark:shadow-none dark:ring-1 dark:ring-white/20"
-            ></button>
+              class="relative h-32 bg-primary-100 dark:bg-primary-900 bg-[url('/illustrations/shopping.svg')] bg-no-repeat bg-center bg-contain shadow-md dark:shadow-none dark:ring-1 dark:ring-white/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2"
+            >
+              <span
+                class="absolute bottom-2 left-1/2 z-10 -translate-x-1/2 whitespace-nowrap rounded-md bg-white/95 px-3 py-1 text-sm font-semibold text-primary-900 shadow-sm dark:bg-neutral-900/95 dark:text-white"
+                >Shopping lists</span
+              >
+            </button>
 
             <button
               routerLink="/recipes"
-              class="h-32 bg-primary-100 dark:bg-primary-900 bg-[url('/illustrations/recipes.svg')] bg-no-repeat bg-center bg-contain shadow-md dark:shadow-none dark:ring-1 dark:ring-white/20"
-            ></button>
+              class="relative h-32 bg-primary-100 dark:bg-primary-900 bg-[url('/illustrations/recipes.svg')] bg-no-repeat bg-center bg-contain shadow-md dark:shadow-none dark:ring-1 dark:ring-white/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2"
+            >
+              <span
+                class="absolute bottom-2 left-1/2 z-10 -translate-x-1/2 whitespace-nowrap rounded-md bg-white/95 px-3 py-1 text-sm font-semibold text-primary-900 shadow-sm dark:bg-neutral-900/95 dark:text-white"
+                >Recipes</span
+              >
+            </button>
 
             <button
               routerLink="/ingredients"
-              class="h-32 bg-primary-100 dark:bg-primary-900 bg-[url('/illustrations/ingredients.svg')] bg-no-repeat bg-center bg-contain shadow-md dark:shadow-none dark:ring-1 dark:ring-white/20"
-            ></button>
+              class="relative h-32 bg-primary-100 dark:bg-primary-900 bg-[url('/illustrations/ingredients.svg')] bg-no-repeat bg-center bg-contain shadow-md dark:shadow-none dark:ring-1 dark:ring-white/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2"
+            >
+              <span
+                class="absolute bottom-2 left-1/2 z-10 -translate-x-1/2 whitespace-nowrap rounded-md bg-white/95 px-3 py-1 text-sm font-semibold text-primary-900 shadow-sm dark:bg-neutral-900/95 dark:text-white"
+                >Ingredients</span
+              >
+            </button>
           </app-grid-responsive>
         </div>
 
@@ -224,7 +244,7 @@
                 <i class="fa-solid fa-utensils"></i>
                 <h2 class="text-title">Menu of the day</h2>
               </app-inline>
-              <span class="text-sub-title">{{ currentDate | capitalize }}</span>
+              <span class="text-sub-title">{{ currentDate }}</span>
             </app-row>
             @if (dayMeals()?.length) {
               <app-grid col1="max" col2="1" col3="max" gapX="sm" gapY="md">
@@ -237,13 +257,15 @@
                   >
 
                   @if (meal.recipeId) {
-                    <app-inline gap="md">
+                    <app-inline gap="md" class="w-full justify-between">
                       <a
-                        class="color-text-primary cursor-pointer"
+                        class="color-text-primary min-w-0 flex-1 cursor-pointer"
                         (click)="viewRecipe(meal.recipeId, meal.servings)"
                         routerLinkActive="active-link"
                       >
-                        <span class="text-body-lg">{{ meal.mealName }}</span>
+                        <span class="text-body-lg line-clamp-2">{{
+                          meal.mealName
+                        }}</span>
                       </a>
 
                       @if (meal.totalTime !== undefined) {
@@ -258,9 +280,12 @@
                   } @else if (meal.manualRecipe) {
                     <app-button
                       variant="ghost"
+                      [fullWidth]="true"
                       (clicked)="viewManualRecipe(meal.manualRecipe)"
                     >
-                      <span class="text-body-lg">{{ meal.mealName }}</span>
+                      <span class="text-body-lg line-clamp-2">{{
+                        meal.mealName
+                      }}</span>
                     </app-button>
                   }
                   <div
@@ -297,14 +322,25 @@
               <h2 class="text-title">My shopping lists</h2>
             </app-inline>
             <app-stack>
-              @for (shoppingListName of dbShoppingListsNames(); track $index) {
-                <app-row>
+              @for (
+                shoppingList of shoppingListsWithItemCounts();
+                track shoppingList.id
+              ) {
+                <app-row class="w-full" gap="md">
                   <app-button
                     variant="ghost"
-                    (clicked)="navigateToShoppingPage(shoppingListName)"
+                    class="flex-1"
+                    [fullWidth]="true"
+                    (clicked)="navigateToShoppingPage(shoppingList.name)"
                   >
-                    <span class="text-body-lg">{{ shoppingListName }}</span>
+                    <span class="text-body-lg w-full text-left">{{
+                      shoppingList.name
+                    }}</span>
                   </app-button>
+                  <span class="text-meta"
+                    >{{ shoppingList.itemCount }}
+                    {{ shoppingList.itemCount === 1 ? 'item' : 'items' }}</span
+                  >
                 </app-row>
               }
             </app-stack>

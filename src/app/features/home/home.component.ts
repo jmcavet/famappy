@@ -27,6 +27,7 @@ import { MemberDomainFacade } from '../../domain-facades/member.facade';
 import { RecipeDomainFacade } from '../../domain-facades/recipe.facade';
 import { GridComponent } from '../../shared/layout/primitives/grid.component';
 import { ShoppingListDomainFacade } from '../../domain-facades/shopping-list.facade';
+import { ShoppingQuickItemsDomainFacade } from '../../domain-facades/shopping-quick-items.facade';
 import { RecipeCardComponent } from '../recipes/components/recipe-card/recipe-card.component';
 import { ModalService } from '../../shared/layout/overlays/modal/modal.service';
 import { ManualEntryViewComponent } from '../meals/components/manual-entry-view/manual-entry-view.component';
@@ -69,6 +70,9 @@ export class HomeComponent {
   private memberDomainFacade = inject(MemberDomainFacade);
   private recipeDomainFacade = inject(RecipeDomainFacade);
   private shoppingListDomainFacade = inject(ShoppingListDomainFacade);
+  private shoppingQuickItemsDomainFacade = inject(
+    ShoppingQuickItemsDomainFacade,
+  );
 
   private mealBackendService = inject(MealBackendService);
 
@@ -80,13 +84,27 @@ export class HomeComponent {
   readonly recipesLoading = this.recipeDomainFacade.recipesLoading;
   readonly shoppingListsLoading =
     this.shoppingListDomainFacade.shoppingListsLoading;
+  readonly shoppingQuickItemsLoading =
+    this.shoppingQuickItemsDomainFacade.shoppingQuickItemsLoading;
 
   readonly dbMeals: Signal<MealDocWithIdInBackend[]> =
     this.mealBackendService.meals;
   private parents = this.memberDomainFacade.parents;
   readonly dbRecipes = this.recipeDomainFacade.dbRecipes;
-  readonly dbShoppingListsNames =
-    this.shoppingListDomainFacade.dbShoppingListsNames;
+  readonly shoppingListsWithItemCounts = computed(() => {
+    const quickItems = this.shoppingQuickItemsDomainFacade.dbShoppingQuickItems();
+
+    return this.shoppingListDomainFacade
+      .dbShoppingLists()
+      .map((shoppingList) => ({
+        ...shoppingList,
+        itemCount:
+          (shoppingList.ingredients ?? []).length +
+          (shoppingList.categoryItemIds ?? []).length +
+          quickItems.filter((item) => item.shoppingListId === shoppingList.id)
+            .length,
+      }));
+  });
 
   private shoppingFacade = inject(ShoppingFacade);
   private shoppingService = inject(ShoppingStateService);
@@ -110,7 +128,8 @@ export class HomeComponent {
       this.mealsLoading() ||
       this.membersLoading() ||
       this.recipesLoading() ||
-      this.shoppingListsLoading()
+      this.shoppingListsLoading() ||
+      this.shoppingQuickItemsLoading()
     );
   });
 
