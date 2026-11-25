@@ -197,23 +197,43 @@
           <app-grid-responsive [cols]="2" [colsMd]="3" [colsLg]="4" gap="md">
             <button
               routerLink="/meals"
-              class="h-32 bg-primary-100 dark:bg-primary-900 bg-[url('/illustrations/meals.svg')] bg-no-repeat bg-center bg-contain shadow-md dark:shadow-none dark:ring-1 dark:ring-white/20"
-            ></button>
+              class="relative h-32 bg-primary-100 dark:bg-primary-900 bg-[url('/illustrations/meals.svg')] bg-no-repeat bg-center bg-contain shadow-md dark:shadow-none dark:ring-1 dark:ring-white/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2"
+            >
+              <span
+                class="absolute bottom-2 left-1/2 z-10 -translate-x-1/2 whitespace-nowrap rounded-md bg-white/95 px-3 py-1 text-sm font-semibold text-primary-900 shadow-sm dark:bg-neutral-900/95 dark:text-white"
+                >Plan meals</span
+              >
+            </button>
 
             <button
               routerLink="/shopping"
-              class="h-32 bg-primary-100 dark:bg-primary-900 bg-[url('/illustrations/shopping.svg')] bg-no-repeat bg-center bg-contain shadow-md dark:shadow-none dark:ring-1 dark:ring-white/20"
-            ></button>
+              class="relative h-32 bg-primary-100 dark:bg-primary-900 bg-[url('/illustrations/shopping.svg')] bg-no-repeat bg-center bg-contain shadow-md dark:shadow-none dark:ring-1 dark:ring-white/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2"
+            >
+              <span
+                class="absolute bottom-2 left-1/2 z-10 -translate-x-1/2 whitespace-nowrap rounded-md bg-white/95 px-3 py-1 text-sm font-semibold text-primary-900 shadow-sm dark:bg-neutral-900/95 dark:text-white"
+                >Shopping lists</span
+              >
+            </button>
 
             <button
               routerLink="/recipes"
-              class="h-32 bg-primary-100 dark:bg-primary-900 bg-[url('/illustrations/recipes.svg')] bg-no-repeat bg-center bg-contain shadow-md dark:shadow-none dark:ring-1 dark:ring-white/20"
-            ></button>
+              class="relative h-32 bg-primary-100 dark:bg-primary-900 bg-[url('/illustrations/recipes.svg')] bg-no-repeat bg-center bg-contain shadow-md dark:shadow-none dark:ring-1 dark:ring-white/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2"
+            >
+              <span
+                class="absolute bottom-2 left-1/2 z-10 -translate-x-1/2 whitespace-nowrap rounded-md bg-white/95 px-3 py-1 text-sm font-semibold text-primary-900 shadow-sm dark:bg-neutral-900/95 dark:text-white"
+                >Recipes</span
+              >
+            </button>
 
             <button
               routerLink="/ingredients"
-              class="h-32 bg-primary-100 dark:bg-primary-900 bg-[url('/illustrations/ingredients.svg')] bg-no-repeat bg-center bg-contain shadow-md dark:shadow-none dark:ring-1 dark:ring-white/20"
-            ></button>
+              class="relative h-32 bg-primary-100 dark:bg-primary-900 bg-[url('/illustrations/ingredients.svg')] bg-no-repeat bg-center bg-contain shadow-md dark:shadow-none dark:ring-1 dark:ring-white/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2"
+            >
+              <span
+                class="absolute bottom-2 left-1/2 z-10 -translate-x-1/2 whitespace-nowrap rounded-md bg-white/95 px-3 py-1 text-sm font-semibold text-primary-900 shadow-sm dark:bg-neutral-900/95 dark:text-white"
+                >Ingredients</span
+              >
+            </button>
           </app-grid-responsive>
         </div>
 
