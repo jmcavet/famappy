@@ -237,13 +237,15 @@
                   >
 
                   @if (meal.recipeId) {
-                    <app-inline gap="md">
+                    <app-inline gap="md" class="w-full justify-between">
                       <a
-                        class="color-text-primary cursor-pointer"
+                        class="color-text-primary min-w-0 flex-1 cursor-pointer"
                         (click)="viewRecipe(meal.recipeId, meal.servings)"
                         routerLinkActive="active-link"
                       >
-                        <span class="text-body-lg">{{ meal.mealName }}</span>
+                        <span class="text-body-lg line-clamp-2">{{
+                          meal.mealName
+                        }}</span>
                       </a>
 
                       @if (meal.totalTime !== undefined) {
@@ -258,9 +260,12 @@
                   } @else if (meal.manualRecipe) {
                     <app-button
                       variant="ghost"
+                      [fullWidth]="true"
                       (clicked)="viewManualRecipe(meal.manualRecipe)"
                     >
-                      <span class="text-body-lg">{{ meal.mealName }}</span>
+                      <span class="text-body-lg line-clamp-2">{{
+                        meal.mealName
+                      }}</span>
                     </app-button>
                   }
                   <div
