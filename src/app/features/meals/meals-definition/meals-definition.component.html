@@ -30,6 +30,18 @@
             Which categories are you interested in?
           </h2>
 
+          <label class="flex cursor-pointer items-center gap-2 py-2">
+            <input
+              id="select-all-categories"
+              type="checkbox"
+              class="h-5 w-5"
+              [checked]="allCategoriesSelected()"
+              [indeterminate]="someCategoriesSelected()"
+              (change)="toggleAllCategories()"
+            />
+            <span>Select all categories</span>
+          </label>
+
           <app-inline [wrap]="true">
             @for (cat of filteredCategories(); track cat.id) {
               <app-chip
