@@ -5,11 +5,11 @@
 } @else {
   <app-section inset="sm">
     <app-row justify="center">
-      <app-inline gap="xs">
+      <app-inline gap="xs" class="w-full">
         @if (calendarDaysWithCooks()) {
           @for (day of calendarDaysWithCooks(); track $index; let i = $index) {
             <div
-              class="day-container inset-inline-xs"
+              class="day-container px-1 py-1"
               [class.active]="day.dayName === selectedDay().dayName"
               (click)="toggleDay(day)"
               [class.weekend]="
