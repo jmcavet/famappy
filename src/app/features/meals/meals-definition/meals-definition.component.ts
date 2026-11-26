@@ -42,6 +42,8 @@ export class MealsDefinitionComponent {
   /** Non-computed signals exposed to html template */
   selectedCategories = this.mealDefinitionFacade.selectedCategories;
   selectedCategoriesIds = this.mealDefinitionFacade.selectedCategoriesIds;
+  allCategoriesSelected = this.mealDefinitionFacade.allCategoriesSelected;
+  someCategoriesSelected = this.mealDefinitionFacade.someCategoriesSelected;
 
   /** Computed signals exposed to html template */
   nbMeals = this.mealDefinitionFacade.nbMeals;
@@ -65,6 +67,10 @@ export class MealsDefinitionComponent {
   */
   toggleSelection(category: RecipeCategoryDocInBackend) {
     this.mealDefinitionFacade.toggleSelection(category);
+  }
+
+  toggleAllCategories() {
+    this.mealDefinitionFacade.toggleAllCategories();
   }
 
   proceed() {

@@ -1,4 +1,4 @@
-import { computed, inject, Injectable, signal } from '@angular/core';
+import { computed, effect, inject, Injectable, signal } from '@angular/core';
 import { MealDefinitionStateService } from '../state/mealDefinition.service';
 import { RecipeCategoryDocInBackend } from '../../../models/cuisine.model';
 import { FormControl } from '@angular/forms';
@@ -8,6 +8,18 @@ import { MealStateService } from '../state/meal.service';
 
 @Injectable({ providedIn: 'root' })
 export class MealDefinitionFacade {
+  private hasInitializedCategories = false;
+
+  constructor() {
+    effect(() => {
+      const categories = this.filteredCategories();
+      if (this.hasInitializedCategories || categories.length === 0) return;
+
+      this.hasInitializedCategories = true;
+      this.selectedCategories.set(categories);
+    });
+  }
+
   /* ════════════════════════════════
    * Constants
    * ════════════════════════════════ */
@@ -37,6 +49,31 @@ export class MealDefinitionFacade {
       : [...current, category];
 
     this.selectedCategories.set(updated);
+  }
+
+  public toggleAllCategories() {
+    const categories = this.filteredCategories();
+    const selectedCategories = this.selectedCategories();
+    const selectedIds = new Set(
+      selectedCategories.map((category) => category.id),
+    );
+    const categoryIds = new Set(categories.map((category) => category.id));
+    const allCategoriesSelected =
+      categories.length > 0 &&
+      categories.every((category) => selectedIds.has(category.id));
+
+    this.selectedCategories.set(
+      allCategoriesSelected
+        ? selectedCategories.filter(
+            (category) => !categoryIds.has(category.id),
+          )
+        : [
+            ...selectedCategories,
+            ...categories.filter(
+              (category) => !selectedIds.has(category.id),
+            ),
+          ],
+    );
   }
 
   public proceed() {
@@ -96,6 +133,27 @@ export class MealDefinitionFacade {
   readonly selectedCategoriesIds = computed(() =>
     this.selectedCategories().map((c) => c.id),
   );
+
+  readonly allCategoriesSelected = computed(() => {
+    const categories = this.filteredCategories();
+    const selectedIds = new Set(this.selectedCategoriesIds());
+
+    return (
+      categories.length > 0 &&
+      categories.every((category) => selectedIds.has(category.id))
+    );
+  });
+
+  readonly someCategoriesSelected = computed(() => {
+    const selectedIds = new Set(this.selectedCategoriesIds());
+
+    return (
+      !this.allCategoriesSelected() &&
+      this.filteredCategories().some((category) =>
+        selectedIds.has(category.id),
+      )
+    );
+  });
 
   /* ════════════════════════════════
    * Domain Projections (business logic)
